@@ -7,17 +7,3 @@ steps:
 
   - script: yarn test
     displayName: "Yarn test"
-
-  # Even though we tell lerna to not do git stuff, it still tries to do a git describe. Which does not work in the default detached head state.
-  - script: |
-      git checkout master
-      git reset --hard $(Build.SourceVersion)
-    displayName: "Reattach git to avoid confusing lerna"
-
-  - task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@2
-    displayName: "Yarn publish"
-    inputs:
-      Arguments: 'lerna publish -- 0.$(Build.BuildNumber) --exact --yes --no-git-reset --no-git-tag-version --no-push --force-publish "*" --registry https://msfast.pkgs.visualstudio.com/_packaging/0f21483f-9290-4624-8dc9-5e2ee1a67b4c/npm/registry/'
-      customRegistry: useFeed
-      customFeed: "0f21483f-9290-4624-8dc9-5e2ee1a67b4c"
-    condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
