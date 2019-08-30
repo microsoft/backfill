@@ -111,7 +111,12 @@ export class Hasher implements IHasher {
         const dependencyPath = this.getPackagePath(dependency);
 
         if (dependencyPath) {
-          return this.getPackageHash(dependencyPath, dependency);
+          return this.getPackageHash(dependencyPath, dependency).then(hash => {
+            logger.verbose(`getHashOfDependencies: ${dependency}: ${hash}`);
+            return hash;
+          });
+        } else {
+          logger.verbose(`getHashOfDependencies: no path for ${dependency}`);
         }
       })
       .filter(notEmpty);
@@ -134,9 +139,20 @@ export class Hasher implements IHasher {
     const dependencies = this.dependencyResolver.dependencies();
 
     const hashOfDependencies = this.getHashOfDependencies(dependencies);
-    const hashOfBuildCommand = createHash(this.buildCommandSignature);
-    const hashOfOwnFiles = this.getHashOfOwnFiles();
-    const hashOfLockFile = this.getHashOfLockFile();
+    const hashOfBuildCommand = createHash(this.buildCommandSignature).then(
+      hash => {
+        logger.verbose(`hashOfBuildCommand: ${hash}`);
+        return hash;
+      }
+    );
+    const hashOfOwnFiles = this.getHashOfOwnFiles().then(hash => {
+      logger.verbose(`hashOfOwnFiles: ${hash}`);
+      return hash;
+    });
+    const hashOfLockFile = this.getHashOfLockFile().then(hash => {
+      logger.verbose(`hashOfLockFile: ${hash}`);
+      return hash;
+    });
 
     mark("hasher:calculateHash");
 
