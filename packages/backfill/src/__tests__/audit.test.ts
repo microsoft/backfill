@@ -2,8 +2,9 @@ import * as path from "path";
 import * as findUp from "find-up";
 import * as shelljs from "shelljs";
 import execa = require("execa");
-
 import { setupFixture } from "backfill-utils-test";
+
+import { sideEffectWarningString, noSideEffectString } from "../audit";
 
 describe("Audit", () => {
   let pathToBackfill: string;
@@ -39,7 +40,7 @@ describe("Audit", () => {
       "npm run compile"
     ]);
 
-    expect(backfillOutput.stdout).toMatch("were within the scope");
+    expect(backfillOutput.stdout).toMatch(noSideEffectString);
   });
 
   it("correctly warns about side-effects", async () => {
@@ -49,7 +50,7 @@ describe("Audit", () => {
       "npm run compile && npm run side-effect"
     ]);
 
-    expect(backfillOutput.stdout).toMatch("got changed outside");
+    expect(backfillOutput.stderr).toMatch(sideEffectWarningString);
     expect(backfillOutput.stdout).toMatch("monorepo/packages/DONE");
   });
 });

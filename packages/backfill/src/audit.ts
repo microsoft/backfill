@@ -67,23 +67,23 @@ export function initializeWatcher(
     });
 }
 
+export const sideEffectWarningString =
+  "The following files got changed outside of the scope of the folder to be cached:";
+export const sideEffectCallToActionString =
+  "You should make sure that these changes are non-essential, as they would not be brought back on a cache-hit.";
+export const noSideEffectString =
+  "All observed file changes were within the scope of the folder to be cached.";
+
 export function closeWatcher() {
   // Wait for one second before closing, giving time for file changes to propagate
+  // Bug: https://github.com/paulmillr/chokidar/issues/855
   setTimeout(() => {
     if (changedFilesOutsideScope.length > 0) {
-      logger.warn(
-        "The following files got changed outside of the scope of the folder to be cached:"
-      );
-
+      logger.warn(sideEffectWarningString);
       changedFilesOutsideScope.forEach(file => logger.info(file));
-
-      logger.warn(
-        "You should make sure that these changes are non-essential, as they would not be brought back on a cache-hit."
-      );
+      logger.warn(sideEffectCallToActionString);
     } else {
-      logger.info(
-        "All observed file changes were within the scope of the folder to be cached."
-      );
+      logger.info(noSideEffectString);
     }
     watcher.close();
   }, 1000);

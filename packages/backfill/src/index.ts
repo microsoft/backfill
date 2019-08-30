@@ -152,6 +152,7 @@ export async function main(): Promise<void> {
 
     // Disable fetching when auditing a package
     cacheStorage.fetch = () => Promise.resolve(false);
+    cacheStorage.put = () => Promise.resolve();
   }
 
   try {
