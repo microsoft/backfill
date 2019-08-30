@@ -2,6 +2,7 @@ import { parse as json2csv } from "json2csv";
 import * as shelljs from "shelljs";
 import * as fs from "fs-extra";
 import * as path from "path";
+import { logger } from "just-task-logger";
 
 type TelemetryData = {
   timestamp: number;
@@ -87,14 +88,14 @@ class Telemetry {
         return fs
           .outputFile(filepath, data)
           .then(() =>
-            console.log(`Backfill telemetry report created: ${filepath}`)
+            logger.info(`Backfill telemetry report created: ${filepath}`)
           );
       })
       .then(() => {
         // Remove single telemetry reports
         shelljs.rm("-f", path.join(telemetryFileFolder, "tel-*.csv"));
       })
-      .catch(console.error);
+      .catch(logger.error);
   }
 
   public async toFile(telemetryFileFolder: string) {
@@ -118,7 +119,7 @@ class Telemetry {
         csv
       );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
   }
 }

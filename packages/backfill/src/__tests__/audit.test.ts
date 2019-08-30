@@ -39,7 +39,7 @@ describe("Audit", () => {
       "npm run compile"
     ]);
 
-    expect(backfillOutput.stdout).toMatch("[success]");
+    expect(backfillOutput.stdout).toMatch("were within the scope");
   });
 
   it("correctly warns about side-effects", async () => {
@@ -49,7 +49,7 @@ describe("Audit", () => {
       "npm run compile && npm run side-effect"
     ]);
 
-    expect(backfillOutput.stdout).toMatch("[warning]");
+    expect(backfillOutput.stdout).toMatch("got changed outside");
     expect(backfillOutput.stdout).toMatch("monorepo/packages/DONE");
   });
 });

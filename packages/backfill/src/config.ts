@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as pkgDir from "pkg-dir";
 import * as findUp from "find-up";
+import { logger } from "just-task-logger";
 
 import {
   CacheStorageConfig,
@@ -29,6 +30,7 @@ export type Config = {
   hashFileFolder: string;
   telemetryFileFolder: string;
   telemetryReportName?: string;
+  verboseLogs: boolean;
   watchGlobs: WatchGlobs;
 };
 
@@ -65,7 +67,7 @@ function getNpmConfigFromSerializedOptions(
       options: { ...parsedOptions }
     };
   } catch (e) {
-    console.error(e.message);
+    logger.error(e.message);
     throw new Error("Invalid npm storage options");
   }
 }
@@ -88,7 +90,7 @@ function getAzureBlobConfigFromSerializedOptions(
       options: { ...parsedOptions }
     };
   } catch (e) {
-    console.error(e.message);
+    logger.error(e.message);
     throw new Error("Invalid blob storage options");
   }
 }
@@ -168,6 +170,7 @@ export function createDefaultConfig(): Config {
     localCacheFolder: defaultCacheFolder,
     hashFileFolder: defaultCacheFolder,
     telemetryFileFolder: defaultCacheFolder,
+    verboseLogs: false,
     get watchGlobs(): WatchGlobs {
       return {
         folders: {

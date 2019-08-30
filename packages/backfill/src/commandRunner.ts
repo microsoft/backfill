@@ -1,5 +1,6 @@
 import * as execa from "execa";
 import { telemetry } from "backfill-telemetry";
+import { logger, mark } from "just-task-logger";
 
 export type ExecaReturns = execa.ExecaReturns;
 export type BuildCommand = () => Promise<ExecaReturns | void>;
@@ -20,6 +21,7 @@ export function createBuildCommand(
 
     // Set up runner
     const startTime = Date.now();
+    mark("buildCommand:run");
     const runner = execa.shell(parsedBuildCommand);
 
     // Stream stdout and stderr
@@ -31,11 +33,14 @@ export function createBuildCommand(
     return (
       runner
         // Add build time to telemetry
-        .then(() => telemetry.setTime("buildTime", startTime, Date.now()))
+        .then(() => {
+          telemetry.setTime("buildTime", startTime, Date.now());
+          logger.perf("buildCommand:run");
+        })
         // Catch to pretty-print the command that failed and re-throw
         .catch(err => {
           if (process.env.NODE_ENV !== "test") {
-            console.error(`\nFailed while running: ${parsedBuildCommand}`);
+            logger.error(`\nFailed while running: ${parsedBuildCommand}`);
           }
           throw err;
         })

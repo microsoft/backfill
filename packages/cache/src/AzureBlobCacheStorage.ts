@@ -84,10 +84,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
         return blobReadableStream.pipe(tarWritableStream);
       })
-      .then(() => {
-        console.log("cache hit (blob storage)");
-        return true;
-      })
+      .then(() => true)
       .catch(() => false);
   }
 
