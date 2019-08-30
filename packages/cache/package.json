@@ -21,6 +21,7 @@
     "backfill-telemetry": "^2.0.0",
     "execa": "^1.0.0",
     "fs-extra": "^7.0.1",
+    "just-task-logger": "^0.3.0",
     "shelljs": "^0.8.3",
     "tar": "^4.4.8"
   },

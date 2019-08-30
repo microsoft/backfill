@@ -3,6 +3,7 @@ import * as findUp from "find-up";
 import * as fs from "fs-extra";
 import * as path from "path";
 import { hashElement } from "folder-hash";
+import { logger, mark } from "just-task-logger";
 
 import { telemetry } from "backfill-telemetry";
 import { IDependencyResolver } from "./dependencyResolver";
@@ -64,7 +65,7 @@ export class Hasher implements IHasher {
     dependency: string
   ) {
     if (this.isInternalPackage(dependencyPath)) {
-      console.warn(
+      logger.warn(
         `"${dependency}" does not have a pre-calculated hash. Will try to create a hash using package name and version as fallback.`
       );
     }
@@ -137,6 +138,8 @@ export class Hasher implements IHasher {
     const hashOfOwnFiles = this.getHashOfOwnFiles();
     const hashOfLockFile = this.getHashOfLockFile();
 
+    mark("hasher:calculateHash");
+
     // 1. Create hash to be used when fetching cache from cache storage
     const packageHash = await Promise.all([
       ...hashOfDependencies,
@@ -146,6 +149,8 @@ export class Hasher implements IHasher {
     ])
       .then(hashes => hashes.filter(notEmpty))
       .then(hashes => createHash(hashes));
+
+    logger.perf("hasher:calculateHash");
 
     // 2. Create hash to be stored in the package. Used to communicate the state
     // of the package to dependent packages (parents)

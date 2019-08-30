@@ -2,7 +2,7 @@ import * as chokidar from "chokidar";
 import * as findUp from "find-up";
 import * as path from "path";
 import anymatch from "anymatch";
-import chalk from "chalk";
+import { logger } from "just-task-logger";
 
 let changedFilesOutsideScope: string[] = [];
 let changedFilesInsideScope: string[] = [];
@@ -36,8 +36,8 @@ export function initializeWatcher(
   changedFilesOutsideScope = [];
   changedFilesInsideScope = [];
 
-  console.log(`[info] Watching for file changes in: ${repositoryRoot}`);
-  console.log(`[info] Backfill will cache: ${folderToCache}`);
+  logger.info(`Watching for file changes in: ${repositoryRoot}`);
+  logger.info(`Backfill will cache: ${folderToCache}`);
 
   // Define globs
   const ignoreGlobs = [
@@ -57,6 +57,7 @@ export function initializeWatcher(
     })
     .on("all", (event, filePath) => {
       const logLine = `${filePath} (${event})`;
+      logger.verbose(logLine);
 
       if (!anymatch(cacheFolderGlob, filePath)) {
         changedFilesOutsideScope.push(logLine);
@@ -66,29 +67,23 @@ export function initializeWatcher(
     });
 }
 
+export const sideEffectWarningString =
+  "The following files got changed outside of the scope of the folder to be cached:";
+export const sideEffectCallToActionString =
+  "You should make sure that these changes are non-essential, as they would not be brought back on a cache-hit.";
+export const noSideEffectString =
+  "All observed file changes were within the scope of the folder to be cached.";
+
 export function closeWatcher() {
   // Wait for one second before closing, giving time for file changes to propagate
+  // Bug: https://github.com/paulmillr/chokidar/issues/855
   setTimeout(() => {
     if (changedFilesOutsideScope.length > 0) {
-      console.log(
-        chalk.bold.yellow(
-          "[warning] The following files got changed outside of the scope of the folder to be cached:"
-        )
-      );
-
-      changedFilesOutsideScope.forEach(file => console.log(file));
-
-      console.log(
-        chalk.yellow(
-          "You should make sure that these changes are non-essential, as they would not be brought back on a cache-hit."
-        )
-      );
+      logger.warn(sideEffectWarningString);
+      changedFilesOutsideScope.forEach(file => logger.info(file));
+      logger.warn(sideEffectCallToActionString);
     } else {
-      console.log(
-        chalk.bold.green(
-          "[success] All observed file changes were within the scope of the folder to be cached."
-        )
-      );
+      logger.info(noSideEffectString);
     }
     watcher.close();
   }, 1000);

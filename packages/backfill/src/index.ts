@@ -2,6 +2,7 @@ import * as yargs from "yargs";
 import { loadDotenv } from "backfill-utils-dotenv";
 import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
 import { telemetry } from "backfill-telemetry";
+import { logger } from "just-task-logger";
 
 import { createConfig, Config } from "./config";
 import { DependencyResolver } from "./dependencyResolver";
@@ -31,13 +32,19 @@ export async function backfill(
   } = config;
 
   telemetry.setName(name);
+  logger.info(`Backfilling package: ${name}`);
+
   telemetry.setCacheProvider(cacheStorageConfig.provider);
+  logger.verbose(`Cache provider: ${cacheStorageConfig.provider}`);
 
   const packageHash = await hasher.createPackageHash();
+  logger.verbose(`Package hash: ${packageHash}`);
 
   if (await cacheStorage.fetch(packageHash, folderToCache)) {
     telemetry.setHit(true);
+    logger.info(`Cache hit!`);
   } else {
+    logger.info(`Cache miss!`);
     telemetry.setHit(false);
 
     try {
@@ -49,7 +56,7 @@ export async function backfill(
     try {
       await cacheStorage.put(packageHash, folderToCache);
     } catch (err) {
-      console.log("Failed persisting the cache: ", err.message);
+      logger.warn("Failed persisting the cache: ", err.message);
     }
   }
 
@@ -69,8 +76,13 @@ export async function main(): Promise<void> {
     localCacheFolder,
     telemetryFileFolder,
     telemetryReportName,
+    verboseLogs,
     watchGlobs
   } = config;
+
+  if (verboseLogs) {
+    logger.enableVerbose = true;
+  }
 
   const helpString = "Backfills unchanged packages.";
 
@@ -89,6 +101,10 @@ export async function main(): Promise<void> {
     })
     .option("audit", {
       description: "Compare files changed with those cached",
+      type: "boolean"
+    })
+    .option("verbose", {
+      description: "Verbose logging",
       type: "boolean"
     }).argv;
 
@@ -136,6 +152,7 @@ export async function main(): Promise<void> {
 
     // Disable fetching when auditing a package
     cacheStorage.fetch = () => Promise.resolve(false);
+    cacheStorage.put = () => Promise.resolve();
   }
 
   try {
@@ -145,7 +162,7 @@ export async function main(): Promise<void> {
       closeWatcher();
     }
   } catch (err) {
-    console.error(err.message || err);
+    logger.error(err.message || err);
     process.exit(1);
   }
 }
