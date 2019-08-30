@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
-    "backfill-utils-tsconfig": "*",
+    "backfill-utils-tsconfig": "^2.0.0",
     "typescript": "3.5.3"
   }
 }

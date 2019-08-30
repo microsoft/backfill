@@ -10,11 +10,11 @@
     "prepare": "backfill -- yarn compile"
   },
   "dependencies": {
-    "backfill-sample-dependency": "*"
+    "backfill-sample-dependency": "^2.0.0"
   },
   "devDependencies": {
-    "backfill": "*",
-    "backfill-utils-tsconfig": "*",
+    "backfill": "^2.0.0",
+    "backfill-utils-tsconfig": "^2.0.0",
     "typescript": "3.5.3"
   }
 }

@@ -24,7 +24,7 @@
     "@types/fs-extra": "^7.0.0",
     "@types/json2csv": "^4.2.0",
     "@types/shelljs": "^0.8.0",
-    "backfill-utils-tsconfig": "*",
+    "backfill-utils-tsconfig": "^2.0.0",
     "typescript": "3.5.3"
   }
 }

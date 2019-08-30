@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^7.0.0",
-    "backfill-utils-tsconfig": "*",
+    "backfill-utils-tsconfig": "^2.0.0",
     "typescript": "3.5.3"
   }
 }
