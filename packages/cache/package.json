@@ -1,6 +1,6 @@
 {
   "name": "backfill-cache",
-  "description": "Backfill CLI",
+  "description": "Backfill Cache Providers",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
   "repository": {
