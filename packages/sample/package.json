@@ -1,13 +1,13 @@
 {
+  "private": true,
   "name": "backfill-sample",
+  "license": "MIT",
   "version": "1.0.0",
   "main": "lib/index.js",
-  "license": "MIT",
-  "private": true,
   "scripts": {
-    "prepare": "backfill -- yarn compile",
     "build": "backfill -- yarn compile",
-    "compile": "tsc"
+    "compile": "tsc",
+    "prepare": "backfill -- yarn compile"
   },
   "dependencies": {
     "backfill-sample-dependency": "*"

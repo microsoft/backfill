@@ -1,19 +1,19 @@
 {
   "name": "backfill-telemetry",
-  "version": "2.0.0",
   "description": "Backfill Telemetry",
+  "license": "MIT",
+  "author": "Benjamin Weggersen <bewegger@microsoft.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "license": "MIT",
-  "author": "Benjamin Weggersen <bewegger@microsoft.com>",
+  "version": "2.0.0",
   "main": "lib/index.js",
   "scripts": {
-    "prepare": "yarn compile",
     "build": "yarn compile",
-    "watch": "tsc -w",
-    "compile": "tsc"
+    "compile": "tsc",
+    "prepare": "yarn compile",
+    "watch": "tsc -w"
   },
   "dependencies": {
     "fs-extra": "^7.0.1",

@@ -1,20 +1,20 @@
 {
   "name": "backfill-cache",
-  "version": "2.0.0",
   "description": "Backfill CLI",
+  "license": "MIT",
+  "author": "Benjamin Weggersen <bewegger@microsoft.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "license": "MIT",
-  "author": "Benjamin Weggersen <bewegger@microsoft.com>",
+  "version": "2.0.0",
   "main": "lib/index.js",
   "scripts": {
-    "prepare": "yarn compile",
     "build": "yarn compile",
-    "watch": "tsc -w",
     "compile": "tsc",
-    "test": "jest"
+    "prepare": "yarn compile",
+    "test": "jest",
+    "watch": "tsc -w"
   },
   "dependencies": {
     "@azure/storage-blob": "12.0.0-preview.2",
