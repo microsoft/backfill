@@ -1,21 +1,14 @@
-# Introduction
+# backfill
 
-This is a command line tool and library to manage backfilling for built
-artifacts from a cache if available.
+A JavaScript caching library for reducing build time.
 
 ## Build & run sample packages/projects
 
-`yarn` will build the tool along with a set of sample packages that use the
-backfill command.
+`yarn` will download dependencies and build all packages under `/packages`.
 
 ## Run unit-tests and code coverage
 
-`yarn test` or `yarn test --watch` will execute the unit-tests for a package.
-Make sure to change the directory to the package first.
-
-By default the test command will collect code coverage and if you install
-[Coverage gutters](https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters)
-you can start the watch mode to show inline coverage in vscode.
+`yarn test` or `yarn test --watch` will execute the unit tests for a package.
 
 # Contributing
 
