@@ -1,0 +1,20 @@
+{
+  "name": "backfill-sample",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "prepare": "backfill -- yarn compile",
+    "build": "backfill -- yarn compile",
+    "compile": "tsc"
+  },
+  "dependencies": {
+    "backfill-sample-dependency": "*"
+  },
+  "devDependencies": {
+    "backfill": "*",
+    "backfill-utils-tsconfig": "*",
+    "typescript": "3.5.3"
+  }
+}

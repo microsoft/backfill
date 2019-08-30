@@ -1,7 +1,20 @@
+# Introduction
+
+This is a command line tool and library to manage backfilling for built artifacts from a cache if available.
+
+## Build & run sample packages/projects
+
+`yarn` will build the tool along with a set of sample packages that use the backfill command.
+
+## Run unit-tests and code coverage
+
+`yarn test` or `yarn test --watch` will execute the unit-tests for a package. Make sure to change the directory to the package first.
+
+By default the test command will collect code coverage and if you install [Coverage gutters](https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters) you can start the watch mode to show inline coverage in vscode.
 
 # Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+This project welcomes contributions and suggestions. Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
 the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 

@@ -1,0 +1,38 @@
+{
+  "name": "backfill-cache",
+  "version": "2.0.0",
+  "description": "Backfill CLI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/backfill"
+  },
+  "license": "MIT",
+  "author": "Benjamin Weggersen <bewegger@microsoft.com>",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepare": "yarn compile",
+    "build": "yarn compile",
+    "watch": "tsc -w",
+    "compile": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@azure/storage-blob": "12.0.0-preview.2",
+    "backfill-telemetry": "*",
+    "execa": "^1.0.0",
+    "fs-extra": "^7.0.1",
+    "shelljs": "^0.8.3",
+    "tar": "^4.4.8"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^7.0.0",
+    "@types/shelljs": "^0.8.0",
+    "@types/tar": "^4.0.0",
+    "backfill-utils-test": "*",
+    "backfill-utils-tsconfig": "*",
+    "execa": "^1.0.0",
+    "jest": "^24.0.12",
+    "ts-jest": "^24.0.2",
+    "typescript": "3.5.3"
+  }
+}

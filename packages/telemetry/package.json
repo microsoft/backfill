@@ -1,0 +1,30 @@
+{
+  "name": "backfill-telemetry",
+  "version": "2.0.0",
+  "description": "Backfill Telemetry",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/backfill"
+  },
+  "license": "MIT",
+  "author": "Benjamin Weggersen <bewegger@microsoft.com>",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepare": "yarn compile",
+    "build": "yarn compile",
+    "watch": "tsc -w",
+    "compile": "tsc"
+  },
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "json2csv": "^4.3.1",
+    "shelljs": "^0.8.3"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^7.0.0",
+    "@types/json2csv": "^4.2.0",
+    "@types/shelljs": "^0.8.0",
+    "backfill-utils-tsconfig": "*",
+    "typescript": "3.5.3"
+  }
+}

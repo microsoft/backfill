@@ -1,0 +1,27 @@
+{
+  "name": "backfill-utils-dotenv",
+  "version": "2.0.0",
+  "description": "Loads .env-variables into process.env",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/backfill"
+  },
+  "license": "MIT",
+  "author": "Benjamin Weggersen <bewegger@microsoft.com>",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepare": "yarn compile",
+    "build": "yarn compile",
+    "watch": "tsc -w",
+    "compile": "tsc"
+  },
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "find-up": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "backfill-utils-tsconfig": "*",
+    "typescript": "3.5.3"
+  }
+}
