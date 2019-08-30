@@ -1,0 +1,8 @@
+{
+  "extends": "backfill-utils-tsconfig/tsconfig.default.json",
+  "exclude": ["__fixtures__", "lib"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib"
+  }
+}

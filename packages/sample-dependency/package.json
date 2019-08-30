@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "backfill-sample-dependency",
+  "license": "MIT",
+  "version": "2.0.0",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "backfill -- yarn compile",
+    "compile": "tsc",
+    "prepare": "backfill -- yarn compile"
+  },
+  "devDependencies": {
+    "backfill": "^2.0.0",
+    "backfill-utils-tsconfig": "^2.0.0",
+    "typescript": "3.5.3"
+  }
+}
