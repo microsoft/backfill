@@ -36,8 +36,9 @@ export function initializeWatcher(
   changedFilesOutsideScope = [];
   changedFilesInsideScope = [];
 
-  logger.info(`Watching for file changes in: ${repositoryRoot}`);
-  logger.info(`Backfill will cache: ${folderToCache}`);
+  logger.info("Running in AUDIT mode");
+  logger.info(`[audit] Watching file changes in: ${repositoryRoot}`);
+  logger.info(`[audit] Cache-folder: ${folderToCache}`);
 
   // Define globs
   const ignoreGlobs = [
@@ -57,7 +58,7 @@ export function initializeWatcher(
     })
     .on("all", (event, filePath) => {
       const logLine = `${filePath} (${event})`;
-      logger.verbose(logLine);
+      logger.verbose(`[audit] ${logLine}`);
 
       if (!anymatch(cacheFolderGlob, filePath)) {
         changedFilesOutsideScope.push(logLine);
@@ -68,11 +69,11 @@ export function initializeWatcher(
 }
 
 export const sideEffectWarningString =
-  "The following files got changed outside of the scope of the folder to be cached:";
+  "[audit] The following files got changed outside of the scope of the folder to be cached:";
 export const sideEffectCallToActionString =
-  "You should make sure that these changes are non-essential, as they would not be brought back on a cache-hit.";
+  "[audit] You should make sure that these changes are non-essential, as they would not be brought back on a cache-hit.";
 export const noSideEffectString =
-  "All observed file changes were within the scope of the folder to be cached.";
+  "[audit] All observed file changes were within the scope of the folder to be cached.";
 
 export function closeWatcher() {
   // Wait for one second before closing, giving time for file changes to propagate

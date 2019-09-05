@@ -32,7 +32,7 @@ export async function backfill(
   } = config;
 
   telemetry.setName(name);
-  logger.info(`Backfilling package: ${name}`);
+  logger.info(`Package name: ${name}`);
 
   telemetry.setCacheProvider(cacheStorageConfig.provider);
   logger.verbose(`Cache provider: ${cacheStorageConfig.provider}`);
