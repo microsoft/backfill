@@ -10,6 +10,7 @@
     "precommit": "lint-staged",
     "postinstall": "lerna run --stream prepare",
     "lerna": "lerna",
+    "publish:branch": "lerna publish --canary --dist-tag $(git rev-parse --abbrev-ref HEAD) --preid $(git rev-parse --abbrev-ref HEAD)",
     "test": "lerna run test",
     "watch": "lerna run watch --parallel"
   },
