@@ -3,6 +3,7 @@ import * as findUp from "find-up";
 import * as path from "path";
 import anymatch from "anymatch";
 import { logger } from "just-task-logger";
+import { WatchGlobs } from "./config";
 
 let changedFilesOutsideScope: string[] = [];
 let changedFilesInsideScope: string[] = [];
@@ -27,7 +28,8 @@ export function initializeWatcher(
   packageRoot: string,
   localCacheFolder: string,
   telemetryFileFolder: string,
-  folderToCache: string
+  folderToCache: string,
+  watchGlobs: WatchGlobs
 ) {
   // Trying to find the git root and using it as an approximation of code boundary
   const repositoryRoot = getGitRepositoryRoot(packageRoot);
@@ -45,8 +47,14 @@ export function initializeWatcher(
     localCacheFolder,
     telemetryFileFolder,
     ".git",
-    ".cache"
-  ].map(p => path.join("**", p, "**"));
+    ".cache",
+    ...watchGlobs.folders.exclude
+  ].map(p => path.join("**", p, "**", "*"));
+
+  if (watchGlobs.files.exclude) {
+    ignoreGlobs.push(...watchGlobs.files.exclude.map(p => path.join("**", p)));
+  }
+
   const cacheFolderGlob = path.join("**", folderToCache, "**");
 
   watcher = chokidar
@@ -81,7 +89,7 @@ export function closeWatcher() {
   setTimeout(() => {
     if (changedFilesOutsideScope.length > 0) {
       logger.warn(sideEffectWarningString);
-      changedFilesOutsideScope.forEach(file => logger.info(file));
+      changedFilesOutsideScope.forEach(file => logger.warn(`[audit] ${file}`));
       logger.warn(sideEffectCallToActionString);
     } else {
       logger.info(noSideEffectString);

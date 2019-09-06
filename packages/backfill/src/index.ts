@@ -147,7 +147,8 @@ export async function main(): Promise<void> {
       packageRoot,
       localCacheFolder,
       telemetryFileFolder,
-      folderToCache
+      folderToCache,
+      watchGlobs
     );
 
     // Disable fetching when auditing a package
