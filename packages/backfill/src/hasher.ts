@@ -126,7 +126,10 @@ export class Hasher implements IHasher {
     return hashElement(this.packageRoot, {
       encoding: "hex",
       ...this.options.watchGlobs
-    }).then(({ hash }) => hash);
+    }).then(result => {
+      logger.verbose(result);
+      return result.hash;
+    });
   }
 
   private async writeHashToDisk(hash: string): Promise<string> {
