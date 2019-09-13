@@ -42,18 +42,19 @@ export function initializeWatcher(
   logger.info(`[audit] Watching file changes in: ${repositoryRoot}`);
   logger.info(`[audit] Cache-folder: ${folderToCache}`);
 
+  const excludeFolders = watchGlobs.folders.exclude;
+  const excludeFiles = watchGlobs.files.exclude || [];
+
   // Define globs
   const ignoreGlobs = [
     localCacheFolder,
     telemetryFileFolder,
     ".git",
     ".cache",
-    ...watchGlobs.folders.exclude
+    ...excludeFolders
   ].map(p => path.join("**", p, "**", "*"));
 
-  if (watchGlobs.files.exclude) {
-    ignoreGlobs.push(...watchGlobs.files.exclude.map(p => path.join("**", p)));
-  }
+  ignoreGlobs.push(...[".cache", ...excludeFiles].map(p => path.join("**", p)));
 
   const cacheFolderGlob = path.join("**", folderToCache, "**");
 
@@ -95,5 +96,5 @@ export function closeWatcher() {
       logger.info(noSideEffectString);
     }
     watcher.close();
-  }, 1000);
+  }, 2000);
 }
