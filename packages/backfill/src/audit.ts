@@ -3,6 +3,7 @@ import * as findUp from "find-up";
 import * as path from "path";
 import anymatch from "anymatch";
 import { logger } from "just-task-logger";
+import { WatchGlobs } from "./config";
 
 let changedFilesOutsideScope: string[] = [];
 let changedFilesInsideScope: string[] = [];
@@ -27,7 +28,8 @@ export function initializeWatcher(
   packageRoot: string,
   localCacheFolder: string,
   telemetryFileFolder: string,
-  folderToCache: string
+  folderToCache: string,
+  watchGlobs: WatchGlobs
 ) {
   // Trying to find the git root and using it as an approximation of code boundary
   const repositoryRoot = getGitRepositoryRoot(packageRoot);
@@ -36,16 +38,24 @@ export function initializeWatcher(
   changedFilesOutsideScope = [];
   changedFilesInsideScope = [];
 
-  logger.info(`Watching for file changes in: ${repositoryRoot}`);
-  logger.info(`Backfill will cache: ${folderToCache}`);
+  logger.info("Running in AUDIT mode");
+  logger.info(`[audit] Watching file changes in: ${repositoryRoot}`);
+  logger.info(`[audit] Cache-folder: ${folderToCache}`);
+
+  const excludeFolders = watchGlobs.folders.exclude;
+  const excludeFiles = watchGlobs.files.exclude || [];
 
   // Define globs
   const ignoreGlobs = [
     localCacheFolder,
     telemetryFileFolder,
     ".git",
-    ".cache"
-  ].map(p => path.join("**", p, "**"));
+    ".cache",
+    ...excludeFolders
+  ].map(p => path.join("**", p, "**", "*"));
+
+  ignoreGlobs.push(...[".cache", ...excludeFiles].map(p => path.join("**", p)));
+
   const cacheFolderGlob = path.join("**", folderToCache, "**");
 
   watcher = chokidar
@@ -57,7 +67,7 @@ export function initializeWatcher(
     })
     .on("all", (event, filePath) => {
       const logLine = `${filePath} (${event})`;
-      logger.verbose(logLine);
+      logger.verbose(`[audit] ${logLine}`);
 
       if (!anymatch(cacheFolderGlob, filePath)) {
         changedFilesOutsideScope.push(logLine);
@@ -68,11 +78,11 @@ export function initializeWatcher(
 }
 
 export const sideEffectWarningString =
-  "The following files got changed outside of the scope of the folder to be cached:";
+  "[audit] The following files got changed outside of the scope of the folder to be cached:";
 export const sideEffectCallToActionString =
-  "You should make sure that these changes are non-essential, as they would not be brought back on a cache-hit.";
+  "[audit] You should make sure that these changes are non-essential, as they would not be brought back on a cache-hit.";
 export const noSideEffectString =
-  "All observed file changes were within the scope of the folder to be cached.";
+  "[audit] All observed file changes were within the scope of the folder to be cached.";
 
 export function closeWatcher() {
   // Wait for one second before closing, giving time for file changes to propagate
@@ -80,11 +90,11 @@ export function closeWatcher() {
   setTimeout(() => {
     if (changedFilesOutsideScope.length > 0) {
       logger.warn(sideEffectWarningString);
-      changedFilesOutsideScope.forEach(file => logger.info(file));
+      changedFilesOutsideScope.forEach(file => logger.warn(`[audit] ${file}`));
       logger.warn(sideEffectCallToActionString);
     } else {
       logger.info(noSideEffectString);
     }
     watcher.close();
-  }, 1000);
+  }, 2000);
 }

@@ -32,7 +32,7 @@ export async function backfill(
   } = config;
 
   telemetry.setName(name);
-  logger.info(`Backfilling package: ${name}`);
+  logger.info(`Package name: ${name}`);
 
   telemetry.setCacheProvider(cacheStorageConfig.provider);
   logger.verbose(`Cache provider: ${cacheStorageConfig.provider}`);
@@ -147,7 +147,8 @@ export async function main(): Promise<void> {
       packageRoot,
       localCacheFolder,
       telemetryFileFolder,
-      folderToCache
+      folderToCache,
+      watchGlobs
     );
 
     // Disable fetching when auditing a package
