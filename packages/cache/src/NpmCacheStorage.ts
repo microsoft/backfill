@@ -18,18 +18,18 @@ export class NpmCacheStorage extends CacheStorage {
     super();
   }
 
-  protected _fetch(hash: string, destinationFolder: string) {
+  protected _fetch(hash: string, outputFolder: string) {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
-    const destinationTempFolder = path.join(this.localCacheFolder, "npm", hash);
+    const temporaryOutputFolder = path.join(this.localCacheFolder, "npm", hash);
 
     // Create a temp folder to try to install the npm
-    fs.mkdirpSync(destinationTempFolder);
+    fs.mkdirpSync(temporaryOutputFolder);
 
     const runner = execa("npm", [
       "install",
       "--prefix",
-      destinationTempFolder,
+      temporaryOutputFolder,
       `${npmPackageName}@0.0.0-${hash}`,
       "--registry",
       registryUrl,
@@ -46,31 +46,32 @@ export class NpmCacheStorage extends CacheStorage {
     return runner
       .then(() => {
         // Clean cache output folder
-        if (fs.pathExistsSync(destinationFolder)) {
-          fs.removeSync(destinationFolder);
+        if (fs.pathExistsSync(outputFolder)) {
+          fs.removeSync(outputFolder);
         }
-        fs.mkdirpSync(destinationFolder);
+        fs.mkdirpSync(outputFolder);
 
         // Move downloaded npm package to cache output folder
         fs.moveSync(
-          path.join(destinationTempFolder, "node_modules", npmPackageName, "*"),
-          destinationFolder,
+          path.join(temporaryOutputFolder, "node_modules", npmPackageName),
+          outputFolder,
           { overwrite: true }
         );
 
         // Clean up
-        if (fs.pathExistsSync(destinationTempFolder)) {
-          fs.removeSync(destinationTempFolder);
+        if (fs.pathExistsSync(temporaryOutputFolder)) {
+          fs.removeSync(temporaryOutputFolder);
         }
-        if (fs.pathExistsSync(path.join(destinationFolder, "package.json"))) {
-          fs.removeSync(path.join(destinationFolder, "package.json"));
+
+        if (fs.pathExistsSync(path.join(outputFolder, "package.json"))) {
+          fs.removeSync(path.join(outputFolder, "package.json"));
         }
 
         // Rename package.json if it was part of the original cache output folder
-        if (fs.pathExistsSync(path.join(destinationFolder, "__package.json"))) {
+        if (fs.pathExistsSync(path.join(outputFolder, "__package.json"))) {
           fs.moveSync(
-            path.join(destinationFolder, "__package.json"),
-            path.join(destinationFolder, "package.json"),
+            path.join(outputFolder, "__package.json"),
+            path.join(outputFolder, "package.json"),
             { overwrite: true }
           );
         }
@@ -79,26 +80,26 @@ export class NpmCacheStorage extends CacheStorage {
       })
       .catch(() => {
         // Clean up
-        fs.removeSync(destinationTempFolder);
+        fs.removeSync(temporaryOutputFolder);
 
         return false;
       });
   }
 
-  protected _put(hash: string, sourceFolder: string) {
+  protected _put(hash: string, outputFolder: string) {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
     // Rename if conflict
-    if (fs.pathExistsSync(path.join(sourceFolder, "package.json"))) {
+    if (fs.pathExistsSync(path.join(outputFolder, "package.json"))) {
       fs.moveSync(
-        path.join(sourceFolder, "package.json"),
-        path.join(sourceFolder, "__package.json"),
+        path.join(outputFolder, "package.json"),
+        path.join(outputFolder, "__package.json"),
         { overwrite: true }
       );
     }
 
     // Create package.json file
-    fs.outputJSONSync(path.join(sourceFolder, "package.json"), {
+    fs.outputJSONSync(path.join(outputFolder, "package.json"), {
       name: npmPackageName,
       version: `0.0.0-${hash}`
     });
@@ -115,7 +116,7 @@ export class NpmCacheStorage extends CacheStorage {
         ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
       ],
       {
-        cwd: sourceFolder
+        cwd: outputFolder
       }
     );
     runner.stdout.pipe(process.stdout);
@@ -123,14 +124,14 @@ export class NpmCacheStorage extends CacheStorage {
 
     return runner.then(() => {
       // Clean up
-      if (fs.pathExistsSync(path.join(sourceFolder, "package.json"))) {
-        fs.removeSync(path.join(sourceFolder, "package.json"));
+      if (fs.pathExistsSync(path.join(outputFolder, "package.json"))) {
+        fs.removeSync(path.join(outputFolder, "package.json"));
       }
 
-      if (fs.pathExistsSync(path.join(sourceFolder, "__package.json"))) {
+      if (fs.pathExistsSync(path.join(outputFolder, "__package.json"))) {
         fs.moveSync(
-          path.join(sourceFolder, "__package.json"),
-          path.join(sourceFolder, "package.json"),
+          path.join(outputFolder, "__package.json"),
+          path.join(outputFolder, "package.json"),
           { overwrite: true }
         );
       }

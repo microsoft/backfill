@@ -12,27 +12,25 @@ export class LocalCacheStorage extends CacheStorage {
     return path.join(this.localCacheFolder, hash);
   }
 
-  protected _fetch(hash: string, destinationFolder: string) {
+  protected _fetch(hash: string, outputFolder: string) {
     const objectUri = this.getLocalCacheFolder(hash);
 
     if (!fs.pathExistsSync(objectUri)) {
       return Promise.resolve(false);
     }
 
-    fs.mkdirpSync(destinationFolder);
-    fs.copySync(
-      path.join(objectUri, destinationFolder, "*"),
-      destinationFolder
-    );
+    fs.mkdirpSync(outputFolder);
+    fs.copySync(path.join(objectUri, outputFolder), outputFolder);
 
     return Promise.resolve(true);
   }
 
-  protected _put(hash: string, sourceFolder: string) {
+  protected _put(hash: string, outputFolder: string) {
     const objectUri = this.getLocalCacheFolder(hash);
+    const outputFolderInCache = path.join(objectUri, outputFolder);
 
-    fs.mkdirpSync(objectUri);
-    fs.copySync(sourceFolder, objectUri);
+    fs.mkdirpSync(outputFolderInCache);
+    fs.copySync(outputFolder, outputFolderInCache);
 
     return Promise.resolve();
   }
