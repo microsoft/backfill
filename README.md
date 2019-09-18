@@ -104,7 +104,7 @@ The default configuration object is:
 {
   cacheStorageConfig: { provider: "local" },
   hashFileFolder: "node_modules/.cache/backfill",
-  localCacheFolder: "node_modules/.cache/backfill",
+  internalCacheFolder: "node_modules/.cache/backfill",
   logFolder: "node_modules/.cache/backfill",
   name: "name-of-package",
   outputFolder: "lib",
@@ -128,7 +128,7 @@ export type Config = {
   cacheStorageConfig: CacheStorageConfig;
   outputFolder: string;
   outputPerformanceLogs: boolean;
-  localCacheFolder: string;
+  internalCacheFolder: string;
   hashFileFolder: string;
   logFolder: string;
   performanceReportName?: string;

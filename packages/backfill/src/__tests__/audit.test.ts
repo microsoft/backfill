@@ -1,9 +1,9 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import * as findUp from "find-up";
 import execa = require("execa");
 import { setupFixture } from "backfill-utils-test";
 
+import { findPathToBackfill } from "./helper";
 import { sideEffectWarningString, noSideEffectString } from "../audit";
 
 function outputAllStd({ stderr, stdout }: execa.ExecaReturns) {
@@ -15,14 +15,7 @@ describe("Audit", () => {
   let backfillOutput: execa.ExecaReturns | undefined;
 
   beforeAll(async () => {
-    const findPathToBackfill = await findUp(path.join("bin", "backfill.js"), {
-      cwd: __dirname
-    });
-    if (!findPathToBackfill) {
-      throw new Error("Cannot find path to `backfill` command");
-    }
-
-    pathToBackfill = findPathToBackfill;
+    pathToBackfill = await findPathToBackfill();
   });
 
   beforeEach(async () => {

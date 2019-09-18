@@ -9,7 +9,7 @@ import { CacheStorage } from "./CacheStorage";
 export class NpmCacheStorage extends CacheStorage {
   constructor(
     private options: NpmCacheStorageOptions,
-    private localCacheFolder: string
+    private internalCacheFolder: string
   ) {
     super();
   }
@@ -17,7 +17,11 @@ export class NpmCacheStorage extends CacheStorage {
   protected _fetch(hash: string, outputFolder: string) {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
-    const temporaryOutputFolder = path.join(this.localCacheFolder, "npm", hash);
+    const temporaryOutputFolder = path.join(
+      this.internalCacheFolder,
+      "npm",
+      hash
+    );
 
     // Create a temp folder to try to install the npm
     fs.mkdirpSync(temporaryOutputFolder);

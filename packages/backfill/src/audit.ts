@@ -26,7 +26,7 @@ function getGitRepositoryRoot(packageRoot: string) {
 
 export function initializeWatcher(
   packageRoot: string,
-  localCacheFolder: string,
+  internalCacheFolder: string,
   logFolder: string,
   outputFolder: string,
   watchGlobs: WatchGlobs
@@ -47,7 +47,7 @@ export function initializeWatcher(
 
   // Define globs
   const ignoreGlobs = [
-    localCacheFolder,
+    internalCacheFolder,
     logFolder,
     ".git",
     ".cache",

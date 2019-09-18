@@ -1,8 +1,8 @@
 import * as path from "path";
 import * as fs from "fs-extra";
 import * as execa from "execa";
-import * as findUp from "find-up";
 
+import { findPathToBackfill } from "./helper";
 import { setupFixture } from "backfill-utils-test";
 
 describe("End to end", () => {
@@ -10,14 +10,7 @@ describe("End to end", () => {
   let hashPath: string;
 
   beforeAll(async () => {
-    const findPathToBackfill = await findUp(path.join("bin", "backfill.js"), {
-      cwd: __dirname
-    });
-    if (!findPathToBackfill) {
-      throw new Error("Cannot find path to `backfill` command");
-    }
-
-    pathToBackfill = findPathToBackfill;
+    pathToBackfill = await findPathToBackfill();
     hashPath = path.join("node_modules", ".cache", "backfill", "hash");
   });
 

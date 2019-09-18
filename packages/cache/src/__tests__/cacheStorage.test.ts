@@ -10,14 +10,14 @@ describe("LocalCacheStorage", () => {
     await setupFixture(fixtureName);
 
     const cacheStorageConfig = createDefaultConfig().cacheStorageConfig;
-    const localCacheFolder = path.join("node_modules", ".cache", "backfill");
+    const internalCacheFolder = path.join("node_modules", ".cache", "backfill");
 
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
-      localCacheFolder
+      internalCacheFolder
     );
 
-    return { cacheStorage, localCacheFolder };
+    return { cacheStorage, internalCacheFolder };
   };
 
   describe("fetch", () => {
@@ -27,13 +27,13 @@ describe("LocalCacheStorage", () => {
       outputFolder: string
     ) => {
       // Setup
-      const { cacheStorage, localCacheFolder } = await setupCacheStorage(
+      const { cacheStorage, internalCacheFolder } = await setupCacheStorage(
         fixtureName
       );
 
       const secretFile = "qwerty";
       const secretFileInCache = path.join(
-        localCacheFolder,
+        internalCacheFolder,
         hash,
         outputFolder,
         secretFile
@@ -96,7 +96,7 @@ describe("LocalCacheStorage", () => {
       outputFolder: string
     ) => {
       // Setup
-      const { cacheStorage, localCacheFolder } = await setupCacheStorage(
+      const { cacheStorage, internalCacheFolder } = await setupCacheStorage(
         fixtureName
       );
 
@@ -111,7 +111,7 @@ describe("LocalCacheStorage", () => {
 
       // Assert
       const secretFileInCache = path.join(
-        localCacheFolder,
+        internalCacheFolder,
         hash,
         outputFolder,
         secretFile
@@ -139,7 +139,7 @@ describe("LocalCacheStorage", () => {
 
     it("will not persist cache when folder to cache does not exist", async () => {
       // Setup
-      const { cacheStorage, localCacheFolder } = await setupCacheStorage(
+      const { cacheStorage, internalCacheFolder } = await setupCacheStorage(
         "basic"
       );
 
@@ -152,7 +152,7 @@ describe("LocalCacheStorage", () => {
       );
 
       // Assert
-      const cachedFolderExists = await fs.pathExists(localCacheFolder);
+      const cachedFolderExists = await fs.pathExists(internalCacheFolder);
       expect(cachedFolderExists).toBe(false);
     });
   });

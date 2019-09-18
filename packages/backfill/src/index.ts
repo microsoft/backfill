@@ -69,7 +69,7 @@ export async function main(): Promise<void> {
   const {
     cacheStorageConfig,
     hashFileFolder,
-    localCacheFolder,
+    internalCacheFolder,
     logFolder,
     name,
     outputFolder,
@@ -110,7 +110,7 @@ export async function main(): Promise<void> {
 
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
-    localCacheFolder
+    internalCacheFolder
   );
 
   const buildCommand = createBuildCommand(
@@ -148,7 +148,7 @@ export async function main(): Promise<void> {
   if (argv["audit"]) {
     initializeWatcher(
       packageRoot,
-      localCacheFolder,
+      internalCacheFolder,
       logFolder,
       outputFolder,
       watchGlobs

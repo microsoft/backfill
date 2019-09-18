@@ -22,7 +22,7 @@ export type WatchGlobs = {
 export type Config = {
   cacheStorageConfig: CacheStorageConfig;
   hashFileFolder: string;
-  localCacheFolder: string;
+  internalCacheFolder: string;
   logFolder: string;
   name: string;
   outputFolder: string;
@@ -70,7 +70,7 @@ export function createDefaultConfig(): Config {
       provider: "local"
     },
     hashFileFolder: defaultCacheFolder,
-    localCacheFolder: defaultCacheFolder,
+    internalCacheFolder: defaultCacheFolder,
     logFolder: defaultCacheFolder,
     outputFolder: "lib",
     outputPerformanceLogs: false,
