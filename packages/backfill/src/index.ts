@@ -1,7 +1,7 @@
 import * as yargs from "yargs";
 import { loadDotenv } from "backfill-utils-dotenv";
 import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
-import { telemetry } from "backfill-telemetry";
+import { performanceLogger } from "backfill-performance-logger";
 import { logger } from "just-task-logger";
 
 import { createConfig, Config } from "./config";
@@ -27,25 +27,25 @@ export async function backfill(
     cacheStorageConfig,
     folderToCache,
     name,
-    telemetryFileFolder,
-    useTelemetry
+    logFolder,
+    outputPerformanceLogs
   } = config;
 
-  telemetry.setName(name);
+  performanceLogger.setName(name);
   logger.info(`Package name: ${name}`);
 
-  telemetry.setCacheProvider(cacheStorageConfig.provider);
+  performanceLogger.setCacheProvider(cacheStorageConfig.provider);
   logger.verbose(`Cache provider: ${cacheStorageConfig.provider}`);
 
   const packageHash = await hasher.createPackageHash();
   logger.verbose(`Package hash: ${packageHash}`);
 
   if (await cacheStorage.fetch(packageHash, folderToCache)) {
-    telemetry.setHit(true);
+    performanceLogger.setHit(true);
     logger.info(`Cache hit!`);
   } else {
     logger.info(`Cache miss!`);
-    telemetry.setHit(false);
+    performanceLogger.setHit(false);
 
     try {
       await buildCommand();
@@ -60,8 +60,8 @@ export async function backfill(
     }
   }
 
-  if (useTelemetry) {
-    await telemetry.toFile(telemetryFileFolder);
+  if (outputPerformanceLogs) {
+    await performanceLogger.toFile(logFolder);
   }
 }
 
@@ -74,8 +74,8 @@ export async function main(): Promise<void> {
     folderToCache,
     packageRoot,
     localCacheFolder,
-    telemetryFileFolder,
-    telemetryReportName,
+    logFolder,
+    performanceReportName,
     verboseLogs,
     watchGlobs
   } = config;
@@ -91,8 +91,8 @@ export async function main(): Promise<void> {
     .usage(helpString)
     .alias("h", "help")
     .version(false)
-    .option("generate-telemetry-report", {
-      description: "Generate telemetry report",
+    .option("generate-performance-report", {
+      description: "Generate performance report",
       type: "boolean"
     })
     .option("hash-only", {
@@ -122,10 +122,10 @@ export async function main(): Promise<void> {
     new DependencyResolver({ packageRoot })
   );
 
-  if (argv["generate-telemetry-report"]) {
-    await telemetry.generateTelemetryReport(
-      telemetryFileFolder,
-      telemetryReportName
+  if (argv["generate-performance-report"]) {
+    await performanceLogger.generatePerformanceReport(
+      logFolder,
+      performanceReportName
     );
 
     return;
@@ -134,10 +134,10 @@ export async function main(): Promise<void> {
   if (argv["hash-only"]) {
     const hash = await hasher.createPackageHash();
 
-    telemetry.setName(name);
-    telemetry.setHash(hash);
-    telemetry.setCacheProvider("SKIP");
-    await telemetry.toFile(telemetryFileFolder);
+    performanceLogger.setName(name);
+    performanceLogger.setHash(hash);
+    performanceLogger.setCacheProvider("SKIP");
+    await performanceLogger.toFile(logFolder);
 
     return;
   }
@@ -146,7 +146,7 @@ export async function main(): Promise<void> {
     initializeWatcher(
       packageRoot,
       localCacheFolder,
-      telemetryFileFolder,
+      logFolder,
       folderToCache,
       watchGlobs
     );

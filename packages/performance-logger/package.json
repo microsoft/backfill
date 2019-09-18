@@ -1,6 +1,6 @@
 {
-  "name": "backfill-telemetry",
-  "description": "Backfill Telemetry",
+  "name": "backfill-performance-logger",
+  "description": "Backfill Performance Logger",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
   "repository": {

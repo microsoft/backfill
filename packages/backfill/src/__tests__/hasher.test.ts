@@ -23,7 +23,7 @@ const createPackageHasher = async (
     {
       packageRoot,
       hashFileFolder,
-      useTelemetry: false,
+      outputPerformanceLogs: false,
       watchGlobs
     },
     buildCommand,

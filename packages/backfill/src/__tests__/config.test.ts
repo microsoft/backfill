@@ -30,18 +30,18 @@ describe("getEnvConfig()", () => {
     process.env = originalEnv;
   });
 
-  it("sets telemetry file folder through ENV variable", async () => {
-    process.env["BACKFILL_TELEMETRY_FILE_FOLDER"] = "foo";
+  it("sets log folder through ENV variable", async () => {
+    process.env["BACKFILL_LOG_FOLDER"] = "foo";
 
     const config = getEnvConfig();
-    expect(config).toStrictEqual({ telemetryFileFolder: "foo" });
+    expect(config).toStrictEqual({ logFolder: "foo" });
   });
 
-  it("sets telemetry flag through ENV variable", async () => {
-    process.env["BACKFILL_USE_TELEMETRY"] = "true";
+  it("sets the performance logging flag through ENV variable", async () => {
+    process.env["BACKFILL_OUTPUT_PERFORMANCE_LOGS"] = "true";
 
     const config = getEnvConfig();
-    expect(config).toStrictEqual({ useTelemetry: true });
+    expect(config).toStrictEqual({ outputPerformanceLogs: true });
   });
 
   it("sets local cache folder through ENV variable", async () => {
@@ -69,11 +69,11 @@ describe("getEnvConfig()", () => {
     expect(config).toStrictEqual({ cacheStorageConfig: cacheStorageConfig });
   });
 
-  it("sets telemetry report name through ENV variable", async () => {
-    process.env["BACKFILL_TELEMETRY_REPORT_NAME"] = "report";
+  it("sets performance report name through ENV variable", async () => {
+    process.env["BACKFILL_PERFORMANCE_REPORT_NAME"] = "report";
 
     const config = getEnvConfig();
-    expect(config).toStrictEqual({ telemetryReportName: "report" });
+    expect(config).toStrictEqual({ performanceReportName: "report" });
   });
 });
 

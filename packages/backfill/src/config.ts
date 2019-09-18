@@ -25,21 +25,21 @@ export type Config = {
   packageRoot: string;
   cacheStorageConfig: CacheStorageConfig;
   folderToCache: string;
-  useTelemetry: boolean;
+  outputPerformanceLogs: boolean;
   localCacheFolder: string;
   hashFileFolder: string;
-  telemetryFileFolder: string;
-  telemetryReportName?: string;
+  logFolder: string;
+  performanceReportName?: string;
   verboseLogs: boolean;
   watchGlobs: WatchGlobs;
 };
 
 export type ConfigEnv = {
   cacheStorageConfig?: CacheStorageConfig;
-  useTelemetry?: boolean;
+  outputPerformanceLogs?: boolean;
   localCacheFolder?: string;
-  telemetryFileFolder?: string;
-  telemetryReportName?: string;
+  logFolder?: string;
+  performanceReportName?: string;
 };
 
 export function getName(packageRoot: string) {
@@ -98,14 +98,14 @@ function getAzureBlobConfigFromSerializedOptions(
 export function getEnvConfig() {
   const config: ConfigEnv = {};
 
-  const telemetryFileFolder = process.env["BACKFILL_TELEMETRY_FILE_FOLDER"];
-  if (telemetryFileFolder) {
-    config["telemetryFileFolder"] = telemetryFileFolder;
+  const logFolder = process.env["BACKFILL_LOG_FOLDER"];
+  if (logFolder) {
+    config["logFolder"] = logFolder;
   }
 
-  const useTelemetry = process.env["BACKFILL_USE_TELEMETRY"];
-  if (useTelemetry) {
-    config["useTelemetry"] = Boolean(useTelemetry === "true");
+  const outputPerformanceLogs = process.env["BACKFILL_OUTPUT_PERFORMANCE_LOGS"];
+  if (outputPerformanceLogs) {
+    config["outputPerformanceLogs"] = Boolean(outputPerformanceLogs === "true");
   }
 
   const localCacheFolder = process.env["BACKFILL_LOCAL_CACHE_FOLDER"];
@@ -129,9 +129,9 @@ export function getEnvConfig() {
     // local cache has no config at the moment
   }
 
-  const telemetryReportName = process.env["BACKFILL_TELEMETRY_REPORT_NAME"];
-  if (telemetryReportName) {
-    config["telemetryReportName"] = telemetryReportName;
+  const performanceReportName = process.env["BACKFILL_PERFORMANCE_REPORT_NAME"];
+  if (performanceReportName) {
+    config["performanceReportName"] = performanceReportName;
   }
 
   return config;
@@ -166,10 +166,10 @@ export function createDefaultConfig(): Config {
       provider: "local"
     },
     folderToCache: "lib",
-    useTelemetry: true,
+    outputPerformanceLogs: false,
     localCacheFolder: defaultCacheFolder,
     hashFileFolder: defaultCacheFolder,
-    telemetryFileFolder: defaultCacheFolder,
+    logFolder: defaultCacheFolder,
     verboseLogs: false,
     get watchGlobs(): WatchGlobs {
       return {

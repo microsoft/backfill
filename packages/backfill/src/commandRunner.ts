@@ -1,5 +1,5 @@
 import * as execa from "execa";
-import { telemetry } from "backfill-telemetry";
+import { performanceLogger } from "backfill-performance-logger";
 import { logger, mark } from "just-task-logger";
 
 export type ExecaReturns = execa.ExecaReturns;
@@ -32,9 +32,9 @@ export function createBuildCommand(
 
     return (
       runner
-        // Add build time to telemetry
+        // Add build time to the performance logger
         .then(() => {
-          telemetry.setTime("buildTime", startTime, Date.now());
+          performanceLogger.setTime("buildTime", startTime, Date.now());
           logger.perf("buildCommand:run");
         })
         // Catch to pretty-print the command that failed and re-throw

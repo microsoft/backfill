@@ -4,6 +4,6 @@ module.exports = {
   cacheStorageConfig: {
     provider: "local"
   },
-  telemetryFileFolder: path.join(__dirname, "telemetry"),
+  logFolder: path.join(__dirname, ".backfill-logs"),
   verboseLogs: true
 };
