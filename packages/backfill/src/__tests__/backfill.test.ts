@@ -16,19 +16,25 @@ describe("backfill", () => {
     const config = createConfig();
     const {
       cacheStorageConfig,
+      clearOutputFolder,
       hashFileFolder,
+      internalCacheFolder,
+      outputFolder,
       packageRoot,
-      localCacheFolder,
       watchGlobs
     } = config;
 
     // Arrange
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
-      localCacheFolder
+      internalCacheFolder
     );
     const buildCommandRaw = "npm run compile";
-    const buildCommand = createBuildCommand([buildCommandRaw]);
+    const buildCommand = createBuildCommand(
+      [buildCommandRaw],
+      clearOutputFolder,
+      outputFolder
+    );
     const hasher = new Hasher(
       { packageRoot, watchGlobs, hashFileFolder },
       buildCommandRaw

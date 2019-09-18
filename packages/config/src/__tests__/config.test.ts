@@ -48,7 +48,7 @@ describe("getEnvConfig()", () => {
     process.env["BACKFILL_LOCAL_CACHE_FOLDER"] = "bar";
 
     const config = getEnvConfig();
-    expect(config).toStrictEqual({ localCacheFolder: "bar" });
+    expect(config).toStrictEqual({ internalCacheFolder: "bar" });
   });
 
   it("sets cache provider through ENV variable", async () => {
@@ -119,15 +119,15 @@ describe("createConfig()", () => {
     await setupFixture("basic");
     const config = createConfig();
 
-    const defaultLocalCacheFolder = createDefaultConfig().localCacheFolder;
-    expect(config.localCacheFolder).toStrictEqual(defaultLocalCacheFolder);
+    const defaultLocalCacheFolder = createDefaultConfig().internalCacheFolder;
+    expect(config.internalCacheFolder).toStrictEqual(defaultLocalCacheFolder);
   });
 
   it("returns config file value when config file is provided, and no ENV override", async () => {
     await setupFixture("config");
     const config = createConfig();
 
-    expect(config.localCacheFolder).toStrictEqual("foo");
+    expect(config.internalCacheFolder).toStrictEqual("foo");
   });
 
   it("returns ENV override value when ENV override is provided", async () => {
@@ -136,6 +136,6 @@ describe("createConfig()", () => {
     await setupFixture("config");
     const config = createConfig();
 
-    expect(config.localCacheFolder).toStrictEqual("bar");
+    expect(config.internalCacheFolder).toStrictEqual("bar");
   });
 });

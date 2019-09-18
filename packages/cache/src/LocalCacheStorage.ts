@@ -4,12 +4,12 @@ import * as path from "path";
 import { CacheStorage } from "./CacheStorage";
 
 export class LocalCacheStorage extends CacheStorage {
-  constructor(private localCacheFolder: string) {
+  constructor(private internalCacheFolder: string) {
     super();
   }
 
   protected getLocalCacheFolder(hash: string): string {
-    return path.join(this.localCacheFolder, hash);
+    return path.join(this.internalCacheFolder, hash);
   }
 
   protected _fetch(hash: string, outputFolder: string) {

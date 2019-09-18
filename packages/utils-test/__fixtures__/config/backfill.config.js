@@ -1,3 +1,3 @@
 module.exports = {
-  localCacheFolder: "foo"
+  internalCacheFolder: "foo"
 };

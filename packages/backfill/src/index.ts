@@ -24,7 +24,7 @@ export async function backfill(
 ): Promise<void> {
   const {
     cacheStorageConfig,
-    folderToCache,
+    outputFolder,
     name,
     logFolder,
     outputPerformanceLogs
@@ -39,7 +39,7 @@ export async function backfill(
   const packageHash = await hasher.createPackageHash();
   logger.verbose(`Package hash: ${packageHash}`);
 
-  if (await cacheStorage.fetch(packageHash, folderToCache)) {
+  if (await cacheStorage.fetch(packageHash, outputFolder)) {
     performanceLogger.setHit(true);
     logger.info(`Cache hit!`);
   } else {
@@ -53,7 +53,7 @@ export async function backfill(
     }
 
     try {
-      await cacheStorage.put(packageHash, folderToCache);
+      await cacheStorage.put(packageHash, outputFolder);
     } catch (err) {
       logger.warn("Failed persisting the cache: ", err.message);
     }
@@ -67,14 +67,15 @@ export async function backfill(
 export async function main(): Promise<void> {
   const config = createConfig();
   const {
-    name,
     cacheStorageConfig,
     hashFileFolder,
-    folderToCache,
-    packageRoot,
-    localCacheFolder,
+    internalCacheFolder,
     logFolder,
+    name,
+    outputFolder,
+    packageRoot,
     performanceReportName,
+    clearOutputFolder,
     verboseLogs,
     watchGlobs
   } = config;
@@ -109,10 +110,14 @@ export async function main(): Promise<void> {
 
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
-    localCacheFolder
+    internalCacheFolder
   );
 
-  const buildCommand = createBuildCommand(argv["_"]);
+  const buildCommand = createBuildCommand(
+    argv["_"],
+    clearOutputFolder,
+    outputFolder
+  );
   const buildCommandSignature = getRawBuildCommand();
 
   const hasher = new Hasher(
@@ -143,9 +148,9 @@ export async function main(): Promise<void> {
   if (argv["audit"]) {
     initializeWatcher(
       packageRoot,
-      localCacheFolder,
+      internalCacheFolder,
       logFolder,
-      folderToCache,
+      outputFolder,
       watchGlobs
     );
 
