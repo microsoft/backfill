@@ -1,4 +1,5 @@
 import * as execa from "execa";
+import * as fs from "fs-extra";
 import { performanceLogger } from "backfill-performance-logger";
 import { logger, mark } from "just-task-logger";
 
@@ -10,13 +11,20 @@ export function getRawBuildCommand(): string {
 }
 
 export function createBuildCommand(
-  buildCommand: string[]
+  buildCommand: string[],
+  clearOutputFolder: boolean,
+  outputFolder: string
 ): () => Promise<ExecaReturns | void> {
   return async (): Promise<ExecaReturns | void> => {
     const parsedBuildCommand = buildCommand.join(" ");
 
     if (!parsedBuildCommand) {
       throw new Error("Command not provided");
+    }
+
+    // Clear outputFolder to guarantee a deterministic cache
+    if (clearOutputFolder) {
+      fs.removeSync(outputFolder);
     }
 
     // Set up runner

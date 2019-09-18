@@ -20,15 +20,16 @@ export type WatchGlobs = {
 };
 
 export type Config = {
-  name: string;
-  packageRoot: string;
   cacheStorageConfig: CacheStorageConfig;
-  folderToCache: string;
-  outputPerformanceLogs: boolean;
-  localCacheFolder: string;
   hashFileFolder: string;
+  localCacheFolder: string;
   logFolder: string;
+  name: string;
+  outputFolder: string;
+  outputPerformanceLogs: boolean;
+  packageRoot: string;
   performanceReportName?: string;
+  clearOutputFolder: boolean;
   verboseLogs: boolean;
   watchGlobs: WatchGlobs;
 };
@@ -68,16 +69,17 @@ export function createDefaultConfig(): Config {
     cacheStorageConfig: {
       provider: "local"
     },
-    folderToCache: "lib",
-    outputPerformanceLogs: false,
-    localCacheFolder: defaultCacheFolder,
     hashFileFolder: defaultCacheFolder,
+    localCacheFolder: defaultCacheFolder,
     logFolder: defaultCacheFolder,
+    outputFolder: "lib",
+    outputPerformanceLogs: false,
+    clearOutputFolder: true,
     verboseLogs: false,
     get watchGlobs(): WatchGlobs {
       return {
         folders: {
-          exclude: [this.folderToCache, "node_modules"],
+          exclude: [this.outputFolder, "node_modules"],
           include: ["*"]
         },
         files: {

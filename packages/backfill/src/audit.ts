@@ -28,7 +28,7 @@ export function initializeWatcher(
   packageRoot: string,
   localCacheFolder: string,
   logFolder: string,
-  folderToCache: string,
+  outputFolder: string,
   watchGlobs: WatchGlobs
 ) {
   // Trying to find the git root and using it as an approximation of code boundary
@@ -40,7 +40,7 @@ export function initializeWatcher(
 
   logger.info("Running in AUDIT mode");
   logger.info(`[audit] Watching file changes in: ${repositoryRoot}`);
-  logger.info(`[audit] Cache-folder: ${folderToCache}`);
+  logger.info(`[audit] Cache-folder: ${outputFolder}`);
 
   const excludeFolders = watchGlobs.folders.exclude;
   const excludeFiles = watchGlobs.files.exclude || [];
@@ -56,7 +56,7 @@ export function initializeWatcher(
 
   ignoreGlobs.push(...[".cache", ...excludeFiles].map(p => path.join("**", p)));
 
-  const cacheFolderGlob = path.join("**", folderToCache, "**");
+  const cacheFolderGlob = path.join("**", outputFolder, "**");
 
   watcher = chokidar
     .watch(repositoryRoot, {
