@@ -77,7 +77,7 @@ class PerformanceLogger {
         const filepath = path.join(
           logFolder,
           "reports",
-          `perf--${performanceReportName || Date.now()}.csv`
+          `perf-${performanceReportName || Date.now()}.csv`
         );
 
         const data = contents.sort().join(endOfLine);
@@ -92,7 +92,7 @@ class PerformanceLogger {
         // Remove individual performance logs
         fs.readdirSync(logFolder).forEach(file => {
           if (path.basename(file).match(/perf-.*.csv/)) {
-            fs.removeSync(file);
+            fs.removeSync(path.join(logFolder, file));
           }
         });
       })
