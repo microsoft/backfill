@@ -1,6 +1,6 @@
 {
-  "name": "backfill",
-  "description": "Backfill CLI",
+  "name": "backfill-config",
+  "description": "Backfill Config",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
   "repository": {
@@ -9,9 +9,6 @@
   },
   "version": "2.0.1",
   "main": "lib/index.js",
-  "bin": {
-    "backfill": "./bin/backfill.js"
-  },
   "scripts": {
     "build": "yarn compile",
     "compile": "tsc",
@@ -20,32 +17,17 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "@types/execa": "^0.9.0",
-    "anymatch": "^3.0.3",
-    "backfill-cache": "^2.0.1",
-    "backfill-config": "^2.0.1",
-    "backfill-performance-logger": "^2.0.1",
-    "backfill-utils-dotenv": "^2.0.1",
-    "chokidar": "^3.0.2",
-    "execa": "^1.0.0",
     "find-up": "^4.0.0",
-    "folder-hash": "^2.1.2",
     "fs-extra": "^7.0.1",
     "just-task-logger": "^0.3.0",
-    "pkg-dir": "^3.0.0",
-    "yargs": "^14.0.0"
+    "pkg-dir": "^4.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^7.0.0",
-    "@types/jest": "^24.0.12",
-    "@types/node": "^10.12.10",
-    "@types/pkg-dir": "^2.0.0",
-    "@types/yargs": "^13.0.2",
     "backfill-utils-test": "^2.0.1",
     "backfill-utils-tsconfig": "^2.0.1",
     "jest": "^24.0.12",
     "ts-jest": "^24.0.2",
-    "ts-mockito": "^2.3.1",
     "typescript": "3.5.3"
   }
 }

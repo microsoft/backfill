@@ -6,7 +6,7 @@ import { getCacheStorageProvider } from "backfill-cache";
 import { backfill } from "../index";
 import { Hasher } from "../hasher";
 import { createBuildCommand } from "../commandRunner";
-import { createConfig } from "../config";
+import { createConfig } from "backfill-config";
 
 describe("backfill", () => {
   it("with cache miss and then cache hit", async () => {

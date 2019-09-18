@@ -3,7 +3,7 @@ import * as findUp from "find-up";
 import * as path from "path";
 import anymatch from "anymatch";
 import { logger } from "just-task-logger";
-import { WatchGlobs } from "./config";
+import { WatchGlobs } from "backfill-config";
 
 let changedFilesOutsideScope: string[] = [];
 let changedFilesInsideScope: string[] = [];
