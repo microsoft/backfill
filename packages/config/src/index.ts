@@ -7,7 +7,9 @@ import {
   CacheStorageConfig,
   NpmCacheStorageConfig,
   AzureBlobCacheStorageConfig
-} from "backfill-cache";
+} from "./cacheConfig";
+
+export * from "./cacheConfig";
 
 export type WatchGlobs = {
   folders: {
