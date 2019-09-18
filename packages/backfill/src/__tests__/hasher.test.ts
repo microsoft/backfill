@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs-extra";
 
 import { Hasher, createHash } from "../hasher";
-import { DependencyResolver } from "../dependencyResolver";
+import { getAllDependencies } from "../dependencyResolver";
 import { createDefaultConfig } from "../config";
 import { setupFixture } from "backfill-utils-test";
 
@@ -17,8 +17,6 @@ const createPackageHasher = async (
   const { hashFileFolder, watchGlobs } = config;
 
   // Arrange
-  const dependencyResolver = new DependencyResolver({ packageRoot });
-
   const hasher = new Hasher(
     {
       packageRoot,
@@ -26,8 +24,7 @@ const createPackageHasher = async (
       outputPerformanceLogs: false,
       watchGlobs
     },
-    buildCommand,
-    dependencyResolver
+    buildCommand
   );
 
   return hasher;
@@ -167,10 +164,7 @@ describe("hashOfDependencies()", () => {
       "backfill -- yarn compile"
     );
 
-    const dependencyResolver = new DependencyResolver({
-      packageRoot: process.cwd()
-    });
-    const dependencies = dependencyResolver.dependencies();
+    const dependencies = getAllDependencies(process.cwd());
 
     const hash = await Promise.all(hasher.getHashOfDependencies(dependencies));
 

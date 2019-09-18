@@ -6,7 +6,7 @@ import { hashElement } from "folder-hash";
 import { logger, mark } from "just-task-logger";
 
 import { performanceLogger } from "backfill-performance-logger";
-import { IDependencyResolver } from "./dependencyResolver";
+import { getAllDependencies, resolveDependency } from "./dependencyResolver";
 
 export interface IHasher {
   createPackageHash: () => Promise<string>;
@@ -35,15 +35,14 @@ export class Hasher implements IHasher {
 
   constructor(
     private options: HasherOptions,
-    private buildCommandSignature: string,
-    private dependencyResolver: IDependencyResolver
+    private buildCommandSignature: string
   ) {
     this.hashFileFolder = this.options.hashFileFolder;
     this.packageRoot = this.options.packageRoot;
   }
 
   private getPackagePath(dependency: string) {
-    const dependencyPath = this.dependencyResolver.resolve(dependency);
+    const dependencyPath = resolveDependency(dependency, this.packageRoot);
 
     if (!dependencyPath) {
       return;
@@ -139,7 +138,7 @@ export class Hasher implements IHasher {
   }
 
   public async createPackageHash(): Promise<string> {
-    const dependencies = this.dependencyResolver.dependencies();
+    const dependencies = getAllDependencies(this.packageRoot);
 
     const hashOfDependencies = this.getHashOfDependencies(dependencies);
     const hashOfBuildCommand = createHash(this.buildCommandSignature).then(
