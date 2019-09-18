@@ -1,15 +1,12 @@
 import * as path from "path";
 import * as pkgDir from "pkg-dir";
 import * as findUp from "find-up";
-import { logger } from "just-task-logger";
 
-import {
-  CacheStorageConfig,
-  NpmCacheStorageConfig,
-  AzureBlobCacheStorageConfig
-} from "./cacheConfig";
+import { CacheStorageConfig } from "./cacheConfig";
+import { getEnvConfig } from "./envConfig";
 
 export * from "./cacheConfig";
+export * from "./envConfig";
 
 export type WatchGlobs = {
   folders: {
@@ -36,107 +33,11 @@ export type Config = {
   watchGlobs: WatchGlobs;
 };
 
-export type ConfigEnv = {
-  cacheStorageConfig?: CacheStorageConfig;
-  outputPerformanceLogs?: boolean;
-  localCacheFolder?: string;
-  logFolder?: string;
-  performanceReportName?: string;
-};
-
 export function getName(packageRoot: string) {
   return (
     require(path.join(packageRoot, "package.json")).name ||
     path.basename(path.dirname(packageRoot))
   );
-}
-
-function getNpmConfigFromSerializedOptions(
-  options: string
-): NpmCacheStorageConfig {
-  try {
-    const parsedOptions = JSON.parse(options);
-
-    if (
-      typeof parsedOptions.npmPackageName !== "string" ||
-      typeof parsedOptions.registryUrl !== "string"
-    ) {
-      throw new Error("Incorrect npm storage configuration");
-    }
-
-    return {
-      provider: "npm",
-      options: { ...parsedOptions }
-    };
-  } catch (e) {
-    logger.error(e.message);
-    throw new Error("Invalid npm storage options");
-  }
-}
-
-function getAzureBlobConfigFromSerializedOptions(
-  options: string
-): AzureBlobCacheStorageConfig {
-  try {
-    const parsedOptions = JSON.parse(options);
-
-    if (
-      typeof parsedOptions.connectionString !== "string" ||
-      typeof parsedOptions.container !== "string"
-    ) {
-      throw new Error("Incorrect blob storage configuration");
-    }
-
-    return {
-      provider: "azure-blob",
-      options: { ...parsedOptions }
-    };
-  } catch (e) {
-    logger.error(e.message);
-    throw new Error("Invalid blob storage options");
-  }
-}
-
-export function getEnvConfig() {
-  const config: ConfigEnv = {};
-
-  const logFolder = process.env["BACKFILL_LOG_FOLDER"];
-  if (logFolder) {
-    config["logFolder"] = logFolder;
-  }
-
-  const outputPerformanceLogs = process.env["BACKFILL_OUTPUT_PERFORMANCE_LOGS"];
-  if (outputPerformanceLogs) {
-    config["outputPerformanceLogs"] = Boolean(outputPerformanceLogs === "true");
-  }
-
-  const localCacheFolder = process.env["BACKFILL_LOCAL_CACHE_FOLDER"];
-  if (localCacheFolder) {
-    config["localCacheFolder"] = localCacheFolder;
-  }
-
-  const cacheProvider = process.env["BACKFILL_CACHE_PROVIDER"];
-  const serializedCacheProviderOptions =
-    process.env["BACKFILL_CACHE_PROVIDER_OPTIONS"];
-
-  if (cacheProvider === "azure-blob" && serializedCacheProviderOptions) {
-    config["cacheStorageConfig"] = getAzureBlobConfigFromSerializedOptions(
-      serializedCacheProviderOptions
-    );
-  } else if (cacheProvider === "npm" && serializedCacheProviderOptions) {
-    config["cacheStorageConfig"] = getNpmConfigFromSerializedOptions(
-      serializedCacheProviderOptions
-    );
-  } else if (cacheProvider === "local") {
-    // local cache has no config at the moment
-  }
-
-  const performanceReportName = process.env["BACKFILL_PERFORMANCE_REPORT_NAME"];
-  if (performanceReportName) {
-    config["performanceReportName"] = performanceReportName;
-  }
-
-  return config;
 }
 
 export function getSearchPaths() {
