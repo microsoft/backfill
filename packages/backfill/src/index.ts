@@ -4,7 +4,7 @@ import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
 import { performanceLogger } from "backfill-performance-logger";
 import { logger } from "just-task-logger";
 
-import { createConfig, Config } from "./config";
+import { createConfig, Config } from "backfill-config";
 import {
   getRawBuildCommand,
   createBuildCommand,

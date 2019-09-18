@@ -2,13 +2,9 @@ import * as execa from "execa";
 import * as fs from "fs-extra";
 import * as path from "path";
 
-import { CacheStorage } from "./CacheStorage";
+import { NpmCacheStorageOptions } from "backfill-config";
 
-export type NpmCacheStorageOptions = {
-  npmPackageName: string;
-  registryUrl: string;
-  npmrcUserconfig?: string;
-};
+import { CacheStorage } from "./CacheStorage";
 
 export class NpmCacheStorage extends CacheStorage {
   constructor(

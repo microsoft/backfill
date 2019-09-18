@@ -8,7 +8,7 @@ import {
   getSearchPaths,
   createDefaultConfig,
   createConfig
-} from "../config";
+} from "../index";
 
 describe("getName()", () => {
   it("get the name of the package", async () => {

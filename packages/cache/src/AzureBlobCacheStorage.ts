@@ -2,12 +2,9 @@ import { BlobServiceClient } from "@azure/storage-blob";
 import * as tar from "tar";
 import * as path from "path";
 
-import { CacheStorage } from "./CacheStorage";
+import { AzureBlobCacheStorageOptions } from "backfill-config";
 
-export type AzureBlobCacheStorageOptions = {
-  connectionString: string;
-  container: string;
-};
+import { CacheStorage } from "./CacheStorage";
 
 const ONE_MEGABYTE = 1024 * 1024;
 const FOUR_MEGABYTES = 4 * ONE_MEGABYTE;

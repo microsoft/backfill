@@ -1,29 +1,11 @@
 import { ICacheStorage } from "./CacheStorage";
-import {
-  AzureBlobCacheStorage,
-  AzureBlobCacheStorageOptions
-} from "./AzureBlobCacheStorage";
+import { AzureBlobCacheStorage } from "./AzureBlobCacheStorage";
 import { LocalCacheStorage } from "./LocalCacheStorage";
-import { NpmCacheStorage, NpmCacheStorageOptions } from "./NpmCacheStorage";
+import { NpmCacheStorage } from "./NpmCacheStorage";
+
+import { CacheStorageConfig } from "backfill-config";
 
 export { ICacheStorage } from "./CacheStorage";
-
-export type AzureBlobCacheStorageConfig = {
-  provider: "azure-blob";
-  options: AzureBlobCacheStorageOptions;
-};
-
-export type NpmCacheStorageConfig = {
-  provider: "npm";
-  options: NpmCacheStorageOptions;
-};
-
-export type CacheStorageConfig =
-  | {
-      provider: "local";
-    }
-  | NpmCacheStorageConfig
-  | AzureBlobCacheStorageConfig;
 
 export function getCacheStorageProvider(
   cacheStorageConfig: CacheStorageConfig,

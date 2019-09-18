@@ -2,17 +2,14 @@ import * as fs from "fs-extra";
 import * as path from "path";
 
 import { setupFixture } from "backfill-utils-test";
+import { createDefaultConfig } from "backfill-config";
 import { getCacheStorageProvider } from "../index";
-import { CacheStorageConfig } from "../index";
 
 describe("LocalCacheStorage", () => {
   const setupCacheStorage = async (fixtureName: string) => {
     await setupFixture(fixtureName);
 
-    // TODO: Import from config
-    const cacheStorageConfig: CacheStorageConfig = {
-      provider: "local"
-    };
+    const cacheStorageConfig = createDefaultConfig().cacheStorageConfig;
     const localCacheFolder = path.join("node_modules", ".cache", "backfill");
 
     const cacheStorage = getCacheStorageProvider(

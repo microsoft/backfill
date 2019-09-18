@@ -3,7 +3,7 @@ import * as fs from "fs-extra";
 
 import { Hasher, createHash } from "../hasher";
 import { getAllDependencies } from "../dependencyResolver";
-import { createDefaultConfig } from "../config";
+import { createDefaultConfig } from "backfill-config";
 import { setupFixture } from "backfill-utils-test";
 
 const config = createDefaultConfig();
