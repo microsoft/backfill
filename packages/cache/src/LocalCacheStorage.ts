@@ -1,5 +1,5 @@
+import * as fs from "fs-extra";
 import * as path from "path";
-import * as shelljs from "shelljs";
 
 import { CacheStorage } from "./CacheStorage";
 
@@ -15,13 +15,12 @@ export class LocalCacheStorage extends CacheStorage {
   protected _fetch(hash: string, destinationFolder: string) {
     const objectUri = this.getLocalCacheFolder(hash);
 
-    if (!shelljs.test("-d", objectUri)) {
+    if (!fs.pathExistsSync(objectUri)) {
       return Promise.resolve(false);
     }
 
-    shelljs.mkdir("-p", destinationFolder);
-    shelljs.cp(
-      "-R",
+    fs.mkdirpSync(destinationFolder);
+    fs.copySync(
       path.join(objectUri, destinationFolder, "*"),
       destinationFolder
     );
@@ -32,8 +31,8 @@ export class LocalCacheStorage extends CacheStorage {
   protected _put(hash: string, sourceFolder: string) {
     const objectUri = this.getLocalCacheFolder(hash);
 
-    shelljs.mkdir("-p", objectUri);
-    shelljs.cp("-R", sourceFolder, objectUri);
+    fs.mkdirpSync(objectUri);
+    fs.copySync(sourceFolder, objectUri);
 
     return Promise.resolve();
   }

@@ -1,7 +1,6 @@
 import * as execa from "execa";
 import * as fs from "fs-extra";
 import * as path from "path";
-import * as shelljs from "shelljs";
 
 import { CacheStorage } from "./CacheStorage";
 
@@ -25,7 +24,7 @@ export class NpmCacheStorage extends CacheStorage {
     const destinationTempFolder = path.join(this.localCacheFolder, "npm", hash);
 
     // Create a temp folder to try to install the npm
-    shelljs.mkdir("-p", destinationTempFolder);
+    fs.mkdirpSync(destinationTempFolder);
 
     const runner = execa("npm", [
       "install",
@@ -47,32 +46,32 @@ export class NpmCacheStorage extends CacheStorage {
     return runner
       .then(() => {
         // Clean cache output folder
-        if (shelljs.test("-d", destinationFolder)) {
-          shelljs.rm("-R", destinationFolder);
+        if (fs.pathExistsSync(destinationFolder)) {
+          fs.removeSync(destinationFolder);
         }
-        shelljs.mkdir("-p", destinationFolder);
+        fs.mkdirpSync(destinationFolder);
 
         // Move downloaded npm package to cache output folder
-        shelljs.mv(
+        fs.moveSync(
           path.join(destinationTempFolder, "node_modules", npmPackageName, "*"),
-          destinationFolder
+          destinationFolder,
+          { overwrite: true }
         );
 
         // Clean up
-        if (shelljs.test("-d", destinationTempFolder)) {
-          shelljs.rm("-R", destinationTempFolder);
+        if (fs.pathExistsSync(destinationTempFolder)) {
+          fs.removeSync(destinationTempFolder);
         }
-        if (shelljs.test("-f", path.join(destinationFolder, "package.json"))) {
-          shelljs.rm(path.join(destinationFolder, "package.json"));
+        if (fs.pathExistsSync(path.join(destinationFolder, "package.json"))) {
+          fs.removeSync(path.join(destinationFolder, "package.json"));
         }
 
         // Rename package.json if it was part of the original cache output folder
-        if (
-          shelljs.test("-f", path.join(destinationFolder, "__package.json"))
-        ) {
-          shelljs.mv(
+        if (fs.pathExistsSync(path.join(destinationFolder, "__package.json"))) {
+          fs.moveSync(
             path.join(destinationFolder, "__package.json"),
-            path.join(destinationFolder, "package.json")
+            path.join(destinationFolder, "package.json"),
+            { overwrite: true }
           );
         }
 
@@ -80,7 +79,7 @@ export class NpmCacheStorage extends CacheStorage {
       })
       .catch(() => {
         // Clean up
-        shelljs.rm("-R", destinationTempFolder);
+        fs.removeSync(destinationTempFolder);
 
         return false;
       });
@@ -90,10 +89,11 @@ export class NpmCacheStorage extends CacheStorage {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
     // Rename if conflict
-    if (shelljs.test("-f", path.join(sourceFolder, "package.json"))) {
-      shelljs.mv(
+    if (fs.pathExistsSync(path.join(sourceFolder, "package.json"))) {
+      fs.moveSync(
         path.join(sourceFolder, "package.json"),
-        path.join(sourceFolder, "__package.json")
+        path.join(sourceFolder, "__package.json"),
+        { overwrite: true }
       );
     }
 
@@ -123,14 +123,15 @@ export class NpmCacheStorage extends CacheStorage {
 
     return runner.then(() => {
       // Clean up
-      if (shelljs.test("-f", path.join(sourceFolder, "package.json"))) {
-        shelljs.rm(path.join(sourceFolder, "package.json"));
+      if (fs.pathExistsSync(path.join(sourceFolder, "package.json"))) {
+        fs.removeSync(path.join(sourceFolder, "package.json"));
       }
 
-      if (shelljs.test("-f", path.join(sourceFolder, "__package.json"))) {
-        shelljs.mv(
+      if (fs.pathExistsSync(path.join(sourceFolder, "__package.json"))) {
+        fs.moveSync(
           path.join(sourceFolder, "__package.json"),
-          path.join(sourceFolder, "package.json")
+          path.join(sourceFolder, "package.json"),
+          { overwrite: true }
         );
       }
     });

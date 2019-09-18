@@ -22,12 +22,10 @@
     "execa": "^1.0.0",
     "fs-extra": "^7.0.1",
     "just-task-logger": "^0.3.0",
-    "shelljs": "^0.8.3",
     "tar": "^4.4.8"
   },
   "devDependencies": {
     "@types/fs-extra": "^7.0.0",
-    "@types/shelljs": "^0.8.0",
     "@types/tar": "^4.0.0",
     "backfill-utils-test": "^2.0.1",
     "backfill-utils-tsconfig": "^2.0.1",

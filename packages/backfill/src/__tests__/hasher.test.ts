@@ -1,5 +1,5 @@
 import * as path from "path";
-import * as shelljs from "shelljs";
+import * as fs from "fs-extra";
 
 import { Hasher, createHash } from "../hasher";
 import { DependencyResolver } from "../dependencyResolver";
@@ -80,20 +80,23 @@ describe("createPackageHash()", () => {
       const hasherTwo = await createPackageHasher(fixtureName, buildCommand);
 
       // Change hash of package-2
-      shelljs.sed(
-        "-i",
-        "cf9ea931ea9c06451cb624eb478045bbcd41812c",
-        "qwerty",
-        path.join(
-          process.cwd(),
-          "node_modules",
-          "package-2",
-          "node_modules",
-          ".cache",
-          "backfill",
-          "hash"
-        )
+      const hashPath = path.join(
+        process.cwd(),
+        "node_modules",
+        "package-2",
+        "node_modules",
+        ".cache",
+        "backfill",
+        "hash"
       );
+
+      await fs.readFile(hashPath).then(async content => {
+        const newContent = content
+          .toString()
+          .replace("cf9ea931ea9c06451cb624eb478045bbcd41812c", "qwerty");
+
+        return await fs.writeFile(hashPath, newContent);
+      });
 
       const hashFromTwo = await hasherTwo.createPackageHash();
 
@@ -118,12 +121,14 @@ describe("createPackageHash()", () => {
       const hasherTwo = await createPackageHasher(fixtureName, buildCommand);
 
       // Change hash of package-2
-      shelljs.sed(
-        "-i",
-        "yarn lockfile v1",
-        "yarn lockfile v2",
-        path.join(process.cwd(), "yarn.lock")
-      );
+      const lockPath = path.join(process.cwd(), "yarn.lock");
+      await fs.readFile(lockPath).then(async content => {
+        const newContent = content
+          .toString()
+          .replace("yarn lockfile v1", "yarn lockfile v2");
+
+        return await fs.writeFile(lockPath, newContent);
+      });
 
       const hashFromTwo = await hasherTwo.createPackageHash();
 
@@ -138,10 +143,14 @@ describe("createPackageHash()", () => {
       path.join(root, "node_modules", ".cache", "backfill", "hash");
 
     const hashFromOne = await createPackageHash(fixtureName, buildCommand);
-    const hashStoredFromOne = shelljs.cat(cachePath(process.cwd())).toString();
+    const hashStoredFromOne = await fs
+      .readFile(cachePath(process.cwd()))
+      .toString();
 
     const hashFromTwo = await createPackageHash(fixtureName, "echo foo");
-    const hashStoredFromTwo = shelljs.cat(cachePath(process.cwd())).toString();
+    const hashStoredFromTwo = await fs
+      .readFile(cachePath(process.cwd()))
+      .toString();
 
     // Expect the package hash to be different ..
     expect(hashFromOne).not.toBe(hashFromTwo);

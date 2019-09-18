@@ -2,7 +2,6 @@ import * as path from "path";
 import * as fs from "fs-extra";
 import * as execa from "execa";
 import * as findUp from "find-up";
-import * as shelljs from "shelljs";
 
 import { setupFixture } from "backfill-utils-test";
 
@@ -31,7 +30,7 @@ describe("End to end", () => {
     expect(ownHash).toEqual("632a3243cb2f7f0905efe0f1cc9216b582523290");
 
     // ... and that `npm run compile` was run successfully
-    const libFolderExist = shelljs.test("-d", "lib");
+    const libFolderExist = await fs.pathExists("lib");
     expect(libFolderExist).toBe(true);
   });
 
@@ -44,7 +43,7 @@ describe("End to end", () => {
     expect(ownHash).toEqual("632a3243cb2f7f0905efe0f1cc9216b582523290");
 
     // ... and that it didn't fetch or produce a lib folder
-    const libFolderExist = shelljs.test("-d", "lib");
+    const libFolderExist = await fs.pathExists("lib");
     expect(libFolderExist).toBe(false);
   });
 

@@ -32,7 +32,6 @@
     "fs-extra": "^7.0.1",
     "just-task-logger": "^0.3.0",
     "pkg-dir": "^3.0.0",
-    "shelljs": "^0.8.3",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
@@ -40,7 +39,6 @@
     "@types/jest": "^24.0.12",
     "@types/node": "^10.12.10",
     "@types/pkg-dir": "^2.0.0",
-    "@types/shelljs": "^0.8.0",
     "@types/yargs": "^13.0.2",
     "backfill-utils-test": "^2.0.1",
     "backfill-utils-tsconfig": "^2.0.1",

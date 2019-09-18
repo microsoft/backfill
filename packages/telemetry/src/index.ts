@@ -1,5 +1,4 @@
 import { parse as json2csv } from "json2csv";
-import * as shelljs from "shelljs";
 import * as fs from "fs-extra";
 import * as path from "path";
 import { logger } from "just-task-logger";
@@ -75,7 +74,7 @@ class Telemetry {
           throw "No telemetry files. No report generated.";
         }
 
-        shelljs.mkdir("-p", path.join(telemetryFileFolder, "reports"));
+        fs.mkdirpSync(path.join(telemetryFileFolder, "reports"));
 
         const filepath = path.join(
           telemetryFileFolder,
@@ -93,7 +92,7 @@ class Telemetry {
       })
       .then(() => {
         // Remove single telemetry reports
-        shelljs.rm("-f", path.join(telemetryFileFolder, "tel-*.csv"));
+        fs.removeSync(path.join(telemetryFileFolder, "tel-*.csv"));
       })
       .catch(logger.error);
   }

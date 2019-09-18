@@ -1,4 +1,4 @@
-import * as shelljs from "shelljs";
+import * as fs from "fs-extra";
 import * as path from "path";
 
 import { setupFixture } from "backfill-utils-test";
@@ -43,8 +43,9 @@ describe("LocalCacheStorage", () => {
       );
       const secretFileInDestination = path.join(destinationFolder, secretFile);
 
-      // Add file to the cache
-      shelljs.touch(secretFileInCache);
+      // Touch Add file to the cache
+      const touchTime = new Date();
+      await fs.utimes(secretFileInCache, touchTime, touchTime);
 
       // Execute
       const fetchResult = await cacheStorage.fetch(
@@ -56,7 +57,7 @@ describe("LocalCacheStorage", () => {
       expect(fetchResult).toBe(true);
 
       // ... and that the secret file was copied over
-      const secretFileExists = shelljs.test("-f", secretFileInDestination);
+      const secretFileExists = await fs.pathExists(secretFileInDestination);
       expect(secretFileExists).toBe(true);
     };
 
@@ -93,7 +94,7 @@ describe("LocalCacheStorage", () => {
       expect(fetchResult).toBe(false);
 
       // ... and that it worked by creating a lib folder
-      const libFolderExist = shelljs.test("-d", destinationFolder);
+      const libFolderExist = await fs.pathExists(destinationFolder);
       expect(libFolderExist).toBe(false);
     });
   });
@@ -119,13 +120,14 @@ describe("LocalCacheStorage", () => {
       const secretFileInDestination = path.join(destinationFolder, secretFile);
 
       // Add file to the cache
-      shelljs.touch(secretFileInDestination);
+      const touchTime = new Date();
+      await fs.utimes(secretFileInDestination, touchTime, touchTime);
 
       // Execute
       await cacheStorage.put(hashToPut, destinationFolder);
 
       // Assert
-      const secretFileExists = shelljs.test("-f", secretFileInCache);
+      const secretFileExists = await fs.pathExists(secretFileInCache);
       expect(secretFileExists).toBe(true);
     };
 
@@ -160,7 +162,7 @@ describe("LocalCacheStorage", () => {
       );
 
       // Assert
-      const cachedFolderExists = shelljs.test("-d", localCacheFolder);
+      const cachedFolderExists = await fs.pathExists(localCacheFolder);
       expect(cachedFolderExists).toBe(false);
     });
   });

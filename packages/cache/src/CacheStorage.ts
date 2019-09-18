@@ -1,4 +1,4 @@
-import * as shelljs from "shelljs";
+import * as fs from "fs-extra";
 import { telemetry } from "backfill-telemetry";
 import { logger, mark } from "just-task-logger";
 
@@ -23,7 +23,7 @@ export abstract class CacheStorage implements ICacheStorage {
     const startTime = Date.now();
     mark("cache:put");
 
-    if (!shelljs.test("-d", sourceFolder)) {
+    if (!fs.pathExistsSync(sourceFolder)) {
       throw new Error("Folder to cache does not exist");
     }
 
