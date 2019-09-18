@@ -1,6 +1,6 @@
+import * as fs from "fs-extra";
 import * as path from "path";
 import * as findUp from "find-up";
-import * as shelljs from "shelljs";
 import execa = require("execa");
 import { setupFixture } from "backfill-utils-test";
 
@@ -31,7 +31,7 @@ describe("Audit", () => {
     const monorepoPath = await setupFixture("monorepo");
 
     // Create a .git folder to help `--audit` identify the boundaries of the repo
-    shelljs.mkdir(".git");
+    fs.mkdirpSync(".git");
 
     const packageAPath = path.join(monorepoPath, "packages", "package-a");
     process.chdir(packageAPath);

@@ -1,4 +1,4 @@
-import * as shelljs from "shelljs";
+import * as fs from "fs-extra";
 import * as path from "path";
 
 import { setupFixture } from "backfill-utils-test";
@@ -26,8 +26,8 @@ describe("LocalCacheStorage", () => {
   describe("fetch", () => {
     const fetchFromCache = async (
       fixtureName: string,
-      hashToFetch: string,
-      destinationFolder: string
+      hash: string,
+      outputFolder: string
     ) => {
       // Setup
       const { cacheStorage, localCacheFolder } = await setupCacheStorage(
@@ -37,26 +37,23 @@ describe("LocalCacheStorage", () => {
       const secretFile = "qwerty";
       const secretFileInCache = path.join(
         localCacheFolder,
-        hashToFetch,
-        destinationFolder,
+        hash,
+        outputFolder,
         secretFile
       );
-      const secretFileInDestination = path.join(destinationFolder, secretFile);
 
-      // Add file to the cache
-      shelljs.touch(secretFileInCache);
+      //  Add file to the cache
+      await fs.outputFile(secretFileInCache, "");
 
       // Execute
-      const fetchResult = await cacheStorage.fetch(
-        hashToFetch,
-        destinationFolder
-      );
+      const fetchResult = await cacheStorage.fetch(hash, outputFolder);
 
       // Verify that fetch finished successfully
       expect(fetchResult).toBe(true);
 
       // ... and that the secret file was copied over
-      const secretFileExists = shelljs.test("-f", secretFileInDestination);
+      const secretFileInDestination = path.join(outputFolder, secretFile);
+      const secretFileExists = await fs.pathExists(secretFileInDestination);
       expect(secretFileExists).toBe(true);
     };
 
@@ -80,20 +77,17 @@ describe("LocalCacheStorage", () => {
       // Setup
       const { cacheStorage } = await setupCacheStorage("with-cache");
 
-      const hashToFetch = "incorrect_hash";
-      const destinationFolder = "lib";
+      const hash = "incorrect_hash";
+      const outputFolder = "lib";
 
       // Execute
-      const fetchResult = await cacheStorage.fetch(
-        hashToFetch,
-        destinationFolder
-      );
+      const fetchResult = await cacheStorage.fetch(hash, outputFolder);
 
       // Verify that fetch happened
       expect(fetchResult).toBe(false);
 
       // ... and that it worked by creating a lib folder
-      const libFolderExist = shelljs.test("-d", destinationFolder);
+      const libFolderExist = await fs.pathExists(outputFolder);
       expect(libFolderExist).toBe(false);
     });
   });
@@ -101,8 +95,8 @@ describe("LocalCacheStorage", () => {
   describe("put", () => {
     const putInCache = async (
       fixtureName: string,
-      hashToPut: string,
-      destinationFolder: string
+      hash: string,
+      outputFolder: string
     ) => {
       // Setup
       const { cacheStorage, localCacheFolder } = await setupCacheStorage(
@@ -110,22 +104,23 @@ describe("LocalCacheStorage", () => {
       );
 
       const secretFile = "qwerty";
-      const secretFileInCache = path.join(
-        localCacheFolder,
-        hashToPut,
-        destinationFolder,
-        secretFile
-      );
-      const secretFileInDestination = path.join(destinationFolder, secretFile);
+      const secretFileInDestination = path.join(outputFolder, secretFile);
 
       // Add file to the cache
-      shelljs.touch(secretFileInDestination);
+      await fs.outputFile(secretFileInDestination, "");
 
       // Execute
-      await cacheStorage.put(hashToPut, destinationFolder);
+      await cacheStorage.put(hash, outputFolder);
 
       // Assert
-      const secretFileExists = shelljs.test("-f", secretFileInCache);
+      const secretFileInCache = path.join(
+        localCacheFolder,
+        hash,
+        outputFolder,
+        secretFile
+      );
+
+      const secretFileExists = await fs.pathExists(secretFileInCache);
       expect(secretFileExists).toBe(true);
     };
 
@@ -151,16 +146,16 @@ describe("LocalCacheStorage", () => {
         "basic"
       );
 
-      const folderToCache = "lib";
+      const outputFolder = "lib";
       const hash = "811c319a73f988d9260fbf3f1d30f0f447c2a194";
 
       // Execute
-      await expect(() => cacheStorage.put(hash, folderToCache)).toThrowError(
+      await expect(() => cacheStorage.put(hash, outputFolder)).toThrowError(
         "Folder to cache does not exist"
       );
 
       // Assert
-      const cachedFolderExists = shelljs.test("-d", localCacheFolder);
+      const cachedFolderExists = await fs.pathExists(localCacheFolder);
       expect(cachedFolderExists).toBe(false);
     });
   });
