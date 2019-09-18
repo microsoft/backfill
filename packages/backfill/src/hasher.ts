@@ -5,7 +5,7 @@ import * as path from "path";
 import { hashElement } from "folder-hash";
 import { logger, mark } from "just-task-logger";
 
-import { telemetry } from "backfill-telemetry";
+import { performanceLogger } from "backfill-performance-logger";
 import { IDependencyResolver } from "./dependencyResolver";
 
 export interface IHasher {
@@ -178,7 +178,7 @@ export class Hasher implements IHasher {
       .then(hashes => createHash(hashes))
       .then(hash => this.writeHashToDisk(hash));
 
-    telemetry.setHash(packageHash);
+    performanceLogger.setHash(packageHash);
     return packageHash;
   }
 }

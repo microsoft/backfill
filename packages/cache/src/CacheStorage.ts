@@ -1,5 +1,5 @@
 import * as fs from "fs-extra";
-import { telemetry } from "backfill-telemetry";
+import { performanceLogger } from "backfill-performance-logger";
 import { logger, mark } from "just-task-logger";
 
 export interface ICacheStorage {
@@ -13,7 +13,7 @@ export abstract class CacheStorage implements ICacheStorage {
     mark("cache:fetch");
 
     return this._fetch(hash, destinationFolder).then(result => {
-      telemetry.setTime("fetchTime", startTime, Date.now());
+      performanceLogger.setTime("fetchTime", startTime, Date.now());
       logger.perf("cache:fetch");
       return result;
     });
@@ -28,7 +28,7 @@ export abstract class CacheStorage implements ICacheStorage {
     }
 
     return this._put(hash, sourceFolder).then(() => {
-      telemetry.setTime("putTime", startTime, Date.now());
+      performanceLogger.setTime("putTime", startTime, Date.now());
       logger.perf("cache:put");
     });
   }

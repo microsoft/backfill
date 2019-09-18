@@ -106,10 +106,10 @@ The default configuration object is:
   name: "name-of-package",
   cacheStorageConfig: { provider: "local" },
   folderToCache: "lib",
-  useTelemetry: true,
+  outputPerformanceLogs: false,
   localCacheFolder: "node_modules/.cache/backfill",
   hashFileFolder: "node_modules/.cache/backfill",
-  telemetryFileFolder: "node_modules/.cache/backfill",
+  logFolder: "node_modules/.cache/backfill",
   watchGlobs: {
     folders: { exclude: ["lib", "node_modules"], include: ["*"] },
     files: { include: ["*"] }
@@ -126,11 +126,11 @@ export type Config = {
   packageRoot: string;
   cacheStorageConfig: CacheStorageConfig;
   folderToCache: string;
-  useTelemetry: boolean;
+  outputPerformanceLogs: boolean;
   localCacheFolder: string;
   hashFileFolder: string;
-  telemetryFileFolder: string;
-  telemetryReportName?: string;
+  logFolder: string;
+  performanceReportName?: string;
   watchGlobs: WatchGlobs;
 };
 ```
@@ -155,11 +155,14 @@ See `getEnvConfig()` in `./packages/backfill/src/config.ts`.
 
 [TODO]
 
-## Telemetry
+## Performance Logs
 
-Some telemetry is gathered and stored to disk. Nothing gets uploaded. It is
-simply stored on disk for your own analysis. You can turn if off by putting
-`useTelemetry: false` in `backfill.config.js`.
+You can optionally output performance logs to disk. If turned on, backfill will
+output a log file after each run with performance metrics. Each log file is
+formatted as a csv file, containing only one row. You can run
+`backfill --generate-performance-report` to combine all logs in the log folder
+into one file. You can turn performance logging by setting
+`outputPerformanceLogs: true` in `backfill.config.js`.
 
 ## Contributing
 

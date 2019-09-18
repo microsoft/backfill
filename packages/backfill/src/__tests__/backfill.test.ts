@@ -43,7 +43,7 @@ describe("backfill", () => {
 
     // Execute
     await backfill(
-      { ...config, useTelemetry: false },
+      { ...config, outputPerformanceLogs: false },
       cacheStorage,
       spiedBuildCommand,
       hasher
@@ -61,7 +61,7 @@ describe("backfill", () => {
 
     // Execute
     await backfill(
-      { ...config, useTelemetry: false },
+      { ...config, outputPerformanceLogs: false },
       cacheStorage,
       buildCommand,
       hasher
