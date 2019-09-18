@@ -5,7 +5,6 @@ import { performanceLogger } from "backfill-performance-logger";
 import { logger } from "just-task-logger";
 
 import { createConfig, Config } from "./config";
-import { DependencyResolver } from "./dependencyResolver";
 import {
   getRawBuildCommand,
   createBuildCommand,
@@ -118,8 +117,7 @@ export async function main(): Promise<void> {
 
   const hasher = new Hasher(
     { packageRoot, watchGlobs, hashFileFolder },
-    buildCommandSignature,
-    new DependencyResolver({ packageRoot })
+    buildCommandSignature
   );
 
   if (argv["generate-performance-report"]) {

@@ -4,7 +4,6 @@ import { setupFixture } from "backfill-utils-test";
 import { getCacheStorageProvider } from "backfill-cache";
 
 import { backfill } from "../index";
-import { DependencyResolver } from "../dependencyResolver";
 import { Hasher } from "../hasher";
 import { createBuildCommand } from "../commandRunner";
 import { createConfig } from "../config";
@@ -32,8 +31,7 @@ describe("backfill", () => {
     const buildCommand = createBuildCommand([buildCommandRaw]);
     const hasher = new Hasher(
       { packageRoot, watchGlobs, hashFileFolder },
-      buildCommandRaw,
-      new DependencyResolver({ packageRoot })
+      buildCommandRaw
     );
 
     // Spy
