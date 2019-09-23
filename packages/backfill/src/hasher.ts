@@ -3,9 +3,8 @@ import * as findUp from "find-up";
 import * as fs from "fs-extra";
 import * as path from "path";
 import { hashElement } from "folder-hash";
-import { logger, mark } from "just-task-logger";
+import { logger, mark } from "backfill-logger";
 
-import { performanceLogger } from "backfill-performance-logger";
 import { getAllDependencies, resolveDependency } from "./dependencyResolver";
 
 export interface IHasher {
@@ -177,7 +176,7 @@ export class Hasher implements IHasher {
       .then(hashes => createHash(hashes))
       .then(hash => this.writeHashToDisk(hash));
 
-    performanceLogger.setHash(packageHash);
+    logger.setHash(packageHash);
     return packageHash;
   }
 }

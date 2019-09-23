@@ -2,7 +2,7 @@ import * as chokidar from "chokidar";
 import * as findUp from "find-up";
 import * as path from "path";
 import anymatch from "anymatch";
-import { logger } from "just-task-logger";
+import { logger } from "backfill-logger";
 import { WatchGlobs } from "backfill-config";
 
 let changedFilesOutsideScope: string[] = [];
