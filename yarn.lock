@@ -1073,9 +1073,9 @@
     "@types/jest-diff" "*"
 
 "@types/json2csv@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@types/json2csv/-/json2csv-4.2.0.tgz#3eb847f70be10d5d73786da02a66f8e265a9001c"
-  integrity sha512-bYq/uoqOqjSEewzNuGwPhtsodaMPImPmnZWGbZ8quHXlkOzflZ06dzObQ9eXYyYU1/TWxSm2wSk07IZOYWChSQ==
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@types/json2csv/-/json2csv-4.5.0.tgz#f846edb5239969942a1aa6fbc470e13e69ae971d"
+  integrity sha512-7T/1w/8QZaEWqAX4LzuP3L9R2D8VuXoJPTrtQ1UG1dbkq90j+t1a7dPrx5JrdhV0tQ8zK7NUApNyK+cAMgOLew==
   dependencies:
     "@types/node" "*"
 
