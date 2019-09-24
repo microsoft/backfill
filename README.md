@@ -213,8 +213,6 @@ formatted as a csv file, containing only one row. You can run
 into one file. You can turn performance logging by setting
 `outputPerformanceLogs: true` in `backfill.config.js`.
 
-##
-
 ## Contributing
 
 This project welcomes contributions and suggestions.
