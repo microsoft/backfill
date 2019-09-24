@@ -5,10 +5,7 @@ function logInternal(
   symbol: string,
   ...args: any[]
 ) {
-  const now = new Date();
-  const timestamp = chalk.gray(`[${now.toLocaleTimeString()}]`);
-
-  console[method](timestamp, symbol, ...args);
+  console[method]("[backfill]", symbol, ...args);
 }
 
 export type LogLevels = "error" | "warn" | "info" | "verbose" | "silly";
