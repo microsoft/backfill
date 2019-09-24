@@ -19,13 +19,11 @@
     "chalk": "^2.4.1",
     "fs-extra": "^7.0.1",
     "json2csv": "^4.3.1",
-    "winston": "^3.2.1",
-    "yargs": "^14.0.0"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@types/fs-extra": "^7.0.0",
     "@types/json2csv": "^4.2.0",
-    "@types/yargs": "^13.0.2",
     "backfill-utils-tsconfig": "^2.0.1",
     "typescript": "3.5.3"
   }

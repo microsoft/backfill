@@ -1,7 +1,7 @@
 import * as yargs from "yargs";
 import { loadDotenv } from "backfill-utils-dotenv";
 import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
-import { logger } from "backfill-logger";
+import { logger, setLogLevel } from "backfill-logger";
 
 import { createConfig, Config } from "backfill-config";
 import {
@@ -48,7 +48,7 @@ export async function backfill(
     try {
       await cacheStorage.put(packageHash, outputFolder);
     } catch (err) {
-      logger.warn("Failed persisting the cache: ", err.message);
+      logger.warn("Failed to persist the cache: ", err.message);
     }
   }
 
@@ -69,12 +69,12 @@ export async function main(): Promise<void> {
     packageRoot,
     performanceReportName,
     clearOutputFolder,
-    verboseLogs,
+    logLevel,
     watchGlobs
   } = config;
 
-  if (verboseLogs) {
-    logger.enableVerbose = true;
+  if (logLevel) {
+    setLogLevel(logLevel);
   }
 
   const helpString = "Backfills unchanged packages.";

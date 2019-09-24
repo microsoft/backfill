@@ -40,7 +40,7 @@ export function initializeWatcher(
 
   logger.info("Running in AUDIT mode");
   logger.info(`[audit] Watching file changes in: ${repositoryRoot}`);
-  logger.info(`[audit] Cache-folder: ${outputFolder}`);
+  logger.info(`[audit] Backfill will cache folder: ${outputFolder}`);
 
   const excludeFolders = watchGlobs.folders.exclude;
   const excludeFiles = watchGlobs.files.exclude || [];
@@ -67,7 +67,7 @@ export function initializeWatcher(
     })
     .on("all", (event, filePath) => {
       const logLine = `${filePath} (${event})`;
-      logger.verbose(`[audit] ${logLine}`);
+      logger.silly(`[audit] ${logLine}`);
 
       if (!anymatch(cacheFolderGlob, filePath)) {
         changedFilesOutsideScope.push(logLine);

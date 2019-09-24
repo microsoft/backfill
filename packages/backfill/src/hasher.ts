@@ -3,7 +3,7 @@ import * as findUp from "find-up";
 import * as fs from "fs-extra";
 import * as path from "path";
 import { hashElement } from "folder-hash";
-import { logger, mark } from "backfill-logger";
+import { logger } from "backfill-logger";
 
 import { getAllDependencies, resolveDependency } from "./dependencyResolver";
 
@@ -110,11 +110,11 @@ export class Hasher implements IHasher {
 
         if (dependencyPath) {
           return this.getPackageHash(dependencyPath, dependency).then(hash => {
-            logger.verbose(`getHashOfDependencies: ${dependency}: ${hash}`);
+            logger.silly(`getHashOfDependencies: ${dependency}: ${hash}`);
             return hash;
           });
         } else {
-          logger.verbose(`getHashOfDependencies: no path for ${dependency}`);
+          logger.silly(`getHashOfDependencies: no path for ${dependency}`);
         }
       })
       .filter(notEmpty);
@@ -125,7 +125,7 @@ export class Hasher implements IHasher {
       encoding: "hex",
       ...this.options.watchGlobs
     }).then(result => {
-      logger.verbose(result);
+      logger.silly("getHashOfOwnFiles:", result);
       return result.hash;
     });
   }
@@ -155,7 +155,7 @@ export class Hasher implements IHasher {
       return hash;
     });
 
-    mark("hasher:calculateHash");
+    logger.profile("hasher:calculateHash");
 
     // 1. Create hash to be used when fetching cache from cache storage
     const packageHash = await Promise.all([
@@ -167,7 +167,7 @@ export class Hasher implements IHasher {
       .then(hashes => hashes.filter(notEmpty))
       .then(hashes => createHash(hashes));
 
-    logger.perf("hasher:calculateHash");
+    logger.profile("hasher:calculateHash");
 
     // 2. Create hash to be stored in the package. Used to communicate the state
     // of the package to dependent packages (parents)

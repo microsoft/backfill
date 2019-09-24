@@ -1,7 +1,4 @@
 import chalk from "chalk";
-import yargs from "yargs";
-
-import { getDeltaAndClearMark } from "./performanceMarkers";
 
 function logInternal(
   method: "info" | "warn" | "error",
@@ -14,62 +11,93 @@ function logInternal(
   console[method](timestamp, symbol, ...args);
 }
 
+export type LogLevels = "error" | "warn" | "info" | "verbose" | "silly";
+
+let logLevel: LogLevels = "info";
+
+export function setLogLevel(newLogLevel: LogLevels) {
+  logLevel = newLogLevel;
+}
+
+function logLevelNumber(logLevel: LogLevels) {
+  switch (logLevel) {
+    case "error":
+      return 0;
+    case "warn":
+      return 1;
+    case "info":
+      return 2;
+    case "verbose":
+      return 3;
+    case "silly":
+      return 4;
+  }
+}
+
 export interface Logger {
-  /** Whether verbose logging is enabled. Default false unless --verbose arg is given. */
-  enableVerbose: boolean;
-  /** Log to `console.info` with a timestamp, but only if verbose logging is enabled. */
+  silly(...args: any[]): void;
   verbose(...args: any[]): void;
-  /** Log to `console.info` with a timestamp. */
   info(...args: any[]): void;
-  /** Log to `console.warn` with a timestamp. */
   warn(...args: any[]): void;
-  /** Log to `console.error` with a timestamp. */
   error(...args: any[]): void;
-  /** Log perf marker data to `console.info` with timestamp, only if verbose is enabled */
-  perf(marker: string, ...args: any[]): number | void;
+  profile(marker: string, ...args: any[]): number | void;
 }
 
 const emptySquare = "\u25a1";
 const square = "\u25a0";
 const triangle = "\u25b2";
 
-export const logger: Logger = {
-  enableVerbose: !!yargs.argv.verbose,
+const performanceMarkers: { [marker: string]: [number, number] } = {};
 
-  verbose(...args: any[]) {
-    if (logger.enableVerbose) {
+export const logger: Logger = {
+  silly(...args: any[]) {
+    if (logLevelNumber(logLevel) >= logLevelNumber("silly")) {
       logInternal("info", chalk.gray(emptySquare), ...args);
     }
   },
 
+  verbose(...args: any[]) {
+    if (logLevelNumber(logLevel) >= logLevelNumber("verbose")) {
+      logInternal("info", chalk.white(emptySquare), ...args);
+    }
+  },
+
   info(...args: any[]) {
-    logInternal("info", chalk.green(square), ...args);
+    if (logLevelNumber(logLevel) >= logLevelNumber("info")) {
+      logInternal("info", chalk.blue(square), ...args);
+    }
   },
 
   warn(...args: any[]) {
-    logInternal("warn", chalk.yellow(triangle), ...args);
+    if (logLevelNumber(logLevel) >= logLevelNumber("warn")) {
+      logInternal("warn", chalk.yellow(triangle), ...args);
+    }
   },
 
   error(...args: any[]) {
     logInternal("error", chalk.redBright("x"), ...args);
   },
 
-  perf(marker: string, ...args: any[]) {
-    if (logger.enableVerbose) {
-      const delta = getDeltaAndClearMark(marker);
+  profile(marker: string, ...args: any[]) {
+    if (!performanceMarkers[marker]) {
+      performanceMarkers[marker] = process.hrtime();
+    } else {
+      const delta = process.hrtime(performanceMarkers[marker]);
+      delete performanceMarkers[marker];
 
       if (delta) {
-        const ns = delta[0] * 1e9 + delta[1];
-        const ms = ns / 1000;
+        const ms = Math.round(delta[0] * 1000 + delta[1] / 1000000);
 
-        logInternal(
-          "info",
-          chalk.cyan(square),
-          `mark(${chalk.cyanBright(marker)}): took ${chalk.cyanBright(
-            `${ms}ms`
-          )}`,
-          ...args
-        );
+        if (logLevelNumber(logLevel) >= logLevelNumber("verbose")) {
+          logInternal(
+            "info",
+            chalk.cyan(square),
+            `Profiling: '${chalk.cyanBright(marker)}' took ${chalk.cyanBright(
+              `${ms}ms`
+            )}`,
+            ...args
+          );
+        }
 
         return ms;
       }

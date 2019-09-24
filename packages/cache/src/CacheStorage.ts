@@ -1,5 +1,5 @@
 import * as fs from "fs-extra";
-import { logger, mark } from "backfill-logger";
+import { logger } from "backfill-logger";
 
 export interface ICacheStorage {
   fetch: (hash: string, destinationFolder: string) => Promise<Boolean>;
@@ -8,7 +8,7 @@ export interface ICacheStorage {
 
 export abstract class CacheStorage implements ICacheStorage {
   public fetch(hash: string, destinationFolder: string): Promise<Boolean> {
-    mark("cache:fetch");
+    logger.profile("cache:fetch");
 
     return this._fetch(hash, destinationFolder).then(result => {
       logger.setTime("fetchTime", "cache:fetch");
@@ -17,7 +17,7 @@ export abstract class CacheStorage implements ICacheStorage {
   }
 
   public put(hash: string, sourceFolder: string): Promise<void> {
-    mark("cache:put");
+    logger.profile("cache:put");
 
     if (!fs.pathExistsSync(sourceFolder)) {
       throw new Error("Folder to cache does not exist");

@@ -1,7 +1,7 @@
 import { logger as genericLogger } from "./genericLogger";
 import { performanceReportLogger } from "./performanceReportLogger";
 
-export { mark } from "./performanceMarkers";
+export { LogLevels, setLogLevel } from "./genericLogger";
 
 export const logger = {
   ...genericLogger,

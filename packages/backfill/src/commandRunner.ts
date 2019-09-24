@@ -1,6 +1,6 @@
 import * as execa from "execa";
 import * as fs from "fs-extra";
-import { logger, mark } from "backfill-logger";
+import { logger } from "backfill-logger";
 
 export type ExecaReturns = execa.ExecaReturns;
 export type BuildCommand = () => Promise<ExecaReturns | void>;
@@ -27,7 +27,7 @@ export function createBuildCommand(
     }
 
     // Set up runner
-    mark("buildCommand:run");
+    logger.profile("buildCommand:run");
     const runner = execa.shell(parsedBuildCommand);
 
     // Stream stdout and stderr
