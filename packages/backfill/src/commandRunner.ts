@@ -1,7 +1,6 @@
 import * as execa from "execa";
 import * as fs from "fs-extra";
-import { performanceLogger } from "backfill-performance-logger";
-import { logger, mark } from "just-task-logger";
+import { logger } from "backfill-logger";
 
 export type ExecaReturns = execa.ExecaReturns;
 export type BuildCommand = () => Promise<ExecaReturns | void>;
@@ -28,8 +27,7 @@ export function createBuildCommand(
     }
 
     // Set up runner
-    const startTime = Date.now();
-    mark("buildCommand:run");
+    logger.profile("buildCommand:run");
     const runner = execa.shell(parsedBuildCommand);
 
     // Stream stdout and stderr
@@ -42,8 +40,7 @@ export function createBuildCommand(
       runner
         // Add build time to the performance logger
         .then(() => {
-          performanceLogger.setTime("buildTime", startTime, Date.now());
-          logger.perf("buildCommand:run");
+          logger.setTime("buildTime", "buildCommand:run");
         })
         // Catch to pretty-print the command that failed and re-throw
         .catch(err => {

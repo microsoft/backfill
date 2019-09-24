@@ -1,8 +1,7 @@
 import * as yargs from "yargs";
 import { loadDotenv } from "backfill-utils-dotenv";
 import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
-import { performanceLogger } from "backfill-performance-logger";
-import { logger } from "just-task-logger";
+import { logger, setLogLevel } from "backfill-logger";
 
 import { createConfig, Config } from "backfill-config";
 import {
@@ -30,21 +29,15 @@ export async function backfill(
     outputPerformanceLogs
   } = config;
 
-  performanceLogger.setName(name);
-  logger.info(`Package name: ${name}`);
-
-  performanceLogger.setCacheProvider(cacheStorageConfig.provider);
-  logger.verbose(`Cache provider: ${cacheStorageConfig.provider}`);
+  logger.setName(name);
+  logger.setCacheProvider(cacheStorageConfig.provider);
 
   const packageHash = await hasher.createPackageHash();
-  logger.verbose(`Package hash: ${packageHash}`);
 
   if (await cacheStorage.fetch(packageHash, outputFolder)) {
-    performanceLogger.setHit(true);
-    logger.info(`Cache hit!`);
+    logger.setHit(true);
   } else {
-    logger.info(`Cache miss!`);
-    performanceLogger.setHit(false);
+    logger.setHit(false);
 
     try {
       await buildCommand();
@@ -55,12 +48,12 @@ export async function backfill(
     try {
       await cacheStorage.put(packageHash, outputFolder);
     } catch (err) {
-      logger.warn("Failed persisting the cache: ", err.message);
+      logger.warn("Failed to persist the cache: ", err.message);
     }
   }
 
   if (outputPerformanceLogs) {
-    await performanceLogger.toFile(logFolder);
+    await logger.toFile(logFolder);
   }
 }
 
@@ -76,12 +69,12 @@ export async function main(): Promise<void> {
     packageRoot,
     performanceReportName,
     clearOutputFolder,
-    verboseLogs,
+    logLevel,
     watchGlobs
   } = config;
 
-  if (verboseLogs) {
-    logger.enableVerbose = true;
+  if (logLevel) {
+    setLogLevel(logLevel);
   }
 
   const helpString = "Backfills unchanged packages.";
@@ -126,10 +119,7 @@ export async function main(): Promise<void> {
   );
 
   if (argv["generate-performance-report"]) {
-    await performanceLogger.generatePerformanceReport(
-      logFolder,
-      performanceReportName
-    );
+    await logger.generatePerformanceReport(logFolder, performanceReportName);
 
     return;
   }
@@ -137,10 +127,10 @@ export async function main(): Promise<void> {
   if (argv["hash-only"]) {
     const hash = await hasher.createPackageHash();
 
-    performanceLogger.setName(name);
-    performanceLogger.setHash(hash);
-    performanceLogger.setCacheProvider("SKIP");
-    await performanceLogger.toFile(logFolder);
+    logger.setName(name);
+    logger.setHash(hash);
+    logger.setCacheProvider("SKIP");
+    await logger.toFile(logFolder);
 
     return;
   }

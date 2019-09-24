@@ -1,4 +1,4 @@
-import { logger } from "just-task-logger";
+import { logger } from "backfill-logger";
 
 export type AzureBlobCacheStorageOptions = {
   connectionString: string;

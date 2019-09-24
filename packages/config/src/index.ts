@@ -2,6 +2,8 @@ import * as path from "path";
 import * as pkgDir from "pkg-dir";
 import * as findUp from "find-up";
 
+import { LogLevels } from "backfill-logger";
+
 import { CacheStorageConfig } from "./cacheConfig";
 import { getEnvConfig } from "./envConfig";
 
@@ -30,7 +32,7 @@ export type Config = {
   packageRoot: string;
   performanceReportName?: string;
   clearOutputFolder: boolean;
-  verboseLogs: boolean;
+  logLevel: LogLevels;
   watchGlobs: WatchGlobs;
 };
 
@@ -75,7 +77,7 @@ export function createDefaultConfig(): Config {
     outputFolder: "lib",
     outputPerformanceLogs: false,
     clearOutputFolder: true,
-    verboseLogs: false,
+    logLevel: "info",
     get watchGlobs(): WatchGlobs {
       return {
         folders: {

@@ -5,5 +5,5 @@ module.exports = {
     provider: "local"
   },
   logFolder: path.join(__dirname, ".backfill-logs"),
-  verboseLogs: true
+  logLevel: "silly"
 };

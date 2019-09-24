@@ -1,9 +1,10 @@
 import { parse as json2csv } from "json2csv";
 import * as fs from "fs-extra";
 import * as path from "path";
-import { logger } from "just-task-logger";
 
-type PerformanceLoggerData = {
+import { logger } from "./genericLogger";
+
+type PerformanceReportData = {
   timestamp: number;
   name?: string;
   hash?: string;
@@ -16,40 +17,46 @@ type PerformanceLoggerData = {
 
 type Times = "buildTime" | "putTime" | "fetchTime";
 
-class PerformanceLogger {
-  data: PerformanceLoggerData;
+const performanceReportData: PerformanceReportData = {
+  timestamp: Date.now()
+};
 
-  constructor() {
-    this.data = {
-      timestamp: Date.now()
-    };
-  }
+function createFileName() {
+  return `perf-${performanceReportData.hash || ""}-${
+    performanceReportData.timestamp
+  }.csv`;
+}
 
-  public setName(name: string) {
-    this.data["name"] = name;
-  }
+export const performanceReportLogger = {
+  setName(name: string) {
+    logger.info(`Package name: ${name}`);
+    performanceReportData["name"] = name;
+  },
 
-  public setHash(hash: string) {
-    this.data["hash"] = hash;
-  }
+  setHash(hash: string) {
+    logger.verbose(`Package hash: ${hash}`);
+    performanceReportData["hash"] = hash;
+  },
 
-  public setCacheProvider(cacheProvider: string) {
-    this.data["cacheProvider"] = cacheProvider;
-  }
+  setCacheProvider(cacheProvider: string) {
+    logger.verbose(`Cache provider: ${cacheProvider}`);
+    performanceReportData["cacheProvider"] = cacheProvider;
+  },
 
-  public setHit(hit: boolean) {
-    this.data["hit"] = hit;
-  }
+  setHit(hit: boolean) {
+    logger.info(hit ? `Cache hit!` : `Cache miss!`);
+    performanceReportData["hit"] = hit;
+  },
 
-  public setTime(type: Times, startTime: number, endTime: number) {
-    this.data[type] = endTime - startTime;
-  }
+  setTime(type: Times, marker: string) {
+    const ms = logger.profile(marker);
 
-  private createFileName() {
-    return `perf-${this.data.hash || ""}-${this.data.timestamp}.csv`;
-  }
+    if (ms) {
+      performanceReportData[type] = ms;
+    }
+  },
 
-  public async generatePerformanceReport(
+  async generatePerformanceReport(
     logFolder: string,
     performanceReportName?: string
   ) {
@@ -97,9 +104,9 @@ class PerformanceLogger {
         });
       })
       .catch(logger.error);
-  }
+  },
 
-  public async toFile(logFolder: string) {
+  async toFile(logFolder: string) {
     const fields = [
       "timestamp",
       "name",
@@ -113,13 +120,13 @@ class PerformanceLogger {
     const opts = { fields, header: false };
 
     try {
-      const csv = json2csv(this.data, opts);
+      const csv = json2csv(performanceReportData, opts);
+      const filepath = path.join(logFolder, createFileName());
 
-      await fs.outputFile(path.join(logFolder, this.createFileName()), csv);
+      await fs.outputFile(filepath, csv);
+      logger.silly(`Performance Log created at ${filepath}`);
     } catch (err) {
       logger.error(err);
     }
   }
-}
-
-export const performanceLogger = new PerformanceLogger();
+};
