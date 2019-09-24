@@ -121,8 +121,10 @@ export const performanceReportLogger = {
 
     try {
       const csv = json2csv(performanceReportData, opts);
+      const filepath = path.join(logFolder, createFileName());
 
-      await fs.outputFile(path.join(logFolder, createFileName()), csv);
+      await fs.outputFile(filepath, csv);
+      logger.silly(`Performance Log created at ${filepath}`);
     } catch (err) {
       logger.error(err);
     }
