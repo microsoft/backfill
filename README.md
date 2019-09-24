@@ -2,7 +2,7 @@
 
 A JavaScript caching library for reducing build time.
 
-**🔌 Easy to install**: Wrap your build commands inside
+**🔌 Easy to install**: Simply wrap your build commands inside
 `backfill -- [command]`  
 **☁️ Remote cache**: Store your cache on Azure Blob or as an npm package  
 **⚙️ Fully configurable**: Smart defaults with cross-package and per-package
@@ -152,11 +152,57 @@ See `getEnvConfig()` in `./packages/backfill/src/config.ts`.
 
 ### Microsoft Azure Blog Storage
 
-[TODO]
+To cache to a Microsoft Azure Blog Storage you need to provide a connection
+string and the container name. If you are configuring via backfill.config.js,
+you can use the following syntax:
+
+```js
+module.exports = {
+  cacheStorageConfig: {
+    provider: "azure-blob",
+    options: {
+      connectionString: "...",
+      container: "..."
+    }
+  }
+};
+```
+
+You can also configure Microsoft Azure Blog Storage using environment variables.
+
+```
+BACKFILL_CACHE_PROVIDER="azure-blob"
+BACKFILL_CACHE_PROVIDER_OPTIONS='{"connectionString":"...","container":"..."}'
+```
 
 ### Npm package
 
-[TODO]
+To cache to an NPM package you need to provide a package name and the registry
+URL of your package feed. This feed should probably be private. If you are
+configuring via backfill.config.js, you can use the following syntax:
+
+```js
+module.exports = {
+  cacheStorageConfig: {
+    provider: "npm",
+    options: {
+      npmPackageName: "...",
+      registryUrl: "..."
+    }
+  }
+};
+```
+
+You can also provide a path to the .npmrc user config file, to provide auth
+details related to your package feed using the `npmrcUserconfig` field in
+`options`.
+
+You can also configure NPM package cache using environment variables.
+
+```
+BACKFILL_CACHE_PROVIDER="npm"
+BACKFILL_CACHE_PROVIDER_OPTIONS='{"npmPackageName":"...","registryUrl":"..."}'
+```
 
 ## Performance Logs
 
@@ -167,12 +213,19 @@ formatted as a csv file, containing only one row. You can run
 into one file. You can turn performance logging by setting
 `outputPerformanceLogs: true` in `backfill.config.js`.
 
+##
+
 ## Contributing
 
-This project welcomes contributions and suggestions. Most contributions require
-you to agree to a Contributor License Agreement (CLA) declaring that you have
-the right to, and actually do, grant us the rights to use your contribution. For
-details, visit https://cla.opensource.microsoft.com.
+This project welcomes contributions and suggestions.
+
+- [Submit bugs](https://github.com/microsoft/backfill/issues) and help us verify
+  fixes as they are checked in.
+- Review the [source code changes](https://github.com/microsoft/backfill/pulls).
+
+Most contributions require you to agree to a Contributor License Agreement (CLA)
+declaring that you have the right to, and actually do, grant us the rights to
+use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
 When you submit a pull request, a CLA bot will automatically determine whether
 you need to provide a CLA and decorate the PR appropriately (e.g., status check,
