@@ -106,6 +106,7 @@ The default configuration object is:
   hashFileFolder: "node_modules/.cache/backfill",
   internalCacheFolder: "node_modules/.cache/backfill",
   logFolder: "node_modules/.cache/backfill",
+  logLevel: "info",
   name: "name-of-package",
   outputFolder: "lib",
   outputPerformanceLogs: false,
@@ -131,6 +132,7 @@ export type Config = {
   internalCacheFolder: string;
   hashFileFolder: string;
   logFolder: string;
+  logLevel: LogLevels;
   performanceReportName?: string;
   watchGlobs: WatchGlobs;
 };
