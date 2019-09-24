@@ -8,8 +8,12 @@ A JavaScript caching library for reducing build time.
 **⚙️ Fully configurable**: Smart defaults with cross-package and per-package
 configuration and environment variable overrides
 
-_backfill is under active development and should not be used in production,
-yet._
+_backfill is under active development and should not be used in production, yet.
+We will keep iterating on it until it is proven stable. We will then look into
+various customization strategies, expanding customization, and adding an API for
+only running scripts in packages that have changed and skip others altogether.
+This is particularly useful for testing and other dev tools that don't need to
+run if nothing has changed._
 
 ## Why
 
