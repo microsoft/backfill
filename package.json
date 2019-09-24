@@ -14,7 +14,7 @@
     "watch": "lerna run watch --parallel"
   },
   "dependencies": {
-    "lerna": "3.10.2",
+    "lerna": "3.16.4",
     "prettier": "1.15.2",
     "typescript": "3.5.3"
   },
