@@ -20,7 +20,7 @@
     "@azure/storage-blob": "12.0.0-preview.2",
     "backfill-config": "^2.0.2",
     "backfill-logger": "^2.0.2",
-    "execa": "^1.0.0",
+    "execa": "^2.0.4",
     "fs-extra": "^7.0.1",
     "just-task-logger": "^0.3.0",
     "tar": "^4.4.8"
@@ -30,7 +30,6 @@
     "@types/tar": "^4.0.0",
     "backfill-utils-test": "^2.0.2",
     "backfill-utils-tsconfig": "^2.0.2",
-    "execa": "^1.0.0",
     "jest": "^24.0.12",
     "ts-jest": "^24.0.2",
     "typescript": "3.5.3"

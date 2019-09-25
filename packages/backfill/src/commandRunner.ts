@@ -2,7 +2,7 @@ import * as execa from "execa";
 import * as fs from "fs-extra";
 import { logger } from "backfill-logger";
 
-export type ExecaReturns = execa.ExecaReturns;
+export type ExecaReturns = execa.ExecaChildProcess;
 export type BuildCommand = () => Promise<ExecaReturns | void>;
 
 export function getRawBuildCommand(): string {
@@ -28,13 +28,10 @@ export function createBuildCommand(
 
     // Set up runner
     logger.profile("buildCommand:run");
-    const runner = execa.shell(parsedBuildCommand);
-
-    // Stream stdout and stderr
-    if (process.env.NODE_ENV !== "test") {
-      runner.stdout.pipe(process.stdout);
-      runner.stderr.pipe(process.stderr);
-    }
+    const runner = execa(parsedBuildCommand, {
+      shell: true,
+      ...(process.env.NODE_ENV !== "test" ? { stdio: "inherit" } : {})
+    });
 
     return (
       runner
@@ -45,7 +42,7 @@ export function createBuildCommand(
         // Catch to pretty-print the command that failed and re-throw
         .catch(err => {
           if (process.env.NODE_ENV !== "test") {
-            logger.error(`\nFailed while running: ${parsedBuildCommand}`);
+            logger.error(`Failed while running: ${parsedBuildCommand}`);
           }
           throw err;
         })

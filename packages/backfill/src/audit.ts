@@ -67,7 +67,7 @@ export function initializeWatcher(
     })
     .on("all", (event, filePath) => {
       const logLine = `${filePath} (${event})`;
-      logger.silly(`[audit] ${logLine}`);
+      logger.silly(`[audit] File change: ${logLine}`);
 
       if (!anymatch(cacheFolderGlob, filePath)) {
         changedFilesOutsideScope.push(logLine);
@@ -86,15 +86,14 @@ export const noSideEffectString =
 
 export function closeWatcher() {
   // Wait for one second before closing, giving time for file changes to propagate
-  // Bug: https://github.com/paulmillr/chokidar/issues/855
   setTimeout(() => {
     if (changedFilesOutsideScope.length > 0) {
       logger.warn(sideEffectWarningString);
-      changedFilesOutsideScope.forEach(file => logger.warn(`[audit] ${file}`));
+      changedFilesOutsideScope.forEach(file => logger.warn(`- ${file}`));
       logger.warn(sideEffectCallToActionString);
     } else {
       logger.info(noSideEffectString);
     }
     watcher.close();
-  }, 2000);
+  }, 1000);
 }
