@@ -26,7 +26,7 @@
     "backfill-logger": "^2.0.2",
     "backfill-utils-dotenv": "^2.0.2",
     "chokidar": "^3.0.2",
-    "execa": "^1.0.0",
+    "execa": "^2.0.4",
     "find-up": "^4.0.0",
     "folder-hash": "^3.2.0",
     "fs-extra": "^7.0.1",
@@ -34,7 +34,6 @@
     "yargs": "^14.0.0"
   },
   "devDependencies": {
-    "@types/execa": "^0.9.0",
     "@types/fs-extra": "^7.0.0",
     "@types/jest": "^24.0.12",
     "@types/node": "^10.12.10",

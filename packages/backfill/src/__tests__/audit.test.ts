@@ -6,13 +6,13 @@ import { setupFixture } from "backfill-utils-test";
 import { findPathToBackfill } from "./helper";
 import { sideEffectWarningString, noSideEffectString } from "../audit";
 
-function outputAllStd({ stderr, stdout }: execa.ExecaReturns) {
+function outputAllStd({ stderr, stdout }: execa.ExecaReturnValue) {
   return `${stdout}\n${stderr}`;
 }
 
 describe("Audit", () => {
   let pathToBackfill: string;
-  let backfillOutput: execa.ExecaReturns | undefined;
+  let backfillOutput: execa.ExecaReturnValue | undefined;
 
   beforeAll(async () => {
     pathToBackfill = await findPathToBackfill();
