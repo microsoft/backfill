@@ -10,7 +10,7 @@
     "precommit": "lint-staged",
     "postinstall": "lerna run --stream prepare",
     "lerna": "lerna",
-    "test": "lerna run test",
+    "test": "lerna run --stream test",
     "watch": "lerna run watch --parallel"
   },
   "dependencies": {
