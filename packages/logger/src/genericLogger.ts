@@ -5,7 +5,10 @@ function logInternal(
   symbol: string,
   ...args: any[]
 ) {
-  console[method]("[backfill]", symbol, ...args);
+  const now = new Date();
+  const timestamp = chalk.gray(`[${now.toLocaleTimeString()}]`);
+
+  console[method](timestamp, symbol, ...args);
 }
 
 export type LogLevels = "error" | "warn" | "info" | "verbose" | "silly";
@@ -40,39 +43,35 @@ export interface Logger {
   profile(marker: string, ...args: any[]): number | void;
 }
 
-const emptySquare = "\u25a1";
-const square = "\u25a0";
-const triangle = "\u25b2";
-
 const performanceMarkers: { [marker: string]: [number, number] } = {};
 
 export const logger: Logger = {
   silly(...args: any[]) {
     if (logLevelNumber(logLevel) >= logLevelNumber("silly")) {
-      logInternal("info", chalk.gray(emptySquare), ...args);
+      logInternal("info", chalk.gray("sill"), ...args);
     }
   },
 
   verbose(...args: any[]) {
     if (logLevelNumber(logLevel) >= logLevelNumber("verbose")) {
-      logInternal("info", chalk.white(emptySquare), ...args);
+      logInternal("info", "verb", ...args);
     }
   },
 
   info(...args: any[]) {
     if (logLevelNumber(logLevel) >= logLevelNumber("info")) {
-      logInternal("info", chalk.blue(square), ...args);
+      logInternal("info", chalk.blue.bold("info"), ...args);
     }
   },
 
   warn(...args: any[]) {
     if (logLevelNumber(logLevel) >= logLevelNumber("warn")) {
-      logInternal("warn", chalk.yellow(triangle), ...args);
+      logInternal("warn", chalk.yellow.bold("warn"), ...args);
     }
   },
 
   error(...args: any[]) {
-    logInternal("error", chalk.redBright("x"), ...args);
+    logInternal("error", chalk.redBright("err!"), ...args);
   },
 
   profile(marker: string, ...args: any[]) {
@@ -88,10 +87,8 @@ export const logger: Logger = {
         if (logLevelNumber(logLevel) >= logLevelNumber("verbose")) {
           logInternal(
             "info",
-            chalk.cyan(square),
-            `Profiling: '${chalk.cyanBright(marker)}' took ${chalk.cyanBright(
-              `${ms}ms`
-            )}`,
+            chalk.cyan("prof"),
+            `${chalk.underline(marker)} took ${chalk.cyanBright(`${ms}ms`)}`,
             ...args
           );
         }
