@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build:
-    name: Test on node ${{ matrix.node_version }} and ${{ matrix.os }}
+    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -14,10 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
-          version: ${{ matrix.node_version }}
+          node_version: ${{ matrix.node_version }}
 
       - name: yarn install, yarn test
         run: |
