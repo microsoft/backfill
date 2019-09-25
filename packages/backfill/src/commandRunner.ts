@@ -28,7 +28,10 @@ export function createBuildCommand(
 
     // Set up runner
     logger.profile("buildCommand:run");
-    const runner = execa(parsedBuildCommand, { shell: true, stdio: "inherit" });
+    const runner = execa(parsedBuildCommand, {
+      shell: true,
+      ...(process.env.NODE_ENV !== "test" ? { stdio: "inherit" } : {})
+    });
 
     return (
       runner
@@ -39,7 +42,7 @@ export function createBuildCommand(
         // Catch to pretty-print the command that failed and re-throw
         .catch(err => {
           if (process.env.NODE_ENV !== "test") {
-            logger.error(`\nFailed while running: ${parsedBuildCommand}`);
+            logger.error(`Failed while running: ${parsedBuildCommand}`);
           }
           throw err;
         })
