@@ -1,9 +1,0 @@
-pool:
-  vmImage: "Ubuntu 16.04"
-
-steps:
-  - script: yarn
-    displayName: "Yarn"
-
-  - script: yarn test
-    displayName: "Yarn test"
