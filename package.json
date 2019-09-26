@@ -7,7 +7,6 @@
     "packages/*"
   ],
   "scripts": {
-    "precommit": "lint-staged",
     "postinstall": "lerna run --stream prepare",
     "lerna": "lerna",
     "test": "lerna run --stream test",
@@ -22,6 +21,11 @@
     "husky": "^3.0.4",
     "lint-staged": "^9.2.5",
     "prettier-package-json": "^2.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "package.json": [
