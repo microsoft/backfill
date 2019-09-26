@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "chalk": "^2.4.1",
-    "fs-extra": "^7.0.1",
+    "fs-extra": "^8.1.0",
     "json2csv": "^4.3.1"
   },
   "devDependencies": {

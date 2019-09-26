@@ -19,7 +19,7 @@
   "dependencies": {
     "backfill-logger": "^2.0.2",
     "find-up": "^4.0.0",
-    "fs-extra": "^7.0.1",
+    "fs-extra": "^8.1.0",
     "just-task-logger": "^0.3.0",
     "pkg-dir": "^4.2.0"
   },
