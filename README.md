@@ -12,7 +12,7 @@ _backfill is under active development and should probably not be used in
 production, yet. We will initially focus on stability improvements. We will then
 look into various optimization strategies, adding more customization, and
 introducing an API for only running scripts in packages that have changed and
-skipping others altogether. This is particularly useful for tests (such as jets)
+skipping others altogether. This is particularly useful for tests (such as Jest)
 and for other dev tools that simply don't need to run if nothing has changed._
 
 ## Why
@@ -150,7 +150,7 @@ environment. This is useful when you don't want to commit keys and secrets to
 your remote cache, or if you want to commit a read-only access key in the repo
 and override with a write and read access key in merge build.
 
-See `getEnvConfig()` in `./packages/backfill/src/config.ts`.
+See `getEnvConfig()` in [`./packages/config/src/envConfig.ts`](https://github.com/microsoft/backfill/blob/master/packages/config/src/envConfig.ts#L15). 
 
 ## Set up remote cache
 
