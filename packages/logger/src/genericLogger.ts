@@ -5,10 +5,7 @@ function logInternal(
   symbol: string,
   ...args: any[]
 ) {
-  const now = new Date();
-  const timestamp = chalk.gray(`[${now.toLocaleTimeString()}]`);
-
-  console[method](timestamp, symbol, ...args);
+  console[method]("backfill:", symbol, ...args);
 }
 
 export type LogLevels = "error" | "warn" | "info" | "verbose" | "silly";
@@ -48,30 +45,30 @@ const performanceMarkers: { [marker: string]: [number, number] } = {};
 export const logger: Logger = {
   silly(...args: any[]) {
     if (logLevelNumber(logLevel) >= logLevelNumber("silly")) {
-      logInternal("info", chalk.gray("sill"), ...args);
+      logInternal("info", chalk.gray("\u25C7"), ...args);
     }
   },
 
   verbose(...args: any[]) {
     if (logLevelNumber(logLevel) >= logLevelNumber("verbose")) {
-      logInternal("info", "verb", ...args);
+      logInternal("info", "\u25a1 ", ...args);
     }
   },
 
   info(...args: any[]) {
     if (logLevelNumber(logLevel) >= logLevelNumber("info")) {
-      logInternal("info", chalk.blue.bold("info"), ...args);
+      logInternal("info", chalk.blue.bold("\u25a0"), ...args);
     }
   },
 
   warn(...args: any[]) {
     if (logLevelNumber(logLevel) >= logLevelNumber("warn")) {
-      logInternal("warn", chalk.yellow.bold("warn"), ...args);
+      logInternal("warn", chalk.yellow.bold("\u25B2"), ...args);
     }
   },
 
   error(...args: any[]) {
-    logInternal("error", chalk.redBright("err!"), ...args);
+    logInternal("error", chalk.redBright("x"), ...args);
   },
 
   profile(marker: string, ...args: any[]) {
@@ -87,8 +84,10 @@ export const logger: Logger = {
         if (logLevelNumber(logLevel) >= logLevelNumber("verbose")) {
           logInternal(
             "info",
-            chalk.cyan("prof"),
-            `${chalk.underline(marker)} took ${chalk.cyanBright(`${ms}ms`)}`,
+            chalk.cyan("\u2023"),
+            `Profiling ${chalk.underline(marker)} took ${chalk.cyanBright(
+              `${ms}ms`
+            )}`,
             ...args
           );
         }
