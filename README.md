@@ -114,7 +114,7 @@ The default configuration object is:
   name: "name-of-package",
   outputFolder: "lib",
   outputPerformanceLogs: false,
-  clearOutputFolder: true,
+  clearOutputFolder: false,
   packageRoot: "path/to/package",
   watchGlobs: {
     folders: { exclude: ["lib", "node_modules"], include: ["*"] },
@@ -150,7 +150,8 @@ environment. This is useful when you don't want to commit keys and secrets to
 your remote cache, or if you want to commit a read-only access key in the repo
 and override with a write and read access key in merge build.
 
-See `getEnvConfig()` in [`./packages/config/src/envConfig.ts`](https://github.com/microsoft/backfill/blob/master/packages/config/src/envConfig.ts#L15). 
+See `getEnvConfig()` in
+[`./packages/config/src/envConfig.ts`](https://github.com/microsoft/backfill/blob/master/packages/config/src/envConfig.ts#L15).
 
 ## Set up remote cache
 

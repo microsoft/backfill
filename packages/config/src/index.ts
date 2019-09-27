@@ -76,7 +76,7 @@ export function createDefaultConfig(): Config {
     logFolder: defaultCacheFolder,
     outputFolder: "lib",
     outputPerformanceLogs: false,
-    clearOutputFolder: true,
+    clearOutputFolder: false,
     logLevel: "info",
     get watchGlobs(): WatchGlobs {
       return {
