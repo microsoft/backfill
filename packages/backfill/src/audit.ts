@@ -69,6 +69,7 @@ export function initializeWatcher(
       persistent: true,
       ignoreInitial: true,
       followSymlinks: false,
+      usePolling: true,
       ignored: ignoreGlobs
     })
     .on("all", (event, filePath) => {
