@@ -1,18 +1,22 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import { logger } from "backfill-logger";
+import execa = require("execa");
 import { setupFixture } from "backfill-utils-test";
-import { createConfig } from "backfill-config";
 
-import {
-  initializeWatcher,
-  closeWatcher,
-  sideEffectCallToActionString,
-  noSideEffectString
-} from "../audit";
+import { findPathToBackfill } from "./helper";
+import { sideEffectWarningString, noSideEffectString } from "../audit";
 
 describe("Audit", () => {
+  let pathToBackfill: string;
+  let backfillOutput: execa.ExecaReturnValue | undefined;
+
+  beforeAll(async () => {
+    pathToBackfill = await findPathToBackfill();
+  });
+
   beforeEach(async () => {
+    backfillOutput = undefined;
+
     const monorepoPath = await setupFixture("monorepo");
 
     // Create a .git folder to help `--audit` identify the boundaries of the repo
@@ -20,45 +24,26 @@ describe("Audit", () => {
 
     const packageAPath = path.join(monorepoPath, "packages", "package-a");
     process.chdir(packageAPath);
-
-    const {
-      packageRoot,
-      internalCacheFolder,
-      logFolder,
-      outputFolder,
-      watchGlobs
-    } = createConfig();
-
-    initializeWatcher(
-      packageRoot,
-      internalCacheFolder,
-      logFolder,
-      outputFolder,
-      watchGlobs
-    );
   });
 
   it("correctly returns success when there are no side-effects", async () => {
-    const spy = jest.spyOn(logger, "info");
+    backfillOutput = await execa("node", [
+      pathToBackfill,
+      "--audit",
+      "npm run compile"
+    ]);
 
-    fs.copyFileSync("src", "lib");
-    await closeWatcher();
-
-    expect(spy).toBeCalledWith(noSideEffectString);
-
-    spy.mockRestore();
+    expect(backfillOutput.all).toMatch(noSideEffectString);
   });
 
   it("correctly warns about side-effects", async () => {
-    const spy = jest.spyOn(logger, "warn");
+    backfillOutput = await execa("node", [
+      pathToBackfill,
+      "--audit",
+      "npm run compile && npm run side-effect"
+    ]);
 
-    fs.copyFileSync("src", "lib");
-    fs.createFileSync(path.join("..", "DONE"));
-    await closeWatcher();
-
-    expect(spy.mock.calls[1][0]).toContain("monorepo/packages/DONE");
-    expect(spy.mock.calls[2][0]).toContain(sideEffectCallToActionString);
-
-    spy.mockRestore();
+    expect(backfillOutput.all).toMatch(sideEffectWarningString);
+    expect(backfillOutput.all).toMatch("monorepo/packages/DONE");
   });
 });
