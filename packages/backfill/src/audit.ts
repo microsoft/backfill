@@ -90,16 +90,22 @@ export const sideEffectCallToActionString =
 export const noSideEffectString =
   "[audit] All observed file changes were within the scope of the folder to be cached.";
 
-export function closeWatcher() {
+async function delay(time: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, time);
+  });
+}
+
+export async function closeWatcher() {
   // Wait for one second before closing, giving time for file changes to propagate
-  setTimeout(() => {
-    if (changedFilesOutsideScope.length > 0) {
-      logger.warn(sideEffectWarningString);
-      changedFilesOutsideScope.forEach(file => logger.warn(`- ${file}`));
-      logger.warn(sideEffectCallToActionString);
-    } else {
-      logger.info(noSideEffectString);
-    }
-    watcher.close();
-  }, 1000);
+  await delay(1000);
+
+  if (changedFilesOutsideScope.length > 0) {
+    logger.warn(sideEffectWarningString);
+    changedFilesOutsideScope.forEach(file => logger.warn(`- ${file}`));
+    logger.warn(sideEffectCallToActionString);
+  } else {
+    logger.info(noSideEffectString);
+  }
+  watcher.close();
 }
