@@ -22,3 +22,5 @@ jobs:
         run: |
           yarn install
           yarn test
+        env:
+          CHOKIDAR_USEPOLLING: 1
