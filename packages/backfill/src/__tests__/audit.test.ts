@@ -1,22 +1,18 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import execa = require("execa");
+import { logger } from "backfill-logger";
 import { setupFixture } from "backfill-utils-test";
+import { createConfig } from "backfill-config";
 
-import { findPathToBackfill } from "./helper";
-import { sideEffectWarningString, noSideEffectString } from "../audit";
+import {
+  initializeWatcher,
+  closeWatcher,
+  sideEffectCallToActionString,
+  noSideEffectString
+} from "../audit";
 
 describe("Audit", () => {
-  let pathToBackfill: string;
-  let backfillOutput: execa.ExecaReturnValue | undefined;
-
-  beforeAll(async () => {
-    pathToBackfill = await findPathToBackfill();
-  });
-
   beforeEach(async () => {
-    backfillOutput = undefined;
-
     const monorepoPath = await setupFixture("monorepo");
 
     // Create a .git folder to help `--audit` identify the boundaries of the repo
@@ -24,26 +20,45 @@ describe("Audit", () => {
 
     const packageAPath = path.join(monorepoPath, "packages", "package-a");
     process.chdir(packageAPath);
+
+    const {
+      packageRoot,
+      internalCacheFolder,
+      logFolder,
+      outputFolder,
+      watchGlobs
+    } = createConfig();
+
+    initializeWatcher(
+      packageRoot,
+      internalCacheFolder,
+      logFolder,
+      outputFolder,
+      watchGlobs
+    );
   });
 
   it("correctly returns success when there are no side-effects", async () => {
-    backfillOutput = await execa("node", [
-      pathToBackfill,
-      "--audit",
-      "npm run compile"
-    ]);
+    const spy = jest.spyOn(logger, "info");
 
-    expect(backfillOutput.all).toMatch(noSideEffectString);
+    fs.copyFileSync("src", "lib");
+    await closeWatcher();
+
+    expect(spy).toBeCalledWith(noSideEffectString);
+
+    spy.mockRestore();
   });
 
   it("correctly warns about side-effects", async () => {
-    backfillOutput = await execa("node", [
-      pathToBackfill,
-      "--audit",
-      "npm run compile && npm run side-effect"
-    ]);
+    const spy = jest.spyOn(logger, "warn");
 
-    expect(backfillOutput.all).toMatch(sideEffectWarningString);
-    expect(backfillOutput.all).toMatch("monorepo/packages/DONE");
+    fs.copyFileSync("src", "lib");
+    fs.createFileSync(path.join("..", "DONE"));
+    await closeWatcher();
+
+    expect(spy.mock.calls[1][0]).toContain("monorepo/packages/DONE");
+    expect(spy.mock.calls[2][0]).toContain(sideEffectCallToActionString);
+
+    spy.mockRestore();
   });
 });
