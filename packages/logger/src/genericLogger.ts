@@ -51,7 +51,7 @@ export const logger: Logger = {
 
   verbose(...args: any[]) {
     if (logLevelNumber(logLevel) >= logLevelNumber("verbose")) {
-      logInternal("info", "\u25a1 ", ...args);
+      logInternal("info", "\u25a1", ...args);
     }
   },
 
