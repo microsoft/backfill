@@ -10,11 +10,12 @@
     "postinstall": "lerna run --stream prepare",
     "lerna": "lerna",
     "test": "lerna run --stream test",
+    "prettier": "prettier \"{.,**}/*.{tsx,ts,js,json,md,yaml}\" --write",
     "watch": "lerna run watch --parallel"
   },
   "dependencies": {
     "lerna": "3.16.4",
-    "prettier": "1.15.2",
+    "prettier": "1.18.2",
     "typescript": "3.5.3"
   },
   "devDependencies": {
