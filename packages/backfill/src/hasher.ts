@@ -58,16 +58,7 @@ export class Hasher implements IHasher {
     return dependencyPath.indexOf("node_modules") === -1;
   }
 
-  private async createFallbackPackageHash(
-    dependencyPath: string,
-    dependency: string
-  ) {
-    if (this.isInternalPackage(dependencyPath)) {
-      logger.warn(
-        `"${dependency}" does not have a pre-calculated hash. Will try to create a hash using package name and version as fallback.`
-      );
-    }
-
+  private async createFallbackPackageHash(dependencyPath: string) {
     const packageJson = require(path.join(dependencyPath, "package.json"));
 
     if (!packageJson || !packageJson.name || !packageJson.version) {
@@ -78,13 +69,20 @@ export class Hasher implements IHasher {
   }
 
   private async getPackageHash(dependencyPath: string, dependency: string) {
+    if (!this.isInternalPackage(dependencyPath)) {
+      return await this.createFallbackPackageHash(dependencyPath);
+    }
+
     const pathToHashFile = this.getHashFilePath(dependencyPath);
 
     try {
       const fileStream = await fs.readFile(pathToHashFile, "utf8");
       return fileStream.toString().trim();
     } catch (e) {
-      return await this.createFallbackPackageHash(dependencyPath, dependency);
+      logger.warn(
+        `"${dependency}" does not have a pre-calculated hash. Will try to create a hash using package name and version as fallback.`
+      );
+      return await this.createFallbackPackageHash(dependencyPath);
     }
   }
 
