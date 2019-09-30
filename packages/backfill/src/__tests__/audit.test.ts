@@ -6,10 +6,6 @@ import { setupFixture } from "backfill-utils-test";
 import { findPathToBackfill } from "./helper";
 import { sideEffectWarningString, noSideEffectString } from "../audit";
 
-function outputAllStd({ stderr, stdout }: execa.ExecaReturnValue) {
-  return `${stdout}\n${stderr}`;
-}
-
 describe("Audit", () => {
   let pathToBackfill: string;
   let backfillOutput: execa.ExecaReturnValue | undefined;
@@ -37,7 +33,7 @@ describe("Audit", () => {
       "npm run compile"
     ]);
 
-    expect(outputAllStd(backfillOutput)).toMatch(noSideEffectString);
+    expect(backfillOutput.all).toMatch(noSideEffectString);
   });
 
   it("correctly warns about side-effects", async () => {
@@ -47,7 +43,7 @@ describe("Audit", () => {
       "npm run compile && npm run side-effect"
     ]);
 
-    expect(outputAllStd(backfillOutput)).toMatch(sideEffectWarningString);
-    expect(outputAllStd(backfillOutput)).toMatch("monorepo/packages/DONE");
+    expect(backfillOutput.all).toMatch(sideEffectWarningString);
+    expect(backfillOutput.all).toMatch("monorepo/packages/DONE");
   });
 });

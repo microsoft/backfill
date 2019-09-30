@@ -153,7 +153,7 @@ export async function main(): Promise<void> {
     await backfill(config, cacheStorage, buildCommand, hasher);
 
     if (argv["audit"]) {
-      closeWatcher();
+      await closeWatcher();
     }
   } catch (err) {
     logger.error(err.message || err);
