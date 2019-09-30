@@ -22,7 +22,7 @@
     "tempy": "^0.3.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^7.0.0",
+    "@types/fs-extra": "^8.0.0",
     "backfill-utils-tsconfig": "^2.0.2",
     "typescript": "3.5.3"
   }
