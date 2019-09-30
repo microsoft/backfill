@@ -10,6 +10,7 @@
     "postinstall": "lerna run --stream prepare",
     "lerna": "lerna",
     "test": "lerna run --stream test",
+    "prettier": "prettier \"{.,**}/*.{tsx,ts,js,json,md,yaml}\" --write",
     "watch": "lerna run watch --parallel"
   },
   "dependencies": {
