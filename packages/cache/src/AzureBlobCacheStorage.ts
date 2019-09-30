@@ -14,35 +14,13 @@ const uploadOptions = {
   maxBuffers: 5
 };
 
-// Work-around for this issue: https://github.com/Azure/azure-sdk-for-js/issues/4935
-function prepareConnectionString(connectionString: string) {
-  const connectionStringElements = connectionString.split(";");
-  const connectionStringTemplate = [
-    "BlobEndpoint",
-    "QueueEndpoint",
-    "FileEndpoint",
-    "TableEndpoint",
-    "SharedAccessSignature"
-  ];
-
-  return connectionStringTemplate
-    .map(templateElement => {
-      const existingElement = connectionStringElements.find(
-        element => element.indexOf(templateElement) === 0
-      );
-
-      return existingElement ? existingElement : `${templateElement}=https://`;
-    })
-    .join(";");
-}
-
 function createBlobClient(
   connectionString: string,
   containerName: string,
   blobName: string
 ) {
   const blobServiceClient = BlobServiceClient.fromConnectionString(
-    prepareConnectionString(connectionString)
+    connectionString
   );
   const containerClient = blobServiceClient.getContainerClient(containerName);
   const blobClient = containerClient.getBlobClient(blobName);
