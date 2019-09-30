@@ -24,6 +24,13 @@ function getGitRepositoryRoot(packageRoot: string) {
   return packageRoot;
 }
 
+function addGlobstars(globPatterns: string[]): string[] {
+  const folders = globPatterns.map(p => path.join("**", p, "**", "*"));
+  const files = globPatterns.map(p => path.join("**", p));
+
+  return [...folders, ...files];
+}
+
 export function initializeWatcher(
   packageRoot: string,
   internalCacheFolder: string,
@@ -46,15 +53,14 @@ export function initializeWatcher(
   const excludeFiles = watchGlobs.files.exclude || [];
 
   // Define globs
-  const ignoreGlobs = [
-    internalCacheFolder,
-    logFolder,
+  const ignoreGlobs = addGlobstars([
     ".git",
     ".cache",
-    ...excludeFolders
-  ].map(p => path.join("**", p, "**", "*"));
-
-  ignoreGlobs.push(...[".cache", ...excludeFiles].map(p => path.join("**", p)));
+    logFolder,
+    internalCacheFolder,
+    ...excludeFolders,
+    ...excludeFiles
+  ]);
 
   const cacheFolderGlob = path.join("**", outputFolder, "**");
 
