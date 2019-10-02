@@ -23,7 +23,7 @@
     "execa": "^2.0.4",
     "fs-extra": "^8.1.0",
     "just-task-logger": "^0.3.0",
-    "tar": "^4.4.8"
+    "tar": "^5.0.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.0",
