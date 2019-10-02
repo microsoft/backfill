@@ -25,7 +25,7 @@
     "backfill-config": "^2.0.2",
     "backfill-logger": "^2.0.2",
     "backfill-utils-dotenv": "^2.0.2",
-    "chokidar": "paulmillr/chokidar#6cd588c7be458348130a2f365f563d6967010d2b",
+    "chokidar": "^3.2.1",
     "execa": "^2.0.4",
     "find-up": "^4.0.0",
     "folder-hash": "^3.2.0",
