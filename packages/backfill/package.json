@@ -30,7 +30,6 @@
     "find-up": "^4.0.0",
     "folder-hash": "^3.2.0",
     "fs-extra": "^8.1.0",
-    "just-task-logger": "^0.3.0",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
