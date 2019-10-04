@@ -73,7 +73,11 @@ async function parseLockFile(packageRoot: string) {
   return lockfile.parse(yarnLock);
 }
 
-function getWorkspacePackageInfo(workspaces: string[]): WorkspaceInfo {
+function getWorkspacePackageInfo(workspaces?: string[]): WorkspaceInfo {
+  if (!workspaces) {
+    return [];
+  }
+
   return workspaces
     .map(workspace => {
       let name: string;

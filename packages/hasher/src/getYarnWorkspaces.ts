@@ -60,13 +60,15 @@ function getPackagePaths(yarnWorkspacesRoot: string, packages: string[]) {
   });
 }
 
-// TODO: Don't require the presence of workspaces. If not, we'll just only have external dependencies.
-
 export default function getYarnWorkspaces(cwd: string) {
-  const yarnWorkspacesRoot = getYarnWorkspaceRoot(cwd);
-  const rootPackageJson = getRootPackageJson(yarnWorkspacesRoot);
-  const packages = getPackages(rootPackageJson);
-  const packagePaths = getPackagePaths(yarnWorkspacesRoot, packages);
+  try {
+    const yarnWorkspacesRoot = getYarnWorkspaceRoot(cwd);
+    const rootPackageJson = getRootPackageJson(yarnWorkspacesRoot);
+    const packages = getPackages(rootPackageJson);
+    const packagePaths = getPackagePaths(yarnWorkspacesRoot, packages);
 
-  return packagePaths;
+    return packagePaths;
+  } catch {
+    return;
+  }
 }
