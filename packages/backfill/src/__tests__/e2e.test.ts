@@ -1,9 +1,9 @@
 import * as path from "path";
 import * as fs from "fs-extra";
 import * as execa from "execa";
+import { setupFixture } from "backfill-utils-test";
 
 import { findPathToBackfill } from "./helper";
-import { setupFixture } from "backfill-utils-test";
 
 describe("End to end", () => {
   let pathToBackfill: string;

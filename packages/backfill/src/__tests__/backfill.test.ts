@@ -2,11 +2,11 @@ import { anyString, spy, verify, resetCalls } from "ts-mockito";
 
 import { setupFixture } from "backfill-utils-test";
 import { getCacheStorageProvider } from "backfill-cache";
+import { Hasher } from "backfill-hasher";
+import { createConfig } from "backfill-config";
 
 import { backfill } from "../index";
-import { Hasher } from "../hasher";
 import { createBuildCommand } from "../commandRunner";
-import { createConfig } from "backfill-config";
 
 describe("backfill", () => {
   it("with cache miss and then cache hit", async () => {
