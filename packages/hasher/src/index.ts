@@ -1,12 +1,20 @@
-const start = process.hrtime();
 import * as crypto from "crypto";
 import * as fg from "fast-glob";
 import * as findUp from "find-up";
 import * as fs from "fs-extra";
 import * as lockfile from "@yarnpkg/lockfile";
 import * as path from "path";
+import { logger } from "backfill-logger";
 
 import getYarnWorkspaces from "./getYarnWorkspaces";
+
+export interface IHasher {
+  createPackageHash: () => Promise<string>;
+}
+
+type HasherOptions = {
+  [key: string]: any;
+};
 
 type Dependencies = { [key in string]: string };
 
@@ -34,6 +42,15 @@ type ProcessedPackage = {
 };
 
 type ProcessedPackages = ProcessedPackage[];
+
+export async function createHash(strings: string | string[]) {
+  const hasher = crypto.createHash("sha1");
+
+  const elements = typeof strings === "string" ? [strings] : strings;
+  elements.forEach(element => hasher.update(element));
+
+  return hasher.digest("hex");
+}
 
 async function getPackageRoot(cwd: string) {
   const packageRoot = await findUp("package.json", { cwd });
@@ -332,11 +349,16 @@ async function getPackageHash(
   const filesHash = await generateHashOfFiles(packageRoot);
   const dependenciesHash = generateHashOfDependencies(processedDependencies);
 
-  return {
+  const packageHash = {
     name,
     filesHash,
     dependenciesHash
   };
+
+  logger.silly(`filesHash of ${name}: ${filesHash}`);
+  logger.silly(`dependenciesHash of ${name}: ${dependenciesHash}`);
+
+  return packageHash;
 }
 
 function generateHashOfPackage(processedPackages: ProcessedPackages) {
@@ -352,40 +374,57 @@ function generateHashOfPackage(processedPackages: ProcessedPackages) {
   return hasher.digest("hex");
 }
 
-(async () => {
-  const packageRoot = await getPackageRoot(process.cwd());
-  const yarnLock = await parseLockFile(packageRoot);
+export class Hasher implements IHasher {
+  packageRoot: string;
 
-  const workspacePaths = getYarnWorkspaces(packageRoot);
-  const workspaces = getWorkspacePackageInfo(workspacePaths);
-
-  const processedPackages: ProcessedPackages = [];
-  const queue = [packageRoot];
-
-  while (queue.length > 0) {
-    const packageRoot = queue.shift();
-
-    if (!packageRoot) {
-      continue;
-    }
-
-    const packageHash = await getPackageHash(
-      packageRoot,
-      workspaces,
-      queue,
-      processedPackages,
-      yarnLock
-    );
-
-    processedPackages.push(packageHash);
+  constructor(
+    private options: HasherOptions,
+    private buildCommandSignature: string
+  ) {
+    this.packageRoot = this.options.packageRoot;
   }
 
-  const packageHashIncludingDependencies = generateHashOfPackage(
-    processedPackages
-  );
-  console.log(packageHashIncludingDependencies);
+  public async createPackageHash(): Promise<string> {
+    logger.profile("hasher:calculateHash");
 
-  const delta = process.hrtime(start);
-  const ms = Math.round(delta[0] * 1000 + delta[1] / 1000000);
-  console.log(ms);
-})();
+    const packageRoot = await getPackageRoot(this.packageRoot);
+    const yarnLock = await parseLockFile(packageRoot);
+
+    const workspacePaths = getYarnWorkspaces(packageRoot);
+    const workspaces = getWorkspacePackageInfo(workspacePaths);
+
+    const processedPackages: ProcessedPackages = [];
+    const queue = [packageRoot];
+
+    while (queue.length > 0) {
+      const packageRoot = queue.shift();
+
+      if (!packageRoot) {
+        continue;
+      }
+
+      const packageHash = await getPackageHash(
+        packageRoot,
+        workspaces,
+        queue,
+        processedPackages,
+        yarnLock
+      );
+
+      processedPackages.push(packageHash);
+    }
+
+    const allPackagesHash = generateHashOfPackage(processedPackages);
+    const buildCommandHash = await createHash(this.buildCommandSignature);
+    const packageHash = await createHash([allPackagesHash, buildCommandHash]);
+
+    logger.verbose(`Hash of all packages: ${allPackagesHash}`);
+    logger.verbose(`Hash of build command: ${buildCommandHash}`);
+    logger.verbose(`Hash of package: ${packageHash}`);
+
+    logger.profile("hasher:calculateHash");
+    logger.setHash(packageHash);
+
+    return packageHash;
+  }
+}
