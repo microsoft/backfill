@@ -2936,9 +2936,9 @@ flush-write-stream@^1.0.0:
     readable-stream "^2.0.4"
 
 folder-hash@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/folder-hash/-/folder-hash-3.2.0.tgz#a9c5d9d6eafe536318d1ad0b61e8aa5467e7093a"
-  integrity sha512-1wrROxgM1mE7VcokgO5wrSC2HhKBDIyzYZ+cMVpSttqfmZKI98qWI4XNYZqIXTO3cvLvZE7LV4dZuc/x1DqfVw==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/folder-hash/-/folder-hash-3.3.0.tgz#542e3fdfdf1d2ad6c81c2f20b014594ebdcb01c6"
+  integrity sha512-e33RCSh76COdx86J7qzcAzHo+pg4CNNjvMfMFCp0O5mn/iCKws0Gqi4qsI2U5rWA1hb8E5zKDBM9gp0qIGQBSg==
   dependencies:
     debug "^4.1.1"
     graceful-fs "~4.2.0"
