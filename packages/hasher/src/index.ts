@@ -128,7 +128,7 @@ function findWorkspacePath(workspaces: WorkspaceInfo, packageName: string) {
   }
 }
 
-function isEvaluated(
+function isVisitedInternal(
   processedPackages: ProcessedPackages,
   packageName: string
 ) {
@@ -152,7 +152,7 @@ function addNewInternalDependenciesToMainQueue(
   }
 
   if (
-    !isEvaluated(processedPackages, name) &&
+    !isVisitedInternal(processedPackages, name) &&
     !isInQueue(queue, dependencyPath)
   ) {
     queue.push(dependencyPath);
@@ -210,6 +210,17 @@ function addExternalDependency(
   processedDependencies.add(exactSignature);
 }
 
+function isVisitedExternal(visited: Set<string>, key: string) {
+  return visited.has(key);
+}
+
+function isInExternalQueue(queue: ExternalDependenciesQueue, key: string) {
+  return queue.find(
+    ({ name, versionRange }) =>
+      createDependencySignature(name, versionRange) === key
+  );
+}
+
 function addNewExternalDependenciesToQueue(
   dependencies: Dependencies | undefined,
   visited: Set<string>,
@@ -222,7 +233,10 @@ function addNewExternalDependenciesToQueue(
         versionRange
       );
 
-      if (!visited.has(versionRangeSignature)) {
+      if (
+        !isVisitedExternal(visited, versionRangeSignature) &&
+        !isInExternalQueue(queue, versionRangeSignature)
+      ) {
         queue.push({ name, versionRange });
       }
     });
