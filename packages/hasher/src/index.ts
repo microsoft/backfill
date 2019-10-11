@@ -41,7 +41,7 @@ type ProcessedPackage = {
   dependenciesHash: string;
 };
 
-type ProcessedPackages = ProcessedPackage[];
+export type ProcessedPackages = ProcessedPackage[];
 
 export async function createHash(strings: string | string[]) {
   const hasher = crypto.createHash("sha1");
@@ -62,18 +62,20 @@ async function getPackageRoot(cwd: string) {
   return path.dirname(packageRoot);
 }
 
-async function parseLockFile(packageRoot: string) {
+export async function parseLockFile(packageRoot: string) {
   const yarnLockPath = await findUp("yarn.lock", { cwd: packageRoot });
 
   if (!yarnLockPath) {
-    throw new Error("Could not find a yarn.lock file");
+    throw new Error(
+      "Could not find a yarn.lock file. The hashing algorithm requires you to use yarn."
+    );
   }
 
   const yarnLock = fs.readFileSync(yarnLockPath).toString();
   return lockfile.parse(yarnLock);
 }
 
-function getWorkspacePackageInfo(workspaces?: string[]): WorkspaceInfo {
+export function getWorkspacePackageInfo(workspaces?: string[]): WorkspaceInfo {
   if (!workspaces) {
     return [];
   }
@@ -100,8 +102,8 @@ function listOfWorkspacePackageNames(workspaces: WorkspaceInfo) {
   return workspaces.map(({ name }) => name);
 }
 
-function filterInternalDependencies(
-  dependencies: string[],
+export function filterInternalDependencies(
+  dependencies: Dependencies,
   workspaces: WorkspaceInfo
 ) {
   const workspacePackageNames = listOfWorkspacePackageNames(workspaces);
@@ -110,8 +112,8 @@ function filterInternalDependencies(
   );
 }
 
-function filterExternalDependencies(
-  dependencies: string[],
+export function filterExternalDependencies(
+  dependencies: Dependencies,
   workspaces: WorkspaceInfo
 ) {
   const workspacePackageNames = listOfWorkspacePackageNames(workspaces);
@@ -139,7 +141,7 @@ function isInQueue(queue: string[], packagePath: string) {
   return queue.indexOf(packagePath) >= 0;
 }
 
-function addNewInternalDependenciesToMainQueue(
+export function addNewInternalDependenciesToMainQueue(
   workspaces: WorkspaceInfo,
   name: string,
   processedPackages: ProcessedPackages,
@@ -332,7 +334,7 @@ async function getPackageHash(
     "package.json"
   ));
 
-  const allDependencies = {
+  const allDependencies: Dependencies = {
     ...dependencies,
     ...devDependencies
   };

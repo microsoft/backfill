@@ -52,7 +52,11 @@ function getPackages(packageJson: PackageJsonWorkspaces) {
 
 function getPackagePaths(yarnWorkspacesRoot: string, packages: string[]) {
   const packagePaths = packages.map(name =>
-    fg.sync(path.join(yarnWorkspacesRoot, `${name}/`))
+    fg.sync(name, {
+      cwd: yarnWorkspacesRoot,
+      onlyDirectories: true,
+      absolute: true
+    })
   );
 
   return packagePaths.reduce((acc, cur) => {
@@ -69,6 +73,6 @@ export default function getYarnWorkspaces(cwd: string) {
 
     return packagePaths;
   } catch {
-    return;
+    return [];
   }
 }
