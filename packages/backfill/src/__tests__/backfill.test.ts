@@ -17,11 +17,10 @@ describe("backfill", () => {
     const {
       cacheStorageConfig,
       clearOutputFolder,
-      hashFileFolder,
       internalCacheFolder,
       outputFolder,
       packageRoot,
-      watchGlobs
+      hashGlobs
     } = config;
 
     // Arrange
@@ -35,10 +34,7 @@ describe("backfill", () => {
       clearOutputFolder,
       outputFolder
     );
-    const hasher = new Hasher(
-      { packageRoot, watchGlobs, hashFileFolder },
-      buildCommandRaw
-    );
+    const hasher = new Hasher({ packageRoot, hashGlobs }, buildCommandRaw);
 
     // Spy
     const spiedCacheStorage = spy(cacheStorage);

@@ -61,7 +61,6 @@ export async function main(): Promise<void> {
   const config = createConfig();
   const {
     cacheStorageConfig,
-    hashFileFolder,
     internalCacheFolder,
     logFolder,
     name,
@@ -70,7 +69,7 @@ export async function main(): Promise<void> {
     performanceReportName,
     clearOutputFolder,
     logLevel,
-    watchGlobs
+    hashGlobs
   } = config;
 
   if (logLevel) {
@@ -113,10 +112,7 @@ export async function main(): Promise<void> {
   );
   const buildCommandSignature = getRawBuildCommand();
 
-  const hasher = new Hasher(
-    { packageRoot, watchGlobs, hashFileFolder },
-    buildCommandSignature
-  );
+  const hasher = new Hasher({ packageRoot, hashGlobs }, buildCommandSignature);
 
   if (argv["generate-performance-report"]) {
     await logger.generatePerformanceReport(logFolder, performanceReportName);
@@ -141,7 +137,7 @@ export async function main(): Promise<void> {
       internalCacheFolder,
       logFolder,
       outputFolder,
-      watchGlobs
+      hashGlobs
     );
 
     // Disable fetching when auditing a package

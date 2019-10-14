@@ -107,7 +107,6 @@ The default configuration object is:
 ```js
 {
   cacheStorageConfig: { provider: "local" },
-  hashFileFolder: "node_modules/.cache/backfill",
   internalCacheFolder: "node_modules/.cache/backfill",
   logFolder: "node_modules/.cache/backfill",
   logLevel: "info",
@@ -116,10 +115,7 @@ The default configuration object is:
   outputPerformanceLogs: false,
   clearOutputFolder: false,
   packageRoot: "path/to/package",
-  watchGlobs: {
-    folders: { exclude: ["lib", "node_modules"], include: ["*"] },
-    files: { include: ["*"] }
-  }
+  hashGlobs: ["**/*", "!**/node_modules/**", `!${outputFolder}/**`]
 }
 
 ```
@@ -134,11 +130,10 @@ export type Config = {
   outputFolder: string;
   outputPerformanceLogs: boolean;
   internalCacheFolder: string;
-  hashFileFolder: string;
   logFolder: string;
   logLevel: LogLevels;
   performanceReportName?: string;
-  watchGlobs: WatchGlobs;
+  hashGlobs: string[];
 };
 ```
 

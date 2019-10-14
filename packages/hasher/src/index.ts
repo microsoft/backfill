@@ -30,7 +30,7 @@ type ParsedYarnLock = {
 
 type WorkspaceInfo = { name: string; path: string }[];
 
-type ExternalDependenciesQueue = {
+export type ExternalDependenciesQueue = {
   name: string;
   versionRange: string;
 }[];
@@ -161,7 +161,7 @@ export function addNewInternalDependenciesToMainQueue(
   }
 }
 
-function resolveInternalDependenciesAndAdd(
+export function resolveInternalDependenciesAndAdd(
   dependencyNames: string[],
   processedDependencies: Set<string>,
   workspaces: WorkspaceInfo,
@@ -190,7 +190,7 @@ function enrichDependenciesWithVersionRanges(
   }));
 }
 
-function createDependencySignature(name: string, version: string) {
+export function createDependencySignature(name: string, version: string) {
   return `${name}@${version}`;
 }
 
@@ -223,7 +223,7 @@ function isInExternalQueue(queue: ExternalDependenciesQueue, key: string) {
   );
 }
 
-function addNewExternalDependenciesToQueue(
+export function addNewExternalDependenciesToQueue(
   dependencies: Dependencies | undefined,
   visited: Set<string>,
   queue: ExternalDependenciesQueue
@@ -245,16 +245,16 @@ function addNewExternalDependenciesToQueue(
   }
 }
 
-function resolveExternalDependenciesAndAdd(
+export function resolveExternalDependenciesAndAdd(
   allDependencies: Dependencies,
-  externalDependencies: string[],
+  namesOfExternalDependencies: string[],
   processedDependencies: Set<string>,
   yarnLock: ParsedYarnLock
 ) {
   const visited: Set<string> = new Set();
 
   const queue = enrichDependenciesWithVersionRanges(
-    externalDependencies,
+    namesOfExternalDependencies,
     allDependencies
   );
 
@@ -280,14 +280,11 @@ function resolveExternalDependenciesAndAdd(
   }
 }
 
-async function generateHashOfFiles(packageRoot: string) {
-  const files = await fg(["**/*"], {
-    ignore: [
-      "**/node_modules/**",
-      "**/lib/**",
-      "deps.js",
-      "tsconfig.tsbuildinfo"
-    ],
+export async function generateHashOfFiles(
+  hashGlobs: string[],
+  packageRoot: string
+) {
+  const files = await fg(hashGlobs, {
     cwd: packageRoot,
     onlyFiles: false,
     objectMode: true
@@ -312,7 +309,7 @@ async function generateHashOfFiles(packageRoot: string) {
   return hasher.digest("hex");
 }
 
-function generateHashOfDependencies(processedDependencies: Set<string>) {
+export function generateHashOfDependencies(processedDependencies: Set<string>) {
   const dependencies = Array.from(processedDependencies);
   dependencies.sort((a, b) => a.localeCompare(b));
 
@@ -327,7 +324,8 @@ async function getPackageHash(
   workspaces: WorkspaceInfo,
   queue: string[],
   processedPackages: ProcessedPackages,
-  yarnLock: ParsedYarnLock
+  yarnLock: ParsedYarnLock,
+  hashGlobs: string[]
 ): Promise<ProcessedPackage> {
   const { name, dependencies, devDependencies } = require(path.join(
     packageRoot,
@@ -366,7 +364,7 @@ async function getPackageHash(
     yarnLock
   );
 
-  const filesHash = await generateHashOfFiles(packageRoot);
+  const filesHash = await generateHashOfFiles(hashGlobs, packageRoot);
   const dependenciesHash = generateHashOfDependencies(processedDependencies);
 
   const packageHash = {
@@ -396,12 +394,14 @@ function generateHashOfPackage(processedPackages: ProcessedPackages) {
 
 export class Hasher implements IHasher {
   packageRoot: string;
+  hashGlobs: string[];
 
   constructor(
     private options: HasherOptions,
     private buildCommandSignature: string
   ) {
     this.packageRoot = this.options.packageRoot;
+    this.hashGlobs = this.options.hashGlobs;
   }
 
   public async createPackageHash(): Promise<string> {
@@ -428,7 +428,8 @@ export class Hasher implements IHasher {
         workspaces,
         queue,
         processedPackages,
-        yarnLock
+        yarnLock,
+        this.hashGlobs
       );
 
       processedPackages.push(packageHash);
