@@ -20,7 +20,7 @@ describe("End to end", () => {
 
     // Verify it produces the correct hash
     const ownHash = fs.readdirSync(path.join(packageRoot, hashPath));
-    expect(ownHash).toContain("68c3733e58111f4fd30228b49efbfd6a7b98b360");
+    expect(ownHash).toContain("e29a5c3aeebd42261514e0ce0b97eaafb77dbe3a");
 
     // ... and that `npm run compile` was run successfully
     const libFolderExist = await fs.pathExists("lib");
