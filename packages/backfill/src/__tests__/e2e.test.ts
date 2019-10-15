@@ -11,33 +11,20 @@ describe("End to end", () => {
 
   beforeAll(async () => {
     pathToBackfill = await findPathToBackfill();
-    hashPath = path.join("node_modules", ".cache", "backfill", "hash");
+    hashPath = path.join("node_modules", ".cache", "backfill");
   });
 
   it("works", async () => {
-    await setupFixture("basic");
+    const packageRoot = await setupFixture("basic");
     await execa("node", [pathToBackfill, "--", "npm run compile"]);
 
     // Verify it produces the correct hash
-    const ownHash = fs.readFileSync(hashPath).toString();
-    expect(ownHash).toEqual("632a3243cb2f7f0905efe0f1cc9216b582523290");
+    const ownHash = fs.readdirSync(path.join(packageRoot, hashPath));
+    expect(ownHash).toContain("68c3733e58111f4fd30228b49efbfd6a7b98b360");
 
     // ... and that `npm run compile` was run successfully
     const libFolderExist = await fs.pathExists("lib");
     expect(libFolderExist).toBe(true);
-  });
-
-  it("only produces a hash file if called with `--hash-only`", async () => {
-    await setupFixture("basic");
-    await execa("node", [pathToBackfill, "--hash-only"]);
-
-    // Verify it produces the same hash as the previous test
-    const ownHash = fs.readFileSync(hashPath).toString();
-    expect(ownHash).toEqual("632a3243cb2f7f0905efe0f1cc9216b582523290");
-
-    // ... and that it didn't fetch or produce a lib folder
-    const libFolderExist = await fs.pathExists("lib");
-    expect(libFolderExist).toBe(false);
   });
 
   it("fails on error with error code 1", async done => {

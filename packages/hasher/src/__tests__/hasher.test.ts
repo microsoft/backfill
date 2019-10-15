@@ -33,14 +33,14 @@ async function setupFixtureAndGetWorkspaceInfo(fixture: string = "monorepo") {
 // * What happens if we don’t have a lock file?
 describe("parseLockFile()", () => {
   it("parses yarn.lock file when it is found", async () => {
-    const packageRoot = await setupFixture("basic-with-lock-file");
+    const packageRoot = await setupFixture("basic");
     const parsedLockeFile = await parseLockFile(packageRoot);
 
     expect(parsedLockeFile).toHaveProperty("type", "success");
   });
 
   it("throws if it cannot find a yarn.lock file", async () => {
-    const packageRoot = await setupFixture("basic");
+    const packageRoot = await setupFixture("basic-without-lock-file");
 
     await expect(parseLockFile(packageRoot)).rejects.toThrow(
       "Could not find a yarn.lock file"
@@ -288,9 +288,7 @@ describe("addNewExternalDependenciesToQueue()", () => {
 // * Given a list of external dependencies and together with a parsed Lock file, add them all to the queue
 describe("resolveExternalDependenciesAndAdd()", () => {
   it("given a list of external dependencies and a parsed Lock file, add all dependencies, transitively", async () => {
-    const { packageRoot } = await setupFixtureAndGetWorkspaceInfo(
-      "basic-with-lock-file"
-    );
+    const { packageRoot } = await setupFixtureAndGetWorkspaceInfo("basic");
 
     const allDependencies = { "package-a": "1.0.0", foo: "1.0.0" };
     const namesOfExternalDependencies = ["foo"];
@@ -385,7 +383,7 @@ describe("The main Hasher class", () => {
 
   it("creates different hashes given different fixtures", async () => {
     const hash = await setupFixtureAndReturnHash();
-    const hashOfBasic = await setupFixtureAndReturnHash("basic-with-lock-file");
+    const hashOfBasic = await setupFixtureAndReturnHash("basic");
 
     expect(hash).not.toEqual(hashOfBasic);
 

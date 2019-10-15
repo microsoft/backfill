@@ -63,7 +63,6 @@ export async function main(): Promise<void> {
     cacheStorageConfig,
     internalCacheFolder,
     logFolder,
-    name,
     outputFolder,
     packageRoot,
     performanceReportName,
@@ -85,10 +84,6 @@ export async function main(): Promise<void> {
     .version(false)
     .option("generate-performance-report", {
       description: "Generate performance report",
-      type: "boolean"
-    })
-    .option("hash-only", {
-      description: "Create package hash without backfilling",
       type: "boolean"
     })
     .option("audit", {
@@ -116,17 +111,6 @@ export async function main(): Promise<void> {
 
   if (argv["generate-performance-report"]) {
     await logger.generatePerformanceReport(logFolder, performanceReportName);
-
-    return;
-  }
-
-  if (argv["hash-only"]) {
-    const hash = await hasher.createPackageHash();
-
-    logger.setName(name);
-    logger.setHash(hash);
-    logger.setCacheProvider("SKIP");
-    await logger.toFile(logFolder);
 
     return;
   }

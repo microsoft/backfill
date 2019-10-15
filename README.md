@@ -61,20 +61,6 @@ Typically you would wrap your npm scripts inside `backfill`, like this:
 }
 ```
 
-**Note**: Backfill will only generate a hash for the package it was called from.
-In order to accurately create a hash representation of that package's
-dependencies, backfill assumes that those packages have already been built using
-backfill. Using tools like Lerna, wsrun or Rush, you can build packages in a
-topologically sorted order such that this assumption is fulfilled.
-
-### `--hash-only`
-
-Sometimes you can't enable backfill for all packages. For these packages, simply
-add `backfill --hash-only` to the build commands to only generate a hash of that
-package without caching anything. Creating a hash of all packages in your repo
-is important as dependent packages using backfill will look for hash keys from
-their dependencies.
-
 ### `--audit`
 
 Backfill can only bring back build output from the folders it was asked to

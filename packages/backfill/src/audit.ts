@@ -49,15 +49,18 @@ export function initializeWatcher(
   logger.info(`[audit] Backfill will cache folder: ${outputFolder}`);
 
   // Define globs
-  const globs = [
-    ...hashGlobs,
-    ...addGlobstars([".git", ".cache", logFolder, internalCacheFolder])
-  ];
+  const ignoreGlobs = addGlobstars([
+    ".git",
+    ".cache",
+    logFolder,
+    internalCacheFolder
+  ]);
 
   const cacheFolderGlob = path.join("**", outputFolder, "**");
 
   watcher = chokidar
-    .watch(globs, {
+    .watch(hashGlobs, {
+      ignored: ignoreGlobs,
       cwd: repositoryRoot,
       persistent: true,
       ignoreInitial: true,
