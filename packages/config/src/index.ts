@@ -68,12 +68,7 @@ export function createDefaultConfig(): Config {
     outputPerformanceLogs: false,
     clearOutputFolder: false,
     logLevel: "info",
-    hashGlobs: [
-      "**/*",
-      "!**/node_modules/**",
-      `!${outputFolder}/**`,
-      "!yarn.lock"
-    ]
+    hashGlobs: ["**/*", "!**/node_modules/**", `!${outputFolder}/**`]
   };
 }
 
