@@ -18,13 +18,15 @@ type HasherOptions = {
 
 type Dependencies = { [key in string]: string };
 
+type YarnLockDependency = {
+  version: string;
+  dependencies?: Dependencies;
+};
+
 type ParsedYarnLock = {
-  type: string;
+  type: "success" | "merge" | "conflict";
   object: {
-    [key in string]: {
-      version: string;
-      dependencies?: Dependencies;
-    };
+    [key in string]: YarnLockDependency;
   };
 };
 
@@ -43,7 +45,7 @@ type ProcessedPackage = {
 
 export type ProcessedPackages = ProcessedPackage[];
 
-export async function createHash(strings: string | string[]) {
+export function createHash(strings: string | string[]): string {
   const hasher = crypto.createHash("sha1");
 
   const elements = typeof strings === "string" ? [strings] : strings;
@@ -52,7 +54,7 @@ export async function createHash(strings: string | string[]) {
   return hasher.digest("hex");
 }
 
-async function getPackageRoot(cwd: string) {
+async function getPackageRoot(cwd: string): Promise<string> {
   const packageRoot = await findUp("package.json", { cwd });
 
   if (!packageRoot) {
@@ -62,7 +64,9 @@ async function getPackageRoot(cwd: string) {
   return path.dirname(packageRoot);
 }
 
-export async function parseLockFile(packageRoot: string) {
+export async function parseLockFile(
+  packageRoot: string
+): Promise<ParsedYarnLock> {
   const yarnLockPath = await findUp("yarn.lock", { cwd: packageRoot });
 
   if (!yarnLockPath) {
@@ -98,14 +102,14 @@ export function getWorkspacePackageInfo(workspaces?: string[]): WorkspaceInfo {
     .filter(Boolean) as WorkspaceInfo;
 }
 
-function listOfWorkspacePackageNames(workspaces: WorkspaceInfo) {
+function listOfWorkspacePackageNames(workspaces: WorkspaceInfo): string[] {
   return workspaces.map(({ name }) => name);
 }
 
 export function filterInternalDependencies(
   dependencies: Dependencies,
   workspaces: WorkspaceInfo
-) {
+): string[] {
   const workspacePackageNames = listOfWorkspacePackageNames(workspaces);
   return Object.keys(dependencies).filter(
     dependency => workspacePackageNames.indexOf(dependency) >= 0
@@ -115,14 +119,17 @@ export function filterInternalDependencies(
 export function filterExternalDependencies(
   dependencies: Dependencies,
   workspaces: WorkspaceInfo
-) {
+): string[] {
   const workspacePackageNames = listOfWorkspacePackageNames(workspaces);
   return Object.keys(dependencies).filter(
     dependency => workspacePackageNames.indexOf(dependency) < 0
   );
 }
 
-function findWorkspacePath(workspaces: WorkspaceInfo, packageName: string) {
+function findWorkspacePath(
+  workspaces: WorkspaceInfo,
+  packageName: string
+): string | undefined {
   const workspace = workspaces.find(({ name }) => name === packageName);
 
   if (workspace) {
@@ -133,11 +140,11 @@ function findWorkspacePath(workspaces: WorkspaceInfo, packageName: string) {
 function isVisitedInternal(
   processedPackages: ProcessedPackages,
   packageName: string
-) {
-  return processedPackages.find(({ name }) => name === packageName);
+): boolean {
+  return Boolean(processedPackages.find(({ name }) => name === packageName));
 }
 
-function isInQueue(queue: string[], packagePath: string) {
+function isInQueue(queue: string[], packagePath: string): boolean {
   return queue.indexOf(packagePath) >= 0;
 }
 
@@ -146,7 +153,7 @@ export function addNewInternalDependenciesToMainQueue(
   name: string,
   processedPackages: ProcessedPackages,
   queue: string[]
-) {
+): void {
   const dependencyPath = findWorkspacePath(workspaces, name);
 
   if (!dependencyPath) {
@@ -167,7 +174,7 @@ export function resolveInternalDependenciesAndAdd(
   workspaces: WorkspaceInfo,
   processedPackages: ProcessedPackages,
   queue: string[]
-) {
+): void {
   dependencyNames.forEach(name => {
     addNewInternalDependenciesToMainQueue(
       workspaces,
@@ -183,14 +190,17 @@ export function resolveInternalDependenciesAndAdd(
 function enrichDependenciesWithVersionRanges(
   dependencyNames: string[],
   dependencies: Dependencies
-) {
+): ExternalDependenciesQueue {
   return dependencyNames.map(name => ({
     name,
     versionRange: dependencies[name]
   }));
 }
 
-export function createDependencySignature(name: string, version: string) {
+export function createDependencySignature(
+  name: string,
+  version: string
+): string {
   return `${name}@${version}`;
 }
 
@@ -198,7 +208,7 @@ function queryLockFile(
   name: string,
   versionRange: string,
   yarnLock: ParsedYarnLock
-) {
+): YarnLockDependency {
   const versionRangeSignature = createDependencySignature(name, versionRange);
   return yarnLock.object[versionRangeSignature];
 }
@@ -207,19 +217,24 @@ function addExternalDependency(
   name: string,
   exactVersion: string,
   processedDependencies: Set<string>
-) {
+): void {
   const exactSignature = createDependencySignature(name, exactVersion);
   processedDependencies.add(exactSignature);
 }
 
-function isVisitedExternal(visited: Set<string>, key: string) {
+function isVisitedExternal(visited: Set<string>, key: string): boolean {
   return visited.has(key);
 }
 
-function isInExternalQueue(queue: ExternalDependenciesQueue, key: string) {
-  return queue.find(
-    ({ name, versionRange }) =>
-      createDependencySignature(name, versionRange) === key
+function isInExternalQueue(
+  queue: ExternalDependenciesQueue,
+  key: string
+): boolean {
+  return Boolean(
+    queue.find(
+      ({ name, versionRange }) =>
+        createDependencySignature(name, versionRange) === key
+    )
   );
 }
 
@@ -227,7 +242,7 @@ export function addNewExternalDependenciesToQueue(
   dependencies: Dependencies | undefined,
   visited: Set<string>,
   queue: ExternalDependenciesQueue
-) {
+): void {
   if (dependencies) {
     Object.entries(dependencies).forEach(([name, versionRange]) => {
       const versionRangeSignature = createDependencySignature(
@@ -250,7 +265,7 @@ export function resolveExternalDependenciesAndAdd(
   namesOfExternalDependencies: string[],
   processedDependencies: Set<string>,
   yarnLock: ParsedYarnLock
-) {
+): void {
   const visited: Set<string> = new Set();
 
   const queue = enrichDependenciesWithVersionRanges(
@@ -283,7 +298,7 @@ export function resolveExternalDependenciesAndAdd(
 export async function generateHashOfFiles(
   hashGlobs: string[],
   packageRoot: string
-) {
+): Promise<string> {
   const files = await fg(hashGlobs, {
     cwd: packageRoot,
     onlyFiles: false,
@@ -309,7 +324,9 @@ export async function generateHashOfFiles(
   return hasher.digest("hex");
 }
 
-export function generateHashOfDependencies(processedDependencies: Set<string>) {
+export function generateHashOfDependencies(
+  processedDependencies: Set<string>
+): string {
   const dependencies = Array.from(processedDependencies);
   dependencies.sort((a, b) => a.localeCompare(b));
 
@@ -379,7 +396,7 @@ async function getPackageHash(
   return packageHash;
 }
 
-function generateHashOfPackage(processedPackages: ProcessedPackages) {
+function generateHashOfPackage(processedPackages: ProcessedPackages): string {
   processedPackages.sort((a, b) => a.name.localeCompare(b.name));
 
   const hasher = crypto.createHash("sha1");
