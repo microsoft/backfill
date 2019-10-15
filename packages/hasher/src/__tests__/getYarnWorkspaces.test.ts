@@ -1,19 +1,19 @@
 import * as path from "path";
 import { setupFixture } from "backfill-utils-test";
 
-import getYarnWorkspaces from "../getYarnWorkspaces";
+import { getYarnWorkspaces } from "../yarnWorkspaces";
 
-describe.only("getYarnWorkspaces()", () => {
-  it("resolves all workspace references", async () => {
+describe("getYarnWorkspaces()", () => {
+  it("gets the name and path of the workspaces", async () => {
     const packageRoot = await setupFixture("monorepo");
+    const workspacesPackageInfo = getYarnWorkspaces(packageRoot);
 
-    const workspacePaths = getYarnWorkspaces(packageRoot);
+    const packageAPath = path.join(packageRoot, "packages", "package-a");
+    const packageBPath = path.join(packageRoot, "packages", "package-b");
 
-    const expectedWorkspacePaths = [
-      path.join(packageRoot, "packages", "package-a"),
-      path.join(packageRoot, "packages", "package-b")
-    ];
-
-    expect(workspacePaths).toEqual(expectedWorkspacePaths);
+    expect(workspacesPackageInfo).toEqual([
+      { name: "package-a", path: packageAPath },
+      { name: "package-b", path: packageBPath }
+    ]);
   });
 });

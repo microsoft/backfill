@@ -12,6 +12,8 @@ type PackageJsonWorkspaces = {
     | string[];
 };
 
+export type WorkspaceInfo = { name: string; path: string }[];
+
 function getYarnWorkspaceRoot(cwd: string) {
   const yarnWorkspacesRoot = findWorkspaceRoot(cwd);
 
@@ -35,15 +37,11 @@ function getRootPackageJson(yarnWorkspacesRoot: string) {
 function getPackages(packageJson: PackageJsonWorkspaces) {
   const { workspaces } = packageJson;
 
-  if (!workspaces) {
-    throw new Error("Could not find a workspaces object in package.json");
-  }
-
-  if (Array.isArray(workspaces)) {
+  if (workspaces && Array.isArray(workspaces)) {
     return workspaces;
   }
 
-  if (!workspaces.packages) {
+  if (!workspaces || !workspaces.packages) {
     throw new Error("Could not find a workspaces object in package.json");
   }
 
@@ -64,14 +62,57 @@ function getPackagePaths(yarnWorkspacesRoot: string, packages: string[]) {
   });
 }
 
-export default function getYarnWorkspaces(cwd: string) {
+export function getWorkspacePackageInfo(
+  workspacePaths?: string[]
+): WorkspaceInfo {
+  if (!workspacePaths) {
+    return [];
+  }
+
+  return workspacePaths
+    .map(workspacePath => {
+      let name: string;
+
+      try {
+        name = require(path.join(workspacePath, "package.json")).name;
+      } catch {
+        return;
+      }
+
+      return {
+        name,
+        path: workspacePath
+      };
+    })
+    .filter(Boolean) as WorkspaceInfo;
+}
+
+export function listOfWorkspacePackageNames(
+  workspaces: WorkspaceInfo
+): string[] {
+  return workspaces.map(({ name }) => name);
+}
+
+export function findWorkspacePath(
+  workspaces: WorkspaceInfo,
+  packageName: string
+): string | undefined {
+  const workspace = workspaces.find(({ name }) => name === packageName);
+
+  if (workspace) {
+    return workspace.path;
+  }
+}
+
+export function getYarnWorkspaces(cwd: string) {
   try {
     const yarnWorkspacesRoot = getYarnWorkspaceRoot(cwd);
     const rootPackageJson = getRootPackageJson(yarnWorkspacesRoot);
     const packages = getPackages(rootPackageJson);
     const packagePaths = getPackagePaths(yarnWorkspacesRoot, packages);
+    const workspaceInfo = getWorkspacePackageInfo(packagePaths);
 
-    return packagePaths;
+    return workspaceInfo;
   } catch {
     return [];
   }
