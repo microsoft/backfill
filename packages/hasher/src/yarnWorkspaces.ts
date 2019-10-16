@@ -72,22 +72,23 @@ export function getWorkspacePackageInfo(
     return [];
   }
 
-  return workspacePaths
-    .map(workspacePath => {
-      let name: string;
+  return workspacePaths.reduce<WorkspaceInfo>((returnValue, workspacePath) => {
+    let name: string;
 
-      try {
-        name = require(path.join(workspacePath, "package.json")).name;
-      } catch {
-        return;
-      }
+    try {
+      name = require(path.join(workspacePath, "package.json")).name;
+    } catch {
+      return returnValue;
+    }
 
-      return {
+    return [
+      ...returnValue,
+      {
         name,
         path: workspacePath
-      };
-    })
-    .filter(Boolean) as WorkspaceInfo;
+      }
+    ];
+  }, []);
 }
 
 export function listOfWorkspacePackageNames(
