@@ -25,8 +25,11 @@ describe("generateHashOfFiles()", () => {
 
     fs.writeFileSync("foo.txt", "bar");
     const hashOfPackageWithFoo = await generateHashOfFiles(glob, packageRoot);
-
     expect(hashOfPackage).not.toEqual(hashOfPackageWithFoo);
+
+    fs.writeFileSync("foo.txt", "foo");
+    const hashOfPackageWithFoo2 = await generateHashOfFiles(glob, packageRoot);
+    expect(hashOfPackageWithFoo).not.toEqual(hashOfPackageWithFoo2);
 
     fs.unlinkSync("foo.txt");
 
