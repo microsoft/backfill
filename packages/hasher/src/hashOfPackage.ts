@@ -6,7 +6,7 @@ import { resolveInternalDependencies } from "./resolveInternalDependencies";
 import { resolveExternalDependencies } from "./resolveExternalDependencies";
 import { generateHashOfFiles } from "./hashOfFiles";
 import { Dependencies } from "./resolveExternalDependencies";
-import { createHash } from "./helpers";
+import { hashStrings } from "./helpers";
 import { ParsedYarnLock } from "./yarnLock";
 import { WorkspaceInfo } from "./yarnWorkspaces";
 
@@ -55,7 +55,7 @@ export async function getPackageHash(
   ];
 
   const filesHash = await generateHashOfFiles(hashGlobs, packageRoot);
-  const dependenciesHash = createHash(resolvedDependencies);
+  const dependenciesHash = hashStrings(resolvedDependencies);
 
   logger.silly(`filesHash of ${name}: ${filesHash}`);
   logger.silly(`dependenciesHash of ${name}: ${dependenciesHash}`);

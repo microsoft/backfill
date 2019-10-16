@@ -1,6 +1,6 @@
 import { setupFixture } from "backfill-utils-test";
 
-import { createHash } from "../helpers";
+import { hashStrings } from "../helpers";
 import { Hasher } from "../index";
 
 describe("createHash()", () => {
@@ -10,15 +10,15 @@ describe("createHash()", () => {
     list.push("foo");
     list.push("bar");
 
-    const hash = createHash(list);
+    const hash = hashStrings(list);
 
     list.push("baz");
-    const hashWithBaz = createHash(list);
+    const hashWithBaz = hashStrings(list);
 
     expect(hash).not.toEqual(hashWithBaz);
 
     list.pop();
-    const hashWithoutBaz = createHash(list);
+    const hashWithoutBaz = hashStrings(list);
 
     expect(hash).toEqual(hashWithoutBaz);
   });
@@ -29,10 +29,10 @@ describe("createHash()", () => {
     list.push("foo");
     list.push("bar");
 
-    const hash = createHash(list);
+    const hash = hashStrings(list);
 
     list.reverse();
-    const hashReverse = createHash(list);
+    const hashReverse = hashStrings(list);
 
     expect(hash).toEqual(hashReverse);
   });

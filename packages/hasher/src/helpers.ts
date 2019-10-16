@@ -2,7 +2,7 @@ import * as path from "path";
 import * as crypto from "crypto";
 import * as findUp from "find-up";
 
-export function createHash(strings: string | string[]): string {
+export function hashStrings(strings: string | string[]): string {
   const hasher = crypto.createHash("sha1");
 
   const anArray = typeof strings === "string" ? [strings] : strings;

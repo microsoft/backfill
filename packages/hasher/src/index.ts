@@ -5,7 +5,7 @@ import {
   getPackageHash,
   generateHashOfInternalPackages
 } from "./hashOfPackage";
-import { createHash, getPackageRoot } from "./helpers";
+import { hashStrings, getPackageRoot } from "./helpers";
 import { parseLockFile } from "./yarnLock";
 import { getYarnWorkspaces } from "./yarnWorkspaces";
 
@@ -55,8 +55,8 @@ export class Hasher implements IHasher {
     }
 
     const internalPackagesHash = generateHashOfInternalPackages(done);
-    const buildCommandHash = await createHash(this.buildCommandSignature);
-    const combinedHash = await createHash([
+    const buildCommandHash = await hashStrings(this.buildCommandSignature);
+    const combinedHash = await hashStrings([
       internalPackagesHash,
       buildCommandHash
     ]);
