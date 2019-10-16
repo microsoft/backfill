@@ -52,8 +52,8 @@ function getPackagePaths(
   yarnWorkspacesRoot: string,
   packages: string[]
 ): string[] {
-  const packagePaths = packages.map(name =>
-    fg.sync(name, {
+  const packagePaths = packages.map(glob =>
+    fg.sync(glob, {
       cwd: yarnWorkspacesRoot,
       onlyDirectories: true,
       absolute: true
