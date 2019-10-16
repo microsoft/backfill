@@ -14,8 +14,8 @@ export interface IHasher {
 }
 
 export class Hasher implements IHasher {
-  packageRoot: string;
-  hashGlobs: string[];
+  private packageRoot: string;
+  private hashGlobs: string[];
 
   constructor(
     private options: { [key: string]: any },
