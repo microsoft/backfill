@@ -18,7 +18,7 @@ export class Hasher implements IHasher {
   private hashGlobs: string[];
 
   constructor(
-    private options: { [key: string]: any },
+    private options: { packageRoot: string; hashGlobs: string[] },
     private buildCommandSignature: string
   ) {
     this.packageRoot = this.options.packageRoot;
