@@ -16,7 +16,7 @@ export async function generateHashOfFiles(
   files.sort((a, b) => a.path.localeCompare(b.path));
 
   const hasher = crypto.createHash("sha1");
-  const hashPromises = files.map(async file => {
+  files.forEach(file => {
     hasher.update(file.path);
 
     if (!file.dirent.isDirectory()) {
@@ -26,8 +26,6 @@ export async function generateHashOfFiles(
       hasher.update(data);
     }
   });
-
-  await Promise.all(hashPromises);
 
   return hasher.digest("hex");
 }
