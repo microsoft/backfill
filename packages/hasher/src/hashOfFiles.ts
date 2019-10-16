@@ -17,11 +17,11 @@ export async function generateHashOfFiles(
 
   const hasher = crypto.createHash("sha1");
   const hashPromises = files.map(async file => {
-    hasher.update(file.name);
+    hasher.update(file.path);
 
     if (!file.dirent.isDirectory()) {
-      const data = await fs
-        .readFile(path.join(packageRoot, file.path))
+      const data = fs
+        .readFileSync(path.join(packageRoot, file.path))
         .toString();
       hasher.update(data);
     }

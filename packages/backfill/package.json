@@ -23,6 +23,7 @@
     "anymatch": "^3.0.3",
     "backfill-cache": "^2.0.2",
     "backfill-config": "^2.0.2",
+    "backfill-hasher": "^2.0.2",
     "backfill-logger": "^2.0.2",
     "backfill-utils-dotenv": "^2.0.2",
     "chokidar": "^3.2.1",
