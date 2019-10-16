@@ -14,7 +14,7 @@ type PackageJsonWorkspaces = {
 
 export type WorkspaceInfo = { name: string; path: string }[];
 
-function getYarnWorkspaceRoot(cwd: string) {
+function getYarnWorkspaceRoot(cwd: string): string {
   const yarnWorkspacesRoot = findWorkspaceRoot(cwd);
 
   if (!yarnWorkspacesRoot) {
@@ -34,7 +34,7 @@ function getRootPackageJson(yarnWorkspacesRoot: string) {
   return packageJson;
 }
 
-function getPackages(packageJson: PackageJsonWorkspaces) {
+function getPackages(packageJson: PackageJsonWorkspaces): string[] {
   const { workspaces } = packageJson;
 
   if (workspaces && Array.isArray(workspaces)) {
@@ -48,7 +48,10 @@ function getPackages(packageJson: PackageJsonWorkspaces) {
   return workspaces.packages;
 }
 
-function getPackagePaths(yarnWorkspacesRoot: string, packages: string[]) {
+function getPackagePaths(
+  yarnWorkspacesRoot: string,
+  packages: string[]
+): string[] {
   const packagePaths = packages.map(name =>
     fg.sync(name, {
       cwd: yarnWorkspacesRoot,
@@ -104,7 +107,7 @@ export function findWorkspacePath(
   }
 }
 
-export function getYarnWorkspaces(cwd: string) {
+export function getYarnWorkspaces(cwd: string): WorkspaceInfo {
   try {
     const yarnWorkspacesRoot = getYarnWorkspaceRoot(cwd);
     const rootPackageJson = getRootPackageJson(yarnWorkspacesRoot);
