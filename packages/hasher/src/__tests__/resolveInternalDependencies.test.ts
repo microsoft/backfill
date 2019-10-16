@@ -1,7 +1,7 @@
 import * as path from "path";
 import { setupFixture } from "backfill-utils-test";
 
-import { filterDependenciesInFixture } from "./helpers";
+import { filterDependenciesInFixture } from "./resolveDependenciesHelper";
 import { getYarnWorkspaces } from "../yarnWorkspaces";
 import { PackageHashInfo } from "../hashOfPackage";
 import {

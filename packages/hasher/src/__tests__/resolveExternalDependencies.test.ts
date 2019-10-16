@@ -1,6 +1,6 @@
 import { setupFixture } from "backfill-utils-test";
 
-import { filterDependenciesInFixture } from "./helpers";
+import { filterDependenciesInFixture } from "./resolveDependenciesHelper";
 import { getYarnWorkspaces } from "../yarnWorkspaces";
 import {
   filterExternalDependencies,
