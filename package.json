@@ -7,10 +7,11 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "lerna run --stream prepare",
+    "postinstall": "yarn update-project-references && lerna run --stream prepare",
     "lerna": "lerna",
-    "test": "lerna run --stream test",
+    "test": "lerna run test",
     "prettier": "prettier \"{.,**}/*.{tsx,ts,js,json,md,yaml}\" --write",
+    "update-project-references": "node tools/update-project-references.js",
     "watch": "lerna run watch --parallel"
   },
   "dependencies": {
@@ -19,13 +20,16 @@
     "typescript": "3.6.4"
   },
   "devDependencies": {
+    "execa": "^3.1.0",
     "husky": "^3.0.4",
     "lint-staged": "^9.2.5",
-    "prettier-package-json": "^2.1.0"
+    "lodash.merge": "^4.6.2",
+    "prettier-package-json": "^2.1.0",
+    "resolve-from": "^5.0.0"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "yarn update-project-references && lint-staged"
     }
   },
   "lint-staged": {
@@ -34,7 +38,7 @@
       "prettier --write",
       "git add"
     ],
-    "**/*.{js,json,md,yaml}": [
+    "**/*.{ts,js,json,md,yaml}": [
       "prettier --write",
       "git add"
     ]

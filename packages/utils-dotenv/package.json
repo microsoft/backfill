@@ -11,9 +11,9 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
-    "compile": "tsc",
+    "compile": "tsc -b",
     "prepare": "yarn compile",
-    "watch": "tsc -w"
+    "watch": "tsc -b -w"
   },
   "dependencies": {
     "dotenv": "^8.1.0",

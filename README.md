@@ -56,7 +56,7 @@ Typically you would wrap your npm scripts inside `backfill`, like this:
 {
   "name": "package",
   "scripts": {
-    "build": "backfill -- tsc"
+    "build": "backfill -- tsc -b"
   }
 }
 ```
@@ -101,7 +101,7 @@ The default configuration object is:
   packageRoot: "path/to/package",
   clearOutputFolder: false,
   logLevel: "info",
-  hashGlobs: ["**/*", "!**/node_modules/**", `!lib/**`]
+  hashGlobs: ["**/*", "!**/node_modules/**", "!lib/**", "!tsconfig.tsbuildinfo"]
 }
 
 ```
