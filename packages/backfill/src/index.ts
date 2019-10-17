@@ -107,7 +107,7 @@ export async function main(): Promise<void> {
   );
   const buildCommandSignature = getRawBuildCommand();
 
-  const hasher = new Hasher({ packageRoot, hashGlobs }, buildCommandSignature);
+  const hasher = new Hasher({ packageRoot }, buildCommandSignature);
 
   if (argv["generate-performance-report"]) {
     await logger.generatePerformanceReport(logFolder, performanceReportName);

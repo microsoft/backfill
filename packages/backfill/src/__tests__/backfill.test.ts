@@ -19,8 +19,7 @@ describe("backfill", () => {
       clearOutputFolder,
       internalCacheFolder,
       outputFolder,
-      packageRoot,
-      hashGlobs
+      packageRoot
     } = config;
 
     // Arrange
@@ -34,7 +33,7 @@ describe("backfill", () => {
       clearOutputFolder,
       outputFolder
     );
-    const hasher = new Hasher({ packageRoot, hashGlobs }, buildCommandRaw);
+    const hasher = new Hasher({ packageRoot }, buildCommandRaw);
 
     // Spy
     const spiedCacheStorage = spy(cacheStorage);

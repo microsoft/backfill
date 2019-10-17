@@ -42,7 +42,7 @@ describe("The main Hasher class", () => {
   const setupFixtureAndReturnHash = async (fixture: string = "monorepo") => {
     const packageRoot = await setupFixture(fixture);
 
-    const options = { packageRoot, hashGlobs: ["**"] };
+    const options = { packageRoot };
     const buildSignature = "yarn build";
 
     const hasher = new Hasher(options, buildSignature);

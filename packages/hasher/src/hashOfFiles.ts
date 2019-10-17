@@ -2,11 +2,13 @@ import * as crypto from "crypto";
 import * as fg from "fast-glob";
 import * as fs from "fs-extra";
 import * as path from "path";
+import { createConfig } from "backfill-config";
 
 export async function generateHashOfFiles(
-  hashGlobs: string[],
   packageRoot: string
 ): Promise<string> {
+  const { hashGlobs } = createConfig(packageRoot);
+
   const files = await fg(hashGlobs, {
     cwd: packageRoot,
     onlyFiles: false,

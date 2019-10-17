@@ -36,8 +36,7 @@ export async function getPackageHash(
   workspaces: WorkspaceInfo,
   queue: string[],
   done: PackageHashInfo[],
-  yarnLock: ParsedYarnLock,
-  hashGlobs: string[]
+  yarnLock: ParsedYarnLock
 ): Promise<PackageHashInfo> {
   const { name, dependencies, devDependencies } = require(path.join(
     packageRoot,
@@ -54,7 +53,7 @@ export async function getPackageHash(
     ...resolveExternalDependencies(allDependencies, workspaces, yarnLock)
   ];
 
-  const filesHash = await generateHashOfFiles(hashGlobs, packageRoot);
+  const filesHash = await generateHashOfFiles(packageRoot);
   const dependenciesHash = hashStrings(resolvedDependencies);
 
   logger.silly(`filesHash of ${name}: ${filesHash}`);

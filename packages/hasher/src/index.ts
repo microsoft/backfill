@@ -15,14 +15,12 @@ export interface IHasher {
 
 export class Hasher implements IHasher {
   private packageRoot: string;
-  private hashGlobs: string[];
 
   constructor(
-    private options: { packageRoot: string; hashGlobs: string[] },
+    private options: { packageRoot: string },
     private buildCommandSignature: string
   ) {
     this.packageRoot = this.options.packageRoot;
-    this.hashGlobs = this.options.hashGlobs;
   }
 
   public async createPackageHash(): Promise<string> {
@@ -47,8 +45,7 @@ export class Hasher implements IHasher {
         workspaces,
         queue,
         done,
-        yarnLock,
-        this.hashGlobs
+        yarnLock
       );
 
       done.push(packageHash);

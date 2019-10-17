@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
+    "backfill-config": "^2.0.2",
     "backfill-logger": "^2.0.2",
     "fast-glob": "^3.0.4",
     "find-up": "^4.1.0",
