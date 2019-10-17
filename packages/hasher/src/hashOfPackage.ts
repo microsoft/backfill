@@ -14,6 +14,7 @@ export type PackageHashInfo = {
   name: string;
   filesHash: string;
   dependenciesHash: string;
+  internalDependencies: string[];
 };
 
 export function generateHashOfInternalPackages(
@@ -34,8 +35,6 @@ export function generateHashOfInternalPackages(
 export async function getPackageHash(
   packageRoot: string,
   workspaces: WorkspaceInfo,
-  queue: string[],
-  done: PackageHashInfo[],
   yarnLock: ParsedYarnLock
 ): Promise<PackageHashInfo> {
   const { name, dependencies, devDependencies } = require(path.join(
@@ -48,9 +47,20 @@ export async function getPackageHash(
     ...devDependencies
   };
 
+  const internalDependencies = resolveInternalDependencies(
+    allDependencies,
+    workspaces
+  );
+
+  const externalDeoendencies = resolveExternalDependencies(
+    allDependencies,
+    workspaces,
+    yarnLock
+  );
+
   const resolvedDependencies = [
-    ...resolveInternalDependencies(allDependencies, workspaces, queue, done),
-    ...resolveExternalDependencies(allDependencies, workspaces, yarnLock)
+    ...internalDependencies,
+    ...externalDeoendencies
   ];
 
   const filesHash = await generateHashOfFiles(packageRoot);
@@ -62,7 +72,8 @@ export async function getPackageHash(
   const packageHash = {
     name,
     filesHash,
-    dependenciesHash
+    dependenciesHash,
+    internalDependencies
   };
 
   return packageHash;

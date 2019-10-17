@@ -1,40 +1,92 @@
+import * as path from "path";
 import { setupFixture } from "backfill-utils-test";
 
-import { hashStrings } from "../helpers";
-import { Hasher } from "../index";
+import { PackageHashInfo } from "../hashOfPackage";
+import { Hasher, addToQueue } from "../index";
+import { WorkspaceInfo } from "../yarnWorkspaces";
 
-describe("createHash()", () => {
-  it("creates different hashes given different lists", () => {
-    const list = [];
+describe("addToQueue", () => {
+  const setupAddToQueue = async () => {
+    const packageRoot = await setupFixture("monorepo");
 
-    list.push("foo");
-    list.push("bar");
+    const packageToAdd = "package-a";
+    const packagePath = path.join(packageRoot, "packages", packageToAdd);
+    const workspaces: WorkspaceInfo = [
+      {
+        name: packageToAdd,
+        path: packagePath
+      }
+    ];
+    const internalDependencies = [packageToAdd];
 
-    const hash = hashStrings(list);
+    const queue: string[] = [];
+    const done: PackageHashInfo[] = [];
 
-    list.push("baz");
-    const hashWithBaz = hashStrings(list);
+    return {
+      internalDependencies,
+      queue,
+      done,
+      workspaces,
+      packageToAdd,
+      packagePath
+    };
+  };
 
-    expect(hash).not.toEqual(hashWithBaz);
+  it("adds internal dependencies to the queue", async () => {
+    const {
+      internalDependencies,
+      queue,
+      done,
+      workspaces,
+      packagePath
+    } = await setupAddToQueue();
 
-    list.pop();
-    const hashWithoutBaz = hashStrings(list);
+    addToQueue(internalDependencies, queue, done, workspaces);
 
-    expect(hash).toEqual(hashWithoutBaz);
+    const expectedQueue = [packagePath];
+    expect(queue).toEqual(expectedQueue);
   });
 
-  it("lists of different order produce the same hash", () => {
-    const list = [];
+  it("doesn't add to the queue if the package has been evaluated", async () => {
+    let {
+      internalDependencies,
+      queue,
+      done,
+      workspaces,
+      packageToAdd
+    } = await setupAddToQueue();
 
-    list.push("foo");
-    list.push("bar");
+    // Override
+    done = [
+      {
+        name: packageToAdd,
+        filesHash: "",
+        dependenciesHash: "",
+        internalDependencies: []
+      }
+    ];
 
-    const hash = hashStrings(list);
+    addToQueue(internalDependencies, queue, done, workspaces);
 
-    list.reverse();
-    const hashReverse = hashStrings(list);
+    expect(queue).toEqual([]);
+  });
 
-    expect(hash).toEqual(hashReverse);
+  it("doesn't add to the queue if the package is already in the queue", async () => {
+    let {
+      internalDependencies,
+      queue,
+      done,
+      workspaces,
+      packagePath
+    } = await setupAddToQueue();
+
+    // Override
+    queue = [packagePath];
+
+    addToQueue(internalDependencies, queue, done, workspaces);
+
+    const expectedQueue = [packagePath];
+    expect(queue).toEqual(expectedQueue);
   });
 });
 
@@ -53,12 +105,11 @@ describe("The main Hasher class", () => {
 
   it("creates different hashes given different fixtures", async () => {
     const hash = await setupFixtureAndReturnHash();
-    const hashOfBasic = await setupFixtureAndReturnHash("basic");
 
+    const hashOfBasic = await setupFixtureAndReturnHash("basic");
     expect(hash).not.toEqual(hashOfBasic);
 
     const hashOfMonorepoAgain = await setupFixtureAndReturnHash();
-
     expect(hash).toEqual(hashOfMonorepoAgain);
   });
 });

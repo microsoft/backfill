@@ -7,10 +7,39 @@ import {
 } from "./hashOfPackage";
 import { hashStrings, getPackageRoot } from "./helpers";
 import { parseLockFile } from "./yarnLock";
-import { getYarnWorkspaces } from "./yarnWorkspaces";
+import {
+  getYarnWorkspaces,
+  findWorkspacePath,
+  WorkspaceInfo
+} from "./yarnWorkspaces";
 
 export interface IHasher {
   createPackageHash: () => Promise<string>;
+}
+
+function isDone(done: PackageHashInfo[], packageName: string): boolean {
+  return Boolean(done.find(({ name }) => name === packageName));
+}
+
+function isInQueue(queue: string[], packagePath: string): boolean {
+  return queue.indexOf(packagePath) >= 0;
+}
+
+export function addToQueue(
+  dependencyNames: string[],
+  queue: string[],
+  done: PackageHashInfo[],
+  workspaces: WorkspaceInfo
+): void {
+  dependencyNames.forEach(name => {
+    const dependencyPath = findWorkspacePath(workspaces, name);
+
+    if (dependencyPath) {
+      if (!isDone(done, name) && !isInQueue(queue, dependencyPath)) {
+        queue.push(dependencyPath);
+      }
+    }
+  });
 }
 
 export class Hasher implements IHasher {
@@ -43,10 +72,10 @@ export class Hasher implements IHasher {
       const packageHash = await getPackageHash(
         packageRoot,
         workspaces,
-        queue,
-        done,
         yarnLock
       );
+
+      addToQueue(packageHash.internalDependencies, queue, done, workspaces);
 
       done.push(packageHash);
     }
