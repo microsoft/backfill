@@ -26,22 +26,25 @@ export class NpmCacheStorage extends CacheStorage {
     // Create a temp folder to try to install the npm
     fs.mkdirpSync(temporaryOutputFolder);
 
-    const runner = execa("npm", [
-      "install",
-      "--prefix",
-      temporaryOutputFolder,
-      `${npmPackageName}@0.0.0-${hash}`,
-      "--registry",
-      registryUrl,
-      "--prefer-offline",
-      "--ignore-scripts",
-      "--no-shrinkwrap",
-      "--no-package-lock",
-      "--loglevel",
-      "error",
-      ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
-    ]);
-    runner.stdout.pipe(process.stdout);
+    const runner = execa(
+      "npm",
+      [
+        "install",
+        "--prefix",
+        temporaryOutputFolder,
+        `${npmPackageName}@0.0.0-${hash}`,
+        "--registry",
+        registryUrl,
+        "--prefer-offline",
+        "--ignore-scripts",
+        "--no-shrinkwrap",
+        "--no-package-lock",
+        "--loglevel",
+        "error",
+        ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
+      ],
+      { stdout: "inherit" }
+    );
 
     return runner
       .then(() => {
@@ -116,11 +119,11 @@ export class NpmCacheStorage extends CacheStorage {
         ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
       ],
       {
-        cwd: outputFolder
+        cwd: outputFolder,
+        stdout: "inherit",
+        stderr: "inherit"
       }
     );
-    runner.stdout.pipe(process.stdout);
-    runner.stderr.pipe(process.stderr);
 
     return runner.then(() => {
       // Clean up
