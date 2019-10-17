@@ -26,7 +26,7 @@ export async function backfill(
     outputFolder,
     name,
     logFolder,
-    outputPerformanceLogs
+    producePerformanceLogs
   } = config;
 
   logger.setName(name);
@@ -52,7 +52,7 @@ export async function backfill(
     }
   }
 
-  if (outputPerformanceLogs) {
+  if (producePerformanceLogs) {
     await logger.toFile(logFolder);
   }
 }

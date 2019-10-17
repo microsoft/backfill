@@ -38,10 +38,10 @@ describe("getEnvConfig()", () => {
   });
 
   it("sets the performance logging flag through ENV variable", async () => {
-    process.env["BACKFILL_OUTPUT_PERFORMANCE_LOGS"] = "true";
+    process.env["BACKFILL_PRODUCE_PERFORMANCE_LOGS"] = "true";
 
     const config = getEnvConfig();
-    expect(config).toStrictEqual({ outputPerformanceLogs: true });
+    expect(config).toStrictEqual({ producePerformanceLogs: true });
   });
 
   it("sets local cache folder through ENV variable", async () => {

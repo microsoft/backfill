@@ -97,7 +97,7 @@ The default configuration object is:
   logFolder: "node_modules/.cache/backfill",
   name: "name-of-package",
   outputFolder: "lib",
-  outputPerformanceLogs: false,
+  producePerformanceLogs: false,
   packageRoot: "path/to/package",
   clearOutputFolder: false,
   logLevel: "info",
@@ -115,7 +115,7 @@ export type Config = {
   logFolder: string;
   name: string;
   outputFolder: string;
-  outputPerformanceLogs: boolean;
+  producePerformanceLogs: boolean;
   packageRoot: string;
   performanceReportName?: string;
   clearOutputFolder: boolean;
@@ -199,7 +199,7 @@ output a log file after each run with performance metrics. Each log file is
 formatted as a csv file, containing only one row. You can run
 `backfill --generate-performance-report` to combine all logs in the log folder
 into one file. You can turn performance logging by setting
-`outputPerformanceLogs: true` in `backfill.config.js`.
+`producePerformanceLogs: true` in `backfill.config.js`.
 
 ## Contributing
 

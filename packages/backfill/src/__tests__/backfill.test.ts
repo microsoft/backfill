@@ -42,7 +42,7 @@ describe("backfill", () => {
 
     // Execute
     await backfill(
-      { ...config, outputPerformanceLogs: false },
+      { ...config, producePerformanceLogs: false },
       cacheStorage,
       spiedBuildCommand,
       hasher
@@ -60,7 +60,7 @@ describe("backfill", () => {
 
     // Execute
     await backfill(
-      { ...config, outputPerformanceLogs: false },
+      { ...config, producePerformanceLogs: false },
       cacheStorage,
       buildCommand,
       hasher

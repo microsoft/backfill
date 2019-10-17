@@ -6,7 +6,7 @@ import { CacheStorageConfig } from "./index";
 
 export type ConfigEnv = {
   cacheStorageConfig?: CacheStorageConfig;
-  outputPerformanceLogs?: boolean;
+  producePerformanceLogs?: boolean;
   internalCacheFolder?: string;
   logFolder?: string;
   performanceReportName?: string;
@@ -20,9 +20,12 @@ export function getEnvConfig() {
     config["logFolder"] = logFolder;
   }
 
-  const outputPerformanceLogs = process.env["BACKFILL_OUTPUT_PERFORMANCE_LOGS"];
-  if (outputPerformanceLogs) {
-    config["outputPerformanceLogs"] = Boolean(outputPerformanceLogs === "true");
+  const producePerformanceLogs =
+    process.env["BACKFILL_PRODUCE_PERFORMANCE_LOGS"];
+  if (producePerformanceLogs) {
+    config["producePerformanceLogs"] = Boolean(
+      producePerformanceLogs === "true"
+    );
   }
 
   const internalCacheFolder = process.env["BACKFILL_LOCAL_CACHE_FOLDER"];
