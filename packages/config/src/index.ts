@@ -18,7 +18,7 @@ export type Config = {
   logFolder: string;
   name: string;
   outputFolder: string;
-  outputPerformanceLogs: boolean;
+  producePerformanceLogs: boolean;
   packageRoot: string;
   performanceReportName?: string;
   clearOutputFolder: boolean;
@@ -65,7 +65,7 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
     internalCacheFolder: defaultCacheFolder,
     logFolder: defaultCacheFolder,
     outputFolder,
-    outputPerformanceLogs: false,
+    producePerformanceLogs: false,
     clearOutputFolder: false,
     logLevel: "info",
     hashGlobs: ["**/*", "!**/node_modules/**", `!${outputFolder}/**`]

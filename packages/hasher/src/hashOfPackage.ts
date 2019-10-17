@@ -66,8 +66,9 @@ export async function getPackageHash(
   const filesHash = await generateHashOfFiles(packageRoot);
   const dependenciesHash = hashStrings(resolvedDependencies);
 
-  logger.silly(`filesHash of ${name}: ${filesHash}`);
-  logger.silly(`dependenciesHash of ${name}: ${dependenciesHash}`);
+  logger.silly(name);
+  logger.silly(`  ${filesHash} (fileHash)`);
+  logger.silly(`  ${dependenciesHash} (dependenciesHash)`);
 
   const packageHash = {
     name,
