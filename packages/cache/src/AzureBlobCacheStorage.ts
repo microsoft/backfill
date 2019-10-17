@@ -33,37 +33,42 @@ export class AzureBlobCacheStorage extends CacheStorage {
     super();
   }
 
-  protected _fetch(hash: string, destinationFolder: string): Promise<boolean> {
+  protected async _fetch(
+    hash: string,
+    destinationFolder: string
+  ): Promise<boolean> {
     const blobClient = createBlobClient(
       this.options.connectionString,
       this.options.container,
       hash
     );
 
-    return blobClient
-      .download(0)
-      .then(response => {
-        const parentFolderWhereToExtractFolder = path.join(
-          destinationFolder,
-          ".."
-        );
+    try {
+      const response = await blobClient.download(0);
 
-        const blobReadableStream = response.readableStreamBody;
-        const tarWritableStream = tar.extract({
-          cwd: parentFolderWhereToExtractFolder
-        });
+      const parentFolderWhereToExtractFolder = path.join(
+        destinationFolder,
+        ".."
+      );
 
-        if (!blobReadableStream) {
-          throw new Error("Unable to fetch blob.");
-        }
+      const blobReadableStream = response.readableStreamBody;
+      const tarWritableStream = tar.extract({
+        cwd: parentFolderWhereToExtractFolder
+      });
 
-        return blobReadableStream.pipe(tarWritableStream);
-      })
-      .then(() => true)
-      .catch(() => false);
+      if (!blobReadableStream) {
+        throw new Error("Unable to fetch blob.");
+      }
+
+      await blobReadableStream.pipe(tarWritableStream);
+
+      return true;
+    } catch {
+      return false;
+    }
   }
 
-  protected _put(hash: string, sourceFolder: string): Promise<void> {
+  protected async _put(hash: string, sourceFolder: string): Promise<void> {
     const blobClient = createBlobClient(
       this.options.connectionString,
       this.options.container,
@@ -74,12 +79,10 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
     const tarStream = tar.create({ gzip: false }, [sourceFolder]);
 
-    return blockBlobClient
-      .uploadStream(
-        tarStream,
-        uploadOptions.bufferSize,
-        uploadOptions.maxBuffers
-      )
-      .then(() => {});
+    await blockBlobClient.uploadStream(
+      tarStream,
+      uploadOptions.bufferSize,
+      uploadOptions.maxBuffers
+    );
   }
 }

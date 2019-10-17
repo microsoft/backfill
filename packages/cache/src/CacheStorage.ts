@@ -11,19 +11,21 @@ export interface ICacheStorage {
 }
 
 export abstract class CacheStorage implements ICacheStorage {
-  public fetch(
+  public async fetch(
     hash: string,
     destinationFolder: string | string[]
   ): Promise<Boolean> {
     logger.profile("cache:fetch");
 
-    return this._fetch(hash, destinationFolder).then(result => {
-      logger.setTime("fetchTime", "cache:fetch");
-      return result;
-    });
+    const result = await this._fetch(hash, destinationFolder);
+    logger.setTime("fetchTime", "cache:fetch");
+    return result;
   }
 
-  public put(hash: string, sourceFolder: string | string[]): Promise<void> {
+  public async put(
+    hash: string,
+    sourceFolder: string | string[]
+  ): Promise<void> {
     logger.profile("cache:put");
 
     if (
@@ -34,17 +36,16 @@ export abstract class CacheStorage implements ICacheStorage {
       throw new Error("Folder to cache does not exist");
     }
 
-    return this._put(hash, sourceFolder).then(() => {
-      logger.setTime("putTime", "cache:put");
-    });
+    await this._put(hash, sourceFolder);
+    logger.setTime("putTime", "cache:put");
   }
 
-  protected abstract _fetch(
+  protected abstract async _fetch(
     hash: string,
     destinationFolder: string | string[]
   ): Promise<boolean>;
 
-  protected abstract _put(
+  protected abstract async _put(
     hash: string,
     sourceFolder: string | string[]
   ): Promise<void>;
