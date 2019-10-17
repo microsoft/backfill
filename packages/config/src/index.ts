@@ -68,7 +68,12 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
     producePerformanceLogs: false,
     clearOutputFolder: false,
     logLevel: "info",
-    hashGlobs: ["**/*", "!**/node_modules/**", `!${outputFolder}/**`]
+    hashGlobs: [
+      "**/*",
+      "!**/node_modules/**",
+      `!${outputFolder}/**`,
+      "!tsconfig.tsbuildinfo"
+    ]
   };
 }
 

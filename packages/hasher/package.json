@@ -11,10 +11,10 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
-    "compile": "tsc",
+    "compile": "tsc -b",
     "prepare": "yarn compile",
     "test": "jest",
-    "watch": "tsc -w"
+    "watch": "tsc -b -w"
   },
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
