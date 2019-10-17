@@ -31,6 +31,6 @@
     "backfill-utils-tsconfig": "^2.0.2",
     "jest": "^24.0.12",
     "ts-jest": "^24.0.2",
-    "typescript": "3.5.3"
+    "typescript": "3.6.4"
   }
 }
