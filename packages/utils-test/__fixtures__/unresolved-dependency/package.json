@@ -1,8 +1,0 @@
-{
-  "name": "unresolved-dependency",
-  "license": "MIT",
-  "version": "0.1.0",
-  "dependencies": {
-    "package-2": "*"
-  }
-}

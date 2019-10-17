@@ -61,34 +61,20 @@ Typically you would wrap your npm scripts inside `backfill`, like this:
 }
 ```
 
-**Note**: Backfill will only generate a hash for the package it was called from.
-In order to accurately create a hash representation of that package's
-dependencies, backfill assumes that those packages have already been built using
-backfill. Using tools like Lerna, wsrun or Rush, you can build packages in a
-topologically sorted order such that this assumption is fulfilled.
-
-### `--hash-only`
-
-Sometimes you can't enable backfill for all packages. For these packages, simply
-add `backfill --hash-only` to the build commands to only generate a hash of that
-package without caching anything. Creating a hash of all packages in your repo
-is important as dependent packages using backfill will look for hash keys from
-their dependencies.
-
 ### `--audit`
 
 Backfill can only bring back build output from the folders it was asked to
-cache. A package that modifies or adds files outside of the cached folders will
-not be brought back to the same state as when it was initially built when used
-together with backfill. To help you debug this you can add `--audit` to your
-`backfill` command. It will listen to all file changes in your repo (it assumes
-you're in a git repo) will running the build command and then report on all
-files that got changed that are outside of the cache scopes.
+cache. A package that modifies or adds files outside of the cached folder will
+not be brought back to the same state as when it was initially built. To help
+you debug this you can add `--audit` to your `backfill` command. It will listen
+to all file changes in your repo (it assumes you're in a git repo) while running
+the build command and then report on any files that got changed outside of the
+cache folder.
 
 ### Configuration
 
-Backfill will look for `backfill.config.js` recursively from the package it is
-called from and combine those configs together.
+Backfill will look for `backfill.config.js` in the package it was called from
+and among parent folders recursively and then combine those configs together.
 
 To configure backfill, simply export a config object with the properties you
 wish to override:
@@ -107,19 +93,15 @@ The default configuration object is:
 ```js
 {
   cacheStorageConfig: { provider: "local" },
-  hashFileFolder: "node_modules/.cache/backfill",
   internalCacheFolder: "node_modules/.cache/backfill",
   logFolder: "node_modules/.cache/backfill",
-  logLevel: "info",
   name: "name-of-package",
   outputFolder: "lib",
   outputPerformanceLogs: false,
-  clearOutputFolder: false,
   packageRoot: "path/to/package",
-  watchGlobs: {
-    folders: { exclude: ["lib", "node_modules"], include: ["*"] },
-    files: { include: ["*"] }
-  }
+  clearOutputFolder: false,
+  logLevel: "info",
+  hashGlobs: ["**/*", "!**/node_modules/**", `!lib/**`]
 }
 
 ```
@@ -128,17 +110,17 @@ The configuration type is:
 
 ```ts
 export type Config = {
-  name: string;
-  packageRoot: string;
   cacheStorageConfig: CacheStorageConfig;
+  internalCacheFolder: string;
+  logFolder: string;
+  name: string;
   outputFolder: string;
   outputPerformanceLogs: boolean;
-  internalCacheFolder: string;
-  hashFileFolder: string;
-  logFolder: string;
-  logLevel: LogLevels;
+  packageRoot: string;
   performanceReportName?: string;
-  watchGlobs: WatchGlobs;
+  clearOutputFolder: boolean;
+  logLevel: LogLevels;
+  hashGlobs: HashGlobs;
 };
 ```
 
@@ -146,9 +128,10 @@ export type Config = {
 
 You can override configuration with environment variables. Backfill will also
 look for a `.env`-file in the root of your repository, and load those into the
-environment. This is useful when you don't want to commit keys and secrets to
-your remote cache, or if you want to commit a read-only access key in the repo
-and override with a write and read access key in merge build.
+environment. This can be useful when you don't want to commit keys and secrets
+to your remote cache, or if you want to commit a read-only cache access key in
+the repo and override with a write and read access key in the PR build, for
+instance.
 
 See `getEnvConfig()` in
 [`./packages/config/src/envConfig.ts`](https://github.com/microsoft/backfill/blob/master/packages/config/src/envConfig.ts#L15).
@@ -158,7 +141,7 @@ See `getEnvConfig()` in
 ### Microsoft Azure Blog Storage
 
 To cache to a Microsoft Azure Blog Storage you need to provide a connection
-string and the container name. If you are configuring via backfill.config.js,
+string and the container name. If you are configuring via `backfill.config.js`,
 you can use the following syntax:
 
 ```js
@@ -184,7 +167,7 @@ BACKFILL_CACHE_PROVIDER_OPTIONS='{"connectionString":"...","container":"..."}'
 
 To cache to an NPM package you need to provide a package name and the registry
 URL of your package feed. This feed should probably be private. If you are
-configuring via backfill.config.js, you can use the following syntax:
+configuring via `backfill.config.js`, you can use the following syntax:
 
 ```js
 module.exports = {
@@ -198,7 +181,7 @@ module.exports = {
 };
 ```
 
-You can also provide a path to the .npmrc user config file, to provide auth
+You can also provide a path to the `.npmrc` user config file, to provide auth
 details related to your package feed using the `npmrcUserconfig` field in
 `options`.
 

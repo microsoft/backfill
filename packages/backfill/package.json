@@ -23,14 +23,12 @@
     "anymatch": "^3.0.3",
     "backfill-cache": "^2.0.2",
     "backfill-config": "^2.0.2",
+    "backfill-hasher": "^2.0.2",
     "backfill-logger": "^2.0.2",
     "backfill-utils-dotenv": "^2.0.2",
     "chokidar": "^3.2.1",
     "execa": "^2.0.4",
-    "find-up": "^4.0.0",
-    "folder-hash": "^3.2.0",
     "fs-extra": "^8.1.0",
-    "just-task-logger": "^0.3.0",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
@@ -40,6 +38,7 @@
     "@types/yargs": "^13.0.2",
     "backfill-utils-test": "^2.0.2",
     "backfill-utils-tsconfig": "^2.0.2",
+    "find-up": "^4.0.0",
     "jest": "^24.0.12",
     "ts-jest": "^24.0.2",
     "ts-mockito": "^2.3.1",

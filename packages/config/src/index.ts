@@ -10,20 +10,10 @@ import { getEnvConfig } from "./envConfig";
 export * from "./cacheConfig";
 export * from "./envConfig";
 
-export type WatchGlobs = {
-  folders: {
-    include: string[];
-    exclude: string[];
-  };
-  files: {
-    include: string[];
-    exclude?: string[];
-  };
-};
+export type HashGlobs = string[];
 
 export type Config = {
   cacheStorageConfig: CacheStorageConfig;
-  hashFileFolder: string;
   internalCacheFolder: string;
   logFolder: string;
   name: string;
@@ -33,7 +23,7 @@ export type Config = {
   performanceReportName?: string;
   clearOutputFolder: boolean;
   logLevel: LogLevels;
-  watchGlobs: WatchGlobs;
+  hashGlobs: HashGlobs;
 };
 
 export function getName(packageRoot: string) {
@@ -43,10 +33,10 @@ export function getName(packageRoot: string) {
   );
 }
 
-export function getSearchPaths() {
+export function getSearchPaths(fromPath: string = process.cwd()) {
   const searchPaths = [];
 
-  let nextPath: string | undefined = process.cwd();
+  let nextPath: string | undefined = fromPath;
   while (nextPath) {
     const configLocation = findUp.sync("backfill.config.js", { cwd: nextPath });
 
@@ -61,9 +51,10 @@ export function getSearchPaths() {
   return searchPaths.reverse();
 }
 
-export function createDefaultConfig(): Config {
-  const packageRoot = pkgDir.sync(process.cwd()) || process.cwd();
+export function createDefaultConfig(fromPath: string = process.cwd()): Config {
+  const packageRoot = pkgDir.sync(fromPath) || fromPath;
   const defaultCacheFolder = path.join("node_modules", ".cache", "backfill");
+  const outputFolder = "lib";
 
   return {
     packageRoot,
@@ -71,31 +62,20 @@ export function createDefaultConfig(): Config {
     cacheStorageConfig: {
       provider: "local"
     },
-    hashFileFolder: defaultCacheFolder,
     internalCacheFolder: defaultCacheFolder,
     logFolder: defaultCacheFolder,
-    outputFolder: "lib",
+    outputFolder,
     outputPerformanceLogs: false,
     clearOutputFolder: false,
     logLevel: "info",
-    get watchGlobs(): WatchGlobs {
-      return {
-        folders: {
-          exclude: [this.outputFolder, "node_modules"],
-          include: ["*"]
-        },
-        files: {
-          include: ["*"]
-        }
-      };
-    }
+    hashGlobs: ["**/*", "!**/node_modules/**", `!${outputFolder}/**`]
   };
 }
 
-export function createConfig(): Config {
-  const defaultConfig = createDefaultConfig();
+export function createConfig(fromPath: string = process.cwd()): Config {
+  const defaultConfig = createDefaultConfig(fromPath);
 
-  const fileBasedConfig = getSearchPaths().reduce((acc, configPath) => {
+  const fileBasedConfig = getSearchPaths(fromPath).reduce((acc, configPath) => {
     const config = require(configPath);
 
     return {

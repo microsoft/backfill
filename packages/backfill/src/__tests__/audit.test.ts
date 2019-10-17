@@ -44,6 +44,6 @@ describe("Audit", () => {
     ]);
 
     expect(backfillOutput.all).toMatch(sideEffectWarningString);
-    expect(backfillOutput.all).toMatch("monorepo/packages/DONE");
+    expect(backfillOutput.all).toMatch("packages/DONE");
   });
 });
