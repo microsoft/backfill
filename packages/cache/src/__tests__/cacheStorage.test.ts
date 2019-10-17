@@ -147,7 +147,7 @@ describe("LocalCacheStorage", () => {
       const hash = "811c319a73f988d9260fbf3f1d30f0f447c2a194";
 
       // Execute
-      await expect(() => cacheStorage.put(hash, outputFolder)).toThrowError(
+      await expect(cacheStorage.put(hash, outputFolder)).rejects.toThrow(
         "Folder to cache does not exist"
       );
 
