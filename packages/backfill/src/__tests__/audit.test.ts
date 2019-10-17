@@ -27,21 +27,21 @@ describe("Audit", () => {
   });
 
   it("correctly returns success when there are no side-effects", async () => {
-    backfillOutput = await execa("node", [
-      pathToBackfill,
-      "--audit",
-      "npm run compile"
-    ]);
+    backfillOutput = await execa(
+      "node",
+      [pathToBackfill, "--audit", "npm run compile"],
+      { all: true }
+    );
 
     expect(backfillOutput.all).toMatch(noSideEffectString);
   });
 
   it("correctly warns about side-effects", async () => {
-    backfillOutput = await execa("node", [
-      pathToBackfill,
-      "--audit",
-      "npm run compile && npm run side-effect"
-    ]);
+    backfillOutput = await execa(
+      "node",
+      [pathToBackfill, "--audit", "npm run compile && npm run side-effect"],
+      { all: true }
+    );
 
     expect(backfillOutput.all).toMatch(sideEffectWarningString);
     expect(backfillOutput.all).toMatch("packages/DONE");
