@@ -80,7 +80,7 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
       "**/*",
       "!**/node_modules/**",
       `!${outputFolder}/**`,
-      "!tsconfig.tsbuildinfo"
+      "!**/tsconfig.tsbuildinfo"
     ]
   };
 }
