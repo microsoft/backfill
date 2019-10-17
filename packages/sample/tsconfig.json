@@ -1,8 +1,6 @@
 {
   "extends": "backfill-utils-tsconfig/tsconfig.default.json",
   "exclude": ["lib"],
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "lib"
-  }
+  "compilerOptions": { "rootDir": "src", "outDir": "lib" },
+  "references": [{ "path": "../backfill" }, { "path": "../sample-dependency" }]
 }
