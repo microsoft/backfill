@@ -1,13 +1,20 @@
 import * as fs from "fs-extra";
 import { logger } from "backfill-logger";
+import { outputFolderAsArray } from "backfill-config";
 
 export interface ICacheStorage {
-  fetch: (hash: string, destinationFolder: string) => Promise<Boolean>;
-  put: (hash: string, sourceFolder: string) => Promise<void>;
+  fetch: (
+    hash: string,
+    destinationFolder: string | string[]
+  ) => Promise<Boolean>;
+  put: (hash: string, sourceFolder: string | string[]) => Promise<void>;
 }
 
 export abstract class CacheStorage implements ICacheStorage {
-  public fetch(hash: string, destinationFolder: string): Promise<Boolean> {
+  public fetch(
+    hash: string,
+    destinationFolder: string | string[]
+  ): Promise<Boolean> {
     logger.profile("cache:fetch");
 
     return this._fetch(hash, destinationFolder).then(result => {
@@ -16,10 +23,14 @@ export abstract class CacheStorage implements ICacheStorage {
     });
   }
 
-  public put(hash: string, sourceFolder: string): Promise<void> {
+  public put(hash: string, sourceFolder: string | string[]): Promise<void> {
     logger.profile("cache:put");
 
-    if (!fs.pathExistsSync(sourceFolder)) {
+    if (
+      !outputFolderAsArray(sourceFolder).every(folder =>
+        fs.pathExistsSync(folder)
+      )
+    ) {
       throw new Error("Folder to cache does not exist");
     }
 
@@ -30,8 +41,11 @@ export abstract class CacheStorage implements ICacheStorage {
 
   protected abstract _fetch(
     hash: string,
-    destinationFolder: string
+    destinationFolder: string | string[]
   ): Promise<boolean>;
 
-  protected abstract _put(hash: string, sourceFolder: string): Promise<void>;
+  protected abstract _put(
+    hash: string,
+    sourceFolder: string | string[]
+  ): Promise<void>;
 }

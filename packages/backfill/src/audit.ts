@@ -3,6 +3,7 @@ import * as findUp from "find-up";
 import * as path from "path";
 import anymatch from "anymatch";
 import { logger } from "backfill-logger";
+import { outputFolderAsArray } from "backfill-config";
 
 let changedFilesOutsideScope: string[] = [];
 let changedFilesInsideScope: string[] = [];
@@ -34,7 +35,7 @@ export function initializeWatcher(
   packageRoot: string,
   internalCacheFolder: string,
   logFolder: string,
-  outputFolder: string,
+  outputFolder: string | string[],
   hashGlobs: string[]
 ) {
   // Trying to find the git root and using it as an approximation of code boundary
@@ -56,7 +57,9 @@ export function initializeWatcher(
     internalCacheFolder
   ]);
 
-  const cacheFolderGlob = path.join("**", outputFolder, "**");
+  const cacheFolderGlob = outputFolderAsArray(outputFolder).map(folder =>
+    path.join("**", folder, "**")
+  );
 
   watcher = chokidar
     .watch(hashGlobs, {

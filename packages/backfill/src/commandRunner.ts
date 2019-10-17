@@ -1,6 +1,7 @@
 import * as execa from "execa";
 import * as fs from "fs-extra";
 import { logger } from "backfill-logger";
+import { outputFolderAsArray } from "backfill-config";
 
 export type ExecaReturns = execa.ExecaChildProcess;
 export type BuildCommand = () => Promise<ExecaReturns | void>;
@@ -12,7 +13,7 @@ export function getRawBuildCommand(): string {
 export function createBuildCommand(
   buildCommand: string[],
   clearOutputFolder: boolean,
-  outputFolder: string
+  outputFolder: string | string[]
 ): () => Promise<ExecaReturns | void> {
   return async (): Promise<ExecaReturns | void> => {
     const parsedBuildCommand = buildCommand.join(" ");
@@ -23,7 +24,9 @@ export function createBuildCommand(
 
     // Clear outputFolder to guarantee a deterministic cache
     if (clearOutputFolder) {
-      fs.removeSync(outputFolder);
+      outputFolderAsArray(outputFolder).forEach(folder =>
+        fs.removeSync(folder)
+      );
     }
 
     // Set up runner
