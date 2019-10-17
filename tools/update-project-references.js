@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const prettier = require("prettier");
 const merge = require("lodash.merge");
+const resolveFrom = require("resolve-from");
 
 function getTSConfigPath(location) {
   return path.join(process.cwd(), location, "tsconfig.json");
@@ -18,9 +19,7 @@ function getTSConfig(filePath) {
     : {};
   if (config.extends) {
     return merge(
-      getTSConfig(
-        require.resolve(path.dirname(filePath), { paths: [config.extends] })
-      ),
+      getTSConfig(resolveFrom(path.dirname(filePath), config.extends)),
       config
     );
   } else {
