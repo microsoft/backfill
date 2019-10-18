@@ -62,7 +62,7 @@ describe("LocalCacheStorage", () => {
       );
     });
 
-    it("will fetch on cache hit (destination folder is dist instead of lib)", async () => {
+    it("will fetch on cache hit (output folder: dist)", async () => {
       await fetchFromCache(
         "any-location-with-cache",
         "46df1a257dfbde62b1e284f6382b20a49506f029",
@@ -129,7 +129,7 @@ describe("LocalCacheStorage", () => {
       );
     });
 
-    it("will put cache in store (cache folder is dist instead of lib)", async () => {
+    it("will put cache in store (output folder: dist)", async () => {
       await putInCache(
         "any-location",
         "46df1a257dfbde62b1e284f6382b20a49506f029",
