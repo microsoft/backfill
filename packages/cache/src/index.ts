@@ -18,7 +18,10 @@ export function getCacheStorageProvider(
         internalCacheFolder
       );
     case "azure-blob":
-      return new AzureBlobCacheStorage(cacheStorageConfig.options);
+      return new AzureBlobCacheStorage(
+        cacheStorageConfig.options,
+        internalCacheFolder
+      );
     case "local":
     default:
       return new LocalCacheStorage(internalCacheFolder);

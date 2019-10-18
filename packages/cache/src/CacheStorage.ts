@@ -19,6 +19,7 @@ export abstract class CacheStorage implements ICacheStorage {
 
     const result = await this._fetch(hash, destinationFolder);
     logger.setTime("fetchTime", "cache:fetch");
+
     return result;
   }
 

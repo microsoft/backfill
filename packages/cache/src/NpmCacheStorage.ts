@@ -3,6 +3,7 @@ import * as fs from "fs-extra";
 import * as path from "path";
 
 import { NpmCacheStorageOptions } from "backfill-config";
+import { outputFolderAsArray } from "backfill-config";
 
 import { CacheStorage } from "./CacheStorage";
 
@@ -14,95 +15,83 @@ export class NpmCacheStorage extends CacheStorage {
     super();
   }
 
-  protected async _fetch(hash: string, outputFolder: string) {
+  protected async _fetch(hash: string, outputFolder: string | string[]) {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
-    const temporaryOutputFolder = path.join(
+    const temporaryNpmOutputFolder = path.join(
       this.internalCacheFolder,
       "npm",
       hash
     );
 
-    // Create a temp folder to try to install the npm
-    fs.mkdirpSync(temporaryOutputFolder);
+    if (!fs.existsSync(temporaryNpmOutputFolder)) {
+      // Create a temp folder to try to install the npm
+      fs.mkdirpSync(temporaryNpmOutputFolder);
 
-    try {
-      await execa(
-        "npm",
-        [
-          "install",
-          "--prefix",
-          temporaryOutputFolder,
-          `${npmPackageName}@0.0.0-${hash}`,
-          "--registry",
-          registryUrl,
-          "--prefer-offline",
-          "--ignore-scripts",
-          "--no-shrinkwrap",
-          "--no-package-lock",
-          "--loglevel",
-          "error",
-          ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
-        ],
-        { stdout: "inherit" }
-      );
+      try {
+        await execa(
+          "npm",
+          [
+            "install",
+            "--prefix",
+            temporaryNpmOutputFolder,
+            `${npmPackageName}@0.0.0-${hash}`,
+            "--registry",
+            registryUrl,
+            "--prefer-offline",
+            "--ignore-scripts",
+            "--no-shrinkwrap",
+            "--no-package-lock",
+            "--loglevel",
+            "error",
+            ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
+          ],
+          { stdout: "inherit" }
+        );
+      } catch (e) {
+        // Clean up
+        fs.removeSync(temporaryNpmOutputFolder);
 
-      // Clean cache output folder
-      if (fs.pathExistsSync(outputFolder)) {
-        fs.removeSync(outputFolder);
+        return false;
       }
-      fs.mkdirpSync(outputFolder);
+    }
+
+    outputFolderAsArray(outputFolder).forEach(folder => {
+      fs.mkdirpSync(folder);
 
       // Move downloaded npm package to cache output folder
       fs.moveSync(
-        path.join(temporaryOutputFolder, "node_modules", npmPackageName),
-        outputFolder,
+        path.join(
+          temporaryNpmOutputFolder,
+          "node_modules",
+          npmPackageName,
+          folder
+        ),
+        folder,
         { overwrite: true }
       );
+    });
 
-      // Clean up
-      if (fs.pathExistsSync(temporaryOutputFolder)) {
-        fs.removeSync(temporaryOutputFolder);
-      }
-
-      if (fs.pathExistsSync(path.join(outputFolder, "package.json"))) {
-        fs.removeSync(path.join(outputFolder, "package.json"));
-      }
-
-      // Rename package.json if it was part of the original cache output folder
-      if (fs.pathExistsSync(path.join(outputFolder, "__package.json"))) {
-        fs.moveSync(
-          path.join(outputFolder, "__package.json"),
-          path.join(outputFolder, "package.json"),
-          { overwrite: true }
-        );
-      }
-
-      return true;
-    } catch (e) {
-      // Clean up
-      fs.removeSync(temporaryOutputFolder);
-
-      return false;
-    }
+    return true;
   }
 
-  protected async _put(hash: string, outputFolder: string) {
+  protected async _put(hash: string, outputFolder: string | string[]) {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
-    // Rename if conflict
-    if (fs.pathExistsSync(path.join(outputFolder, "package.json"))) {
-      fs.moveSync(
-        path.join(outputFolder, "package.json"),
-        path.join(outputFolder, "__package.json"),
-        { overwrite: true }
-      );
-    }
+    const temporaryNpmOutputFolder = path.join(
+      this.internalCacheFolder,
+      "npm",
+      hash
+    );
 
     // Create package.json file
-    fs.outputJSONSync(path.join(outputFolder, "package.json"), {
+    fs.outputJSONSync(path.join(temporaryNpmOutputFolder, "package.json"), {
       name: npmPackageName,
       version: `0.0.0-${hash}`
+    });
+
+    outputFolderAsArray(outputFolder).forEach(folder => {
+      fs.copySync(folder, path.join(temporaryNpmOutputFolder, folder));
     });
 
     // Upload package
@@ -117,23 +106,10 @@ export class NpmCacheStorage extends CacheStorage {
         ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
       ],
       {
-        cwd: outputFolder,
+        cwd: temporaryNpmOutputFolder,
         stdout: "inherit",
         stderr: "inherit"
       }
     );
-
-    // Clean up
-    if (fs.pathExistsSync(path.join(outputFolder, "package.json"))) {
-      fs.removeSync(path.join(outputFolder, "package.json"));
-    }
-
-    if (fs.pathExistsSync(path.join(outputFolder, "__package.json"))) {
-      fs.moveSync(
-        path.join(outputFolder, "__package.json"),
-        path.join(outputFolder, "package.json"),
-        { overwrite: true }
-      );
-    }
   }
 }

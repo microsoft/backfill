@@ -1,8 +1,10 @@
 import { BlobServiceClient } from "@azure/storage-blob";
+import * as fs from "fs-extra";
 import * as tar from "tar";
 import * as path from "path";
 
 import { AzureBlobCacheStorageOptions } from "backfill-config";
+import { outputFolderAsArray } from "backfill-config";
 
 import { CacheStorage } from "./CacheStorage";
 
@@ -29,46 +31,63 @@ function createBlobClient(
 }
 
 export class AzureBlobCacheStorage extends CacheStorage {
-  constructor(private options: AzureBlobCacheStorageOptions) {
+  constructor(
+    private options: AzureBlobCacheStorageOptions,
+    private internalCacheFolder: string
+  ) {
     super();
   }
 
   protected async _fetch(
     hash: string,
-    destinationFolder: string
+    outputFolder: string | string[]
   ): Promise<boolean> {
-    const blobClient = createBlobClient(
-      this.options.connectionString,
-      this.options.container,
+    const temporaryBlobOutputFolder = path.join(
+      this.internalCacheFolder,
+      "azure-blob",
       hash
     );
 
-    try {
-      const response = await blobClient.download(0);
-
-      const parentFolderWhereToExtractFolder = path.join(
-        destinationFolder,
-        ".."
+    if (!fs.existsSync(temporaryBlobOutputFolder)) {
+      const blobClient = createBlobClient(
+        this.options.connectionString,
+        this.options.container,
+        hash
       );
 
-      const blobReadableStream = response.readableStreamBody;
-      const tarWritableStream = tar.extract({
-        cwd: parentFolderWhereToExtractFolder
-      });
+      try {
+        const response = await blobClient.download(0);
 
-      if (!blobReadableStream) {
-        throw new Error("Unable to fetch blob.");
+        const blobReadableStream = response.readableStreamBody;
+        const tarWritableStream = tar.extract({
+          cwd: temporaryBlobOutputFolder
+        });
+
+        if (!blobReadableStream) {
+          throw new Error("Unable to fetch blob.");
+        }
+
+        blobReadableStream.pipe(tarWritableStream);
+      } catch {
+        return false;
       }
-
-      await blobReadableStream.pipe(tarWritableStream);
-
-      return true;
-    } catch {
-      return false;
     }
+
+    outputFolderAsArray(outputFolder).forEach(folder => {
+      fs.mkdirpSync(folder);
+
+      fs.moveSync(path.join(temporaryBlobOutputFolder, folder), folder, {
+        overwrite: true
+      });
+    });
+
+    return true;
   }
 
-  protected async _put(hash: string, sourceFolder: string): Promise<void> {
+  protected async _put(
+    hash: string,
+    outputFolder: string | string[]
+  ): Promise<void> {
     const blobClient = createBlobClient(
       this.options.connectionString,
       this.options.container,
@@ -77,7 +96,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
     const blockBlobClient = blobClient.getBlockBlobClient();
 
-    const tarStream = tar.create({ gzip: false }, [sourceFolder]);
+    const outputFolders = outputFolderAsArray(outputFolder);
+    const tarStream = tar.create({ gzip: false }, outputFolders);
 
     await blockBlobClient.uploadStream(
       tarStream,
