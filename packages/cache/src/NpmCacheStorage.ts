@@ -33,25 +33,29 @@ export class NpmCacheStorage extends CacheStorage {
     if (!fs.existsSync(packageFolderInTemporaryFolder)) {
       fs.mkdirpSync(temporaryNpmOutputFolder);
 
-      await execa(
-        "npm",
-        [
-          "install",
-          "--prefix",
-          temporaryNpmOutputFolder,
-          `${npmPackageName}@0.0.0-${hash}`,
-          "--registry",
-          registryUrl,
-          "--prefer-offline",
-          "--ignore-scripts",
-          "--no-shrinkwrap",
-          "--no-package-lock",
-          "--loglevel",
-          "error",
-          ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
-        ],
-        { stdout: "inherit" }
-      );
+      try {
+        await execa(
+          "npm",
+          [
+            "install",
+            "--prefix",
+            temporaryNpmOutputFolder,
+            `${npmPackageName}@0.0.0-${hash}`,
+            "--registry",
+            registryUrl,
+            "--prefer-offline",
+            "--ignore-scripts",
+            "--no-shrinkwrap",
+            "--no-package-lock",
+            "--loglevel",
+            "error",
+            ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
+          ],
+          { stdout: "inherit" }
+        );
+      } catch (error) {
+        throw new Error(error);
+      }
     }
 
     return packageFolderInTemporaryFolder;

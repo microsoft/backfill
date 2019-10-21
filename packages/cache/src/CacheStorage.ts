@@ -18,10 +18,10 @@ export abstract class CacheStorage implements ICacheStorage {
   ): Promise<Boolean> {
     logger.profile("cache:fetch");
 
-    let localCacheFolder: string;
-    try {
-      localCacheFolder = await this._fetch(hash);
-    } catch {
+    const localCacheFolder = await this._fetch(hash);
+
+    if (!localCacheFolder) {
+      logger.setTime("fetchTime", "cache:fetch");
       return false;
     }
 
@@ -53,7 +53,7 @@ export abstract class CacheStorage implements ICacheStorage {
     logger.setTime("putTime", "cache:put");
   }
 
-  protected abstract async _fetch(hash: string): Promise<string>;
+  protected abstract async _fetch(hash: string): Promise<string | undefined>;
 
   protected abstract async _put(
     hash: string,

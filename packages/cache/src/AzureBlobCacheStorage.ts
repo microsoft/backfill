@@ -38,7 +38,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
     super();
   }
 
-  protected async _fetch(hash: string): Promise<string> {
+  protected async _fetch(hash: string): Promise<string | undefined> {
     const temporaryBlobOutputFolder = path.join(
       this.internalCacheFolder,
       "azure-blob",
@@ -46,24 +46,41 @@ export class AzureBlobCacheStorage extends CacheStorage {
     );
 
     if (!fs.existsSync(temporaryBlobOutputFolder)) {
-      const blobClient = createBlobClient(
-        this.options.connectionString,
-        this.options.container,
-        hash
-      );
+      try {
+        const blobClient = createBlobClient(
+          this.options.connectionString,
+          this.options.container,
+          hash
+        );
 
-      const response = await blobClient.download(0);
+        const response = await blobClient.download(0);
 
-      const blobReadableStream = response.readableStreamBody;
-      const tarWritableStream = tar.extract({
-        cwd: temporaryBlobOutputFolder
-      });
+        const blobReadableStream = response.readableStreamBody;
+        if (!blobReadableStream) {
+          throw new Error("Unable to fetch blob.");
+        }
 
-      if (!blobReadableStream) {
-        throw new Error("Unable to fetch blob.");
+        fs.mkdirpSync(temporaryBlobOutputFolder);
+
+        const tarWritableStream = tar.extract({
+          cwd: temporaryBlobOutputFolder
+        });
+
+        blobReadableStream.pipe(tarWritableStream);
+
+        const blobPromise = new Promise((resolve, reject) => {
+          blobReadableStream.on("end", () => resolve());
+          blobReadableStream.on("error", error => reject(error));
+        });
+
+        await blobPromise;
+      } catch (error) {
+        if (error && error.statusCode === 404) {
+          return;
+        } else {
+          throw new Error(error);
+        }
       }
-
-      blobReadableStream.pipe(tarWritableStream);
     }
 
     return temporaryBlobOutputFolder;

@@ -13,11 +13,11 @@ export class LocalCacheStorage extends CacheStorage {
     return path.join(this.internalCacheFolder, hash);
   }
 
-  protected async _fetch(hash: string): Promise<string> {
+  protected async _fetch(hash: string): Promise<string | undefined> {
     const localCacheFolder = this.getLocalCacheFolder(hash);
 
     if (!fs.pathExistsSync(localCacheFolder)) {
-      throw "Cache miss";
+      return;
     }
 
     return localCacheFolder;
