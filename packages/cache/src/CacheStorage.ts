@@ -1,4 +1,5 @@
 import * as fs from "fs-extra";
+import * as path from "path";
 import { logger } from "backfill-logger";
 import { outputFolderAsArray } from "backfill-config";
 
@@ -13,38 +14,46 @@ export interface ICacheStorage {
 export abstract class CacheStorage implements ICacheStorage {
   public async fetch(
     hash: string,
-    destinationFolder: string | string[]
+    outputFolder: string | string[]
   ): Promise<Boolean> {
     logger.profile("cache:fetch");
 
-    const result = await this._fetch(hash, destinationFolder);
+    let localCacheFolder: string;
+    try {
+      localCacheFolder = await this._fetch(hash);
+    } catch {
+      return false;
+    }
+
+    outputFolderAsArray(outputFolder).forEach(folder => {
+      fs.mkdirpSync(folder);
+      fs.copySync(path.join(localCacheFolder, folder), folder);
+    });
+
     logger.setTime("fetchTime", "cache:fetch");
 
-    return result;
+    return true;
   }
 
   public async put(
     hash: string,
-    sourceFolder: string | string[]
+    outputFolder: string | string[]
   ): Promise<void> {
     logger.profile("cache:put");
 
     if (
-      !outputFolderAsArray(sourceFolder).every(folder =>
+      !outputFolderAsArray(outputFolder).every(folder =>
         fs.pathExistsSync(folder)
       )
     ) {
       throw new Error("Folder to cache does not exist");
     }
 
-    await this._put(hash, sourceFolder);
+    await this._put(hash, outputFolder);
     logger.setTime("putTime", "cache:put");
   }
 
-  protected abstract async _fetch(
-    hash: string,
-    destinationFolder: string | string[]
-  ): Promise<boolean>;
+  protected abstract async _fetch(hash: string): Promise<string>;
 
   protected abstract async _put(
     hash: string,

@@ -15,7 +15,7 @@ export class NpmCacheStorage extends CacheStorage {
     super();
   }
 
-  protected async _fetch(hash: string, outputFolder: string | string[]) {
+  protected async _fetch(hash: string): Promise<string> {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
     const temporaryNpmOutputFolder = path.join(
@@ -24,55 +24,37 @@ export class NpmCacheStorage extends CacheStorage {
       hash
     );
 
-    if (!fs.existsSync(temporaryNpmOutputFolder)) {
-      // Create a temp folder to try to install the npm
+    const packageFolderInTemporaryFolder = path.join(
+      temporaryNpmOutputFolder,
+      "node_modules",
+      npmPackageName
+    );
+
+    if (!fs.existsSync(packageFolderInTemporaryFolder)) {
       fs.mkdirpSync(temporaryNpmOutputFolder);
 
-      try {
-        await execa(
-          "npm",
-          [
-            "install",
-            "--prefix",
-            temporaryNpmOutputFolder,
-            `${npmPackageName}@0.0.0-${hash}`,
-            "--registry",
-            registryUrl,
-            "--prefer-offline",
-            "--ignore-scripts",
-            "--no-shrinkwrap",
-            "--no-package-lock",
-            "--loglevel",
-            "error",
-            ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
-          ],
-          { stdout: "inherit" }
-        );
-      } catch (e) {
-        // Clean up
-        fs.removeSync(temporaryNpmOutputFolder);
-
-        return false;
-      }
+      await execa(
+        "npm",
+        [
+          "install",
+          "--prefix",
+          temporaryNpmOutputFolder,
+          `${npmPackageName}@0.0.0-${hash}`,
+          "--registry",
+          registryUrl,
+          "--prefer-offline",
+          "--ignore-scripts",
+          "--no-shrinkwrap",
+          "--no-package-lock",
+          "--loglevel",
+          "error",
+          ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
+        ],
+        { stdout: "inherit" }
+      );
     }
 
-    outputFolderAsArray(outputFolder).forEach(folder => {
-      fs.mkdirpSync(folder);
-
-      // Move downloaded npm package to cache output folder
-      fs.moveSync(
-        path.join(
-          temporaryNpmOutputFolder,
-          "node_modules",
-          npmPackageName,
-          folder
-        ),
-        folder,
-        { overwrite: true }
-      );
-    });
-
-    return true;
+    return packageFolderInTemporaryFolder;
   }
 
   protected async _put(hash: string, outputFolder: string | string[]) {
@@ -81,7 +63,8 @@ export class NpmCacheStorage extends CacheStorage {
     const temporaryNpmOutputFolder = path.join(
       this.internalCacheFolder,
       "npm",
-      hash
+      hash,
+      "upload"
     );
 
     // Create package.json file

@@ -13,22 +13,20 @@ export class LocalCacheStorage extends CacheStorage {
     return path.join(this.internalCacheFolder, hash);
   }
 
-  protected async _fetch(hash: string, outputFolder: string | string[]) {
+  protected async _fetch(hash: string): Promise<string> {
     const localCacheFolder = this.getLocalCacheFolder(hash);
 
     if (!fs.pathExistsSync(localCacheFolder)) {
-      return false;
+      throw "Cache miss";
     }
 
-    outputFolderAsArray(outputFolder).forEach(folder => {
-      fs.mkdirpSync(folder);
-      fs.copySync(path.join(localCacheFolder, folder), folder);
-    });
-
-    return true;
+    return localCacheFolder;
   }
 
-  protected async _put(hash: string, outputFolder: string | string[]) {
+  protected async _put(
+    hash: string,
+    outputFolder: string | string[]
+  ): Promise<void> {
     const localCacheFolder = this.getLocalCacheFolder(hash);
 
     outputFolderAsArray(outputFolder).forEach(folder => {

@@ -38,10 +38,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
     super();
   }
 
-  protected async _fetch(
-    hash: string,
-    outputFolder: string | string[]
-  ): Promise<boolean> {
+  protected async _fetch(hash: string): Promise<string> {
     const temporaryBlobOutputFolder = path.join(
       this.internalCacheFolder,
       "azure-blob",
@@ -55,33 +52,21 @@ export class AzureBlobCacheStorage extends CacheStorage {
         hash
       );
 
-      try {
-        const response = await blobClient.download(0);
+      const response = await blobClient.download(0);
 
-        const blobReadableStream = response.readableStreamBody;
-        const tarWritableStream = tar.extract({
-          cwd: temporaryBlobOutputFolder
-        });
+      const blobReadableStream = response.readableStreamBody;
+      const tarWritableStream = tar.extract({
+        cwd: temporaryBlobOutputFolder
+      });
 
-        if (!blobReadableStream) {
-          throw new Error("Unable to fetch blob.");
-        }
-
-        blobReadableStream.pipe(tarWritableStream);
-      } catch {
-        return false;
+      if (!blobReadableStream) {
+        throw new Error("Unable to fetch blob.");
       }
+
+      blobReadableStream.pipe(tarWritableStream);
     }
 
-    outputFolderAsArray(outputFolder).forEach(folder => {
-      fs.mkdirpSync(folder);
-
-      fs.moveSync(path.join(temporaryBlobOutputFolder, folder), folder, {
-        overwrite: true
-      });
-    });
-
-    return true;
+    return temporaryBlobOutputFolder;
   }
 
   protected async _put(
