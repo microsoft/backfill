@@ -75,6 +75,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
         await blobPromise;
       } catch (error) {
+        fs.removeSync(temporaryBlobOutputFolder);
+
         if (error && error.statusCode === 404) {
           return;
         } else {

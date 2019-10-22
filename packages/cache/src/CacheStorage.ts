@@ -4,11 +4,8 @@ import { logger } from "backfill-logger";
 import { outputFolderAsArray } from "backfill-config";
 
 export interface ICacheStorage {
-  fetch: (
-    hash: string,
-    destinationFolder: string | string[]
-  ) => Promise<Boolean>;
-  put: (hash: string, sourceFolder: string | string[]) => Promise<void>;
+  fetch: (hash: string, outputFolder: string | string[]) => Promise<Boolean>;
+  put: (hash: string, outputFolder: string | string[]) => Promise<void>;
 }
 
 export abstract class CacheStorage implements ICacheStorage {
@@ -22,14 +19,18 @@ export abstract class CacheStorage implements ICacheStorage {
 
     if (!localCacheFolder) {
       logger.setTime("fetchTime", "cache:fetch");
+      logger.setHit(false);
       return false;
     }
 
-    outputFolderAsArray(outputFolder).forEach(folder => {
-      fs.mkdirpSync(folder);
-      fs.copySync(path.join(localCacheFolder, folder), folder);
-    });
+    await Promise.all(
+      outputFolderAsArray(outputFolder).map(async folder => {
+        fs.mkdirpSync(folder);
+        await fs.copy(path.join(localCacheFolder, folder), folder);
+      })
+    );
 
+    logger.setHit(true);
     logger.setTime("fetchTime", "cache:fetch");
 
     return true;
@@ -41,22 +42,20 @@ export abstract class CacheStorage implements ICacheStorage {
   ): Promise<void> {
     logger.profile("cache:put");
 
-    if (
-      !outputFolderAsArray(outputFolder).every(folder =>
-        fs.pathExistsSync(folder)
-      )
-    ) {
-      throw new Error("Folder to cache does not exist");
-    }
+    outputFolderAsArray(outputFolder).forEach(folder => {
+      if (!fs.pathExistsSync(folder)) {
+        const fullFolderPath = path.join(process.cwd(), folder);
+        throw `backfill is trying to cache "${fullFolderPath}", but the folder does not exist.`;
+      }
+    });
 
     await this._put(hash, outputFolder);
     logger.setTime("putTime", "cache:put");
   }
 
   protected abstract async _fetch(hash: string): Promise<string | undefined>;
-
   protected abstract async _put(
     hash: string,
-    sourceFolder: string | string[]
+    outputFolder: string | string[]
   ): Promise<void>;
 }

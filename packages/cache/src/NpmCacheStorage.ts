@@ -54,6 +54,8 @@ export class NpmCacheStorage extends CacheStorage {
           { stdout: "inherit" }
         );
       } catch (error) {
+        fs.removeSync(temporaryNpmOutputFolder);
+
         throw new Error(error);
       }
     }

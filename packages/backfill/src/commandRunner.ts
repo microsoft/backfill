@@ -24,8 +24,8 @@ export function createBuildCommand(
 
     // Clear outputFolder to guarantee a deterministic cache
     if (clearOutputFolder) {
-      outputFolderAsArray(outputFolder).forEach(folder =>
-        fs.removeSync(folder)
+      await Promise.all(
+        outputFolderAsArray(outputFolder).map(folder => fs.remove(folder))
       );
     }
 

@@ -29,10 +29,13 @@ export class LocalCacheStorage extends CacheStorage {
   ): Promise<void> {
     const localCacheFolder = this.getLocalCacheFolder(hash);
 
-    outputFolderAsArray(outputFolder).forEach(folder => {
-      const outputFolderInCache = path.join(localCacheFolder, folder);
-      fs.mkdirpSync(outputFolderInCache);
-      fs.copySync(folder, outputFolderInCache);
-    });
+    await Promise.all(
+      outputFolderAsArray(outputFolder).map(async folder => {
+        const outputFolderInCache = path.join(localCacheFolder, folder);
+
+        fs.mkdirpSync(outputFolderInCache);
+        await fs.copy(folder, outputFolderInCache);
+      })
+    );
   }
 }
