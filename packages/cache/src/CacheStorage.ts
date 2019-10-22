@@ -45,7 +45,9 @@ export abstract class CacheStorage implements ICacheStorage {
     outputFolderAsArray(outputFolder).forEach(folder => {
       if (!fs.pathExistsSync(folder)) {
         const fullFolderPath = path.join(process.cwd(), folder);
-        throw `backfill is trying to cache "${fullFolderPath}", but the folder does not exist.`;
+        throw new Error(
+          `backfill is trying to cache "${fullFolderPath}", but the folder does not exist.`
+        );
       }
     });
 

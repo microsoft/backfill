@@ -66,7 +66,9 @@ export const performanceReportLogger = {
       .readdir(logFolder)
       .then(files => {
         if (!(files instanceof Array)) {
-          throw "Could not read performance logs. No report generated.";
+          throw new Error(
+            "Could not read performance logs. No report generated."
+          );
         }
 
         return files
@@ -76,7 +78,7 @@ export const performanceReportLogger = {
       .then(contents => Promise.all(contents))
       .then(contents => {
         if (contents.length === 0) {
-          throw "Found no performance logs. No report generated.";
+          throw new Error("Found no performance logs. No report generated.");
         }
 
         fs.mkdirpSync(path.join(logFolder, "reports"));
