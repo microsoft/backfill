@@ -44,7 +44,7 @@ export async function backfill(
     try {
       await cacheStorage.put(packageHash, outputFolder);
     } catch (err) {
-      logger.warn("Failed to persist the cache: ", err.message);
+      logger.error("Failed to persist the cache:\n\n", err.message);
     }
   }
 
