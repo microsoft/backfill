@@ -54,74 +54,87 @@ export async function backfill(
 }
 
 export async function main(): Promise<void> {
-  const config = createConfig();
-  const {
-    cacheStorageConfig,
-    internalCacheFolder,
-    logFolder,
-    outputFolder,
-    packageRoot,
-    performanceReportName,
-    clearOutputFolder,
-    logLevel,
-    hashGlobs
-  } = config;
-
-  if (logLevel) {
-    setLogLevel(logLevel);
-  }
-
-  const helpString = "Backfills unchanged packages.";
-
-  const argv = yargs
-    .strict()
-    .usage(helpString)
-    .alias("h", "help")
-    .version(false)
-    .option("generate-performance-report", {
-      description: "Generate performance report",
-      type: "boolean"
-    })
-    .option("audit", {
-      description: "Compare files changed with those cached",
-      type: "boolean"
-    }).argv;
-
-  const cacheStorage = getCacheStorageProvider(
-    cacheStorageConfig,
-    internalCacheFolder
-  );
-
-  const buildCommand = createBuildCommand(
-    argv["_"],
-    clearOutputFolder,
-    outputFolder
-  );
-  const buildCommandSignature = getRawBuildCommand();
-
-  const hasher = new Hasher({ packageRoot }, buildCommandSignature);
-
-  if (argv["generate-performance-report"]) {
-    await logger.generatePerformanceReport(logFolder, performanceReportName);
-
-    return;
-  }
-
-  if (argv["audit"]) {
-    initializeWatcher(
-      packageRoot,
+  try {
+    const config = createConfig();
+    const {
+      cacheStorageConfig,
+      clearOutputFolder,
+      hashGlobs,
       internalCacheFolder,
       logFolder,
+      logLevel,
+      mode,
       outputFolder,
-      hashGlobs
+      packageRoot,
+      performanceReportName
+    } = config;
+
+    if (logLevel) {
+      setLogLevel(logLevel);
+    }
+
+    const helpString = "Backfills unchanged packages.";
+
+    const argv = yargs
+      .strict()
+      .usage(helpString)
+      .alias("h", "help")
+      .version(false)
+      .option("generate-performance-report", {
+        description: "Generate performance report",
+        type: "boolean"
+      })
+      .option("audit", {
+        description: "Compare files changed with those cached",
+        type: "boolean"
+      }).argv;
+
+    if (mode !== "READ_WRITE") {
+      logger.info(`Running in ${mode} mode.`);
+    } else {
+      logger.verbose(`Running in ${mode} mode.`);
+    }
+
+    const buildCommand = createBuildCommand(
+      argv["_"],
+      clearOutputFolder,
+      outputFolder
     );
 
-    // Disable fetching when auditing a package
-    cacheStorage.fetch = () => Promise.resolve(false);
-    cacheStorage.put = () => Promise.resolve();
-  }
+    if (mode === "PASS") {
+      try {
+        await buildCommand();
+      } catch (err) {
+        throw new Error("Command failed");
+      }
 
-  try {
+      return;
+    }
+
+    const cacheStorage = getCacheStorageProvider(
+      cacheStorageConfig,
+      internalCacheFolder,
+      argv["audit"] ? "PASS" : mode
+    );
+
+    const hasher = new Hasher({ packageRoot }, getRawBuildCommand());
+
+    if (argv["generate-performance-report"]) {
+      await logger.generatePerformanceReport(logFolder, performanceReportName);
+
+      return;
+    }
+
+    if (argv["audit"]) {
+      initializeWatcher(
+        packageRoot,
+        internalCacheFolder,
+        logFolder,
+        outputFolder,
+        hashGlobs
+      );
+    }
+
     await backfill(config, cacheStorage, buildCommand, hasher);
 
     if (argv["audit"]) {

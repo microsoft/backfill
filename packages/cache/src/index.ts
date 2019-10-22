@@ -3,27 +3,42 @@ import { AzureBlobCacheStorage } from "./AzureBlobCacheStorage";
 import { LocalCacheStorage } from "./LocalCacheStorage";
 import { NpmCacheStorage } from "./NpmCacheStorage";
 
-import { CacheStorageConfig } from "backfill-config";
+import { CacheStorageConfig, BackfillModes } from "backfill-config";
 
 export { ICacheStorage } from "./CacheStorage";
 
+function applyMode(cacheStorage: ICacheStorage, mode: BackfillModes) {
+  if (mode === "READ_ONLY" || mode === "PASS") {
+    cacheStorage.put = () => Promise.resolve();
+  }
+
+  if (mode === "WRITE_ONLY" || mode === "PASS") {
+    cacheStorage.fetch = () => Promise.resolve(false);
+  }
+}
+
 export function getCacheStorageProvider(
   cacheStorageConfig: CacheStorageConfig,
-  internalCacheFolder: string
+  internalCacheFolder: string,
+  mode: BackfillModes = "READ_WRITE"
 ): ICacheStorage {
-  switch (cacheStorageConfig.provider) {
-    case "npm":
-      return new NpmCacheStorage(
-        cacheStorageConfig.options,
-        internalCacheFolder
-      );
-    case "azure-blob":
-      return new AzureBlobCacheStorage(
-        cacheStorageConfig.options,
-        internalCacheFolder
-      );
-    case "local":
-    default:
-      return new LocalCacheStorage(internalCacheFolder);
+  let cacheStorage: ICacheStorage;
+
+  if (cacheStorageConfig.provider === "npm") {
+    cacheStorage = new NpmCacheStorage(
+      cacheStorageConfig.options,
+      internalCacheFolder
+    );
+  } else if (cacheStorageConfig.provider === "azure-blob") {
+    cacheStorage = new AzureBlobCacheStorage(
+      cacheStorageConfig.options,
+      internalCacheFolder
+    );
+  } else {
+    cacheStorage = new LocalCacheStorage(internalCacheFolder);
   }
+
+  applyMode(cacheStorage, mode);
+
+  return cacheStorage;
 }
