@@ -93,15 +93,15 @@ The default configuration object is:
 ```js
 {
   cacheStorageConfig: { provider: "local" },
+  clearOutputFolder: false,
+  hashGlobs: ["**/*", "!**/node_modules/**", "!lib/**", "!**/tsconfig.tsbuildinfo"],
   internalCacheFolder: "node_modules/.cache/backfill",
   logFolder: "node_modules/.cache/backfill",
+  logLevel: "info",
   name: "name-of-package",
   outputFolder: "lib",
-  producePerformanceLogs: false,
   packageRoot: "path/to/package",
-  clearOutputFolder: false,
-  logLevel: "info",
-  hashGlobs: ["**/*", "!**/node_modules/**", "!lib/**", "!**/tsconfig.tsbuildinfo"]
+  producePerformanceLogs: false
 }
 ```
 
@@ -117,16 +117,16 @@ The configuration type is:
 ```ts
 export type Config = {
   cacheStorageConfig: CacheStorageConfig;
+  clearOutputFolder: boolean;
+  hashGlobs: HashGlobs;
   internalCacheFolder: string;
   logFolder: string;
+  logLevel: LogLevels;
   name: string;
   outputFolder: string | string[];
-  producePerformanceLogs: boolean;
   packageRoot: string;
   performanceReportName?: string;
-  clearOutputFolder: boolean;
-  logLevel: LogLevels;
-  hashGlobs: HashGlobs;
+  producePerformanceLogs: boolean;
 };
 ```
 

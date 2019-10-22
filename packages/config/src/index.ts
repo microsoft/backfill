@@ -14,16 +14,16 @@ export type HashGlobs = string[];
 
 export type Config = {
   cacheStorageConfig: CacheStorageConfig;
+  clearOutputFolder: boolean;
+  hashGlobs: HashGlobs;
   internalCacheFolder: string;
   logFolder: string;
+  logLevel: LogLevels;
   name: string;
   outputFolder: string | string[];
-  producePerformanceLogs: boolean;
   packageRoot: string;
   performanceReportName?: string;
-  clearOutputFolder: boolean;
-  logLevel: LogLevels;
-  hashGlobs: HashGlobs;
+  producePerformanceLogs: boolean;
 };
 
 export function outputFolderAsArray(outputFolder: string | string[]): string[] {
@@ -65,23 +65,23 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
   const outputFolder = "lib";
 
   return {
-    packageRoot,
-    name: getName(packageRoot),
     cacheStorageConfig: {
       provider: "local"
     },
-    internalCacheFolder: defaultCacheFolder,
-    logFolder: defaultCacheFolder,
-    outputFolder,
-    producePerformanceLogs: false,
     clearOutputFolder: false,
-    logLevel: "info",
     hashGlobs: [
       "**/*",
       "!**/node_modules/**",
       `!${outputFolder}/**`,
       "!**/tsconfig.tsbuildinfo"
-    ]
+    ],
+    internalCacheFolder: defaultCacheFolder,
+    logFolder: defaultCacheFolder,
+    logLevel: "info",
+    name: getName(packageRoot),
+    outputFolder,
+    packageRoot,
+    producePerformanceLogs: false
   };
 }
 
