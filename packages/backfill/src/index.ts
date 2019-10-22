@@ -85,10 +85,6 @@ export async function main(): Promise<void> {
     .option("audit", {
       description: "Compare files changed with those cached",
       type: "boolean"
-    })
-    .option("verbose", {
-      description: "Verbose logging",
-      type: "boolean"
     }).argv;
 
   const cacheStorage = getCacheStorageProvider(
