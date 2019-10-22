@@ -34,11 +34,7 @@ export async function backfill(
 
   const packageHash = await hasher.createPackageHash();
 
-  if (await cacheStorage.fetch(packageHash, outputFolder)) {
-    logger.setHit(true);
-  } else {
-    logger.setHit(false);
-
+  if (!(await cacheStorage.fetch(packageHash, outputFolder))) {
     try {
       await buildCommand();
     } catch (err) {

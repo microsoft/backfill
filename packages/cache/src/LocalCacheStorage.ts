@@ -1,5 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from "path";
+import { outputFolderAsArray } from "backfill-config";
 
 import { CacheStorage } from "./CacheStorage";
 
@@ -12,26 +13,29 @@ export class LocalCacheStorage extends CacheStorage {
     return path.join(this.internalCacheFolder, hash);
   }
 
-  protected _fetch(hash: string, outputFolder: string) {
-    const objectUri = this.getLocalCacheFolder(hash);
+  protected async _fetch(hash: string): Promise<string | undefined> {
+    const localCacheFolder = this.getLocalCacheFolder(hash);
 
-    if (!fs.pathExistsSync(objectUri)) {
-      return Promise.resolve(false);
+    if (!fs.pathExistsSync(localCacheFolder)) {
+      return;
     }
 
-    fs.mkdirpSync(outputFolder);
-    fs.copySync(path.join(objectUri, outputFolder), outputFolder);
-
-    return Promise.resolve(true);
+    return localCacheFolder;
   }
 
-  protected _put(hash: string, outputFolder: string) {
-    const objectUri = this.getLocalCacheFolder(hash);
-    const outputFolderInCache = path.join(objectUri, outputFolder);
+  protected async _put(
+    hash: string,
+    outputFolder: string | string[]
+  ): Promise<void> {
+    const localCacheFolder = this.getLocalCacheFolder(hash);
 
-    fs.mkdirpSync(outputFolderInCache);
-    fs.copySync(outputFolder, outputFolderInCache);
+    await Promise.all(
+      outputFolderAsArray(outputFolder).map(async folder => {
+        const outputFolderInCache = path.join(localCacheFolder, folder);
 
-    return Promise.resolve();
+        await fs.mkdirp(outputFolderInCache);
+        await fs.copy(folder, outputFolderInCache);
+      })
+    );
   }
 }

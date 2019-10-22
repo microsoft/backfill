@@ -17,7 +17,7 @@ export type Config = {
   internalCacheFolder: string;
   logFolder: string;
   name: string;
-  outputFolder: string;
+  outputFolder: string | string[];
   producePerformanceLogs: boolean;
   packageRoot: string;
   performanceReportName?: string;
@@ -25,6 +25,14 @@ export type Config = {
   logLevel: LogLevels;
   hashGlobs: HashGlobs;
 };
+
+export function outputFolderAsArray(outputFolder: string | string[]): string[] {
+  const outputFolders = Array.isArray(outputFolder)
+    ? outputFolder
+    : [outputFolder];
+
+  return outputFolders;
+}
 
 export function getName(packageRoot: string) {
   return (
@@ -72,14 +80,13 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
       "**/*",
       "!**/node_modules/**",
       `!${outputFolder}/**`,
-      "!tsconfig.tsbuildinfo"
+      "!**/tsconfig.tsbuildinfo"
     ]
   };
 }
 
 export function createConfig(fromPath: string = process.cwd()): Config {
   const defaultConfig = createDefaultConfig(fromPath);
-
   const fileBasedConfig = getSearchPaths(fromPath).reduce((acc, configPath) => {
     const config = require(configPath);
 

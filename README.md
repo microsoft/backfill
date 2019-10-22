@@ -101,10 +101,16 @@ The default configuration object is:
   packageRoot: "path/to/package",
   clearOutputFolder: false,
   logLevel: "info",
-  hashGlobs: ["**/*", "!**/node_modules/**", "!lib/**", "!tsconfig.tsbuildinfo"]
+  hashGlobs: ["**/*", "!**/node_modules/**", "!lib/**", "!**/tsconfig.tsbuildinfo"]
 }
-
 ```
+
+The `outputFolder` is the folder you want to cache. It can either be a string or
+an array of strings. `outputFolder` should be expressed as a relative path from
+the root of each package. If you want to cache `package-a/lib`, for instance,
+you'd write `outputFolder: "lib"`. If you also want to cache the
+`pacakge/a/dist/bundles` folder, you'd write
+`outputFolder: ["lib", "dist/bundles"]`.
 
 The configuration type is:
 
@@ -114,7 +120,7 @@ export type Config = {
   internalCacheFolder: string;
   logFolder: string;
   name: string;
-  outputFolder: string;
+  outputFolder: string | string[];
   producePerformanceLogs: boolean;
   packageRoot: string;
   performanceReportName?: string;
