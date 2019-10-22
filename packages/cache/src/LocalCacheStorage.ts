@@ -33,7 +33,7 @@ export class LocalCacheStorage extends CacheStorage {
       outputFolderAsArray(outputFolder).map(async folder => {
         const outputFolderInCache = path.join(localCacheFolder, folder);
 
-        fs.mkdirpSync(outputFolderInCache);
+        await fs.mkdirp(outputFolderInCache);
         await fs.copy(folder, outputFolderInCache);
       })
     );

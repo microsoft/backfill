@@ -25,7 +25,7 @@ export abstract class CacheStorage implements ICacheStorage {
 
     await Promise.all(
       outputFolderAsArray(outputFolder).map(async folder => {
-        fs.mkdirpSync(folder);
+        await fs.mkdirp(folder);
         await fs.copy(path.join(localCacheFolder, folder), folder);
       })
     );
