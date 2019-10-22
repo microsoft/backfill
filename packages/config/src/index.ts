@@ -12,6 +12,14 @@ export * from "./envConfig";
 
 export type HashGlobs = string[];
 
+export const modesObject = {
+  "READ-ONLY": "",
+  "WRITE-ONLY": "",
+  "READ-WRITE": ""
+};
+
+export type BackfillModes = keyof typeof modesObject;
+
 export type Config = {
   cacheStorageConfig: CacheStorageConfig;
   clearOutputFolder: boolean;
@@ -20,6 +28,7 @@ export type Config = {
   logFolder: string;
   logLevel: LogLevels;
   name: string;
+  mode: BackfillModes;
   outputFolder: string | string[];
   packageRoot: string;
   performanceReportName?: string;
@@ -79,6 +88,7 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
     logFolder: defaultCacheFolder,
     logLevel: "info",
     name: getName(packageRoot),
+    mode: "READ-WRITE",
     outputFolder,
     packageRoot,
     producePerformanceLogs: false

@@ -98,7 +98,8 @@ The default configuration object is:
   internalCacheFolder: "node_modules/.cache/backfill",
   logFolder: "node_modules/.cache/backfill",
   logLevel: "info",
-  name: "name-of-package",
+  name: "[name-of-package]",
+  mode: "READ-WRITE",
   outputFolder: "lib",
   packageRoot: "path/to/package",
   producePerformanceLogs: false
@@ -122,6 +123,7 @@ export type Config = {
   internalCacheFolder: string;
   logFolder: string;
   logLevel: LogLevels;
+  mode: "READ-ONLY" | "WRITE-ONLY" | "READ-WRITE";
   name: string;
   outputFolder: string | string[];
   packageRoot: string;

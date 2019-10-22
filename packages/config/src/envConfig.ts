@@ -2,15 +2,20 @@ import {
   getAzureBlobConfigFromSerializedOptions,
   getNpmConfigFromSerializedOptions
 } from "./cacheConfig";
-import { CacheStorageConfig } from "./index";
+import { CacheStorageConfig, BackfillModes, modesObject } from "./index";
 
 export type ConfigEnv = {
   cacheStorageConfig?: CacheStorageConfig;
   internalCacheFolder?: string;
   logFolder?: string;
+  mode?: BackfillModes;
   performanceReportName?: string;
   producePerformanceLogs?: boolean;
 };
+
+function isCorrectMode(mode: string): mode is BackfillModes {
+  return modesObject.hasOwnProperty(mode);
+}
 
 export function getEnvConfig() {
   const config: ConfigEnv = {};
@@ -44,6 +49,17 @@ export function getEnvConfig() {
   const logFolder = process.env["BACKFILL_LOG_FOLDER"];
   if (logFolder) {
     config["logFolder"] = logFolder;
+  }
+
+  const mode = process.env["BACKFILL_MODE"];
+  if (mode) {
+    if (isCorrectMode(mode)) {
+      config["mode"] = mode;
+    } else {
+      throw new Error(
+        `"BACKFILL_MODE" was set, but with the wrong value: "${mode}".`
+      );
+    }
   }
 
   const producePerformanceLogs =
