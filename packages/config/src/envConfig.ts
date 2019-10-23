@@ -52,7 +52,7 @@ export function getEnvConfig() {
     if (isCorrectMode(mode)) {
       config["mode"] = mode;
     } else {
-      throw `Backfill config option "BACKFILL_MODE" was set, but with the wrong value: "${config["mode"]}".`;
+      throw `Backfill config option "BACKFILL_MODE" was set, but with the wrong value: "${mode}".`;
     }
   }
 
