@@ -3,13 +3,15 @@ import {
   getNpmConfigFromSerializedOptions
 } from "./cacheConfig";
 import { LogLevels, isCorrectLogLevel } from "backfill-logger";
-import { CacheStorageConfig } from "./index";
+
+import { CacheStorageConfig, BackfillModes, isCorrectMode } from "./index";
 
 export type ConfigEnv = {
   cacheStorageConfig?: CacheStorageConfig;
   internalCacheFolder?: string;
   logFolder?: string;
   logLevel?: LogLevels;
+  mode?: BackfillModes;
   performanceReportName?: string;
   producePerformanceLogs?: boolean;
 };
@@ -33,7 +35,7 @@ export function getEnvConfig() {
     // local cache has no config at the moment
   }
 
-  const internalCacheFolder = process.env["BACKFILL_LOCAL_CACHE_FOLDER"];
+  const internalCacheFolder = process.env["BACKFILL_INTERNAL_CACHE_FOLDER"];
   if (internalCacheFolder) {
     config["internalCacheFolder"] = internalCacheFolder;
   }
@@ -41,6 +43,15 @@ export function getEnvConfig() {
   const logFolder = process.env["BACKFILL_LOG_FOLDER"];
   if (logFolder) {
     config["logFolder"] = logFolder;
+  }
+
+  const mode = process.env["BACKFILL_MODE"];
+  if (mode) {
+    if (isCorrectMode(mode)) {
+      config["mode"] = mode;
+    } else {
+      throw `Backfill config option "BACKFILL_MODE" was set, but with the wrong value: "${mode}".`;
+    }
   }
 
   const logLevel = process.env["BACKFILL_LOG_LEVEL"];

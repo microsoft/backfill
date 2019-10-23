@@ -12,6 +12,15 @@ export * from "./envConfig";
 
 export type HashGlobs = string[];
 
+export const modesObject = {
+  READ_ONLY: "",
+  WRITE_ONLY: "",
+  READ_WRITE: "",
+  PASS: ""
+};
+
+export type BackfillModes = keyof typeof modesObject;
+
 export type Config = {
   cacheStorageConfig: CacheStorageConfig;
   clearOutputFolder: boolean;
@@ -20,6 +29,7 @@ export type Config = {
   logFolder: string;
   logLevel: LogLevels;
   name: string;
+  mode: BackfillModes;
   outputFolder: string | string[];
   packageRoot: string;
   performanceReportName?: string;
@@ -32,6 +42,10 @@ export function outputFolderAsArray(outputFolder: string | string[]): string[] {
     : [outputFolder];
 
   return outputFolders;
+}
+
+export function isCorrectMode(mode: string): mode is BackfillModes {
+  return modesObject.hasOwnProperty(mode);
 }
 
 export function getName(packageRoot: string) {
@@ -79,6 +93,7 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
     logFolder: defaultCacheFolder,
     logLevel: "info",
     name: getName(packageRoot),
+    mode: "READ_WRITE",
     outputFolder,
     packageRoot,
     producePerformanceLogs: false
@@ -89,6 +104,12 @@ export function createConfig(fromPath: string = process.cwd()): Config {
   const defaultConfig = createDefaultConfig(fromPath);
   const fileBasedConfig = getSearchPaths(fromPath).reduce((acc, configPath) => {
     const config = require(configPath);
+
+    if (config["mode"]) {
+      if (!isCorrectMode(config["mode"])) {
+        throw `Backfill config option "mode" was set, but with the wrong value: "${config["mode"]}".`;
+      }
+    }
 
     return {
       ...acc,

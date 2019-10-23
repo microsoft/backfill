@@ -84,21 +84,26 @@ export class NpmCacheStorage extends CacheStorage {
     });
 
     // Upload package
-    await execa(
-      "npm",
-      [
-        "publish",
-        "--registry",
-        registryUrl,
-        "--loglevel",
-        "error",
-        ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
-      ],
-      {
-        cwd: temporaryNpmOutputFolder,
-        stdout: "inherit",
-        stderr: "inherit"
+    try {
+      await execa(
+        "npm",
+        [
+          "publish",
+          "--registry",
+          registryUrl,
+          "--loglevel",
+          "error",
+          ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
+        ],
+        {
+          cwd: temporaryNpmOutputFolder,
+          stdout: "inherit"
+        }
+      );
+    } catch (error) {
+      if (error.stderr.toString().indexOf("403") === -1) {
+        throw new Error(error);
       }
-    );
+    }
   }
 }
