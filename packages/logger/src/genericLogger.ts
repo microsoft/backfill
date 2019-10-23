@@ -8,7 +8,19 @@ function logInternal(
   console[method]("backfill:", symbol, ...args);
 }
 
-export type LogLevels = "error" | "warn" | "info" | "verbose" | "silly";
+export const logLevelObject = {
+  error: "",
+  warn: "",
+  info: "",
+  verbose: "",
+  silly: ""
+};
+
+export type LogLevels = keyof typeof logLevelObject;
+
+export function isCorrectLogLevel(logLevel: string): logLevel is LogLevels {
+  return logLevelObject.hasOwnProperty(logLevel);
+}
 
 let logLevel: LogLevels = "info";
 

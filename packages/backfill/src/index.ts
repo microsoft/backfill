@@ -10,6 +10,8 @@ import {
 } from "./commandRunner";
 import { IHasher, Hasher } from "backfill-hasher";
 
+export { createConfig } from "backfill-config";
+
 import { initializeWatcher, closeWatcher } from "./audit";
 
 // Load environment variables
