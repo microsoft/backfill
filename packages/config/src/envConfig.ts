@@ -2,12 +2,15 @@ import {
   getAzureBlobConfigFromSerializedOptions,
   getNpmConfigFromSerializedOptions
 } from "./cacheConfig";
+import { LogLevels, isCorrectLogLevel } from "backfill-logger";
+
 import { CacheStorageConfig, BackfillModes, isCorrectMode } from "./index";
 
 export type ConfigEnv = {
   cacheStorageConfig?: CacheStorageConfig;
   internalCacheFolder?: string;
   logFolder?: string;
+  logLevel?: LogLevels;
   mode?: BackfillModes;
   performanceReportName?: string;
   producePerformanceLogs?: boolean;
@@ -37,11 +40,6 @@ export function getEnvConfig() {
     config["internalCacheFolder"] = internalCacheFolder;
   }
 
-  const performanceReportName = process.env["BACKFILL_PERFORMANCE_REPORT_NAME"];
-  if (performanceReportName) {
-    config["performanceReportName"] = performanceReportName;
-  }
-
   const logFolder = process.env["BACKFILL_LOG_FOLDER"];
   if (logFolder) {
     config["logFolder"] = logFolder;
@@ -54,6 +52,20 @@ export function getEnvConfig() {
     } else {
       throw `Backfill config option "BACKFILL_MODE" was set, but with the wrong value: "${mode}".`;
     }
+  }
+
+  const logLevel = process.env["BACKFILL_LOG_LEVEL"];
+  if (logLevel) {
+    if (isCorrectLogLevel(logLevel)) {
+      config["logLevel"] = logLevel;
+    } else {
+      throw `Backfill config option "BACKFILL_LOG_LEVEL" was set, but with the wrong value: "${logLevel}".`;
+    }
+  }
+
+  const performanceReportName = process.env["BACKFILL_PERFORMANCE_REPORT_NAME"];
+  if (performanceReportName) {
+    config["performanceReportName"] = performanceReportName;
   }
 
   const producePerformanceLogs =
