@@ -14,22 +14,24 @@
   resolved "https://registry.yarnpkg.com/@azure/core-asynciterator-polyfill/-/core-asynciterator-polyfill-1.0.0-preview.1.tgz#ad7c726cfd73c946dbfbc3e485338ccf678fc75a"
   integrity sha512-hMp0y+j/odkAyTa5TYewn4hUlFdEe3sR9uTd2Oq+se61RtuDsqM7UWrNNlyylPyjIENSZHJVWN7jte/jvvMN2Q==
 
-"@azure/core-auth@1.0.0-preview.3":
-  version "1.0.0-preview.3"
-  resolved "https://registry.yarnpkg.com/@azure/core-auth/-/core-auth-1.0.0-preview.3.tgz#3f52e07942fb934c03e861987d6a1bfd35d538b6"
-  integrity sha512-SUG/ccOMGjPVUwKvwAW6r543bd66UOHu66N/jycr0hMVLI/46TuMZJIMjA2AN2+Gc+IrxSXQeJbN2VBFiJBWvA==
+"@azure/core-auth@1.0.0-preview.4":
+  version "1.0.0-preview.4"
+  resolved "https://registry.yarnpkg.com/@azure/core-auth/-/core-auth-1.0.0-preview.4.tgz#8a25bfdde772a338f9e0344668ea50bdfb213cec"
+  integrity sha512-RQUIQ8En0n3u8a7sLzcgkJlGp/NDEX7q4Mj2DNTe9GdMIPmKKckwzACjlQ1FdDSOkxxMS3HmTZE+Js+8CyRj1w==
   dependencies:
     "@azure/abort-controller" "1.0.0-preview.2"
+    "@azure/core-tracing" "1.0.0-preview.5"
     tslib "^1.9.3"
 
-"@azure/core-http@1.0.0-preview.3":
-  version "1.0.0-preview.3"
-  resolved "https://registry.yarnpkg.com/@azure/core-http/-/core-http-1.0.0-preview.3.tgz#890e4dedc7a33398175bbabc3488d779b301ae6e"
-  integrity sha512-YxZPXG0xYRvBhkAtNVD18VG3i6JyS2dH7QtkiYoi9yAc/x7HUMcKg7FmOD/Nf/++OVGoTQcJ9QpG34MggWuHEQ==
+"@azure/core-http@1.0.0-preview.6":
+  version "1.0.0-preview.6"
+  resolved "https://registry.yarnpkg.com/@azure/core-http/-/core-http-1.0.0-preview.6.tgz#ce77f7fd1f07b079c1101ae861e5ecf7ce332c2c"
+  integrity sha512-DoSAphAlzIFRZXvVxNtZYAWPpcT85GmYCKheDgF12cr/EDIlfH6g9+el6b+Knm8Cx4HSNlEbja8dWK1786jFKQ==
   dependencies:
     "@azure/abort-controller" "1.0.0-preview.2"
-    "@azure/core-auth" "1.0.0-preview.3"
-    "@azure/core-tracing" "1.0.0-preview.2"
+    "@azure/core-auth" "1.0.0-preview.4"
+    "@azure/core-tracing" "1.0.0-preview.5"
+    "@azure/logger" "1.0.0-preview.1"
     "@types/node-fetch" "^2.5.0"
     "@types/tunnel" "^0.0.1"
     form-data "^2.5.0"
@@ -48,21 +50,30 @@
   dependencies:
     "@azure/core-asynciterator-polyfill" "1.0.0-preview.1"
 
-"@azure/core-tracing@1.0.0-preview.2":
-  version "1.0.0-preview.2"
-  resolved "https://registry.yarnpkg.com/@azure/core-tracing/-/core-tracing-1.0.0-preview.2.tgz#4f589dcac7841c8bcb65995d9592105e3d3f8ad2"
-  integrity sha512-ID/kDVax0uYlw1HVBNsLv6JuE8NbgLUrKrmvVqyuvtbNk+Gk+IKbpUbrDMAoauDAd1CHifs+fkg210LD2JWSEQ==
+"@azure/core-tracing@1.0.0-preview.5":
+  version "1.0.0-preview.5"
+  resolved "https://registry.yarnpkg.com/@azure/core-tracing/-/core-tracing-1.0.0-preview.5.tgz#656892565a9d1920be2008c9609429e37e13443c"
+  integrity sha512-i3hF4EQucZmn2l4zXscwG5bilnboKHtnLMFVuzXk55dt487/9EJ5uMOP3eyTFpULGjn6xubgYFAJVpUJGVQv4w==
+  dependencies:
+    "@opencensus/web-types" "0.0.7"
+    tslib "^1.9.3"
+
+"@azure/logger@1.0.0-preview.1":
+  version "1.0.0-preview.1"
+  resolved "https://registry.yarnpkg.com/@azure/logger/-/logger-1.0.0-preview.1.tgz#9be1dfad27f1f868301443c51986d4069a99bb9f"
+  integrity sha512-IZqcABYFnlA4blARodptCPeoOp7d9nNTvnQ3a7nf9THDPufz7nzzX6fVqi3OsLcs3+ip7La82OghVhjwiue8fA==
   dependencies:
     tslib "^1.9.3"
 
-"@azure/storage-blob@12.0.0-preview.3":
-  version "12.0.0-preview.3"
-  resolved "https://registry.yarnpkg.com/@azure/storage-blob/-/storage-blob-12.0.0-preview.3.tgz#aed0cdd899d2b59dc9291bf1e025e91249aa8ea1"
-  integrity sha512-vbxCCy1VZuuLHsEFgmQK9+dtyuUjKB2+/u+AiVfQPwp4X1K7t2JbpfOd6jFEIvng7qOFJCftLr65x0UwbY085A==
+"@azure/storage-blob@12.0.0-preview.5":
+  version "12.0.0-preview.5"
+  resolved "https://registry.yarnpkg.com/@azure/storage-blob/-/storage-blob-12.0.0-preview.5.tgz#46dbe0ed3f70ef3f48164388244dc1474fbb5ebf"
+  integrity sha512-fC4ezFYuN21ZjHIi/fpAaG0UQTDSDNoTb2l66RRmGPJ7Yf1J2VOQAi8b1KTlicQ/6XhGhBwKxJaIjt0bGWD6BQ==
   dependencies:
     "@azure/abort-controller" "1.0.0-preview.2"
-    "@azure/core-http" "1.0.0-preview.3"
+    "@azure/core-http" "1.0.0-preview.6"
     "@azure/core-paging" "1.0.0-preview.2"
+    "@azure/core-tracing" "1.0.0-preview.5"
     events "^3.0.0"
     tslib "^1.9.3"
 
@@ -1173,6 +1184,11 @@
     octokit-pagination-methods "^1.1.0"
     once "^1.4.0"
     universal-user-agent "^4.0.0"
+
+"@opencensus/web-types@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@opencensus/web-types/-/web-types-0.0.7.tgz#4426de1fe5aa8f624db395d2152b902874f0570a"
+  integrity sha512-xB+w7ZDAu3YBzqH44rCmG9/RlrOmFuDPt/bpf17eJr8eZSrLt7nc7LnWdxM9Mmoj/YKMHpxRg28txu3TcpiL+g==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
