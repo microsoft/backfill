@@ -3,6 +3,9 @@ import * as fg from "fast-glob";
 import * as fs from "fs-extra";
 import * as path from "path";
 import { createConfig } from "backfill-config";
+import { hashStrings } from "./helpers";
+
+const newline = /\r\n|\r|\n/g;
 
 export async function generateHashOfFiles(
   packageRoot: string
@@ -17,17 +20,20 @@ export async function generateHashOfFiles(
 
   files.sort((a, b) => a.path.localeCompare(b.path));
 
-  const hasher = crypto.createHash("sha1");
-  files.forEach(file => {
-    hasher.update(file.path);
+  const hashes = await Promise.all(
+    files.map(async file => {
+      const hasher = crypto.createHash("sha1");
+      hasher.update(file.path);
 
-    if (!file.dirent.isDirectory()) {
-      const data = fs
-        .readFileSync(path.join(packageRoot, file.path))
-        .toString();
-      hasher.update(data);
-    }
-  });
+      if (!file.dirent.isDirectory()) {
+        const fileBuffer = await fs.readFile(path.join(packageRoot, file.path));
+        const data = fileBuffer.toString().replace(newline, "\n");
+        hasher.update(data);
+      }
 
-  return hasher.digest("hex");
+      return hasher.digest("hex");
+    })
+  );
+
+  return hashStrings(hashes);
 }
