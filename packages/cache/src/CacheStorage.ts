@@ -23,12 +23,14 @@ export abstract class CacheStorage implements ICacheStorage {
       return false;
     }
 
+    logger.profile("cache:fetch:copy-to-ouputfolder");
     await Promise.all(
       outputFolderAsArray(outputFolder).map(async folder => {
         await fs.mkdirp(folder);
         await fs.copy(path.join(localCacheFolder, folder), folder);
       })
     );
+    logger.profile("cache:fetch:copy-to-ouputfolder");
 
     logger.setHit(true);
     logger.setTime("fetchTime", "cache:fetch");
