@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "2.0.3",
+  "version": "2.0.4",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@azure/storage-blob": "12.0.0-preview.5",
-    "backfill-config": "^2.0.3",
+    "backfill-config": "^2.0.4",
     "backfill-logger": "^2.0.3",
     "execa": "^3.1.0",
     "fs-extra": "^8.1.0",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/fs-extra": "^8.0.0",
     "@types/tar": "^4.0.0",
-    "backfill-utils-test": "^2.0.3",
+    "backfill-utils-test": "^2.0.4",
     "backfill-utils-tsconfig": "^2.0.3",
     "jest": "^24.0.12",
     "ts-jest": "^24.0.2",
