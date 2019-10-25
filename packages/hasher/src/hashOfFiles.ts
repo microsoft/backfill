@@ -6,6 +6,7 @@ import { createConfig } from "backfill-config";
 import { hashStrings } from "./helpers";
 
 const newline = /\r\n|\r|\n/g;
+const LF = "\n";
 
 export async function generateHashOfFiles(
   packageRoot: string
@@ -27,7 +28,7 @@ export async function generateHashOfFiles(
 
       if (!file.dirent.isDirectory()) {
         const fileBuffer = await fs.readFile(path.join(packageRoot, file.path));
-        const data = fileBuffer.toString().replace(newline, "\n");
+        const data = fileBuffer.toString().replace(newline, LF);
         hasher.update(data);
       }
 
