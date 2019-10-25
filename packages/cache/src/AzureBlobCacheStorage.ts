@@ -4,8 +4,10 @@ import * as tar from "tar";
 import * as path from "path";
 
 import { logger } from "backfill-logger";
-import { AzureBlobCacheStorageOptions } from "backfill-config";
-import { outputFolderAsArray } from "backfill-config";
+import {
+  AzureBlobCacheStorageOptions,
+  outputFolderAsArray
+} from "backfill-config";
 
 import { CacheStorage } from "./CacheStorage";
 
