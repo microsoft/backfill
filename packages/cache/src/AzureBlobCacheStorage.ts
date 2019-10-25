@@ -73,7 +73,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
           cwd: temporaryBlobOutputFolder
         });
 
-        logger.profile("cache:azure:extract-temp");
+        logger.profile("cache:azure:extract-to-temp");
         blobReadableStream.pipe(tarWritableStream);
 
         const blobPromise = new Promise((resolve, reject) => {
@@ -83,7 +83,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
         await blobPromise;
 
-        logger.profile("cache:azure:extract-temp");
+        logger.profile("cache:azure:extract-to-temp");
       } catch (error) {
         fs.removeSync(temporaryBlobOutputFolder);
 
