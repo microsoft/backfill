@@ -3,8 +3,11 @@ import * as fs from "fs-extra";
 import * as tar from "tar";
 import * as path from "path";
 
-import { AzureBlobCacheStorageOptions } from "backfill-config";
-import { outputFolderAsArray } from "backfill-config";
+import { logger } from "backfill-logger";
+import {
+  AzureBlobCacheStorageOptions,
+  outputFolderAsArray
+} from "backfill-config";
 
 import { CacheStorage } from "./CacheStorage";
 
@@ -53,6 +56,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
           hash
         );
 
+        logger.profile("cache:azure:download");
+
         const response = await blobClient.download(0);
 
         const blobReadableStream = response.readableStreamBody;
@@ -60,12 +65,15 @@ export class AzureBlobCacheStorage extends CacheStorage {
           throw new Error("Unable to fetch blob.");
         }
 
+        logger.profile("cache:azure:download");
+
         fs.mkdirpSync(temporaryBlobOutputFolder);
 
         const tarWritableStream = tar.extract({
           cwd: temporaryBlobOutputFolder
         });
 
+        logger.profile("cache:azure:extract-to-temp");
         blobReadableStream.pipe(tarWritableStream);
 
         const blobPromise = new Promise((resolve, reject) => {
@@ -74,6 +82,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
         });
 
         await blobPromise;
+
+        logger.profile("cache:azure:extract-to-temp");
       } catch (error) {
         fs.removeSync(temporaryBlobOutputFolder);
 

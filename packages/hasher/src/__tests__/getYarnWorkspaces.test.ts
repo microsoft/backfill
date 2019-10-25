@@ -1,5 +1,6 @@
 import * as path from "path";
 import { setupFixture } from "backfill-utils-test";
+import normalize = require("normalize-path");
 
 import { getYarnWorkspaces } from "../yarnWorkspaces";
 
@@ -8,8 +9,12 @@ describe("getYarnWorkspaces()", () => {
     const packageRoot = await setupFixture("monorepo");
     const workspacesPackageInfo = getYarnWorkspaces(packageRoot);
 
-    const packageAPath = path.join(packageRoot, "packages", "package-a");
-    const packageBPath = path.join(packageRoot, "packages", "package-b");
+    const packageAPath = normalize(
+      path.join(packageRoot, "packages", "package-a")
+    );
+    const packageBPath = normalize(
+      path.join(packageRoot, "packages", "package-b")
+    );
 
     expect(workspacesPackageInfo).toEqual([
       { name: "package-a", path: packageAPath },

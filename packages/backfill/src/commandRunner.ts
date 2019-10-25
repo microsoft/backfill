@@ -45,7 +45,7 @@ export function createBuildCommand(
         // Catch to pretty-print the command that failed and re-throw
         .catch(err => {
           if (process.env.NODE_ENV !== "test") {
-            logger.error(`Failed while running: ${parsedBuildCommand}`);
+            logger.error(`Failed while running: "${parsedBuildCommand}"`);
           }
           throw err;
         })

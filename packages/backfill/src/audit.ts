@@ -25,8 +25,8 @@ function getGitRepositoryRoot(packageRoot: string) {
 }
 
 function addGlobstars(globPatterns: string[]): string[] {
-  const folders = globPatterns.map(p => path.join("**", p, "**", "*"));
-  const files = globPatterns.map(p => path.join("**", p));
+  const folders = globPatterns.map(p => path.posix.join("**", p, "**", "*"));
+  const files = globPatterns.map(p => path.posix.join("**", p));
 
   return [...folders, ...files];
 }
@@ -58,7 +58,7 @@ export function initializeWatcher(
   ]);
 
   const cacheFolderGlob = outputFolderAsArray(outputFolder).map(folder =>
-    path.join("**", folder, "**")
+    path.posix.join("**", folder, "**")
   );
 
   watcher = chokidar

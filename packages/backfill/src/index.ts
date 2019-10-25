@@ -40,7 +40,7 @@ export async function backfill(
     try {
       await buildCommand();
     } catch (err) {
-      throw new Error("Command failed");
+      throw new Error(`Command failed with the following error:\n\n${err}`);
     }
 
     try {
