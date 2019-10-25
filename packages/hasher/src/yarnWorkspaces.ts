@@ -1,6 +1,5 @@
 import * as path from "path";
 import * as fg from "fast-glob";
-import normalize = require("normalize-path");
 
 import * as findWorkspaceRoot from "find-yarn-workspace-root";
 
@@ -61,11 +60,9 @@ function getPackagePaths(
     })
   );
 
-  return packagePaths
-    .reduce((acc, cur) => {
-      return [...acc, ...cur];
-    })
-    .map(packagePath => normalize(packagePath));
+  return packagePaths.reduce((acc, cur) => {
+    return [...acc, ...cur];
+  });
 }
 
 export function getWorkspacePackageInfo(
