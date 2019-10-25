@@ -3,6 +3,6 @@
   "license": "MIT",
   "version": "0.1.0",
   "scripts": {
-    "compile": "copy src/index.ts lib/index.js"
+    "compile": "node node_modules/.bin/copy src/index.ts lib/index.js"
   }
 }

@@ -41,12 +41,7 @@ describe("backfill", () => {
     const spiedHasher = spy(hasher);
 
     // Execute
-    await backfill(
-      { ...config, producePerformanceLogs: false },
-      cacheStorage,
-      spiedBuildCommand,
-      hasher
-    );
+    await backfill(config, cacheStorage, spiedBuildCommand, hasher);
 
     // Assert
     verify(spiedHasher.createPackageHash()).once();
@@ -59,12 +54,7 @@ describe("backfill", () => {
     jest.clearAllMocks();
 
     // Execute
-    await backfill(
-      { ...config, producePerformanceLogs: false },
-      cacheStorage,
-      buildCommand,
-      hasher
-    );
+    await backfill(config, cacheStorage, buildCommand, hasher);
 
     // Assert
     verify(spiedHasher.createPackageHash()).once();
