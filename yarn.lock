@@ -2,36 +2,36 @@
 # yarn lockfile v1
 
 
-"@azure/abort-controller@1.0.0-preview.2":
-  version "1.0.0-preview.2"
-  resolved "https://registry.yarnpkg.com/@azure/abort-controller/-/abort-controller-1.0.0-preview.2.tgz#4cbe53ea5294317e4f50fa4270ab459486b9fbfa"
-  integrity sha512-pd2MVcHaitEC0ZoeixSTkJqTJFkIUVglosV//P2C/VwLg+9moGyx/P+WH2onDYukEOL5CCEuF0LBDfnTeL0gVA==
+"@azure/abort-controller@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/abort-controller/-/abort-controller-1.0.0.tgz#75798c58fb486db20050c3ca00c5f2d7232f921a"
+  integrity sha512-U4RM+AuCxlwq1GDP+VSswfzxvsmQ2hUAAhii2Em2xf0e00/6CsZAoQnQCxhvLDe39pebjivobU29LioN9x+DJQ==
   dependencies:
     tslib "^1.9.3"
 
-"@azure/core-asynciterator-polyfill@1.0.0-preview.1":
-  version "1.0.0-preview.1"
-  resolved "https://registry.yarnpkg.com/@azure/core-asynciterator-polyfill/-/core-asynciterator-polyfill-1.0.0-preview.1.tgz#ad7c726cfd73c946dbfbc3e485338ccf678fc75a"
-  integrity sha512-hMp0y+j/odkAyTa5TYewn4hUlFdEe3sR9uTd2Oq+se61RtuDsqM7UWrNNlyylPyjIENSZHJVWN7jte/jvvMN2Q==
+"@azure/core-asynciterator-polyfill@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/core-asynciterator-polyfill/-/core-asynciterator-polyfill-1.0.0.tgz#dcccebb88406e5c76e0e1d52e8cc4c43a68b3ee7"
+  integrity sha512-kmv8CGrPfN9SwMwrkiBK9VTQYxdFQEGe0BmQk+M8io56P9KNzpAxcWE/1fxJj7uouwN4kXF0BHW8DNlgx+wtCg==
 
-"@azure/core-auth@1.0.0-preview.4":
-  version "1.0.0-preview.4"
-  resolved "https://registry.yarnpkg.com/@azure/core-auth/-/core-auth-1.0.0-preview.4.tgz#8a25bfdde772a338f9e0344668ea50bdfb213cec"
-  integrity sha512-RQUIQ8En0n3u8a7sLzcgkJlGp/NDEX7q4Mj2DNTe9GdMIPmKKckwzACjlQ1FdDSOkxxMS3HmTZE+Js+8CyRj1w==
+"@azure/core-auth@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/core-auth/-/core-auth-1.0.0.tgz#e1012ec8919abb88baac6365892dc7d485b02115"
+  integrity sha512-DcXqxt0O0HDhYTcrN16e/hJutFkFTM8fQq6bJbHuDh5AUbDUKFrF64hj5RXATukThOszGFrR1MWJOGZPSo7fiA==
   dependencies:
-    "@azure/abort-controller" "1.0.0-preview.2"
+    "@azure/abort-controller" "^1.0.0"
     "@azure/core-tracing" "1.0.0-preview.5"
     tslib "^1.9.3"
 
-"@azure/core-http@1.0.0-preview.6":
-  version "1.0.0-preview.6"
-  resolved "https://registry.yarnpkg.com/@azure/core-http/-/core-http-1.0.0-preview.6.tgz#ce77f7fd1f07b079c1101ae861e5ecf7ce332c2c"
-  integrity sha512-DoSAphAlzIFRZXvVxNtZYAWPpcT85GmYCKheDgF12cr/EDIlfH6g9+el6b+Knm8Cx4HSNlEbja8dWK1786jFKQ==
+"@azure/core-http@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/core-http/-/core-http-1.0.0.tgz#d599cd48034916b84babec0478d357a30f0a92e2"
+  integrity sha512-vUVrALCoxY0gRfGWbEdiaFGK7qJMV/ZjZucN+LWZZGy/NdP5Iv6nVrxeb7YYIhPDsmcRvABYHrZUt01TB/8aAQ==
   dependencies:
-    "@azure/abort-controller" "1.0.0-preview.2"
-    "@azure/core-auth" "1.0.0-preview.4"
+    "@azure/abort-controller" "^1.0.0"
+    "@azure/core-auth" "^1.0.0"
     "@azure/core-tracing" "1.0.0-preview.5"
-    "@azure/logger" "1.0.0-preview.1"
+    "@azure/logger" "^1.0.0"
     "@types/node-fetch" "^2.5.0"
     "@types/tunnel" "^0.0.1"
     form-data "^2.5.0"
@@ -43,12 +43,22 @@
     uuid "^3.3.2"
     xml2js "^0.4.19"
 
-"@azure/core-paging@1.0.0-preview.2":
-  version "1.0.0-preview.2"
-  resolved "https://registry.yarnpkg.com/@azure/core-paging/-/core-paging-1.0.0-preview.2.tgz#a555bd6df3fdae9fb35ab704f157ef73a1e17b10"
-  integrity sha512-D0oiOmg82AnhTT3xkIyTpEhCesHtlpV2rTVVlCQmQPbfzAWh8eBZp1QAgNQcBdF6uXZrp69znpXSnICmtfH23Q==
+"@azure/core-lro@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/core-lro/-/core-lro-1.0.0.tgz#9837398e03aa04b5b0b09158f4338861348dcce4"
+  integrity sha512-l4abIb8S9qmlv3bJkonLvgGSVQcSXq5jByA7Z28GRGJaQN/mSFal9YQOuLvVag+JXQJsoftuxJFrZiggF2TwOg==
   dependencies:
-    "@azure/core-asynciterator-polyfill" "1.0.0-preview.1"
+    "@azure/abort-controller" "^1.0.0"
+    "@azure/core-http" "^1.0.0"
+    events "^3.0.0"
+    tslib "^1.9.3"
+
+"@azure/core-paging@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/core-paging/-/core-paging-1.0.0.tgz#3aa3855582154260326feea97f9f8322cbfe56d9"
+  integrity sha512-CzaT7LwxU97PZ+/Pn7uAbNGXY2mJ/3b56kmLsZzbR9stfrNfzlILxR94WHG/D1jZEQOk4lUNiaqJ2zP7nSGJhA==
+  dependencies:
+    "@azure/core-asynciterator-polyfill" "^1.0.0"
 
 "@azure/core-tracing@1.0.0-preview.5":
   version "1.0.0-preview.5"
@@ -58,22 +68,24 @@
     "@opencensus/web-types" "0.0.7"
     tslib "^1.9.3"
 
-"@azure/logger@1.0.0-preview.1":
-  version "1.0.0-preview.1"
-  resolved "https://registry.yarnpkg.com/@azure/logger/-/logger-1.0.0-preview.1.tgz#9be1dfad27f1f868301443c51986d4069a99bb9f"
-  integrity sha512-IZqcABYFnlA4blARodptCPeoOp7d9nNTvnQ3a7nf9THDPufz7nzzX6fVqi3OsLcs3+ip7La82OghVhjwiue8fA==
+"@azure/logger@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/logger/-/logger-1.0.0.tgz#48b371dfb34288c8797e5c104f6c4fb45bf1772c"
+  integrity sha512-g2qLDgvmhyIxR3JVS8N67CyIOeFRKQlX/llxYJQr1OSGQqM3HTpVP8MjmjcEKbL/OIt2N9C9UFaNQuKOw1laOA==
   dependencies:
     tslib "^1.9.3"
 
-"@azure/storage-blob@12.0.0-preview.5":
-  version "12.0.0-preview.5"
-  resolved "https://registry.yarnpkg.com/@azure/storage-blob/-/storage-blob-12.0.0-preview.5.tgz#46dbe0ed3f70ef3f48164388244dc1474fbb5ebf"
-  integrity sha512-fC4ezFYuN21ZjHIi/fpAaG0UQTDSDNoTb2l66RRmGPJ7Yf1J2VOQAi8b1KTlicQ/6XhGhBwKxJaIjt0bGWD6BQ==
+"@azure/storage-blob@12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/storage-blob/-/storage-blob-12.0.0.tgz#b52a1b4bffc6957786009e552dfa00b703a5e3b4"
+  integrity sha512-kYR9uqbLLR8WSigtMlF3x0xa3TlDOb7p2GEPCEW1OyiXEImL0z9Iwws1o1HJuD/WidkczNXpRPjtMPyq4CYe1w==
   dependencies:
-    "@azure/abort-controller" "1.0.0-preview.2"
-    "@azure/core-http" "1.0.0-preview.6"
-    "@azure/core-paging" "1.0.0-preview.2"
+    "@azure/abort-controller" "^1.0.0"
+    "@azure/core-http" "^1.0.0"
+    "@azure/core-lro" "^1.0.0"
+    "@azure/core-paging" "^1.0.0"
     "@azure/core-tracing" "1.0.0-preview.5"
+    "@azure/logger" "^1.0.0"
     events "^3.0.0"
     tslib "^1.9.3"
 
