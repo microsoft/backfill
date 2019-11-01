@@ -10,7 +10,7 @@ import {
 } from "./commandRunner";
 import { IHasher, Hasher } from "backfill-hasher";
 
-export { createConfig } from "backfill-config";
+export { createDefaultConfig } from "backfill-config";
 
 import { initializeWatcher, closeWatcher } from "./audit";
 
@@ -143,7 +143,7 @@ export async function main(): Promise<void> {
       await closeWatcher();
     }
   } catch (err) {
-    logger.error(err.message || err);
+    logger.error(err);
     process.exit(1);
   }
 }
