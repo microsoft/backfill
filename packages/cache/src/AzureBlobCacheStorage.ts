@@ -1,9 +1,6 @@
 import { BlobServiceClient } from "@azure/storage-blob";
-import * as fs from "fs-extra";
 import * as tar from "tar";
-import * as path from "path";
 
-import { logger } from "backfill-logger";
 import {
   AzureBlobCacheStorageOptions,
   outputFolderAsArray
@@ -34,68 +31,44 @@ function createBlobClient(
 }
 
 export class AzureBlobCacheStorage extends CacheStorage {
-  constructor(
-    private options: AzureBlobCacheStorageOptions,
-    private internalCacheFolder: string
-  ) {
+  constructor(private options: AzureBlobCacheStorageOptions) {
     super();
   }
 
-  protected async _fetch(hash: string): Promise<string | undefined> {
-    const temporaryBlobOutputFolder = path.join(
-      this.internalCacheFolder,
-      "azure-blob",
-      hash
-    );
+  protected async _fetch(hash: string): Promise<boolean> {
+    try {
+      const blobClient = createBlobClient(
+        this.options.connectionString,
+        this.options.container,
+        hash
+      );
 
-    if (!fs.existsSync(temporaryBlobOutputFolder)) {
-      try {
-        const blobClient = createBlobClient(
-          this.options.connectionString,
-          this.options.container,
-          hash
-        );
+      const response = await blobClient.download(0);
 
-        logger.profile("cache:azure:download");
+      const blobReadableStream = response.readableStreamBody;
+      if (!blobReadableStream) {
+        throw new Error("Unable to fetch blob.");
+      }
 
-        const response = await blobClient.download(0);
+      const tarWritableStream = tar.extract({});
 
-        const blobReadableStream = response.readableStreamBody;
-        if (!blobReadableStream) {
-          throw new Error("Unable to fetch blob.");
-        }
+      blobReadableStream.pipe(tarWritableStream);
 
-        logger.profile("cache:azure:download");
+      const blobPromise = new Promise((resolve, reject) => {
+        blobReadableStream.on("end", () => resolve());
+        blobReadableStream.on("error", error => reject(error));
+      });
 
-        fs.mkdirpSync(temporaryBlobOutputFolder);
+      await blobPromise;
 
-        const tarWritableStream = tar.extract({
-          cwd: temporaryBlobOutputFolder
-        });
-
-        logger.profile("cache:azure:extract-to-temp");
-        blobReadableStream.pipe(tarWritableStream);
-
-        const blobPromise = new Promise((resolve, reject) => {
-          blobReadableStream.on("end", () => resolve());
-          blobReadableStream.on("error", error => reject(error));
-        });
-
-        await blobPromise;
-
-        logger.profile("cache:azure:extract-to-temp");
-      } catch (error) {
-        fs.removeSync(temporaryBlobOutputFolder);
-
-        if (error && error.statusCode === 404) {
-          return;
-        } else {
-          throw new Error(error);
-        }
+      return true;
+    } catch (error) {
+      if (error && error.statusCode === 404) {
+        return false;
+      } else {
+        throw new Error(error);
       }
     }
-
-    return temporaryBlobOutputFolder;
   }
 
   protected async _put(

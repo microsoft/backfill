@@ -30,10 +30,7 @@ export function getCacheStorageProvider(
       internalCacheFolder
     );
   } else if (cacheStorageConfig.provider === "azure-blob") {
-    cacheStorage = new AzureBlobCacheStorage(
-      cacheStorageConfig.options,
-      internalCacheFolder
-    );
+    cacheStorage = new AzureBlobCacheStorage(cacheStorageConfig.options);
   } else {
     cacheStorage = new LocalCacheStorage(internalCacheFolder);
   }

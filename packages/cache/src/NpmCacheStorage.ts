@@ -2,8 +2,7 @@ import * as execa from "execa";
 import * as fs from "fs-extra";
 import * as path from "path";
 
-import { NpmCacheStorageOptions } from "backfill-config";
-import { outputFolderAsArray } from "backfill-config";
+import { NpmCacheStorageOptions, outputFolderAsArray } from "backfill-config";
 
 import { CacheStorage } from "./CacheStorage";
 
@@ -15,7 +14,10 @@ export class NpmCacheStorage extends CacheStorage {
     super();
   }
 
-  protected async _fetch(hash: string): Promise<string> {
+  protected async _fetch(
+    hash: string,
+    outputFolder: string | string[]
+  ): Promise<boolean> {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
     const temporaryNpmOutputFolder = path.join(
@@ -56,11 +58,25 @@ export class NpmCacheStorage extends CacheStorage {
       } catch (error) {
         fs.removeSync(temporaryNpmOutputFolder);
 
-        throw new Error(error);
+        if (error.stderr.toString().indexOf("ETARGET") > -1) {
+          return false;
+        } else {
+          throw new Error(error);
+        }
       }
     }
 
-    return packageFolderInTemporaryFolder;
+    await Promise.all(
+      outputFolderAsArray(outputFolder).map(async folder => {
+        await fs.mkdirp(folder);
+        await fs.copy(
+          path.join(packageFolderInTemporaryFolder, folder),
+          folder
+        );
+      })
+    );
+
+    return true;
   }
 
   protected async _put(hash: string, outputFolder: string | string[]) {
