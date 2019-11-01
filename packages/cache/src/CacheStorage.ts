@@ -15,27 +15,11 @@ export abstract class CacheStorage implements ICacheStorage {
   ): Promise<Boolean> {
     logger.profile("cache:fetch");
 
-    const localCacheFolder = await this._fetch(hash);
-
-    if (!localCacheFolder) {
-      logger.setTime("fetchTime", "cache:fetch");
-      logger.setHit(false);
-      return false;
-    }
-
-    logger.profile("cache:fetch:copy-to-outputfolder");
-    await Promise.all(
-      outputFolderAsArray(outputFolder).map(async folder => {
-        await fs.mkdirp(folder);
-        await fs.copy(path.join(localCacheFolder, folder), folder);
-      })
-    );
-    logger.profile("cache:fetch:copy-to-outputfolder");
-
-    logger.setHit(true);
+    const result = await this._fetch(hash, outputFolder);
     logger.setTime("fetchTime", "cache:fetch");
 
-    return true;
+    logger.setHit(result);
+    return result;
   }
 
   public async put(
@@ -57,7 +41,10 @@ export abstract class CacheStorage implements ICacheStorage {
     logger.setTime("putTime", "cache:put");
   }
 
-  protected abstract async _fetch(hash: string): Promise<string | undefined>;
+  protected abstract async _fetch(
+    hash: string,
+    outputFolder: string | string[]
+  ): Promise<boolean>;
   protected abstract async _put(
     hash: string,
     outputFolder: string | string[]
