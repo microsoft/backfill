@@ -1,5 +1,4 @@
 import * as fs from "fs-extra";
-import * as path from "path";
 import { logger } from "backfill-logger";
 import { outputFolderAsArray } from "backfill-config";
 
@@ -28,16 +27,19 @@ export abstract class CacheStorage implements ICacheStorage {
   ): Promise<void> {
     logger.profile("cache:put");
 
-    outputFolderAsArray(outputFolder).forEach(folder => {
-      if (!fs.pathExistsSync(folder)) {
-        const fullFolderPath = path.join(process.cwd(), folder);
-        throw new Error(
-          `backfill is trying to cache "${fullFolderPath}", but the folder does not exist.`
-        );
-      }
-    });
+    const filteredOutputFolders = outputFolderAsArray(outputFolder).filter(
+      folder => fs.pathExistsSync(folder)
+    );
 
-    await this._put(hash, outputFolder);
+    if (filteredOutputFolders.length === 0) {
+      throw new Error(
+        `Couldn't find a folder on disk to cache. Searched for these folders: ${outputFolderAsArray(
+          outputFolder
+        ).join(", ")}.`
+      );
+    }
+
+    await this._put(hash, filteredOutputFolders);
     logger.setTime("putTime", "cache:put");
   }
 

@@ -26,8 +26,14 @@ export class LocalCacheStorage extends CacheStorage {
 
     await Promise.all(
       outputFolderAsArray(outputFolder).map(async folder => {
+        const locationInCache = path.join(localCacheFolder, folder);
+
+        if (!fs.pathExistsSync(locationInCache)) {
+          return;
+        }
+
         await fs.mkdirp(folder);
-        await fs.copy(path.join(localCacheFolder, folder), folder);
+        await fs.copy(locationInCache, folder);
       })
     );
 
