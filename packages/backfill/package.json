@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "2.0.4",
+  "version": "2.0.5",
   "main": "lib/index.js",
   "bin": {
     "backfill": "./bin/backfill.js"
@@ -21,11 +21,11 @@
   },
   "dependencies": {
     "anymatch": "^3.0.3",
-    "backfill-cache": "^2.0.4",
+    "backfill-cache": "^2.0.5",
     "backfill-config": "^2.0.4",
     "backfill-hasher": "^2.0.4",
     "backfill-logger": "^2.0.3",
-    "backfill-utils-dotenv": "^2.0.3",
+    "backfill-utils-dotenv": "^2.0.5",
     "chokidar": "^3.2.1",
     "execa": "^3.1.0",
     "fs-extra": "^8.1.0",
