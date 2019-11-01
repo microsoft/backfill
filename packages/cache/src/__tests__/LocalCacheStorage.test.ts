@@ -180,7 +180,7 @@ describe("LocalCacheStorage", () => {
         hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
         outputFolder: "lib",
         expectSuccess: false,
-        errorMessage: "backfill is trying to cache"
+        errorMessage: "Couldn't find a folder on disk to cache"
       });
     });
   });
