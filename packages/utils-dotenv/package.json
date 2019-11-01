@@ -20,7 +20,7 @@
     "find-up": "^4.0.0"
   },
   "devDependencies": {
-    "@types/dotenv": "^6.1.1",
+    "@types/dotenv": "^8.2.0",
     "backfill-utils-tsconfig": "^2.0.3",
     "typescript": "3.6.4"
   }
