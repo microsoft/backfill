@@ -27,11 +27,13 @@ export async function backfill(
     cacheStorageConfig,
     outputFolder,
     name,
+    mode,
     logFolder,
     producePerformanceLogs
   } = config;
 
   logger.setName(name);
+  logger.setMode(mode);
   logger.setCacheProvider(cacheStorageConfig.provider);
 
   const packageHash = await hasher.createPackageHash();
@@ -46,7 +48,9 @@ export async function backfill(
     try {
       await cacheStorage.put(packageHash, outputFolder);
     } catch (err) {
-      logger.error("Failed to persist the cache:\n\n", err.message);
+      logger.error(
+        `Failed to persist the cache with the following error:\n\n${err}`
+      );
     }
   }
 
@@ -91,27 +95,11 @@ export async function main(): Promise<void> {
         type: "boolean"
       }).argv;
 
-    if (mode !== "READ_WRITE") {
-      logger.info(`Running in ${mode} mode.`);
-    } else {
-      logger.verbose(`Running in ${mode} mode.`);
-    }
-
     const buildCommand = createBuildCommand(
       argv["_"],
       clearOutputFolder,
       outputFolder
     );
-
-    if (mode === "PASS") {
-      try {
-        await buildCommand();
-      } catch (err) {
-        throw new Error("Command failed");
-      }
-
-      return;
-    }
 
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
