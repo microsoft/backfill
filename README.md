@@ -102,7 +102,8 @@ The default configuration object is:
   name: "[name-of-package]",
   outputFolder: "lib",
   packageRoot: "path/to/package",
-  producePerformanceLogs: false
+  producePerformanceLogs: false,
+  validateOutput: false
 }
 ```
 
@@ -129,6 +130,7 @@ export type Config = {
   packageRoot: string;
   performanceReportName?: string;
   producePerformanceLogs: boolean;
+  validateOutput: boolean;
 };
 ```
 
