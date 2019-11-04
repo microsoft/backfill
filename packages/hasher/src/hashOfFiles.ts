@@ -9,11 +9,14 @@ const newline = /\r\n|\r|\n/g;
 const LF = "\n";
 
 export async function generateHashOfFiles(
-  packageRoot: string
+  packageRoot: string,
+  glob?: string[]
 ): Promise<string> {
-  const { hashGlobs } = createConfig(packageRoot);
+  if (!glob) {
+    glob = createConfig(packageRoot).hashGlobs;
+  }
 
-  const files = await fg(hashGlobs, {
+  const files = await fg(glob, {
     cwd: packageRoot,
     onlyFiles: false,
     objectMode: true

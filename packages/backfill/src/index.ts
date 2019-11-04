@@ -29,29 +29,71 @@ export async function backfill(
     name,
     mode,
     logFolder,
-    producePerformanceLogs
+    producePerformanceLogs,
+    validateOutput
   } = config;
 
   logger.setName(name);
   logger.setMode(mode);
   logger.setCacheProvider(cacheStorageConfig.provider);
 
-  const packageHash = await hasher.createPackageHash();
-
-  if (!(await cacheStorage.fetch(packageHash, outputFolder))) {
+  const createPackageHash = async () => await hasher.createPackageHash();
+  const fetch = async (hash: string) =>
+    await cacheStorage.fetch(hash, outputFolder);
+  const run = async () => {
     try {
       await buildCommand();
     } catch (err) {
       throw new Error(`Command failed with the following error:\n\n${err}`);
     }
-
+  };
+  const put = async (hash: string) => {
     try {
-      await cacheStorage.put(packageHash, outputFolder);
+      await cacheStorage.put(hash, outputFolder);
     } catch (err) {
       logger.error(
         `Failed to persist the cache with the following error:\n\n${err}`
       );
     }
+  };
+
+  switch (mode) {
+    case "READ_WRITE": {
+      const hash = await createPackageHash();
+
+      if (!(await fetch(hash))) {
+        await run();
+        await put(hash);
+      }
+
+      break;
+    }
+    case "READ_ONLY": {
+      const hash = await createPackageHash();
+
+      if (!(await fetch(hash))) {
+        await run();
+      }
+
+      break;
+    }
+    case "WRITE_ONLY": {
+      const hash = await createPackageHash();
+
+      await run();
+      await put(hash);
+
+      break;
+    }
+    case "PASS": {
+      await run();
+      break;
+    }
+  }
+
+  if (validateOutput) {
+    const hashOfOutput = await hasher.hashOfOutput();
+    logger.setHashOfOutput(hashOfOutput);
   }
 
   if (producePerformanceLogs) {
@@ -69,7 +111,6 @@ export async function main(): Promise<void> {
       internalCacheFolder,
       logFolder,
       logLevel,
-      mode,
       outputFolder,
       packageRoot,
       performanceReportName
@@ -103,11 +144,13 @@ export async function main(): Promise<void> {
 
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
-      internalCacheFolder,
-      argv["audit"] ? "PASS" : mode
+      internalCacheFolder
     );
 
-    const hasher = new Hasher({ packageRoot }, getRawBuildCommand());
+    const hasher = new Hasher(
+      { packageRoot, outputFolder },
+      getRawBuildCommand()
+    );
 
     if (argv["generate-performance-report"]) {
       await logger.generatePerformanceReport(logFolder, performanceReportName);

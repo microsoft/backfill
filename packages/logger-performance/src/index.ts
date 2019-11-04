@@ -9,12 +9,13 @@ type PerformanceReportData = {
   timestamp: number;
   name?: string;
   hash?: string;
-  mode?: BackfillModes;
   cacheProvider?: string;
   hit?: boolean;
   buildTime?: number;
   putTime?: number;
   fetchTime?: number;
+  mode?: BackfillModes;
+  hashOfOutput?: string;
 };
 
 type Times = "buildTime" | "putTime" | "fetchTime";
@@ -66,6 +67,11 @@ export const performanceLogger = {
     }
 
     performanceReportData["mode"] = mode;
+  },
+
+  setHashOfOutput(hash: string) {
+    logger.verbose(`Hash of output: ${hash}`);
+    performanceReportData["hashOfOutput"] = hash;
   },
 
   async generatePerformanceReport(
