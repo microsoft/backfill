@@ -112,8 +112,7 @@ export async function main(): Promise<void> {
       logFolder,
       logLevel,
       outputFolder,
-      packageRoot,
-      performanceReportName
+      packageRoot
     } = config;
 
     if (logLevel) {
@@ -127,10 +126,6 @@ export async function main(): Promise<void> {
       .usage(helpString)
       .alias("h", "help")
       .version(false)
-      .option("generate-performance-report", {
-        description: "Generate performance report",
-        type: "boolean"
-      })
       .option("audit", {
         description: "Compare files changed with those cached",
         type: "boolean"
@@ -151,12 +146,6 @@ export async function main(): Promise<void> {
       { packageRoot, outputFolder },
       getRawBuildCommand()
     );
-
-    if (argv["generate-performance-report"]) {
-      await logger.generatePerformanceReport(logFolder, performanceReportName);
-
-      return;
-    }
 
     if (argv["audit"]) {
       initializeWatcher(

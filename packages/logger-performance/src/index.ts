@@ -1,4 +1,3 @@
-import { parse as json2csv } from "json2csv";
 import * as fs from "fs-extra";
 import * as path from "path";
 
@@ -25,9 +24,7 @@ const performanceReportData: PerformanceReportData = {
 };
 
 function createFileName() {
-  return `perf-${performanceReportData.hash || ""}-${
-    performanceReportData.timestamp
-  }.csv`;
+  return `perf-${performanceReportData.name}-${performanceReportData.timestamp}.json`;
 }
 
 export const performanceLogger = {
@@ -74,79 +71,10 @@ export const performanceLogger = {
     performanceReportData["hashOfOutput"] = hash;
   },
 
-  async generatePerformanceReport(
-    logFolder: string,
-    performanceReportName?: string
-  ) {
-    var endOfLine = require("os").EOL;
-
-    return fs
-      .readdir(logFolder)
-      .then(files => {
-        if (!(files instanceof Array)) {
-          throw new Error(
-            "Could not read performance logs. No report generated."
-          );
-        }
-
-        return files
-          .filter(file => path.extname(file) === ".csv")
-          .map(file => fs.readFile(path.join(logFolder, file), "utf8"));
-      })
-      .then(contents => Promise.all(contents))
-      .then(contents => {
-        if (contents.length === 0) {
-          throw new Error("Found no performance logs. No report generated.");
-        }
-
-        fs.mkdirpSync(path.join(logFolder, "reports"));
-
-        const filepath = path.join(
-          logFolder,
-          "reports",
-          `perf-${performanceReportName || Date.now()}.csv`
-        );
-
-        const data = contents.sort().join(endOfLine);
-
-        return fs
-          .outputFile(filepath, data)
-          .then(() =>
-            logger.info(`Backfill Performance Report created: ${filepath}`)
-          );
-      })
-      .then(() => {
-        // Remove individual performance logs
-        fs.readdirSync(logFolder).forEach(file => {
-          if (path.basename(file).match(/perf-.*.csv/)) {
-            fs.removeSync(path.join(logFolder, file));
-          }
-        });
-      })
-      .catch(logger.error);
-  },
-
   async toFile(logFolder: string) {
-    const fields = [
-      "timestamp",
-      "name",
-      "hash",
-      "cacheProvider",
-      "hit",
-      "buildTime",
-      "putTime",
-      "fetchTime"
-    ];
-    const opts = { fields, header: false };
+    const filepath = path.join(logFolder, createFileName());
+    await fs.outputJson(filepath, performanceReportData, { spaces: 2 });
 
-    try {
-      const csv = json2csv(performanceReportData, opts);
-      const filepath = path.join(logFolder, createFileName());
-
-      await fs.outputFile(filepath, csv);
-      logger.silly(`Performance Log created at ${filepath}`);
-    } catch (err) {
-      logger.error(err);
-    }
+    logger.silly(`Performance log created at ${filepath}`);
   }
 };
