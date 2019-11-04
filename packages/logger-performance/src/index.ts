@@ -2,12 +2,14 @@ import { parse as json2csv } from "json2csv";
 import * as fs from "fs-extra";
 import * as path from "path";
 
-import { logger } from "./genericLogger";
+import { logger } from "backfill-generic-logger";
+import { BackfillModes } from "backfill-config";
 
 type PerformanceReportData = {
   timestamp: number;
   name?: string;
   hash?: string;
+  mode?: BackfillModes;
   cacheProvider?: string;
   hit?: boolean;
   buildTime?: number;
@@ -27,7 +29,7 @@ function createFileName() {
   }.csv`;
 }
 
-export const performanceReportLogger = {
+export const performanceLogger = {
   setName(name: string) {
     logger.info(`Package name: ${name}`);
     performanceReportData["name"] = name;
@@ -54,6 +56,16 @@ export const performanceReportLogger = {
     if (ms) {
       performanceReportData[type] = ms;
     }
+  },
+
+  setMode(mode: BackfillModes) {
+    if (mode !== "READ_WRITE") {
+      logger.info(`Running in ${mode} mode.`);
+    } else {
+      logger.verbose(`Running in ${mode} mode.`);
+    }
+
+    performanceReportData["mode"] = mode;
   },
 
   async generatePerformanceReport(

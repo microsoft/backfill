@@ -1,33 +1,25 @@
 {
-  "name": "backfill-config",
-  "description": "Backfill Config",
+  "name": "backfill-generic-logger",
+  "description": "Backfill Generic Logger",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "2.0.4",
+  "version": "2.0.3",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
     "compile": "tsc -b",
     "prepare": "yarn compile",
-    "test": "jest",
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "backfill-generic-logger": "^2.0.3",
-    "find-up": "^4.0.0",
-    "fs-extra": "^8.1.0",
-    "pkg-dir": "^4.2.0"
+    "chalk": "^2.4.1"
   },
   "devDependencies": {
-    "@types/fs-extra": "^8.0.0",
-    "backfill-utils-test": "^2.0.4",
     "backfill-utils-tsconfig": "^2.0.3",
-    "jest": "^24.0.12",
-    "ts-jest": "^24.0.2",
     "typescript": "3.6.4"
   }
 }

@@ -2,7 +2,7 @@ import * as path from "path";
 import * as pkgDir from "pkg-dir";
 import * as findUp from "find-up";
 
-import { LogLevels } from "backfill-logger";
+import { LogLevels } from "backfill-generic-logger";
 
 import { CacheStorageConfig } from "./cacheConfig";
 import { getEnvConfig } from "./envConfig";

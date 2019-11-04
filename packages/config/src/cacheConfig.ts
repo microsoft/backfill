@@ -1,4 +1,4 @@
-import { logger } from "backfill-logger";
+import { logger } from "backfill-generic-logger";
 
 export type AzureBlobCacheStorageOptions = {
   connectionString: string;

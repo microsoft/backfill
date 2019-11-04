@@ -16,13 +16,10 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "chalk": "^2.4.1",
-    "fs-extra": "^8.1.0",
-    "json2csv": "^4.3.1"
+    "backfill-generic-logger": "*",
+    "backfill-performance-logger": "*"
   },
   "devDependencies": {
-    "@types/fs-extra": "^8.0.0",
-    "@types/json2csv": "^4.2.0",
     "backfill-utils-tsconfig": "^2.0.3",
     "typescript": "3.6.4"
   }
