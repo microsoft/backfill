@@ -1,5 +1,6 @@
 import * as fs from "fs-extra";
 import * as path from "path";
+import * as filenamify from "filenamify";
 
 import { logger } from "backfill-generic-logger";
 import { BackfillModes } from "backfill-config";
@@ -24,7 +25,9 @@ const performanceReportData: PerformanceReportData = {
 };
 
 function createFileName() {
-  return `perf-${performanceReportData.name}-${performanceReportData.timestamp}.json`;
+  return filenamify(
+    `perf-${performanceReportData.name}-${performanceReportData.timestamp}.json`
+  );
 }
 
 export const performanceLogger = {

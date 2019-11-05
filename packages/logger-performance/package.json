@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "backfill-generic-logger": "*",
+    "filenamify": "^4.1.0",
     "fs-extra": "^8.1.0"
   },
   "devDependencies": {
