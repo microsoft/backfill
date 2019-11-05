@@ -1,4 +1,4 @@
-import { logger } from "backfill-logger";
+import { logger } from "backfill-generic-logger";
 
 export type AzureBlobCacheStorageOptions = {
   connectionString: string;
@@ -45,8 +45,8 @@ export function getNpmConfigFromSerializedOptions(
       provider: "npm",
       options: { ...parsedOptions }
     };
-  } catch (e) {
-    logger.error(e.message);
+  } catch (error) {
+    logger.error(error);
     throw new Error("Invalid npm storage options");
   }
 }
@@ -68,8 +68,8 @@ export function getAzureBlobConfigFromSerializedOptions(
       provider: "azure-blob",
       options: { ...parsedOptions }
     };
-  } catch (e) {
-    logger.error(e.message);
+  } catch (error) {
+    logger.error(error);
     throw new Error("Invalid blob storage options");
   }
 }

@@ -33,7 +33,7 @@ describe("backfill", () => {
       clearOutputFolder,
       outputFolder
     );
-    const hasher = new Hasher({ packageRoot }, buildCommandRaw);
+    const hasher = new Hasher({ packageRoot, outputFolder }, buildCommandRaw);
 
     // Spy
     const spiedCacheStorage = spy(cacheStorage);

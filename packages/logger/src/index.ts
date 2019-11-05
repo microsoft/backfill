@@ -1,9 +1,13 @@
-import { logger as genericLogger } from "./genericLogger";
-import { performanceReportLogger } from "./performanceReportLogger";
+import { logger as genericLogger } from "backfill-generic-logger";
+import { performanceLogger } from "backfill-performance-logger";
 
-export { LogLevels, setLogLevel, isCorrectLogLevel } from "./genericLogger";
+export {
+  LogLevels,
+  setLogLevel,
+  isCorrectLogLevel
+} from "backfill-generic-logger";
 
 export const logger = {
   ...genericLogger,
-  ...performanceReportLogger
+  ...performanceLogger
 };

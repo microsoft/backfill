@@ -2,7 +2,7 @@ import * as path from "path";
 import * as pkgDir from "pkg-dir";
 import * as findUp from "find-up";
 
-import { LogLevels } from "backfill-logger";
+import { LogLevels } from "backfill-generic-logger";
 
 import { CacheStorageConfig } from "./cacheConfig";
 import { getEnvConfig } from "./envConfig";
@@ -34,6 +34,7 @@ export type Config = {
   packageRoot: string;
   performanceReportName?: string;
   producePerformanceLogs: boolean;
+  validateOutput: boolean;
 };
 
 export function outputFolderAsArray(outputFolder: string | string[]): string[] {
@@ -96,7 +97,8 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
     mode: "READ_WRITE",
     outputFolder,
     packageRoot,
-    producePerformanceLogs: false
+    producePerformanceLogs: false,
+    validateOutput: false
   };
 }
 

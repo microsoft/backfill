@@ -1,26 +1,15 @@
+import { CacheStorageConfig } from "backfill-config";
+
 import { ICacheStorage } from "./CacheStorage";
 import { AzureBlobCacheStorage } from "./AzureBlobCacheStorage";
 import { LocalCacheStorage } from "./LocalCacheStorage";
 import { NpmCacheStorage } from "./NpmCacheStorage";
 
-import { CacheStorageConfig, BackfillModes } from "backfill-config";
-
 export { ICacheStorage } from "./CacheStorage";
-
-function applyMode(cacheStorage: ICacheStorage, mode: BackfillModes) {
-  if (mode === "READ_ONLY" || mode === "PASS") {
-    cacheStorage.put = () => Promise.resolve();
-  }
-
-  if (mode === "WRITE_ONLY" || mode === "PASS") {
-    cacheStorage.fetch = () => Promise.resolve(false);
-  }
-}
 
 export function getCacheStorageProvider(
   cacheStorageConfig: CacheStorageConfig,
-  internalCacheFolder: string,
-  mode: BackfillModes = "READ_WRITE"
+  internalCacheFolder: string
 ): ICacheStorage {
   let cacheStorage: ICacheStorage;
 
@@ -34,8 +23,6 @@ export function getCacheStorageProvider(
   } else {
     cacheStorage = new LocalCacheStorage(internalCacheFolder);
   }
-
-  applyMode(cacheStorage, mode);
 
   return cacheStorage;
 }

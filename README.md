@@ -102,7 +102,8 @@ The default configuration object is:
   name: "[name-of-package]",
   outputFolder: "lib",
   packageRoot: "path/to/package",
-  producePerformanceLogs: false
+  producePerformanceLogs: false,
+  validateOutput: false
 }
 ```
 
@@ -129,6 +130,7 @@ export type Config = {
   packageRoot: string;
   performanceReportName?: string;
   producePerformanceLogs: boolean;
+  validateOutput: boolean;
 };
 ```
 
@@ -204,9 +206,7 @@ BACKFILL_CACHE_PROVIDER_OPTIONS='{"npmPackageName":"...","registryUrl":"..."}'
 
 You can optionally output performance logs to disk. If turned on, backfill will
 output a log file after each run with performance metrics. Each log file is
-formatted as a csv file, containing only one row. You can run
-`backfill --generate-performance-report` to combine all logs in the log folder
-into one file. You can turn performance logging by setting
+formatted as a JSON file. You can turn performance logging by setting
 `producePerformanceLogs: true` in `backfill.config.js`.
 
 ## Contributing

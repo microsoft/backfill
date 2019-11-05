@@ -27,27 +27,73 @@ export async function backfill(
     cacheStorageConfig,
     outputFolder,
     name,
+    mode,
     logFolder,
-    producePerformanceLogs
+    producePerformanceLogs,
+    validateOutput
   } = config;
 
   logger.setName(name);
+  logger.setMode(mode);
   logger.setCacheProvider(cacheStorageConfig.provider);
 
-  const packageHash = await hasher.createPackageHash();
-
-  if (!(await cacheStorage.fetch(packageHash, outputFolder))) {
+  const createPackageHash = async () => await hasher.createPackageHash();
+  const fetch = async (hash: string) =>
+    await cacheStorage.fetch(hash, outputFolder);
+  const run = async () => {
     try {
       await buildCommand();
     } catch (err) {
       throw new Error(`Command failed with the following error:\n\n${err}`);
     }
-
+  };
+  const put = async (hash: string) => {
     try {
-      await cacheStorage.put(packageHash, outputFolder);
+      await cacheStorage.put(hash, outputFolder);
     } catch (err) {
-      logger.error("Failed to persist the cache:\n\n", err.message);
+      logger.error(
+        `Failed to persist the cache with the following error:\n\n${err}`
+      );
     }
+  };
+
+  switch (mode) {
+    case "READ_WRITE": {
+      const hash = await createPackageHash();
+
+      if (!(await fetch(hash))) {
+        await run();
+        await put(hash);
+      }
+
+      break;
+    }
+    case "READ_ONLY": {
+      const hash = await createPackageHash();
+
+      if (!(await fetch(hash))) {
+        await run();
+      }
+
+      break;
+    }
+    case "WRITE_ONLY": {
+      const hash = await createPackageHash();
+
+      await run();
+      await put(hash);
+
+      break;
+    }
+    case "PASS": {
+      await run();
+      break;
+    }
+  }
+
+  if (validateOutput) {
+    const hashOfOutput = await hasher.hashOfOutput();
+    logger.setHashOfOutput(hashOfOutput);
   }
 
   if (producePerformanceLogs) {
@@ -65,10 +111,8 @@ export async function main(): Promise<void> {
       internalCacheFolder,
       logFolder,
       logLevel,
-      mode,
       outputFolder,
-      packageRoot,
-      performanceReportName
+      packageRoot
     } = config;
 
     if (logLevel) {
@@ -82,20 +126,10 @@ export async function main(): Promise<void> {
       .usage(helpString)
       .alias("h", "help")
       .version(false)
-      .option("generate-performance-report", {
-        description: "Generate performance report",
-        type: "boolean"
-      })
       .option("audit", {
         description: "Compare files changed with those cached",
         type: "boolean"
       }).argv;
-
-    if (mode !== "READ_WRITE") {
-      logger.info(`Running in ${mode} mode.`);
-    } else {
-      logger.verbose(`Running in ${mode} mode.`);
-    }
 
     const buildCommand = createBuildCommand(
       argv["_"],
@@ -103,29 +137,15 @@ export async function main(): Promise<void> {
       outputFolder
     );
 
-    if (mode === "PASS") {
-      try {
-        await buildCommand();
-      } catch (err) {
-        throw new Error("Command failed");
-      }
-
-      return;
-    }
-
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
-      internalCacheFolder,
-      argv["audit"] ? "PASS" : mode
+      internalCacheFolder
     );
 
-    const hasher = new Hasher({ packageRoot }, getRawBuildCommand());
-
-    if (argv["generate-performance-report"]) {
-      await logger.generatePerformanceReport(logFolder, performanceReportName);
-
-      return;
-    }
+    const hasher = new Hasher(
+      { packageRoot, outputFolder },
+      getRawBuildCommand()
+    );
 
     if (argv["audit"]) {
       initializeWatcher(

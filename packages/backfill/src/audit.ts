@@ -106,5 +106,6 @@ export async function closeWatcher() {
   } else {
     logger.info(noSideEffectString);
   }
+
   watcher.close();
 }

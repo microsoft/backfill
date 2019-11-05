@@ -2,22 +2,12 @@ import {
   getAzureBlobConfigFromSerializedOptions,
   getNpmConfigFromSerializedOptions
 } from "./cacheConfig";
-import { LogLevels, isCorrectLogLevel } from "backfill-logger";
+import { isCorrectLogLevel } from "backfill-generic-logger";
 
-import { CacheStorageConfig, BackfillModes, isCorrectMode } from "./index";
-
-export type ConfigEnv = {
-  cacheStorageConfig?: CacheStorageConfig;
-  internalCacheFolder?: string;
-  logFolder?: string;
-  logLevel?: LogLevels;
-  mode?: BackfillModes;
-  performanceReportName?: string;
-  producePerformanceLogs?: boolean;
-};
+import { isCorrectMode, Config } from "./index";
 
 export function getEnvConfig() {
-  const config: ConfigEnv = {};
+  const config: Partial<Config> = {};
 
   const cacheProvider = process.env["BACKFILL_CACHE_PROVIDER"];
   const serializedCacheProviderOptions =
@@ -74,6 +64,11 @@ export function getEnvConfig() {
     config["producePerformanceLogs"] = Boolean(
       producePerformanceLogs === "true"
     );
+  }
+
+  const validateOutput = process.env["BACKFILL_VALIDATE_OUTPUT"];
+  if (validateOutput) {
+    config["validateOutput"] = Boolean(validateOutput === "true");
   }
 
   return config;
