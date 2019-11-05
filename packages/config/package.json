@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "2.0.4",
+  "version": "2.0.6",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
@@ -17,14 +17,14 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "backfill-generic-logger": "^2.0.3",
+    "backfill-generic-logger": "^2.0.6",
     "find-up": "^4.0.0",
     "fs-extra": "^8.1.0",
     "pkg-dir": "^4.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.0",
-    "backfill-utils-test": "^2.0.4",
+    "backfill-utils-test": "^2.0.6",
     "backfill-utils-tsconfig": "^2.0.3",
     "jest": "^24.0.12",
     "ts-jest": "^24.0.2",
