@@ -1,5 +1,3 @@
-import * as path from "path";
-
 import { logger } from "backfill-logger";
 import { outputFolderAsArray } from "backfill-config";
 
@@ -105,8 +103,8 @@ export class Hasher implements IHasher {
   }
 
   public async hashOfOutput(): Promise<string> {
-    const outputFolderGlob = outputFolderAsArray(this.outputFolder).map(p =>
-      path.join(p, "**")
+    const outputFolderGlob = outputFolderAsArray(this.outputFolder).map(
+      p => `${p}/**`
     );
 
     return generateHashOfFiles(this.packageRoot, outputFolderGlob);
