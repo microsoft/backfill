@@ -12,7 +12,6 @@
   "scripts": {
     "build": "yarn compile",
     "compile": "tsc -b",
-    "prepare": "yarn compile",
     "test": "jest",
     "watch": "tsc -b -w"
   },
