@@ -7,7 +7,8 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "yarn update-project-references && lerna run --stream prepare",
+    "build": "lerna run --stream build",
+    "postinstall": "yarn update-project-references",
     "lerna": "lerna",
     "test": "lerna run test",
     "prettier": "prettier \"{.,**}/*.{tsx,ts,js,json,md,yaml}\" --write",
