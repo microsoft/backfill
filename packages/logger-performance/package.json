@@ -23,6 +23,6 @@
     "@types/fs-extra": "^8.0.0",
     "backfill-config": "^2.0.6",
     "backfill-utils-tsconfig": "^2.0.3",
-    "typescript": "3.7.2"
+    "typescript": "3.7.3"
   }
 }
