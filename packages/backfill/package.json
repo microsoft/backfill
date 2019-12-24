@@ -33,7 +33,7 @@
   "devDependencies": {
     "@types/fs-extra": "^8.0.0",
     "@types/jest": "^24.0.12",
-    "@types/node": "^12.11.1",
+    "@types/node": "^13.1.0",
     "@types/yargs": "^13.0.2",
     "backfill-utils-test": "^2.0.6",
     "backfill-utils-tsconfig": "^2.0.3",
