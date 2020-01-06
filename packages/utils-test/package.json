@@ -23,6 +23,6 @@
   "devDependencies": {
     "@types/fs-extra": "^8.0.0",
     "backfill-utils-tsconfig": "^2.0.3",
-    "typescript": "3.7.3"
+    "typescript": "3.7.4"
   }
 }
