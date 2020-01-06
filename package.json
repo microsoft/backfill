@@ -18,7 +18,7 @@
   "dependencies": {
     "lerna": "3.19.0",
     "prettier": "1.18.2",
-    "typescript": "3.7.3"
+    "typescript": "3.7.4"
   },
   "devDependencies": {
     "execa": "^3.1.0",
