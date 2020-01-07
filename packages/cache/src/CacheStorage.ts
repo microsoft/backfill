@@ -27,9 +27,9 @@ export abstract class CacheStorage implements ICacheStorage {
   ): Promise<void> {
     logger.profile("cache:put");
 
-    const filteredOutputFolders = outputFolderAsArray(outputFolder).filter(
-      folder => fs.pathExistsSync(folder)
-    );
+    const filteredOutputFolders = outputFolderAsArray(
+      outputFolder
+    ).filter(folder => fs.pathExistsSync(folder));
 
     if (filteredOutputFolders.length === 0) {
       throw new Error(
