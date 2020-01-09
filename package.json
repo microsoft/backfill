@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "execa": "^3.1.0",
-    "husky": "^3.0.4",
+    "husky": "^4.0.3",
     "lint-staged": "^9.2.5",
     "lodash.merge": "^4.6.2",
     "prettier-package-json": "^2.1.0",
