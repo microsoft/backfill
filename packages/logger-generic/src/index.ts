@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk = require("chalk");
 
 function logInternal(
   method: "info" | "warn" | "error",
