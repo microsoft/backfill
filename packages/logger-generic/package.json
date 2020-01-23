@@ -15,7 +15,7 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "chalk": "^2.4.1"
+    "chalk": "^3.0.0"
   },
   "devDependencies": {
     "backfill-utils-tsconfig": "^2.0.3",
