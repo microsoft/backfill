@@ -43,5 +43,8 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "resolutions": {
+    "**/cache-base/union-value/set-value": "^2.0.0"
   }
 }
