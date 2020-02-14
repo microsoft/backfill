@@ -100,7 +100,7 @@ The default configuration object is:
   logLevel: "info",
   mode: "READ_WRITE",
   name: "[name-of-package]",
-  outputGlob: ["lib"],
+  outputGlob: ["lib/**"],
   packageRoot: "path/to/package",
   producePerformanceLogs: false,
   validateOutput: false
