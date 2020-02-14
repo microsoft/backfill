@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "2.0.6",
+  "version": "3.0.0-alpha.0",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
@@ -15,8 +15,8 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "backfill-generic-logger": "^2.0.6",
-    "backfill-performance-logger": "^2.0.6"
+    "backfill-generic-logger": "^3.0.0-alpha.0",
+    "backfill-performance-logger": "^3.0.0-alpha.0"
   },
   "devDependencies": {
     "backfill-utils-tsconfig": "^2.0.3",
