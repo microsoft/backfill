@@ -1,4 +1,4 @@
-import { anyString, spy, verify, resetCalls } from "ts-mockito";
+import { anyString, anything, spy, verify, resetCalls } from "ts-mockito";
 
 import { setupFixture } from "backfill-utils-test";
 import { getCacheStorageProvider } from "backfill-cache";
@@ -16,9 +16,9 @@ describe("backfill", () => {
     const config = createConfig();
     const {
       cacheStorageConfig,
-      clearOutputFolder,
+      clearOutput,
       internalCacheFolder,
-      outputFolder,
+      outputGlob,
       packageRoot
     } = config;
 
@@ -30,10 +30,10 @@ describe("backfill", () => {
     const buildCommandRaw = "npm run compile";
     const buildCommand = createBuildCommand(
       [buildCommandRaw],
-      clearOutputFolder,
-      outputFolder
+      clearOutput,
+      outputGlob
     );
-    const hasher = new Hasher({ packageRoot, outputFolder }, buildCommandRaw);
+    const hasher = new Hasher({ packageRoot, outputGlob }, buildCommandRaw);
 
     // Spy
     const spiedCacheStorage = spy(cacheStorage);
@@ -46,8 +46,8 @@ describe("backfill", () => {
     // Assert
     verify(spiedHasher.createPackageHash()).once();
     expect(spiedBuildCommand).toHaveBeenCalled();
-    verify(spiedCacheStorage.fetch(anyString(), anyString())).once();
-    verify(spiedCacheStorage.put(anyString(), anyString())).once();
+    verify(spiedCacheStorage.fetch(anyString())).once();
+    verify(spiedCacheStorage.put(anyString(), anything())).once();
 
     resetCalls(spiedHasher);
     resetCalls(spiedCacheStorage);
@@ -59,7 +59,7 @@ describe("backfill", () => {
     // Assert
     verify(spiedHasher.createPackageHash()).once();
     expect(spiedBuildCommand).not.toHaveBeenCalled();
-    verify(spiedCacheStorage.fetch(anyString(), anyString())).once();
+    verify(spiedCacheStorage.fetch(anyString())).once();
     verify(spiedCacheStorage.put(anyString(), anyString())).never();
   });
 });

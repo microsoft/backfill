@@ -25,7 +25,7 @@ export async function backfill(
 ): Promise<void> {
   const {
     cacheStorageConfig,
-    outputFolder,
+    outputGlob,
     name,
     mode,
     logFolder,
@@ -38,8 +38,7 @@ export async function backfill(
   logger.setCacheProvider(cacheStorageConfig.provider);
 
   const createPackageHash = async () => await hasher.createPackageHash();
-  const fetch = async (hash: string) =>
-    await cacheStorage.fetch(hash, outputFolder);
+  const fetch = async (hash: string) => await cacheStorage.fetch(hash);
   const run = async () => {
     try {
       await buildCommand();
@@ -49,7 +48,7 @@ export async function backfill(
   };
   const put = async (hash: string) => {
     try {
-      await cacheStorage.put(hash, outputFolder);
+      await cacheStorage.put(hash, outputGlob);
     } catch (err) {
       logger.error(
         `Failed to persist the cache with the following error:\n\n${err}`
@@ -106,12 +105,12 @@ export async function main(): Promise<void> {
     const config = createConfig();
     const {
       cacheStorageConfig,
-      clearOutputFolder,
+      clearOutput,
       hashGlobs,
       internalCacheFolder,
       logFolder,
       logLevel,
-      outputFolder,
+      outputGlob,
       packageRoot
     } = config;
 
@@ -131,11 +130,7 @@ export async function main(): Promise<void> {
         type: "boolean"
       }).argv;
 
-    const buildCommand = createBuildCommand(
-      argv["_"],
-      clearOutputFolder,
-      outputFolder
-    );
+    const buildCommand = createBuildCommand(argv["_"], clearOutput, outputGlob);
 
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
@@ -143,7 +138,7 @@ export async function main(): Promise<void> {
     );
 
     const hasher = new Hasher(
-      { packageRoot, outputFolder },
+      { packageRoot, outputGlob },
       getRawBuildCommand()
     );
 
@@ -152,7 +147,7 @@ export async function main(): Promise<void> {
         packageRoot,
         internalCacheFolder,
         logFolder,
-        outputFolder,
+        outputGlob,
         hashGlobs
       );
     }

@@ -23,27 +23,19 @@ export type BackfillModes = keyof typeof modesObject;
 
 export type Config = {
   cacheStorageConfig: CacheStorageConfig;
-  clearOutputFolder: boolean;
+  clearOutput: boolean;
   hashGlobs: HashGlobs;
   internalCacheFolder: string;
   logFolder: string;
   logLevel: LogLevels;
   name: string;
   mode: BackfillModes;
-  outputFolder: string | string[];
+  outputGlob: string[];
   packageRoot: string;
   performanceReportName?: string;
   producePerformanceLogs: boolean;
   validateOutput: boolean;
 };
-
-export function outputFolderAsArray(outputFolder: string | string[]): string[] {
-  const outputFolders = Array.isArray(outputFolder)
-    ? outputFolder
-    : [outputFolder];
-
-  return outputFolders;
-}
 
 export function isCorrectMode(mode: string): mode is BackfillModes {
   return modesObject.hasOwnProperty(mode);
@@ -77,17 +69,17 @@ export function getSearchPaths(fromPath: string = process.cwd()) {
 export function createDefaultConfig(fromPath: string = process.cwd()): Config {
   const packageRoot = pkgDir.sync(fromPath) || fromPath;
   const defaultCacheFolder = path.join("node_modules", ".cache", "backfill");
-  const outputFolder = "lib";
+  const outputGlob = ["lib/**"];
 
   return {
     cacheStorageConfig: {
       provider: "local"
     },
-    clearOutputFolder: false,
+    clearOutput: false,
     hashGlobs: [
       "**/*",
       "!**/node_modules/**",
-      `!${outputFolder}/**`,
+      `!lib/**`,
       "!**/tsconfig.tsbuildinfo"
     ],
     internalCacheFolder: defaultCacheFolder,
@@ -95,7 +87,7 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
     logLevel: "info",
     name: getName(packageRoot),
     mode: "READ_WRITE",
-    outputFolder,
+    outputGlob,
     packageRoot,
     producePerformanceLogs: false,
     validateOutput: false

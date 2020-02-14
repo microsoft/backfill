@@ -3,7 +3,6 @@ import * as findUp from "find-up";
 import * as path from "path";
 import anymatch from "anymatch";
 import { logger } from "backfill-logger";
-import { outputFolderAsArray } from "backfill-config";
 
 let changedFilesOutsideScope: string[] = [];
 let changedFilesInsideScope: string[] = [];
@@ -35,7 +34,7 @@ export function initializeWatcher(
   packageRoot: string,
   internalCacheFolder: string,
   logFolder: string,
-  outputFolder: string | string[],
+  outputGlob: string[],
   hashGlobs: string[]
 ) {
   // Trying to find the git root and using it as an approximation of code boundary
@@ -47,7 +46,7 @@ export function initializeWatcher(
 
   logger.info("Running in AUDIT mode");
   logger.info(`[audit] Watching file changes in: ${repositoryRoot}`);
-  logger.info(`[audit] Backfill will cache folder: ${outputFolder}`);
+  logger.info(`[audit] Backfill will cache folder: ${outputGlob}`);
 
   // Define globs
   const ignoreGlobs = addGlobstars([
@@ -56,11 +55,6 @@ export function initializeWatcher(
     logFolder,
     internalCacheFolder
   ]);
-
-  const cacheFolderGlob = outputFolderAsArray(outputFolder).map(folder =>
-    path.posix.join("**", folder, "**")
-  );
-
   watcher = chokidar
     .watch(hashGlobs, {
       ignored: ignoreGlobs,
@@ -74,7 +68,12 @@ export function initializeWatcher(
       const logLine = `${filePath} (${event})`;
       logger.silly(`[audit] File change: ${logLine}`);
 
-      if (!anymatch(cacheFolderGlob, filePath)) {
+      if (
+        !anymatch(
+          outputGlob.map(glob => path.posix.join("**", glob)),
+          filePath
+        )
+      ) {
         changedFilesOutsideScope.push(logLine);
       } else {
         changedFilesInsideScope.push(logLine);

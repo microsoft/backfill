@@ -1,54 +1,42 @@
-import * as fs from "fs-extra";
 import { logger } from "backfill-logger";
-import { outputFolderAsArray } from "backfill-config";
+import * as fg from "fast-glob";
 
 export interface ICacheStorage {
-  fetch: (hash: string, outputFolder: string | string[]) => Promise<Boolean>;
-  put: (hash: string, outputFolder: string | string[]) => Promise<void>;
+  fetch: (hash: string) => Promise<Boolean>;
+  put: (hash: string, outputGlob: string[]) => Promise<void>;
 }
 
 export abstract class CacheStorage implements ICacheStorage {
-  public async fetch(
-    hash: string,
-    outputFolder: string | string[]
-  ): Promise<Boolean> {
+  public async fetch(hash: string): Promise<Boolean> {
     logger.profile("cache:fetch");
 
-    const result = await this._fetch(hash, outputFolder);
+    const result = await this._fetch(hash);
     logger.setTime("fetchTime", "cache:fetch");
 
     logger.setHit(result);
     return result;
   }
 
-  public async put(
-    hash: string,
-    outputFolder: string | string[]
-  ): Promise<void> {
+  public async put(hash: string, outputGlob: string[]): Promise<void> {
     logger.profile("cache:put");
 
-    const filteredOutputFolders = outputFolderAsArray(
-      outputFolder
-    ).filter(folder => fs.pathExistsSync(folder));
-
-    if (filteredOutputFolders.length === 0) {
+    const filesBeingCached = fg.sync(outputGlob);
+    if (filesBeingCached.length === 0) {
       throw new Error(
-        `Couldn't find a folder on disk to cache. Searched for these folders: ${outputFolderAsArray(
-          outputFolder
-        ).join(", ")}.`
+        `Couldn't find any file on disk matching the output glob (${outputGlob.join(
+          ", "
+        )})`
       );
     }
 
-    await this._put(hash, filteredOutputFolders);
+    await this._put(hash, outputGlob);
     logger.setTime("putTime", "cache:put");
   }
 
-  protected abstract async _fetch(
-    hash: string,
-    outputFolder: string | string[]
-  ): Promise<boolean>;
+  protected abstract async _fetch(hash: string): Promise<boolean>;
+
   protected abstract async _put(
     hash: string,
-    outputFolder: string | string[]
+    outputGlob: string[]
   ): Promise<void>;
 }
