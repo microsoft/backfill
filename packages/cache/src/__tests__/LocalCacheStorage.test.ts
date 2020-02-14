@@ -181,5 +181,35 @@ describe("LocalCacheStorage", () => {
           "Couldn't find any file on disk matching the output glob (lib/**, dist/**)"
       });
     });
+
+    it("will persist file matching glob in root folder", async () => {
+      await putInCache({
+        fixtureName: "basic",
+        hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
+        outputGlob: ["tsconfig.tsbuildinfo"],
+        filesToCache: ["tsconfig.tsbuildinfo"]
+      });
+    });
+
+    it("will not persist file excluded by a glob", async () => {
+      await putInCache({
+        fixtureName: "basic",
+        hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
+        expectSuccess: false,
+        outputGlob: ["lib/**", "!lib/qwerty"],
+        filesToCache: ["lib/qwerty"],
+        errorMessage:
+          "Couldn't find any file on disk matching the output glob (lib/**, !lib/qwerty)"
+      });
+    });
+
+    it("will persist file when others are excluded in the same folder", async () => {
+      await putInCache({
+        fixtureName: "basic",
+        hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
+        outputGlob: ["lib/**", "!lib/qwerty"],
+        filesToCache: ["lib/azerty"]
+      });
+    });
   });
 });
