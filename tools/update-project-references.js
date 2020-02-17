@@ -98,12 +98,10 @@ function updateTSReferences(workspaceInfo) {
 }
 
 const workspaceInfo = JSON.parse(
-  JSON.parse(
-    execa
-      .sync("yarn", ["workspaces", "info", "--json"])
-      .stdout.toString()
-      .trim()
-  ).data
+  execa
+    .sync("yarn", ["--silent", "workspaces", "info", "--json"])
+    .stdout.toString()
+    .trim()
 );
 
 updateTSReferences(workspaceInfo);
