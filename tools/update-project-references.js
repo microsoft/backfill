@@ -99,7 +99,7 @@ function updateTSReferences(workspaceInfo) {
 
 const workspaceInfo = JSON.parse(
   execa
-    .sync("yarn", ["--silent", "workspaces", "info", "--json"])
+    .sync("yarn", ["--silent", "workspaces", "info"])
     .stdout.toString()
     .trim()
 );
