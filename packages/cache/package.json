@@ -16,7 +16,7 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "@azure/storage-blob": "12.0.1",
+    "@azure/storage-blob": "12.1.0",
     "backfill-config": "^2.0.6",
     "backfill-logger": "^2.0.6",
     "execa": "^4.0.0",
