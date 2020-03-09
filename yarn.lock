@@ -84,10 +84,10 @@
   dependencies:
     tslib "^1.9.3"
 
-"@azure/storage-blob@12.0.1":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@azure/storage-blob/-/storage-blob-12.0.1.tgz#9478f62e475347b0bf5edd773826fd9f07e4784a"
-  integrity sha512-NxMpOnN2jmWXgCZJqlGLuN5axXpi379PmVuCXWX6WLDwoY/jSJ1WOwWbS9h0Lgs/Lnd7rPrIijJEwUNQeGEtFw==
+"@azure/storage-blob@12.1.0":
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/@azure/storage-blob/-/storage-blob-12.1.0.tgz#02d388b8bd1463c6836a1b7802a9e50ce2cc6e68"
+  integrity sha512-fdYDpxRmdqOqoIwuKHV1w6lfAcBcZTdnxl0a1iHFsVoo5m3Vifawmvw6p/mhk3qFAavpchiOdthUfVJ78xurzA==
   dependencies:
     "@azure/abort-controller" "^1.0.0"
     "@azure/core-http" "^1.0.0"
@@ -97,7 +97,7 @@
     "@azure/logger" "^1.0.0"
     "@opentelemetry/types" "^0.2.0"
     events "^3.0.0"
-    tslib "^1.9.3"
+    tslib "^1.10.0"
 
 "@babel/code-frame@^7.0.0":
   version "7.0.0"
@@ -7293,10 +7293,10 @@ ts-mockito@^2.3.1:
   dependencies:
     lodash "^4.17.5"
 
-tslib@^1.9.0, tslib@^1.9.3:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
-  integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
+tslib@^1.10.0, tslib@^1.9.0, tslib@^1.9.3:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
+  integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
 
 tunnel-agent@^0.6.0:
   version "0.6.0"
