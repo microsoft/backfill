@@ -64,12 +64,14 @@ export class NpmCacheStorage extends CacheStorage {
       }
     }
 
-    fs.readdirSync(packageFolderInTemporaryFolder).forEach(fileOrFolder => {
-      fs.copySync(
-        path.join(packageFolderInTemporaryFolder, fileOrFolder),
-        fileOrFolder
-      );
-    });
+    await Promise.all(
+      fs.readdirSync(packageFolderInTemporaryFolder).map(async fileOrFolder => {
+        fs.copy(
+          path.join(packageFolderInTemporaryFolder, fileOrFolder),
+          fileOrFolder
+        );
+      })
+    );
 
     return true;
   }
