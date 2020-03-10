@@ -91,14 +91,17 @@ export class NpmCacheStorage extends CacheStorage {
     });
 
     const files = fg.sync(outputGlob);
-    files.forEach(file => {
-      const destinationFolder = path.join(
-        temporaryNpmOutputFolder,
-        path.dirname(file)
-      );
-      fs.mkdirpSync(destinationFolder);
-      fs.copySync(file, path.join(temporaryNpmOutputFolder, file));
-    });
+
+    await Promise.all(
+      files.map(async file => {
+        const destinationFolder = path.join(
+          temporaryNpmOutputFolder,
+          path.dirname(file)
+        );
+        await fs.mkdirp(destinationFolder);
+        await fs.copy(file, path.join(temporaryNpmOutputFolder, file));
+      })
+    );
 
     // Upload package
     try {

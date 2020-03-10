@@ -31,10 +31,16 @@ export class LocalCacheStorage extends CacheStorage {
     const localCacheFolder = this.getLocalCacheFolder(hash);
 
     const files = fg.sync(outputGlob);
-    files.forEach(file => {
-      const destinationFolder = path.join(localCacheFolder, path.dirname(file));
-      fs.mkdirpSync(destinationFolder);
-      fs.copySync(file, path.join(localCacheFolder, file));
-    });
+
+    await Promise.all(
+      files.map(async file => {
+        const destinationFolder = path.join(
+          localCacheFolder,
+          path.dirname(file)
+        );
+        await fs.mkdirp(destinationFolder);
+        await fs.copy(file, path.join(localCacheFolder, file));
+      })
+    );
   }
 }
