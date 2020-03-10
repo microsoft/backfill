@@ -27,6 +27,7 @@
     "backfill-utils-dotenv": "^3.0.0-alpha.0",
     "chokidar": "^3.2.1",
     "execa": "^4.0.0",
+    "fast-glob": "^3.0.4",
     "fs-extra": "^8.1.0",
     "yargs": "^15.0.2"
   },
