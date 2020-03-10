@@ -24,7 +24,7 @@ export function createBuildCommand(
 
     if (clearOutput) {
       const filesToClear = fg.sync(outputGlob);
-      await Promise.all(filesToClear.map(fs.remove));
+      await Promise.all(filesToClear.map(async file => await fs.remove(file)));
     }
 
     // Set up runner
