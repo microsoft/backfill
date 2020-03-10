@@ -110,7 +110,7 @@ The default configuration object is:
 The `outputGlob` is a list of globs describing the files you want to cache.
 `outputGlob` should be expressed as a relative path from the root of each
 package. If you want to cache `package-a/lib`, for instance, you'd write
-`outputGlob: ["lib/**"]`. If you also want to cache the `pacakge/a/dist/bundles`
+`outputGlob: ["lib/**"]`. If you also want to cache the `pacakge-a/dist/bundles`
 folder, you'd write `outputGlob: ["lib/**", "dist/bundles/**"]`.
 
 The configuration type is:
