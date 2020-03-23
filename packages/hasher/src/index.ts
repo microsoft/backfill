@@ -85,8 +85,8 @@ export class Hasher implements IHasher {
     }
 
     const internalPackagesHash = generateHashOfInternalPackages(done);
-    const buildCommandHash = await hashStrings(this.buildCommandSignature);
-    const combinedHash = await hashStrings([
+    const buildCommandHash = hashStrings(this.buildCommandSignature);
+    const combinedHash = hashStrings([
       internalPackagesHash,
       buildCommandHash
     ]);
