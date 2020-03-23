@@ -1,5 +1,7 @@
 import * as crypto from "crypto";
 import * as path from "path";
+import * as fs from "fs";
+import * as fsExtra from "fs-extra";
 import { logger } from "backfill-logger";
 
 import { resolveInternalDependencies } from "./resolveInternalDependencies";
@@ -37,6 +39,18 @@ export async function getPackageHash(
   workspaces: WorkspaceInfo,
   yarnLock: ParsedYarnLock
 ): Promise<PackageHashInfo> {
+  const cacheFile = path.join(packageRoot, "node_modules", "backfill-hash.json");
+
+  try {
+    const cachedValue = await fs.promises.readFile(cacheFile);
+    const result = JSON.parse(cachedValue.toString());
+    return result;
+
+  }
+  catch {
+
+  }
+
   const { name, dependencies, devDependencies } = require(path.join(
     packageRoot,
     "package.json"
@@ -76,6 +90,9 @@ export async function getPackageHash(
     dependenciesHash,
     internalDependencies
   };
+
+  await fsExtra.mkdirp(path.dirname(cacheFile));
+  await fs.promises.writeFile(cacheFile, JSON.stringify(packageHash));
 
   return packageHash;
 }

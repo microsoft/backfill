@@ -1,7 +1,22 @@
+import { Hasher } from "backfill-hasher";
+import { createConfig } from "backfill-config";
+
 /*
- * Compute the hash of all the workspaces and store it on disk.
+ * Compute the hash for a given workspace, stores it on
+ * disk for other commands to use.
  */
-export async function populateHashesOfAllPackages(): Promise<void> {
+export async function computeHash(): Promise<string> {
+  const config = createConfig();
+  const {
+    outputGlob,
+    packageRoot
+  } = config;
+  const hasher = new Hasher(
+    { packageRoot, outputGlob },
+    "ci-pipeline"
+  );
+  const hash = await hasher.createPackageHash();
+  return hash;
 }
 
 /*
