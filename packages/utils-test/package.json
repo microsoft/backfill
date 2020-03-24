@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "3.0.0",
+  "version": "3.0.0-alpha.0",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
@@ -15,7 +15,7 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "backfill-generic-logger": "^3.0.0",
+    "backfill-generic-logger": "^3.0.0-alpha.0",
     "find-up": "^4.0.0",
     "fs-extra": "^8.1.0",
     "tempy": "^0.3.0"
