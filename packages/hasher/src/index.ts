@@ -1,5 +1,4 @@
 import { logger } from "backfill-logger";
-import { outputFolderAsArray } from "backfill-config";
 
 import { generateHashOfFiles } from "./hashOfFiles";
 import {
@@ -47,14 +46,14 @@ export function addToQueue(
 
 export class Hasher implements IHasher {
   private packageRoot: string;
-  private outputFolder: string | string[];
+  private outputGlob: string[];
 
   constructor(
-    private options: { packageRoot: string; outputFolder: string | string[] },
+    private options: { packageRoot: string; outputGlob: string[] },
     private buildCommandSignature: string
   ) {
     this.packageRoot = this.options.packageRoot;
-    this.outputFolder = this.options.outputFolder;
+    this.outputGlob = this.options.outputGlob;
   }
 
   public async createPackageHash(): Promise<string> {
@@ -103,10 +102,6 @@ export class Hasher implements IHasher {
   }
 
   public async hashOfOutput(): Promise<string> {
-    const outputFolderGlob = outputFolderAsArray(this.outputFolder).map(
-      p => `${p}/**`
-    );
-
-    return generateHashOfFiles(this.packageRoot, outputFolderGlob);
+    return generateHashOfFiles(this.packageRoot, this.outputGlob);
   }
 }

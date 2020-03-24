@@ -100,19 +100,18 @@ The default configuration object is:
   logLevel: "info",
   mode: "READ_WRITE",
   name: "[name-of-package]",
-  outputFolder: "lib",
+  outputGlob: ["lib/**"],
   packageRoot: "path/to/package",
   producePerformanceLogs: false,
   validateOutput: false
 }
 ```
 
-The `outputFolder` is the folder you want to cache. It can either be a string or
-an array of strings. `outputFolder` should be expressed as a relative path from
-the root of each package. If you want to cache `package-a/lib`, for instance,
-you'd write `outputFolder: "lib"`. If you also want to cache the
-`pacakge/a/dist/bundles` folder, you'd write
-`outputFolder: ["lib", "dist/bundles"]`.
+The `outputGlob` is a list of globs describing the files you want to cache.
+`outputGlob` should be expressed as a relative path from the root of each
+package. If you want to cache `package-a/lib`, for instance, you'd write
+`outputGlob: ["lib/**"]`. If you also want to cache the `pacakge-a/dist/bundles`
+folder, you'd write `outputGlob: ["lib/**", "dist/bundles/**"]`.
 
 The configuration type is:
 
@@ -126,7 +125,7 @@ export type Config = {
   logLevel: LogLevels;
   mode: "READ_ONLY" | "WRITE_ONLY" | "READ_WRITE" | "PASS";
   name: string;
-  outputFolder: string | string[];
+  outputGlob: string[];
   packageRoot: string;
   performanceReportName?: string;
   producePerformanceLogs: boolean;

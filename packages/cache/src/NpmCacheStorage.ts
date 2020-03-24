@@ -1,8 +1,9 @@
 import * as execa from "execa";
 import * as fs from "fs-extra";
 import * as path from "path";
+import * as fg from "fast-glob";
 
-import { NpmCacheStorageOptions, outputFolderAsArray } from "backfill-config";
+import { NpmCacheStorageOptions } from "backfill-config";
 
 import { CacheStorage } from "./CacheStorage";
 
@@ -14,10 +15,7 @@ export class NpmCacheStorage extends CacheStorage {
     super();
   }
 
-  protected async _fetch(
-    hash: string,
-    outputFolder: string | string[]
-  ): Promise<boolean> {
+  protected async _fetch(hash: string): Promise<boolean> {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
     const temporaryNpmOutputFolder = path.join(
@@ -66,26 +64,21 @@ export class NpmCacheStorage extends CacheStorage {
       }
     }
 
+    const files = await fg(`**/*`, {
+      cwd: path.join(process.cwd(), packageFolderInTemporaryFolder)
+    });
+
     await Promise.all(
-      outputFolderAsArray(outputFolder).map(async folder => {
-        const locationInCache = path.join(
-          packageFolderInTemporaryFolder,
-          folder
-        );
-
-        if (!fs.pathExistsSync(locationInCache)) {
-          return;
-        }
-
-        await fs.mkdirp(folder);
-        await fs.copy(path.join(locationInCache, folder), folder);
+      files.map(async file => {
+        await fs.mkdirp(path.dirname(file));
+        await fs.copy(path.join(packageFolderInTemporaryFolder, file), file);
       })
     );
 
     return true;
   }
 
-  protected async _put(hash: string, outputFolder: string | string[]) {
+  protected async _put(hash: string, outputGlob: string[]) {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
     const temporaryNpmOutputFolder = path.join(
@@ -101,9 +94,18 @@ export class NpmCacheStorage extends CacheStorage {
       version: `0.0.0-${hash}`
     });
 
-    outputFolderAsArray(outputFolder).forEach(folder => {
-      fs.copySync(folder, path.join(temporaryNpmOutputFolder, folder));
-    });
+    const files = await fg(outputGlob);
+
+    await Promise.all(
+      files.map(async file => {
+        const destinationFolder = path.join(
+          temporaryNpmOutputFolder,
+          path.dirname(file)
+        );
+        await fs.mkdirp(destinationFolder);
+        await fs.copy(file, path.join(temporaryNpmOutputFolder, file));
+      })
+    );
 
     // Upload package
     try {

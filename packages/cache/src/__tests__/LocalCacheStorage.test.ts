@@ -2,7 +2,7 @@ import * as fs from "fs-extra";
 import * as path from "path";
 
 import { setupFixture } from "backfill-utils-test";
-import { CacheStorageConfig, outputFolderAsArray } from "backfill-config";
+import { CacheStorageConfig } from "backfill-config";
 import { getCacheStorageProvider } from "../index";
 
 const setupCacheStorage = async (fixtureName: string) => {
@@ -40,7 +40,8 @@ function expectPathExists(pathToCheck: string, expectSuccess: boolean) {
 type CacheHelper = {
   fixtureName: string;
   hash: string;
-  outputFolder: string | string[];
+  outputGlob?: string[];
+  filesToCache?: string[];
   expectSuccess?: boolean;
   errorMessage?: string;
 };
@@ -48,7 +49,6 @@ type CacheHelper = {
 async function fetchFromCache({
   fixtureName,
   hash,
-  outputFolder,
   expectSuccess = true
 }: CacheHelper) {
   const { cacheStorage, internalCacheFolder } = await setupCacheStorage(
@@ -58,29 +58,20 @@ async function fetchFromCache({
   const secretFile = "qwerty";
 
   if (expectSuccess) {
-    outputFolderAsArray(outputFolder).forEach(folder => {
-      createFileInFolder(
-        path.join(internalCacheFolder, hash, folder),
-        secretFile,
-        true
-      );
-    });
+    createFileInFolder(path.join(internalCacheFolder, hash), secretFile, true);
   }
 
-  const fetchResult = await cacheStorage.fetch(hash, outputFolder);
+  const fetchResult = await cacheStorage.fetch(hash);
   expect(fetchResult).toBe(expectSuccess);
 
-  outputFolderAsArray(outputFolder).forEach(folder => {
-    const pathToCheck = expectSuccess ? path.join(folder, secretFile) : folder;
-
-    expectPathExists(pathToCheck, expectSuccess);
-  });
+  expectPathExists(secretFile, expectSuccess);
 }
 
 async function putInCache({
   fixtureName,
   hash,
-  outputFolder,
+  outputGlob,
+  filesToCache,
   expectSuccess = true,
   errorMessage
 }: CacheHelper) {
@@ -88,25 +79,31 @@ async function putInCache({
     fixtureName
   );
 
-  const secretFile = "qwerty";
+  if (!outputGlob) {
+    throw new Error("outputGlob should be provided to the putInCache function");
+  }
 
-  if (expectSuccess) {
-    outputFolderAsArray(outputFolder).forEach(folder => {
-      createFileInFolder(folder, secretFile, false);
-    });
+  if (!filesToCache) {
+    throw new Error(
+      "filesToCache should be provided to the putInCache function"
+    );
   }
 
   if (expectSuccess) {
-    await cacheStorage.put(hash, outputFolder);
+    filesToCache.forEach(f => createFileInFolder(".", f, false));
+  }
+
+  if (expectSuccess) {
+    await cacheStorage.put(hash, outputGlob);
   } else {
-    await expect(cacheStorage.put(hash, outputFolder)).rejects.toThrow(
+    await expect(cacheStorage.put(hash, outputGlob)).rejects.toThrow(
       errorMessage
     );
   }
 
-  outputFolderAsArray(outputFolder).forEach(folder => {
+  filesToCache.forEach(f => {
     const pathToCheck = expectSuccess
-      ? path.join(internalCacheFolder, hash, folder, secretFile)
+      ? path.join(internalCacheFolder, hash, f)
       : internalCacheFolder;
 
     expectPathExists(pathToCheck, expectSuccess);
@@ -118,24 +115,21 @@ describe("LocalCacheStorage", () => {
     it("will fetch on cache hit", async () => {
       await fetchFromCache({
         fixtureName: "with-cache",
-        hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
-        outputFolder: "lib"
+        hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194"
       });
     });
 
     it("will fetch on cache hit (output folder: dist)", async () => {
       await fetchFromCache({
         fixtureName: "with-cache-dist",
-        hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
-        outputFolder: "dist"
+        hash: "46df1a257dfbde62b1e284f6382b20a49506f029"
       });
     });
 
     it("will fetch on cache hit (multiple output folders: lib and dist)", async () => {
       await fetchFromCache({
         fixtureName: "multiple-output-folders-with-cache",
-        hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
-        outputFolder: ["lib", "dist"]
+        hash: "46df1a257dfbde62b1e284f6382b20a49506f029"
       });
     });
 
@@ -143,7 +137,6 @@ describe("LocalCacheStorage", () => {
       await fetchFromCache({
         fixtureName: "with-cache",
         hash: "incorrect_hash",
-        outputFolder: "lib",
         expectSuccess: false
       });
     });
@@ -154,7 +147,8 @@ describe("LocalCacheStorage", () => {
       await putInCache({
         fixtureName: "pre-built",
         hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
-        outputFolder: "lib"
+        outputGlob: ["lib/**"],
+        filesToCache: ["lib/qwerty"]
       });
     });
 
@@ -162,7 +156,8 @@ describe("LocalCacheStorage", () => {
       await putInCache({
         fixtureName: "pre-built-dist",
         hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
-        outputFolder: "dist"
+        outputGlob: ["dist/**"],
+        filesToCache: ["dist/qwerty"]
       });
     });
 
@@ -170,7 +165,8 @@ describe("LocalCacheStorage", () => {
       await putInCache({
         fixtureName: "multiple-output-folders",
         hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
-        outputFolder: ["lib", "dist"]
+        outputGlob: ["lib/**", "dist/**"],
+        filesToCache: ["lib/qwerty", "dist/azer/ty"]
       });
     });
 
@@ -178,9 +174,41 @@ describe("LocalCacheStorage", () => {
       await putInCache({
         fixtureName: "basic",
         hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
-        outputFolder: "lib",
         expectSuccess: false,
-        errorMessage: "Couldn't find a folder on disk to cache"
+        outputGlob: ["lib/**", "dist/**"],
+        filesToCache: [],
+        errorMessage:
+          "Couldn't find any file on disk matching the output glob (lib/**, dist/**)"
+      });
+    });
+
+    it("will persist file matching glob in root folder", async () => {
+      await putInCache({
+        fixtureName: "basic",
+        hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
+        outputGlob: ["tsconfig.tsbuildinfo"],
+        filesToCache: ["tsconfig.tsbuildinfo"]
+      });
+    });
+
+    it("will not persist file excluded by a glob", async () => {
+      await putInCache({
+        fixtureName: "basic",
+        hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
+        expectSuccess: false,
+        outputGlob: ["lib/**", "!lib/qwerty"],
+        filesToCache: ["lib/qwerty"],
+        errorMessage:
+          "Couldn't find any file on disk matching the output glob (lib/**, !lib/qwerty)"
+      });
+    });
+
+    it("will persist file when others are excluded in the same folder", async () => {
+      await putInCache({
+        fixtureName: "basic",
+        hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
+        outputGlob: ["lib/**", "!lib/qwerty"],
+        filesToCache: ["lib/azerty"]
       });
     });
   });

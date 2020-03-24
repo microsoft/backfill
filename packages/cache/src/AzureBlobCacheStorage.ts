@@ -1,10 +1,8 @@
 import { BlobServiceClient } from "@azure/storage-blob";
 import * as tar from "tar";
+import * as fg from "fast-glob";
 
-import {
-  AzureBlobCacheStorageOptions,
-  outputFolderAsArray
-} from "backfill-config";
+import { AzureBlobCacheStorageOptions } from "backfill-config";
 
 import { CacheStorage } from "./CacheStorage";
 
@@ -71,10 +69,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
     }
   }
 
-  protected async _put(
-    hash: string,
-    outputFolder: string | string[]
-  ): Promise<void> {
+  protected async _put(hash: string, outputGlob: string[]): Promise<void> {
     const blobClient = createBlobClient(
       this.options.connectionString,
       this.options.container,
@@ -83,8 +78,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
     const blockBlobClient = blobClient.getBlockBlobClient();
 
-    const outputFolders = outputFolderAsArray(outputFolder);
-    const tarStream = tar.create({ gzip: false }, outputFolders);
+    const filesToCopy = await fg(outputGlob);
+    const tarStream = tar.create({ gzip: false }, filesToCopy);
 
     await blockBlobClient.uploadStream(
       tarStream,
