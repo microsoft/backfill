@@ -71,7 +71,7 @@ export class NpmCacheStorage extends CacheStorage {
     await Promise.all(
       files.map(async file => {
         await fs.mkdirp(path.dirname(file));
-        fs.copy(path.join(packageFolderInTemporaryFolder, file), file);
+        await fs.copy(path.join(packageFolderInTemporaryFolder, file), file);
       })
     );
 
