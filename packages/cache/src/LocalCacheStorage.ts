@@ -20,9 +20,14 @@ export class LocalCacheStorage extends CacheStorage {
       return false;
     }
 
+    const files = await fg(`**/*`, {
+      cwd: path.join(process.cwd(), localCacheFolder)
+    });
+
     await Promise.all(
-      fs.readdirSync(localCacheFolder).map(async fileOrFolder => {
-        await fs.copy(path.join(localCacheFolder, fileOrFolder), fileOrFolder);
+      files.map(async file => {
+        await fs.mkdirp(path.dirname(file));
+        await fs.copy(path.join(localCacheFolder, file), file);
       })
     );
 
