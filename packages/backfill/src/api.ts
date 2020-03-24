@@ -1,5 +1,9 @@
 import { Hasher } from "backfill-hasher";
 import { createConfig } from "backfill-config";
+import { getCacheStorageProvider } from "backfill-cache";
+import * as fs from "fs";
+import * as fsExtra from "fs-extra";
+import * as path from "path";
 
 /*
  * Compute the hash for a given workspace, stores it on
@@ -23,6 +27,26 @@ export async function computeHash(): Promise<string> {
  * Fetch cached data from cache storage.
  */
 export async function rehydrateFromCache(): Promise<void> {
+  const config = createConfig();
+  const {
+    cacheStorageConfig,
+    internalCacheFolder,
+    outputGlob,
+    packageRoot
+  } = config;
+    const cacheStorage = getCacheStorageProvider(
+      cacheStorageConfig,
+      internalCacheFolder
+    );
+  const hasher = new Hasher(
+    { packageRoot, outputGlob },
+    "ci-pipeline"
+  );
+  const hash = await hasher.createPackageHash();
+  const fetch = await cacheStorage.fetch(hash);
+
+  await fsExtra.mkdirp(path.join(packageRoot, "node_modules"));
+  await fsExtra.writeJson(path.join(packageRoot, "node_modules", "cache-hit.json"), fetch);
 }
 
 /*
@@ -31,11 +55,36 @@ export async function rehydrateFromCache(): Promise<void> {
  * the cache if we are in a cache miss situation.
  */
 export async function isCacheHit(): Promise<boolean> {
-  return Promise.resolve(false);
+  try {
+    fs.statSync(path.join(process.cwd(), "node_modules", "cache-hit.json"));
+    const content = await fs.promises.readFile(path.join(process.cwd(), "node_modules", "cache-hit.json"));
+    return JSON.parse(content.toString());
+    
+  } catch {
+    return false;
+  }
 }
 
 /*
  * Store the cache to the cache storage.
  */
-export function populateCache() {
+export async function populateCache() {
+  const config = createConfig();
+  const {
+    cacheStorageConfig,
+    internalCacheFolder,
+    outputGlob,
+    packageRoot
+  } = config;
+    const cacheStorage = getCacheStorageProvider(
+      cacheStorageConfig,
+      internalCacheFolder
+    );
+  const hasher = new Hasher(
+    { packageRoot, outputGlob },
+    "ci-pipeline"
+  );
+
+  const hash = await hasher.createPackageHash();
+  await cacheStorage.put(hash, outputGlob);
 }
