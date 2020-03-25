@@ -7,6 +7,7 @@ import { logger } from "backfill-logger";
 import { resolveInternalDependencies } from "./resolveInternalDependencies";
 import { resolveExternalDependencies } from "./resolveExternalDependencies";
 import { generateHashOfFiles } from "./hashOfFiles";
+
 import { Dependencies } from "./resolveExternalDependencies";
 import { hashStrings } from "./helpers";
 import { ParsedYarnLock } from "./yarnLock";
@@ -39,17 +40,17 @@ export async function getPackageHash(
   workspaces: WorkspaceInfo,
   yarnLock: ParsedYarnLock
 ): Promise<PackageHashInfo> {
-  const cacheFile = path.join(packageRoot, "node_modules", "backfill-hash.json");
+  const cacheFile = path.join(
+    packageRoot,
+    "node_modules",
+    "backfill-hash.json"
+  );
 
   try {
     const cachedValue = await fs.promises.readFile(cacheFile);
     const result = JSON.parse(cachedValue.toString());
     return result;
-
-  }
-  catch {
-
-  }
+  } catch {}
 
   const { name, dependencies, devDependencies } = require(path.join(
     packageRoot,
