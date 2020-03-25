@@ -78,7 +78,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
     const blockBlobClient = blobClient.getBlockBlobClient();
 
-    const filesToCopy = fg.sync(outputGlob);
+    const filesToCopy = await fg(outputGlob);
+
     const tarStream = tar.create({ gzip: false }, filesToCopy);
 
     await blockBlobClient.uploadStream(

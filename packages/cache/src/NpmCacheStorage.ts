@@ -64,12 +64,14 @@ export class NpmCacheStorage extends CacheStorage {
       }
     }
 
+    const files = await fg(`**/*`, {
+      cwd: path.join(process.cwd(), packageFolderInTemporaryFolder)
+    });
+
     await Promise.all(
-      fs.readdirSync(packageFolderInTemporaryFolder).map(async fileOrFolder => {
-        fs.copy(
-          path.join(packageFolderInTemporaryFolder, fileOrFolder),
-          fileOrFolder
-        );
+      files.map(async file => {
+        await fs.mkdirp(path.dirname(file));
+        await fs.copy(path.join(packageFolderInTemporaryFolder, file), file);
       })
     );
 
@@ -92,7 +94,7 @@ export class NpmCacheStorage extends CacheStorage {
       version: `0.0.0-${hash}`
     });
 
-    const files = fg.sync(outputGlob);
+    const files = await fg(outputGlob);
 
     await Promise.all(
       files.map(async file => {
