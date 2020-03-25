@@ -2,14 +2,14 @@
   "private": true,
   "name": "backfill-sample-dependency",
   "license": "MIT",
-  "version": "3.0.2-alpha.0",
+  "version": "3.0.3-alpha.0",
   "main": "lib/index.js",
   "scripts": {
     "build": "backfill -- yarn compile",
     "compile": "tsc -b"
   },
   "devDependencies": {
-    "backfill": "^3.0.2-alpha.0",
+    "backfill": "^3.0.3-alpha.0",
     "backfill-utils-tsconfig": "^2.0.3",
     "typescript": "3.7.4"
   }
