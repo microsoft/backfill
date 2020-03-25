@@ -11,14 +11,8 @@ import * as path from "path";
  */
 export async function computeHash(): Promise<string> {
   const config = createConfig();
-  const {
-    outputGlob,
-    packageRoot
-  } = config;
-  const hasher = new Hasher(
-    { packageRoot, outputGlob },
-    "ci-pipeline"
-  );
+  const { outputGlob, packageRoot } = config;
+  const hasher = new Hasher({ packageRoot, outputGlob }, "ci-pipeline");
   const hash = await hasher.createPackageHash();
   return hash;
 }
@@ -34,19 +28,19 @@ export async function rehydrateFromCache(): Promise<void> {
     outputGlob,
     packageRoot
   } = config;
-    const cacheStorage = getCacheStorageProvider(
-      cacheStorageConfig,
-      internalCacheFolder
-    );
-  const hasher = new Hasher(
-    { packageRoot, outputGlob },
-    "ci-pipeline"
+  const cacheStorage = getCacheStorageProvider(
+    cacheStorageConfig,
+    internalCacheFolder
   );
+  const hasher = new Hasher({ packageRoot, outputGlob }, "ci-pipeline");
   const hash = await hasher.createPackageHash();
   const fetch = await cacheStorage.fetch(hash);
 
   await fsExtra.mkdirp(path.join(packageRoot, "node_modules"));
-  await fsExtra.writeJson(path.join(packageRoot, "node_modules", "cache-hit.json"), fetch);
+  await fsExtra.writeJson(
+    path.join(packageRoot, "node_modules", "cache-hit.json"),
+    fetch
+  );
 }
 
 /*
@@ -57,9 +51,10 @@ export async function rehydrateFromCache(): Promise<void> {
 export async function isCacheHit(): Promise<boolean> {
   try {
     fs.statSync(path.join(process.cwd(), "node_modules", "cache-hit.json"));
-    const content = await fs.promises.readFile(path.join(process.cwd(), "node_modules", "cache-hit.json"));
+    const content = await fs.promises.readFile(
+      path.join(process.cwd(), "node_modules", "cache-hit.json")
+    );
     return JSON.parse(content.toString());
-    
   } catch {
     return false;
   }
@@ -67,6 +62,7 @@ export async function isCacheHit(): Promise<boolean> {
 
 /*
  * Store the cache to the cache storage.
+ *
  */
 export async function populateCache() {
   const config = createConfig();
@@ -76,14 +72,11 @@ export async function populateCache() {
     outputGlob,
     packageRoot
   } = config;
-    const cacheStorage = getCacheStorageProvider(
-      cacheStorageConfig,
-      internalCacheFolder
-    );
-  const hasher = new Hasher(
-    { packageRoot, outputGlob },
-    "ci-pipeline"
+  const cacheStorage = getCacheStorageProvider(
+    cacheStorageConfig,
+    internalCacheFolder
   );
+  const hasher = new Hasher({ packageRoot, outputGlob }, "ci-pipeline");
 
   const hash = await hasher.createPackageHash();
   await cacheStorage.put(hash, outputGlob);
