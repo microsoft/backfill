@@ -10,8 +10,10 @@ import * as path from "path";
  * Compute the hash for a given workspace, stores it on
  * disk for other commands to use.
  */
-export async function computeHash(): Promise<string> {
-  const config = createConfig();
+export async function computeHash(
+  cwd: string = process.cwd()
+): Promise<string> {
+  const config = createConfig(cwd);
   const { outputGlob, packageRoot } = config;
   const hasher = new Hasher({ packageRoot, outputGlob }, "ci-pipeline");
   const hash = await hasher.createPackageHash();
@@ -21,8 +23,10 @@ export async function computeHash(): Promise<string> {
 /*
  * Fetch cached data from cache storage.
  */
-export async function rehydrateFromCache(): Promise<void> {
-  const config = createConfig();
+export async function rehydrateFromCache(
+  cwd: string = process.cwd()
+): Promise<void> {
+  const config = createConfig(cwd);
   const {
     cacheStorageConfig,
     internalCacheFolder,
@@ -31,7 +35,7 @@ export async function rehydrateFromCache(): Promise<void> {
   } = config;
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
-    internalCacheFolder
+    path.join(cwd, internalCacheFolder)
   );
   const hasher = new Hasher({ packageRoot, outputGlob }, "ci-pipeline");
   const hash = await hasher.createPackageHash();
@@ -49,11 +53,13 @@ export async function rehydrateFromCache(): Promise<void> {
  * This can be used to only run build commands or uploade
  * the cache if we are in a cache miss situation.
  */
-export async function isCacheHit(): Promise<boolean> {
+export async function isCacheHit(
+  cwd: string = process.cwd()
+): Promise<boolean> {
   try {
-    fs.statSync(path.join(process.cwd(), "node_modules", "cache-hit.json"));
+    fs.statSync(path.join(cwd, "node_modules", "cache-hit.json"));
     const content = await fs.promises.readFile(
-      path.join(process.cwd(), "node_modules", "cache-hit.json")
+      path.join(cwd, "node_modules", "cache-hit.json")
     );
     return JSON.parse(content.toString());
   } catch {
@@ -65,8 +71,8 @@ export async function isCacheHit(): Promise<boolean> {
  * Store the cache to the cache storage.
  *
  */
-export async function populateCache() {
-  const config = createConfig();
+export async function populateCache(cwd: string = process.cwd()) {
+  const config = createConfig(cwd);
   const {
     cacheStorageConfig,
     internalCacheFolder,
@@ -75,7 +81,8 @@ export async function populateCache() {
   } = config;
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
-    internalCacheFolder
+    path.join(cwd, internalCacheFolder),
+    cwd
   );
   const hasher = new Hasher({ packageRoot, outputGlob }, "ci-pipeline");
 

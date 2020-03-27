@@ -9,19 +9,21 @@ export { ICacheStorage } from "./CacheStorage";
 
 export function getCacheStorageProvider(
   cacheStorageConfig: CacheStorageConfig,
-  internalCacheFolder: string
+  internalCacheFolder: string,
+  cwd: string = process.cwd()
 ): ICacheStorage {
   let cacheStorage: ICacheStorage;
 
   if (cacheStorageConfig.provider === "npm") {
     cacheStorage = new NpmCacheStorage(
       cacheStorageConfig.options,
-      internalCacheFolder
+      internalCacheFolder,
+      cwd
     );
   } else if (cacheStorageConfig.provider === "azure-blob") {
-    cacheStorage = new AzureBlobCacheStorage(cacheStorageConfig.options);
+    cacheStorage = new AzureBlobCacheStorage(cacheStorageConfig.options, cwd);
   } else {
-    cacheStorage = new LocalCacheStorage(internalCacheFolder);
+    cacheStorage = new LocalCacheStorage(internalCacheFolder, cwd);
   }
 
   return cacheStorage;

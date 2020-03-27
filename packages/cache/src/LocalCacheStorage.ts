@@ -5,7 +5,7 @@ import * as fg from "fast-glob";
 import { CacheStorage } from "./CacheStorage";
 
 export class LocalCacheStorage extends CacheStorage {
-  constructor(private internalCacheFolder: string) {
+  constructor(private internalCacheFolder: string, private cwd: string) {
     super();
   }
 
@@ -21,13 +21,16 @@ export class LocalCacheStorage extends CacheStorage {
     }
 
     const files = await fg(`**/*`, {
-      cwd: path.join(process.cwd(), localCacheFolder)
+      cwd: path.join(this.cwd, localCacheFolder)
     });
 
     await Promise.all(
       files.map(async file => {
-        await fs.mkdirp(path.dirname(file));
-        await fs.copy(path.join(localCacheFolder, file), file);
+        await fs.mkdirp(path.dirname(path.join(this.cwd, file)));
+        await fs.copy(
+          path.join(localCacheFolder, file),
+          path.join(this.cwd, file)
+        );
       })
     );
 
@@ -37,7 +40,7 @@ export class LocalCacheStorage extends CacheStorage {
   protected async _put(hash: string, outputGlob: string[]): Promise<void> {
     const localCacheFolder = this.getLocalCacheFolder(hash);
 
-    const files = fg.sync(outputGlob);
+    const files = fg.sync(outputGlob, { cwd: this.cwd });
 
     await Promise.all(
       files.map(async file => {
@@ -46,7 +49,10 @@ export class LocalCacheStorage extends CacheStorage {
           path.dirname(file)
         );
         await fs.mkdirp(destinationFolder);
-        await fs.copy(file, path.join(localCacheFolder, file));
+        await fs.copy(
+          path.join(this.cwd, file),
+          path.join(localCacheFolder, file)
+        );
       })
     );
   }
