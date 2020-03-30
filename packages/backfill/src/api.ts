@@ -13,11 +13,12 @@ import * as path from "path";
  */
 export async function computeHash(
   cwd: string,
-  logger: Logger
+  logger: Logger,
+  salt: string
 ): Promise<string> {
   const config = createConfig(cwd);
   const { outputGlob, packageRoot } = config;
-  const hasher = new Hasher({ packageRoot, outputGlob, logger }, "ci-pipeline");
+  const hasher = new Hasher({ packageRoot, outputGlob, logger }, salt);
   const hash = await hasher.createPackageHash();
   return hash;
 }
@@ -27,7 +28,8 @@ export async function computeHash(
  */
 export async function rehydrateFromCache(
   cwd: string,
-  logger: Logger
+  logger: Logger,
+  salt: string
 ): Promise<void> {
   const config = createConfig(cwd);
   const {
@@ -42,7 +44,7 @@ export async function rehydrateFromCache(
     logger,
     cwd
   );
-  const hasher = new Hasher({ packageRoot, outputGlob, logger }, "ci-pipeline");
+  const hasher = new Hasher({ packageRoot, outputGlob, logger }, salt);
   const hash = await hasher.createPackageHash();
   const fetch = await cacheStorage.fetch(hash);
 
@@ -74,7 +76,7 @@ export async function isCacheHit(cwd: string): Promise<boolean> {
  * Store the cache to the cache storage.
  *
  */
-export async function populateCache(cwd: string, logger: Logger) {
+export async function populateCache(cwd: string, logger: Logger, salt: string) {
   const config = createConfig(cwd);
   const {
     cacheStorageConfig,
@@ -88,7 +90,7 @@ export async function populateCache(cwd: string, logger: Logger) {
     logger,
     cwd
   );
-  const hasher = new Hasher({ packageRoot, outputGlob, logger }, "ci-pipeline");
+  const hasher = new Hasher({ packageRoot, outputGlob, logger }, salt);
 
   const hash = await hasher.createPackageHash();
   await cacheStorage.put(hash, outputGlob);
