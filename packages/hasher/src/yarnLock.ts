@@ -17,10 +17,16 @@ export type ParsedYarnLock = {
   };
 };
 
+const lockFiles: { [key: string]: ParsedYarnLock } = {};
+
 export async function parseLockFile(
   packageRoot: string
 ): Promise<ParsedYarnLock> {
   const yarnLockPath = await findUp("yarn.lock", { cwd: packageRoot });
+
+  if (yarnLockPath && lockFiles[yarnLockPath]) {
+    return lockFiles[yarnLockPath];
+  }
 
   if (!yarnLockPath) {
     throw new Error(
@@ -29,7 +35,9 @@ export async function parseLockFile(
   }
 
   const yarnLock = fs.readFileSync(yarnLockPath).toString();
-  return lockfile.parse(yarnLock);
+  const parsed = lockfile.parse(yarnLock);
+  lockFiles[yarnLockPath] = parsed;
+  return parsed;
 }
 
 export function queryLockFile(
