@@ -1,6 +1,5 @@
 import { CacheStorageConfig } from "backfill-config";
 import { Logger } from "backfill-generic-logger";
-
 import { ICacheStorage } from "./CacheStorage";
 import { AzureBlobCacheStorage } from "./AzureBlobCacheStorage";
 import { LocalCacheStorage } from "./LocalCacheStorage";
