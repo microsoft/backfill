@@ -1,4 +1,5 @@
-import { logger } from "backfill-logger";
+import { logger as performanceLogger } from "backfill-logger";
+import { Logger } from "backfill-generic-logger";
 import * as fg from "fast-glob";
 
 export interface ICacheStorage {
@@ -7,18 +8,19 @@ export interface ICacheStorage {
 }
 
 export abstract class CacheStorage implements ICacheStorage {
+  protected constructor(private logger: Logger) {}
   public async fetch(hash: string): Promise<Boolean> {
-    logger.profile("cache:fetch");
+    performanceLogger.profile("cache:fetch", this.logger);
 
     const result = await this._fetch(hash);
-    logger.setTime("fetchTime", "cache:fetch");
+    performanceLogger.setTime("fetchTime", "cache:fetch", this.logger);
 
-    logger.setHit(result);
+    performanceLogger.setHit(result, this.logger);
     return result;
   }
 
   public async put(hash: string, outputGlob: string[]): Promise<void> {
-    logger.profile("cache:put");
+    performanceLogger.profile("cache:put", this.logger);
 
     const filesBeingCached = fg.sync(outputGlob);
     if (filesBeingCached.length === 0) {
@@ -30,7 +32,7 @@ export abstract class CacheStorage implements ICacheStorage {
     }
 
     await this._put(hash, outputGlob);
-    logger.setTime("putTime", "cache:put");
+    performanceLogger.setTime("putTime", "cache:put", this.logger);
   }
 
   protected abstract async _fetch(hash: string): Promise<boolean>;

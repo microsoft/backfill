@@ -5,6 +5,7 @@
   "references": [
     { "path": "../cache" },
     { "path": "../config" },
+    { "path": "../generic-logger" },
     { "path": "../hasher" },
     { "path": "../logger" },
     { "path": "../utils-dotenv" },

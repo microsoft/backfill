@@ -1,4 +1,5 @@
-import { logger } from "backfill-logger";
+import { Logger } from "backfill-generic-logger";
+import { logger as PerformanceLogger } from "backfill-logger";
 
 import { generateHashOfFiles } from "./hashOfFiles";
 import {
@@ -47,17 +48,23 @@ export function addToQueue(
 export class Hasher implements IHasher {
   private packageRoot: string;
   private outputGlob: string[];
+  private logger: Logger;
 
   constructor(
-    private options: { packageRoot: string; outputGlob: string[] },
+    private options: {
+      packageRoot: string;
+      outputGlob: string[];
+      logger: Logger;
+    },
     private buildCommandSignature: string
   ) {
     this.packageRoot = this.options.packageRoot;
     this.outputGlob = this.options.outputGlob;
+    this.logger = this.options.logger;
   }
 
   public async createPackageHash(): Promise<string> {
-    logger.profile("hasher:calculateHash");
+    this.logger.profile("hasher:calculateHash");
 
     const packageRoot = await getPackageRoot(this.packageRoot);
     const yarnLock = await parseLockFile(packageRoot);
@@ -86,17 +93,14 @@ export class Hasher implements IHasher {
 
     const internalPackagesHash = generateHashOfInternalPackages(done);
     const buildCommandHash = hashStrings(this.buildCommandSignature);
-    const combinedHash = hashStrings([
-      internalPackagesHash,
-      buildCommandHash
-    ]);
+    const combinedHash = hashStrings([internalPackagesHash, buildCommandHash]);
 
-    logger.verbose(`Hash of internal packages: ${internalPackagesHash}`);
-    logger.verbose(`Hash of build command: ${buildCommandHash}`);
-    logger.verbose(`Combined hash: ${combinedHash}`);
+    this.logger.verbose(`Hash of internal packages: ${internalPackagesHash}`);
+    this.logger.verbose(`Hash of build command: ${buildCommandHash}`);
+    this.logger.verbose(`Combined hash: ${combinedHash}`);
 
-    logger.profile("hasher:calculateHash");
-    logger.setHash(combinedHash);
+    this.logger.profile("hasher:calculateHash");
+    PerformanceLogger.setHash(combinedHash, this.logger);
 
     return combinedHash;
   }

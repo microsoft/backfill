@@ -4,6 +4,7 @@ import { setupFixture } from "backfill-utils-test";
 import { getCacheStorageProvider } from "backfill-cache";
 import { Hasher } from "backfill-hasher";
 import { createConfig } from "backfill-config";
+import { logger } from "backfill-logger";
 
 import { backfill } from "../index";
 import { createBuildCommand } from "../commandRunner";
@@ -13,7 +14,7 @@ describe("backfill", () => {
     //  Set up
     await setupFixture("basic");
 
-    const config = createConfig();
+    const config = createConfig(process.cwd());
     const {
       cacheStorageConfig,
       clearOutput,
@@ -25,7 +26,9 @@ describe("backfill", () => {
     // Arrange
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
-      internalCacheFolder
+      internalCacheFolder,
+      logger,
+      process.cwd()
     );
     const buildCommandRaw = "npm run compile";
     const buildCommand = createBuildCommand(
@@ -33,7 +36,10 @@ describe("backfill", () => {
       clearOutput,
       outputGlob
     );
-    const hasher = new Hasher({ packageRoot, outputGlob }, buildCommandRaw);
+    const hasher = new Hasher(
+      { packageRoot, outputGlob, logger },
+      buildCommandRaw
+    );
 
     // Spy
     const spiedCacheStorage = spy(cacheStorage);

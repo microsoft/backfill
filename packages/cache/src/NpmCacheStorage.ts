@@ -1,4 +1,5 @@
 import * as execa from "execa";
+import { Logger } from "backfill-generic-logger";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as fg from "fast-glob";
@@ -11,9 +12,10 @@ export class NpmCacheStorage extends CacheStorage {
   constructor(
     private options: NpmCacheStorageOptions,
     private internalCacheFolder: string,
-    private cwd: string
+    private cwd: string,
+    logger: Logger
   ) {
-    super();
+    super(logger);
   }
 
   protected async _fetch(hash: string): Promise<boolean> {

@@ -4,6 +4,7 @@ import { setupFixture } from "backfill-utils-test";
 import { PackageHashInfo } from "../hashOfPackage";
 import { Hasher, addToQueue } from "../index";
 import { WorkspaceInfo } from "../yarnWorkspaces";
+import { logger } from "backfill-logger";
 
 describe("addToQueue", () => {
   const setupAddToQueue = async () => {
@@ -94,7 +95,7 @@ describe("The main Hasher class", () => {
   const setupFixtureAndReturnHash = async (fixture: string = "monorepo") => {
     const packageRoot = await setupFixture(fixture);
 
-    const options = { packageRoot, outputGlob: ["lib/**"] };
+    const options = { packageRoot, outputGlob: ["lib/**"], logger };
     const buildSignature = "yarn build";
 
     const hasher = new Hasher(options, buildSignature);

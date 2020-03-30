@@ -38,7 +38,7 @@ export function createBuildCommand(
       runner
         // Add build time to the performance logger
         .then(() => {
-          logger.setTime("buildTime", "buildCommand:run");
+          logger.setTime("buildTime", "buildCommand:run", logger);
         })
         // Catch to pretty-print the command that failed and re-throw
         .catch(err => {

@@ -4,6 +4,7 @@
   "compilerOptions": { "rootDir": "src", "outDir": "lib" },
   "references": [
     { "path": "../config" },
+    { "path": "../generic-logger" },
     { "path": "../logger" },
     { "path": "../utils-test" }
   ]

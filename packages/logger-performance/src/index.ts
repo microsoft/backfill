@@ -2,7 +2,7 @@ import * as fs from "fs-extra";
 import * as path from "path";
 import * as filenamify from "filenamify";
 
-import { logger } from "backfill-generic-logger";
+import { Logger } from "backfill-generic-logger";
 import { BackfillModes } from "backfill-config";
 
 type PerformanceReportData = {
@@ -31,27 +31,27 @@ function createFileName() {
 }
 
 export const performanceLogger = {
-  setName(name: string) {
+  setName(name: string, logger: Logger) {
     logger.info(`Package name: ${name}`);
     performanceReportData["name"] = name;
   },
 
-  setHash(hash: string) {
+  setHash(hash: string, logger: Logger) {
     logger.verbose(`Package hash: ${hash}`);
     performanceReportData["hash"] = hash;
   },
 
-  setCacheProvider(cacheProvider: string) {
+  setCacheProvider(cacheProvider: string, logger: Logger) {
     logger.verbose(`Cache provider: ${cacheProvider}`);
     performanceReportData["cacheProvider"] = cacheProvider;
   },
 
-  setHit(hit: boolean) {
+  setHit(hit: boolean, logger: Logger) {
     logger.info(hit ? `Cache hit!` : `Cache miss!`);
     performanceReportData["hit"] = hit;
   },
 
-  setTime(type: Times, marker: string) {
+  setTime(type: Times, marker: string, logger: Logger) {
     const ms = logger.profile(marker);
 
     if (ms) {
@@ -59,7 +59,7 @@ export const performanceLogger = {
     }
   },
 
-  setMode(mode: BackfillModes) {
+  setMode(mode: BackfillModes, logger: Logger) {
     if (mode !== "READ_WRITE") {
       logger.info(`Running in ${mode} mode.`);
     } else {
@@ -69,12 +69,12 @@ export const performanceLogger = {
     performanceReportData["mode"] = mode;
   },
 
-  setHashOfOutput(hash: string) {
+  setHashOfOutput(hash: string, logger: Logger) {
     logger.verbose(`Hash of output: ${hash}`);
     performanceReportData["hashOfOutput"] = hash;
   },
 
-  async toFile(logFolder: string) {
+  async toFile(logFolder: string, logger: Logger) {
     const filepath = path.join(logFolder, createFileName());
     await fs.outputJson(filepath, performanceReportData, { spaces: 2 });
 

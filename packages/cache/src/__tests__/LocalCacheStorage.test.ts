@@ -4,6 +4,7 @@ import * as path from "path";
 import { setupFixture } from "backfill-utils-test";
 import { CacheStorageConfig } from "backfill-config";
 import { getCacheStorageProvider } from "../index";
+import { logger } from "backfill-logger";
 
 const setupCacheStorage = async (fixtureName: string) => {
   await setupFixture(fixtureName);
@@ -15,7 +16,9 @@ const setupCacheStorage = async (fixtureName: string) => {
 
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
-    internalCacheFolder
+    internalCacheFolder,
+    logger,
+    process.cwd()
   );
 
   return { cacheStorage, internalCacheFolder };

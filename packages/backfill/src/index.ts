@@ -34,9 +34,9 @@ export async function backfill(
     validateOutput
   } = config;
 
-  logger.setName(name);
-  logger.setMode(mode);
-  logger.setCacheProvider(cacheStorageConfig.provider);
+  logger.setName(name, logger);
+  logger.setMode(mode, logger);
+  logger.setCacheProvider(cacheStorageConfig.provider, logger);
 
   const createPackageHash = async () => await hasher.createPackageHash();
   const fetch = async (hash: string) => await cacheStorage.fetch(hash);
@@ -93,17 +93,17 @@ export async function backfill(
 
   if (validateOutput) {
     const hashOfOutput = await hasher.hashOfOutput();
-    logger.setHashOfOutput(hashOfOutput);
+    logger.setHashOfOutput(hashOfOutput, logger);
   }
 
   if (producePerformanceLogs) {
-    await logger.toFile(logFolder);
+    await logger.toFile(logFolder, logger);
   }
 }
 
 export async function main(): Promise<void> {
   try {
-    const config = createConfig();
+    const config = createConfig(process.cwd());
     const {
       cacheStorageConfig,
       clearOutput,
@@ -135,11 +135,13 @@ export async function main(): Promise<void> {
 
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
-      internalCacheFolder
+      internalCacheFolder,
+      logger,
+      process.cwd()
     );
 
     const hasher = new Hasher(
-      { packageRoot, outputGlob },
+      { packageRoot, outputGlob, logger },
       getRawBuildCommand()
     );
 

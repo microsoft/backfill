@@ -1,6 +1,7 @@
 import { Hasher } from "backfill-hasher";
 import { createConfig } from "backfill-config";
 import { getCacheStorageProvider } from "backfill-cache";
+import { Logger } from "backfill-generic-logger";
 import * as fs from "fs";
 
 import * as fsExtra from "fs-extra";
@@ -11,11 +12,12 @@ import * as path from "path";
  * disk for other commands to use.
  */
 export async function computeHash(
-  cwd: string = process.cwd()
+  cwd: string,
+  logger: Logger
 ): Promise<string> {
   const config = createConfig(cwd);
   const { outputGlob, packageRoot } = config;
-  const hasher = new Hasher({ packageRoot, outputGlob }, "ci-pipeline");
+  const hasher = new Hasher({ packageRoot, outputGlob, logger }, "ci-pipeline");
   const hash = await hasher.createPackageHash();
   return hash;
 }
@@ -24,7 +26,8 @@ export async function computeHash(
  * Fetch cached data from cache storage.
  */
 export async function rehydrateFromCache(
-  cwd: string = process.cwd()
+  cwd: string,
+  logger: Logger
 ): Promise<void> {
   const config = createConfig(cwd);
   const {
@@ -35,9 +38,11 @@ export async function rehydrateFromCache(
   } = config;
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
-    path.join(cwd, internalCacheFolder)
+    path.join(cwd, internalCacheFolder),
+    logger,
+    cwd
   );
-  const hasher = new Hasher({ packageRoot, outputGlob }, "ci-pipeline");
+  const hasher = new Hasher({ packageRoot, outputGlob, logger }, "ci-pipeline");
   const hash = await hasher.createPackageHash();
   const fetch = await cacheStorage.fetch(hash);
 
@@ -53,9 +58,7 @@ export async function rehydrateFromCache(
  * This can be used to only run build commands or uploade
  * the cache if we are in a cache miss situation.
  */
-export async function isCacheHit(
-  cwd: string = process.cwd()
-): Promise<boolean> {
+export async function isCacheHit(cwd: string): Promise<boolean> {
   try {
     fs.statSync(path.join(cwd, "node_modules", "cache-hit.json"));
     const content = await fs.promises.readFile(
@@ -71,7 +74,7 @@ export async function isCacheHit(
  * Store the cache to the cache storage.
  *
  */
-export async function populateCache(cwd: string = process.cwd()) {
+export async function populateCache(cwd: string, logger: Logger) {
   const config = createConfig(cwd);
   const {
     cacheStorageConfig,
@@ -82,9 +85,10 @@ export async function populateCache(cwd: string = process.cwd()) {
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
     path.join(cwd, internalCacheFolder),
+    logger,
     cwd
   );
-  const hasher = new Hasher({ packageRoot, outputGlob }, "ci-pipeline");
+  const hasher = new Hasher({ packageRoot, outputGlob, logger }, "ci-pipeline");
 
   const hash = await hasher.createPackageHash();
   await cacheStorage.put(hash, outputGlob);

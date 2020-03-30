@@ -22,6 +22,7 @@
     "anymatch": "^3.0.3",
     "backfill-cache": "^3.0.4-alpha.0",
     "backfill-config": "^3.0.3-alpha.0",
+    "backfill-generic-logger": "^3.0.1-alpha.0",
     "backfill-hasher": "^3.0.4-alpha.0",
     "backfill-logger": "^3.0.3-alpha.0",
     "backfill-utils-dotenv": "^3.0.1-alpha.0",
