@@ -3,7 +3,7 @@
   "include": ["src"],
   "compilerOptions": { "rootDir": "src", "outDir": "lib" },
   "references": [
-    { "path": "../logger-generic" },
+    { "path": "../generic-logger" },
     { "path": "../logger-performance" }
   ]
 }
