@@ -1,0 +1,28 @@
+{
+  "name": "backfill-performance-logger",
+  "description": "Backfill Performance Logger",
+  "license": "MIT",
+  "author": "Benjamin Weggersen <bewegger@microsoft.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/backfill"
+  },
+  "version": "3.0.0",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "yarn compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w"
+  },
+  "dependencies": {
+    "backfill-generic-logger": "^3.0.0",
+    "filenamify": "^4.1.0",
+    "fs-extra": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.0.0",
+    "backfill-config": "^3.0.0",
+    "backfill-utils-tsconfig": "^2.0.3",
+    "typescript": "3.7.4"
+  }
+}

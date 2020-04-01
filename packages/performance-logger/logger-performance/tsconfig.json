@@ -2,8 +2,5 @@
   "extends": "backfill-utils-tsconfig/tsconfig.default.json",
   "include": ["src"],
   "compilerOptions": { "rootDir": "src", "outDir": "lib" },
-  "references": [
-    { "path": "../generic-logger" },
-    { "path": "../performance-logger" }
-  ]
+  "references": [{ "path": "../config" }, { "path": "../generic-logger" }]
 }
