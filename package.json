@@ -10,6 +10,7 @@
     "build": "lerna run --stream build",
     "postinstall": "yarn update-project-references",
     "lerna": "lerna",
+    "prepublishOnly": "lerna run build && lerna run test",
     "test": "lerna run test",
     "prettier": "prettier \"{.,**}/*.{tsx,ts,js,json,md,yaml}\" --write",
     "update-project-references": "node tools/update-project-references.js",

@@ -1,6 +1,6 @@
 {
   "extends": "backfill-utils-tsconfig/tsconfig.default.json",
-  "exclude": ["__fixtures__", "lib"],
+  "include": ["src"],
   "compilerOptions": { "rootDir": "src", "outDir": "lib" },
-  "references": [{ "path": "../generic-logger" }]
+  "references": [{ "path": "../config" }, { "path": "../generic-logger" }]
 }
