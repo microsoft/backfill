@@ -1,5 +1,3 @@
-import { logger } from "backfill-logger";
-
 import { generateHashOfFiles } from "./hashOfFiles";
 import {
   PackageHashInfo,
@@ -13,6 +11,7 @@ import {
   findWorkspacePath,
   WorkspaceInfo
 } from "./yarnWorkspaces";
+import { Reporter } from "backfill-reporting";
 
 export interface IHasher {
   createPackageHash: () => Promise<string>;
@@ -50,14 +49,15 @@ export class Hasher implements IHasher {
 
   constructor(
     private options: { packageRoot: string; outputGlob: string[] },
-    private buildCommandSignature: string
+    private buildCommandSignature: string,
+    private reporter: Reporter
   ) {
     this.packageRoot = this.options.packageRoot;
     this.outputGlob = this.options.outputGlob;
   }
 
   public async createPackageHash(): Promise<string> {
-    logger.profile("hasher:calculateHash");
+    const tracer = this.reporter.traceOperation("hasher:calculateHash");
 
     const packageRoot = await getPackageRoot(this.packageRoot);
     const yarnLock = await parseLockFile(packageRoot);
@@ -76,7 +76,8 @@ export class Hasher implements IHasher {
       const packageHash = await getPackageHash(
         packageRoot,
         workspaces,
-        yarnLock
+        yarnLock,
+        this.reporter
       );
 
       addToQueue(packageHash.internalDependencies, queue, done, workspaces);
@@ -91,17 +92,21 @@ export class Hasher implements IHasher {
       buildCommandHash
     ]);
 
-    logger.verbose(`Hash of internal packages: ${internalPackagesHash}`);
-    logger.verbose(`Hash of build command: ${buildCommandHash}`);
-    logger.verbose(`Combined hash: ${combinedHash}`);
+    this.reporter.verbose(`Hash of internal packages: ${internalPackagesHash}`);
+    this.reporter.verbose(`Hash of build command: ${buildCommandHash}`);
+    this.reporter.verbose(`Combined hash: ${combinedHash}`);
 
-    logger.profile("hasher:calculateHash");
-    logger.setHash(combinedHash);
+    tracer.stop();
+    this.reporter.reportBuilder.setHash(combinedHash);
 
     return combinedHash;
   }
 
   public async hashOfOutput(): Promise<string> {
-    return generateHashOfFiles(this.packageRoot, this.outputGlob);
+    return generateHashOfFiles(
+      this.packageRoot,
+      this.reporter,
+      this.outputGlob
+    );
   }
 }

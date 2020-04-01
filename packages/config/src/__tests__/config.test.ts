@@ -1,6 +1,7 @@
 import * as path from "path";
 
 import { setupFixture } from "backfill-utils-test";
+import { Reporter } from "backfill-reporting";
 
 import {
   getName,
@@ -21,6 +22,7 @@ describe("getName()", () => {
 
 describe("getEnvConfig()", () => {
   const originalEnv = process.env;
+  const reporter = new Reporter("info");
 
   beforeEach(() => {
     process.env = { ...originalEnv };
@@ -33,21 +35,21 @@ describe("getEnvConfig()", () => {
   it("sets log folder through ENV variable", async () => {
     process.env["BACKFILL_LOG_FOLDER"] = "foo";
 
-    const config = getEnvConfig();
+    const config = getEnvConfig(reporter);
     expect(config).toStrictEqual({ logFolder: "foo" });
   });
 
   it("sets the performance logging flag through ENV variable", async () => {
     process.env["BACKFILL_PRODUCE_PERFORMANCE_LOGS"] = "true";
 
-    const config = getEnvConfig();
+    const config = getEnvConfig(reporter);
     expect(config).toStrictEqual({ producePerformanceLogs: true });
   });
 
   it("sets local cache folder through ENV variable", async () => {
     process.env["BACKFILL_INTERNAL_CACHE_FOLDER"] = "bar";
 
-    const config = getEnvConfig();
+    const config = getEnvConfig(reporter);
     expect(config).toStrictEqual({ internalCacheFolder: "bar" });
   });
 
@@ -65,14 +67,14 @@ describe("getEnvConfig()", () => {
       cacheStorageConfig.options
     );
 
-    const config = getEnvConfig();
+    const config = getEnvConfig(reporter);
     expect(config).toStrictEqual({ cacheStorageConfig: cacheStorageConfig });
   });
 
   it("sets performance report name through ENV variable", async () => {
     process.env["BACKFILL_PERFORMANCE_REPORT_NAME"] = "report";
 
-    const config = getEnvConfig();
+    const config = getEnvConfig(reporter);
     expect(config).toStrictEqual({ performanceReportName: "report" });
   });
 });
@@ -106,6 +108,7 @@ describe("getSearchPaths()", () => {
 
 describe("createConfig()", () => {
   const originalEnv = process.env;
+  const reporter = new Reporter("info");
 
   beforeAll(() => {
     process.env = { ...originalEnv };
@@ -117,7 +120,7 @@ describe("createConfig()", () => {
 
   it("returns default config values when no config file and no ENV override is provided", async () => {
     await setupFixture("basic");
-    const config = createConfig();
+    const config = createConfig(reporter);
 
     const defaultLocalCacheFolder = createDefaultConfig().internalCacheFolder;
     expect(config.internalCacheFolder).toStrictEqual(defaultLocalCacheFolder);
@@ -125,7 +128,7 @@ describe("createConfig()", () => {
 
   it("returns config file value when config file is provided, and no ENV override", async () => {
     await setupFixture("config");
-    const config = createConfig();
+    const config = createConfig(reporter);
 
     expect(config.internalCacheFolder).toStrictEqual("foo");
   });
@@ -134,7 +137,7 @@ describe("createConfig()", () => {
     process.env["BACKFILL_INTERNAL_CACHE_FOLDER"] = "bar";
 
     await setupFixture("config");
-    const config = createConfig();
+    const config = createConfig(reporter);
 
     expect(config.internalCacheFolder).toStrictEqual("bar");
   });

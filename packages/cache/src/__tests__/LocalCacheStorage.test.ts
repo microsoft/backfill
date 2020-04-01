@@ -1,6 +1,7 @@
 import * as fs from "fs-extra";
 import * as path from "path";
 
+import { Reporter } from "backfill-reporting";
 import { setupFixture } from "backfill-utils-test";
 import { CacheStorageConfig } from "backfill-config";
 import { getCacheStorageProvider } from "../index";
@@ -12,10 +13,12 @@ const setupCacheStorage = async (fixtureName: string) => {
     provider: "local"
   };
   const internalCacheFolder = path.join("node_modules", ".cache", "backfill");
+  const reporter = new Reporter("info");
 
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
-    internalCacheFolder
+    internalCacheFolder,
+    reporter
   );
 
   return { cacheStorage, internalCacheFolder };

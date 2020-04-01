@@ -23,7 +23,7 @@
     "backfill-cache": "^3.0.0",
     "backfill-config": "^3.0.0",
     "backfill-hasher": "^3.0.0",
-    "backfill-logger": "^3.0.0",
+    "backfill-reporting": "^3.0.0",
     "backfill-utils-dotenv": "^3.0.0",
     "chokidar": "^3.2.1",
     "execa": "^4.0.0",

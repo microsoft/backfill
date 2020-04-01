@@ -4,6 +4,8 @@ import { setupFixture } from "backfill-utils-test";
 import { PackageHashInfo } from "../hashOfPackage";
 import { Hasher, addToQueue } from "../index";
 import { WorkspaceInfo } from "../yarnWorkspaces";
+import { Reporter } from "backfill-reporting";
+const reporter = new Reporter("info");
 
 describe("addToQueue", () => {
   const setupAddToQueue = async () => {
@@ -97,7 +99,7 @@ describe("The main Hasher class", () => {
     const options = { packageRoot, outputGlob: ["lib/**"] };
     const buildSignature = "yarn build";
 
-    const hasher = new Hasher(options, buildSignature);
+    const hasher = new Hasher(options, buildSignature, reporter);
     const hash = await hasher.createPackageHash();
 
     return hash;

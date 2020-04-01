@@ -1,6 +1,5 @@
 import * as crypto from "crypto";
 import * as path from "path";
-import { logger } from "backfill-logger";
 
 import { resolveInternalDependencies } from "./resolveInternalDependencies";
 import { resolveExternalDependencies } from "./resolveExternalDependencies";
@@ -9,6 +8,7 @@ import { Dependencies } from "./resolveExternalDependencies";
 import { hashStrings } from "./helpers";
 import { ParsedYarnLock } from "./yarnLock";
 import { WorkspaceInfo } from "./yarnWorkspaces";
+import { Reporter } from "backfill-reporting";
 
 export type PackageHashInfo = {
   name: string;
@@ -35,7 +35,8 @@ export function generateHashOfInternalPackages(
 export async function getPackageHash(
   packageRoot: string,
   workspaces: WorkspaceInfo,
-  yarnLock: ParsedYarnLock
+  yarnLock: ParsedYarnLock,
+  reporter: Reporter
 ): Promise<PackageHashInfo> {
   const { name, dependencies, devDependencies } = require(path.join(
     packageRoot,
@@ -63,12 +64,12 @@ export async function getPackageHash(
     ...externalDeoendencies
   ];
 
-  const filesHash = await generateHashOfFiles(packageRoot);
+  const filesHash = await generateHashOfFiles(packageRoot, reporter);
   const dependenciesHash = hashStrings(resolvedDependencies);
 
-  logger.silly(name);
-  logger.silly(`  ${filesHash} (fileHash)`);
-  logger.silly(`  ${dependenciesHash} (dependenciesHash)`);
+  reporter.silly(name);
+  reporter.silly(`  ${filesHash} (fileHash)`);
+  reporter.silly(`  ${dependenciesHash} (dependenciesHash)`);
 
   const packageHash = {
     name,

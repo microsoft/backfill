@@ -2,10 +2,18 @@ import * as fs from "fs-extra";
 import { setupFixture } from "backfill-utils-test";
 
 import { createBuildCommand } from "../commandRunner";
+import { Reporter } from "backfill-reporting";
+
+const reporter = new Reporter("info");
 
 describe("createBuildCommand", () => {
   it("runs a command successfully", async () => {
-    const buildCommand = createBuildCommand(["echo foo"], false, [""]);
+    const buildCommand = createBuildCommand(
+      ["echo foo"],
+      false,
+      [""],
+      reporter
+    );
 
     const buildResult = await buildCommand();
 
@@ -15,13 +23,18 @@ describe("createBuildCommand", () => {
   });
 
   it("resolves if no command can be found", async () => {
-    const buildCommand = createBuildCommand([""], false, [""]);
+    const buildCommand = createBuildCommand([""], false, [""], reporter);
 
     await expect(buildCommand()).rejects.toThrow("Command not provided");
   });
 
   it("prints the error command and throws if it fails", async () => {
-    const buildCommand = createBuildCommand(["somecommand"], false, [""]);
+    const buildCommand = createBuildCommand(
+      ["somecommand"],
+      false,
+      [""],
+      reporter
+    );
 
     try {
       await buildCommand();
@@ -33,7 +46,12 @@ describe("createBuildCommand", () => {
 
   it("clears the output folder", async () => {
     await setupFixture("pre-built");
-    const buildCommand = createBuildCommand(["echo foo"], true, ["lib/**"]);
+    const buildCommand = createBuildCommand(
+      ["echo foo"],
+      true,
+      ["lib/**"],
+      reporter
+    );
 
     const index_js_ExistsBeforeBuild = await fs.pathExists("lib/index.js");
     await buildCommand();

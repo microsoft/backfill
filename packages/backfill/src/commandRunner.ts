@@ -1,7 +1,7 @@
 import * as execa from "execa";
 import * as fs from "fs-extra";
 import * as fg from "fast-glob";
-import { logger } from "backfill-logger";
+import { Reporter } from "backfill-reporting";
 
 export type ExecaReturns = execa.ExecaChildProcess;
 export type BuildCommand = () => Promise<ExecaReturns | void>;
@@ -13,7 +13,8 @@ export function getRawBuildCommand(): string {
 export function createBuildCommand(
   buildCommand: string[],
   clearOutput: boolean,
-  outputGlob: string[]
+  outputGlob: string[],
+  reporter: Reporter
 ): () => Promise<ExecaReturns | void> {
   return async (): Promise<ExecaReturns | void> => {
     const parsedBuildCommand = buildCommand.join(" ");
@@ -28,7 +29,7 @@ export function createBuildCommand(
     }
 
     // Set up runner
-    logger.profile("buildCommand:run");
+    const tracer = reporter.reportBuilder.setTime("buildTime");
     const runner = execa(parsedBuildCommand, {
       shell: true,
       ...(process.env.NODE_ENV !== "test" ? { stdio: "inherit" } : {})
@@ -38,12 +39,12 @@ export function createBuildCommand(
       runner
         // Add build time to the performance logger
         .then(() => {
-          logger.setTime("buildTime", "buildCommand:run");
+          tracer.stop();
         })
         // Catch to pretty-print the command that failed and re-throw
         .catch(err => {
           if (process.env.NODE_ENV !== "test") {
-            logger.error(`Failed while running: "${parsedBuildCommand}"`);
+            reporter.error(`Failed while running: "${parsedBuildCommand}"`);
           }
           throw err;
         })

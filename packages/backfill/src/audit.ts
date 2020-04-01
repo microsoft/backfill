@@ -2,8 +2,7 @@ import * as chokidar from "chokidar";
 import * as findUp from "find-up";
 import * as path from "path";
 import anymatch from "anymatch";
-import { logger } from "backfill-logger";
-
+import { Reporter } from "backfill-reporting";
 let changedFilesOutsideScope: string[] = [];
 let changedFilesInsideScope: string[] = [];
 
@@ -35,7 +34,8 @@ export function initializeWatcher(
   internalCacheFolder: string,
   logFolder: string,
   outputGlob: string[],
-  hashGlobs: string[]
+  hashGlobs: string[],
+  reporter: Reporter
 ) {
   // Trying to find the git root and using it as an approximation of code boundary
   const repositoryRoot = getGitRepositoryRoot(packageRoot);
@@ -44,9 +44,9 @@ export function initializeWatcher(
   changedFilesOutsideScope = [];
   changedFilesInsideScope = [];
 
-  logger.info("Running in AUDIT mode");
-  logger.info(`[audit] Watching file changes in: ${repositoryRoot}`);
-  logger.info(`[audit] Backfill will cache folder: ${outputGlob}`);
+  reporter.info("Running in AUDIT mode");
+  reporter.info(`[audit] Watching file changes in: ${repositoryRoot}`);
+  reporter.info(`[audit] Backfill will cache folder: ${outputGlob}`);
 
   // Define globs
   const ignoreGlobs = addGlobstars([
@@ -66,7 +66,7 @@ export function initializeWatcher(
     })
     .on("all", (event, filePath) => {
       const logLine = `${filePath} (${event})`;
-      logger.silly(`[audit] File change: ${logLine}`);
+      reporter.silly(`[audit] File change: ${logLine}`);
 
       if (
         !anymatch(
@@ -94,16 +94,16 @@ async function delay(time: number) {
   });
 }
 
-export async function closeWatcher() {
+export async function closeWatcher(reporter: Reporter) {
   // Wait for one second before closing, giving time for file changes to propagate
   await delay(1000);
 
   if (changedFilesOutsideScope.length > 0) {
-    logger.warn(sideEffectWarningString);
-    changedFilesOutsideScope.forEach(file => logger.warn(`- ${file}`));
-    logger.warn(sideEffectCallToActionString);
+    reporter.warn(sideEffectWarningString);
+    changedFilesOutsideScope.forEach(file => reporter.warn(`- ${file}`));
+    reporter.warn(sideEffectCallToActionString);
   } else {
-    logger.info(noSideEffectString);
+    reporter.info(noSideEffectString);
   }
 
   watcher.close();
