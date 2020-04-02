@@ -94,8 +94,6 @@ export function makeLogger(
     },
 
     setMode(mode: string, logLevel: "verbose" | "info") {
-      // if (mode !== "READ_WRITE") {
-      //   consoleLogger.info(`Running in ${mode} mode.`);
       consoleLogger[logLevel](`Running in ${mode} mode.`);
 
       performanceReportData["mode"] = mode;
