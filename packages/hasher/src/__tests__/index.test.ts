@@ -4,8 +4,9 @@ import { setupFixture } from "backfill-utils-test";
 import { PackageHashInfo } from "../hashOfPackage";
 import { Hasher, addToQueue } from "../index";
 import { WorkspaceInfo } from "../yarnWorkspaces";
-import { Logger } from "backfill-logger";
-const logger = new Logger("info");
+import { makeLogger } from "backfill-logger";
+
+const logger = makeLogger("info");
 
 describe("addToQueue", () => {
   const setupAddToQueue = async () => {

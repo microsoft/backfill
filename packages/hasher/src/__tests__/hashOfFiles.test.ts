@@ -2,14 +2,14 @@ import * as fs from "fs-extra";
 import { setupFixture } from "backfill-utils-test";
 
 import { generateHashOfFiles } from "../hashOfFiles";
-import { Logger } from "backfill-logger";
+import { makeLogger } from "backfill-logger";
 
 import { createConfig, Config } from "backfill-config";
 const { createDefaultConfig } = jest.requireActual("backfill-config");
 jest.mock("backfill-config");
 
 const mockedDependency = <jest.Mock<Config>>createConfig;
-const logger = new Logger("info");
+const logger = makeLogger("info");
 
 describe("generateHashOfFiles()", () => {
   it("excludes files provided by backfill config", async () => {

@@ -1,7 +1,7 @@
 import * as fs from "fs-extra";
 import * as path from "path";
 
-import { Logger } from "backfill-logger";
+import { makeLogger } from "backfill-logger";
 import { setupFixture } from "backfill-utils-test";
 import { CacheStorageConfig } from "backfill-config";
 import { getCacheStorageProvider } from "../index";
@@ -13,7 +13,7 @@ const setupCacheStorage = async (fixtureName: string) => {
     provider: "local"
   };
   const internalCacheFolder = path.join("node_modules", ".cache", "backfill");
-  const logger = new Logger("info");
+  const logger = makeLogger("info");
 
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,

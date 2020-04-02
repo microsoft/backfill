@@ -57,7 +57,7 @@ export class Hasher implements IHasher {
   }
 
   public async createPackageHash(): Promise<string> {
-    const tracer = this.logger.traceOperation("hasher:calculateHash");
+    const tracer = this.logger.setTime("hashTime");
 
     const packageRoot = await getPackageRoot(this.packageRoot);
     const yarnLock = await parseLockFile(packageRoot);
@@ -86,18 +86,15 @@ export class Hasher implements IHasher {
     }
 
     const internalPackagesHash = generateHashOfInternalPackages(done);
-    const buildCommandHash = await hashStrings(this.buildCommandSignature);
-    const combinedHash = await hashStrings([
-      internalPackagesHash,
-      buildCommandHash
-    ]);
+    const buildCommandHash = hashStrings(this.buildCommandSignature);
+    const combinedHash = hashStrings([internalPackagesHash, buildCommandHash]);
 
     this.logger.verbose(`Hash of internal packages: ${internalPackagesHash}`);
     this.logger.verbose(`Hash of build command: ${buildCommandHash}`);
     this.logger.verbose(`Combined hash: ${combinedHash}`);
 
     tracer.stop();
-    this.logger.reportBuilder.setHash(combinedHash);
+    this.logger.setHash(combinedHash);
 
     return combinedHash;
   }

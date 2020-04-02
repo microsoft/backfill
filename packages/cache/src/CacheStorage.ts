@@ -9,18 +9,18 @@ export interface ICacheStorage {
 export abstract class CacheStorage implements ICacheStorage {
   public constructor(protected logger: Logger) {}
   public async fetch(hash: string): Promise<Boolean> {
-    const tracer = this.logger.reportBuilder.setTime("fetchTime");
+    const tracer = this.logger.setTime("fetchTime");
 
     const result = await this._fetch(hash);
 
     tracer.stop();
 
-    this.logger.reportBuilder.setHit(result);
+    this.logger.setHit(result);
     return result;
   }
 
   public async put(hash: string, outputGlob: string[]): Promise<void> {
-    const tracer = this.logger.reportBuilder.setTime("putTime");
+    const tracer = this.logger.setTime("putTime");
 
     const filesBeingCached = fg.sync(outputGlob);
     if (filesBeingCached.length === 0) {

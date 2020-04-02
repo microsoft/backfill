@@ -4,12 +4,12 @@ import { setupFixture } from "backfill-utils-test";
 import { getCacheStorageProvider } from "backfill-cache";
 import { Hasher } from "backfill-hasher";
 import { createConfig } from "backfill-config";
-import { Logger } from "backfill-logger";
+import { makeLogger } from "backfill-logger";
 
 import { backfill } from "../index";
 import { createBuildCommand } from "../commandRunner";
 
-const logger = new Logger("info");
+const logger = makeLogger("info");
 
 describe("backfill", () => {
   it("with cache miss and then cache hit", async () => {

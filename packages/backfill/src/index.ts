@@ -2,7 +2,7 @@ import * as yargs from "yargs";
 
 import { loadDotenv } from "backfill-utils-dotenv";
 import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
-import { Logger } from "backfill-logger";
+import { Logger, makeLogger } from "backfill-logger";
 import { createConfig, Config } from "backfill-config";
 import {
   getRawBuildCommand,
@@ -35,9 +35,9 @@ export async function backfill(
     validateOutput
   } = config;
 
-  logger.reportBuilder.setName(name);
-  logger.reportBuilder.setMode(mode);
-  logger.reportBuilder.setCacheProvider(cacheStorageConfig.provider);
+  logger.setName(name);
+  logger.setMode(mode);
+  logger.setCacheProvider(cacheStorageConfig.provider);
 
   const createPackageHash = async () => await hasher.createPackageHash();
   const fetch = async (hash: string) => await cacheStorage.fetch(hash);
@@ -94,16 +94,16 @@ export async function backfill(
 
   if (validateOutput) {
     const hashOfOutput = await hasher.hashOfOutput();
-    logger.reportBuilder.setHashOfOutput(hashOfOutput);
+    logger.setHashOfOutput(hashOfOutput);
   }
 
   if (producePerformanceLogs) {
-    await logger.reportBuilder.toFile(logFolder);
+    await logger.toFile(logFolder);
   }
 }
 
 export async function main(): Promise<void> {
-  const logger = new Logger("info");
+  let logger = makeLogger("info");
   try {
     const config = createConfig(logger);
     const {
@@ -118,7 +118,7 @@ export async function main(): Promise<void> {
     } = config;
 
     if (logLevel) {
-      logger.changeLogLevel(logLevel);
+      logger = makeLogger(logLevel);
     }
 
     const helpString = "Backfills unchanged packages.";

@@ -2,9 +2,9 @@ import * as fs from "fs-extra";
 import { setupFixture } from "backfill-utils-test";
 
 import { createBuildCommand } from "../commandRunner";
-import { Logger } from "backfill-logger";
+import { makeLogger } from "backfill-logger";
 
-const logger = new Logger("info");
+const logger = makeLogger("info");
 
 describe("createBuildCommand", () => {
   it("runs a command successfully", async () => {

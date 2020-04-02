@@ -29,7 +29,7 @@ export function createBuildCommand(
     }
 
     // Set up runner
-    const tracer = logger.reportBuilder.setTime("buildTime");
+    const tracer = logger.setTime("buildTime");
     const runner = execa(parsedBuildCommand, {
       shell: true,
       ...(process.env.NODE_ENV !== "test" ? { stdio: "inherit" } : {})

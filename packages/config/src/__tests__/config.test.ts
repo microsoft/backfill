@@ -1,7 +1,7 @@
 import * as path from "path";
 
 import { setupFixture } from "backfill-utils-test";
-import { Logger } from "backfill-logger";
+import { makeLogger } from "backfill-logger";
 
 import {
   getName,
@@ -22,7 +22,7 @@ describe("getName()", () => {
 
 describe("getEnvConfig()", () => {
   const originalEnv = process.env;
-  const logger = new Logger("info");
+  const logger = makeLogger("info");
 
   beforeEach(() => {
     process.env = { ...originalEnv };
@@ -108,7 +108,7 @@ describe("getSearchPaths()", () => {
 
 describe("createConfig()", () => {
   const originalEnv = process.env;
-  const logger = new Logger("info");
+  const logger = makeLogger("info");
 
   beforeAll(() => {
     process.env = { ...originalEnv };

@@ -16,8 +16,6 @@ export type LevelFilter = {
 
 export type LoggerOverrides = {
   console?: Console;
-  timer?: Timer;
-  outputFormatter?: OutputFormatter;
 };
 
 export type OutputFormatter = {
@@ -25,7 +23,6 @@ export type OutputFormatter = {
 };
 
 const logLevels = {
-  trace: 5,
   silly: 4,
   verbose: 3,
   info: 2,
@@ -61,8 +58,6 @@ const defaultFilter: (logLevel: LogLevel) => LevelFilter = (
 const defaultFormatter = {
   format(logLevel: LogLevel, ...args: string[]): string[] {
     switch (logLevel) {
-      case "trace":
-        return ["backfill:", "trace", ...args];
       case "silly":
         return ["backfill:", chalk.gray("\u25C7"), ...args];
       case "verbose":
@@ -86,71 +81,53 @@ export function isCorrectLogLevel(level: string): level is LogLevel {
 
 export type LogLevel = keyof typeof logLevels;
 
-export class Logger {
-  private console: Console;
-  private timer: Timer;
-  private formatter: OutputFormatter;
-  private filter: LevelFilter;
-  public reportBuilder: ReportBuilder;
+type ConsoleLogger = {
+  silly(...args: string[]): void;
+  verbose(...args: string[]): void;
+  info(...args: string[]): void;
+  warn(...args: string[]): void;
+  error(...args: string[]): void;
+};
 
-  public constructor(logLevel: LogLevel, overrides?: LoggerOverrides) {
-    this.console = (overrides && overrides.console) || console;
-    this.timer = (overrides && overrides.timer) || defaultTimer;
-    this.formatter =
-      (overrides && overrides.outputFormatter) || defaultFormatter;
-    this.filter = defaultFilter(logLevel);
-    this.reportBuilder = makeReportBuilder(this);
-  }
+function makeConsoleLogger(
+  logLevel: LogLevel,
+  overrides?: LoggerOverrides
+): ConsoleLogger {
+  let consoleOverride = (overrides && overrides.console) || console;
+  let formatter = defaultFormatter;
+  let filter = defaultFilter(logLevel);
 
-  public changeLogLevel(level: LogLevel): void {
-    this.filter = defaultFilter(level);
-  }
-
-  public silly(...args: string[]): void {
-    if (this.filter.filter("silly")) {
-      this.console.info(...this.formatter.format("silly", ...args));
-    }
-  }
-
-  public verbose(...args: string[]): void {
-    if (this.filter.filter("verbose")) {
-      this.console.info(...this.formatter.format("verbose", ...args));
-    }
-  }
-
-  public info(...args: string[]): void {
-    if (this.filter.filter("info")) {
-      this.console.info(...this.formatter.format("info", ...args));
-    }
-  }
-
-  public warn(...args: string[]): void {
-    if (this.filter.filter("warn")) {
-      this.console.warn(...this.formatter.format("warn", ...args));
-    }
-  }
-
-  public error(...args: string[]): void {
-    if (this.filter.filter("error")) {
-      this.console.error(...this.formatter.format("error", ...args));
-    }
-  }
-
-  public trace(...args: string[]): void {
-    if (this.filter.filter("trace")) {
-      this.console.info(...this.formatter.format("trace", ...args));
-    }
-  }
-
-  public traceOperation(operationName: string): { stop(): void } {
-    const tracer = this.timer.start();
-    return {
-      stop: (): void => {
-        const time = tracer.stop();
-        this.trace("Opreation", operationName, `took ${time} ms.`);
+  return {
+    silly(...args: string[]): void {
+      if (filter.filter("silly")) {
+        consoleOverride.info(...formatter.format("silly", ...args));
       }
-    };
-  }
+    },
+
+    verbose(...args: string[]): void {
+      if (filter.filter("verbose")) {
+        consoleOverride.info(...formatter.format("verbose", ...args));
+      }
+    },
+
+    info(...args: string[]): void {
+      if (filter.filter("info")) {
+        consoleOverride.info(...formatter.format("info", ...args));
+      }
+    },
+
+    warn(...args: string[]): void {
+      if (filter.filter("warn")) {
+        consoleOverride.warn(...formatter.format("warn", ...args));
+      }
+    },
+
+    error(...args: string[]): void {
+      if (filter.filter("error")) {
+        consoleOverride.error(...formatter.format("error", ...args));
+      }
+    }
+  };
 }
 
 type PerformanceReportData = {
@@ -161,12 +138,13 @@ type PerformanceReportData = {
   hit?: boolean;
   buildTime?: number;
   putTime?: number;
+  hashTime?: number;
   fetchTime?: number;
   mode?: string;
   hashOfOutput?: string;
 };
 
-type Times = "buildTime" | "putTime" | "fetchTime";
+type Times = "hashTime" | "buildTime" | "putTime" | "fetchTime";
 
 const performanceReportData: PerformanceReportData = {
   timestamp: Date.now()
@@ -178,7 +156,7 @@ function createFileName() {
   );
 }
 
-export type ReportBuilder = {
+export type Logger = ConsoleLogger & {
   setName(name: string): void;
   setHash(hash: string): void;
   setCacheProvider(cacheProvider: string): void;
@@ -189,44 +167,60 @@ export type ReportBuilder = {
   toFile(logFolder: string): Promise<void>;
 };
 
-function makeReportBuilder(logger: Logger): ReportBuilder {
+export function makeLogger(
+  logLevel: LogLevel,
+  overrides?: LoggerOverrides
+): Logger {
+  let consoleLogger = makeConsoleLogger(logLevel, overrides);
   return {
+    silly: consoleLogger.silly,
+    verbose: consoleLogger.verbose,
+    info: consoleLogger.info,
+    warn: consoleLogger.warn,
+    error: consoleLogger.error,
     setName(name: string) {
-      logger.info(`Package name: ${name}`);
+      consoleLogger.info(`Package name: ${name}`);
       performanceReportData["name"] = name;
     },
 
     setHash(hash: string) {
-      logger.verbose(`Package hash: ${hash}`);
+      consoleLogger.verbose(`Package hash: ${hash}`);
       performanceReportData["hash"] = hash;
     },
 
     setCacheProvider(cacheProvider: string) {
-      logger.verbose(`Cache provider: ${cacheProvider}`);
+      consoleLogger.verbose(`Cache provider: ${cacheProvider}`);
       performanceReportData["cacheProvider"] = cacheProvider;
     },
 
     setHit(hit: boolean) {
-      logger.info(hit ? `Cache hit!` : `Cache miss!`);
+      consoleLogger.info(hit ? `Cache hit!` : `Cache miss!`);
       performanceReportData["hit"] = hit;
     },
 
     setTime(type: Times): { stop(): void } {
-      return logger.traceOperation(type);
+      const tracer = defaultTimer.start();
+      return {
+        stop: () => {
+          const time = tracer.stop();
+          consoleLogger.verbose("Opreation", type, `took ${time} ms.`);
+          performanceReportData[type] = time;
+        }
+      };
     },
 
     setMode(mode: string) {
       if (mode !== "READ_WRITE") {
-        logger.info(`Running in ${mode} mode.`);
+        consoleLogger.info(`Running in ${mode} mode.`);
       } else {
-        logger.verbose(`Running in ${mode} mode.`);
+        consoleLogger.verbose(`Running in ${mode} mode.`);
       }
 
       performanceReportData["mode"] = mode;
     },
 
     setHashOfOutput(hash: string) {
-      logger.verbose(`Hash of output: ${hash}`);
+      consoleLogger.verbose(`Hash of output: ${hash}`);
       performanceReportData["hashOfOutput"] = hash;
     },
 
@@ -234,7 +228,7 @@ function makeReportBuilder(logger: Logger): ReportBuilder {
       const filepath = path.join(logFolder, createFileName());
       await fs.outputJson(filepath, performanceReportData, { spaces: 2 });
 
-      logger.silly(`Performance log created at ${filepath}`);
+      consoleLogger.silly(`Performance log created at ${filepath}`);
     }
   };
 }
