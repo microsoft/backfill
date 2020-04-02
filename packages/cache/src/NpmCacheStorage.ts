@@ -36,25 +36,25 @@ export class NpmCacheStorage extends CacheStorage {
       fs.mkdirpSync(temporaryNpmOutputFolder);
 
       try {
-        await execa(
-          "npm",
-          [
-            "install",
-            "--prefix",
-            temporaryNpmOutputFolder,
-            `${npmPackageName}@0.0.0-${hash}`,
-            "--registry",
-            registryUrl,
-            "--prefer-offline",
-            "--ignore-scripts",
-            "--no-shrinkwrap",
-            "--no-package-lock",
-            "--loglevel",
-            "error",
-            ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
-          ],
-          { stdout: "inherit" }
-        );
+        const runner = execa("npm", [
+          "install",
+          "--prefix",
+          temporaryNpmOutputFolder,
+          `${npmPackageName}@0.0.0-${hash}`,
+          "--registry",
+          registryUrl,
+          "--prefer-offline",
+          "--ignore-scripts",
+          "--no-shrinkwrap",
+          "--no-package-lock",
+          "--loglevel",
+          "error",
+          ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
+        ]);
+
+        this.logger.pipeProcessOutput(runner.stdout, runner.stderr);
+
+        await runner;
       } catch (error) {
         fs.removeSync(temporaryNpmOutputFolder);
 
@@ -111,7 +111,7 @@ export class NpmCacheStorage extends CacheStorage {
 
     // Upload package
     try {
-      await execa(
+      const runner = execa(
         "npm",
         [
           "publish",
@@ -126,6 +126,10 @@ export class NpmCacheStorage extends CacheStorage {
           stdout: "inherit"
         }
       );
+
+      this.logger.pipeProcessOutput(runner.stdout, runner.stderr);
+
+      await runner;
     } catch (error) {
       if (error.stderr.toString().indexOf("403") === -1) {
         throw new Error(error);

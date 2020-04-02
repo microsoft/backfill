@@ -1,6 +1,7 @@
 import * as fs from "fs-extra";
 import * as path from "path";
 import filenamify from "filenamify";
+import { Readable } from "stream";
 
 import { LogLevel } from "./logLevel";
 import { defaultTimer, Timer } from "./timer";
@@ -44,6 +45,7 @@ export type Logger = ConsoleLogger & {
   setMode(mode: string, logLevel: "verbose" | "info"): void;
   setHashOfOutput(hash: string): void;
   toFile(logFolder: string): Promise<void>;
+  pipeProcessOutput(stdout: Readable | null, stderr: Readable | null): void;
 };
 
 export function makeLogger(
@@ -57,6 +59,16 @@ export function makeLogger(
   };
 
   return {
+    pipeProcessOutput(stdout: Readable | null, stderr: Readable | null): void {
+      stdout &&
+        stdout.on("data", chunk =>
+          consoleLogger.consoleOverride.info(chunk.toString())
+        );
+      stderr &&
+        stderr.on("data", chunk =>
+          consoleLogger.consoleOverride.error(chunk.toString())
+        );
+    },
     silly: consoleLogger.silly,
     verbose: consoleLogger.verbose,
     info: consoleLogger.info,
