@@ -4,7 +4,7 @@ import * as path from "path";
 import * as fg from "fast-glob";
 
 import { NpmCacheStorageOptions } from "backfill-config";
-import { Reporter } from "backfill-reporting";
+import { Logger } from "backfill-logger";
 
 import { CacheStorage } from "./CacheStorage";
 
@@ -12,9 +12,9 @@ export class NpmCacheStorage extends CacheStorage {
   constructor(
     private options: NpmCacheStorageOptions,
     private internalCacheFolder: string,
-    reporter: Reporter
+    logger: Logger
   ) {
-    super(reporter);
+    super(logger);
   }
 
   protected async _fetch(hash: string): Promise<boolean> {

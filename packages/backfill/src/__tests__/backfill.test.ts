@@ -4,19 +4,19 @@ import { setupFixture } from "backfill-utils-test";
 import { getCacheStorageProvider } from "backfill-cache";
 import { Hasher } from "backfill-hasher";
 import { createConfig } from "backfill-config";
-import { Reporter } from "backfill-reporting";
+import { Logger } from "backfill-logger";
 
 import { backfill } from "../index";
 import { createBuildCommand } from "../commandRunner";
 
-const reporter = new Reporter("info");
+const logger = new Logger("info");
 
 describe("backfill", () => {
   it("with cache miss and then cache hit", async () => {
     //  Set up
     await setupFixture("basic");
 
-    const config = createConfig(reporter);
+    const config = createConfig(logger);
     const {
       cacheStorageConfig,
       clearOutput,
@@ -29,19 +29,19 @@ describe("backfill", () => {
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
       internalCacheFolder,
-      reporter
+      logger
     );
     const buildCommandRaw = "npm run compile";
     const buildCommand = createBuildCommand(
       [buildCommandRaw],
       clearOutput,
       outputGlob,
-      reporter
+      logger
     );
     const hasher = new Hasher(
       { packageRoot, outputGlob },
       buildCommandRaw,
-      reporter
+      logger
     );
 
     // Spy
@@ -50,7 +50,7 @@ describe("backfill", () => {
     const spiedHasher = spy(hasher);
 
     // Execute
-    await backfill(config, cacheStorage, spiedBuildCommand, hasher, reporter);
+    await backfill(config, cacheStorage, spiedBuildCommand, hasher, logger);
 
     // Assert
     verify(spiedHasher.createPackageHash()).once();
@@ -63,7 +63,7 @@ describe("backfill", () => {
     jest.clearAllMocks();
 
     // Execute
-    await backfill(config, cacheStorage, buildCommand, hasher, reporter);
+    await backfill(config, cacheStorage, buildCommand, hasher, logger);
 
     // Assert
     verify(spiedHasher.createPackageHash()).once();

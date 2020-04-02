@@ -2,7 +2,7 @@ import * as path from "path";
 import * as pkgDir from "pkg-dir";
 import * as findUp from "find-up";
 
-import { LogLevel, Reporter } from "backfill-reporting";
+import { LogLevel, Logger } from "backfill-logger";
 
 import { CacheStorageConfig } from "./cacheConfig";
 import { getEnvConfig } from "./envConfig";
@@ -95,7 +95,7 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
 }
 
 export function createConfig(
-  reporter: Reporter,
+  logger: Logger,
   fromPath: string = process.cwd()
 ): Config {
   const defaultConfig = createDefaultConfig(fromPath);
@@ -114,7 +114,7 @@ export function createConfig(
     };
   }, {});
 
-  const envBasedConfig = getEnvConfig(reporter);
+  const envBasedConfig = getEnvConfig(logger);
 
   return {
     ...defaultConfig,

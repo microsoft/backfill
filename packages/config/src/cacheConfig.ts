@@ -1,4 +1,4 @@
-import { Reporter } from "backfill-reporting";
+import { Logger } from "backfill-logger";
 
 export type AzureBlobCacheStorageOptions = {
   connectionString: string;
@@ -30,7 +30,7 @@ export type CacheStorageConfig =
 
 export function getNpmConfigFromSerializedOptions(
   options: string,
-  reporter: Reporter
+  logger: Logger
 ): NpmCacheStorageConfig {
   try {
     const parsedOptions = JSON.parse(options);
@@ -47,14 +47,14 @@ export function getNpmConfigFromSerializedOptions(
       options: { ...parsedOptions }
     };
   } catch (error) {
-    reporter.error(error);
+    logger.error(error);
     throw new Error("Invalid npm storage options");
   }
 }
 
 export function getAzureBlobConfigFromSerializedOptions(
   options: string,
-  reporter: Reporter
+  logger: Logger
 ): AzureBlobCacheStorageConfig {
   try {
     const parsedOptions = JSON.parse(options);
@@ -71,7 +71,7 @@ export function getAzureBlobConfigFromSerializedOptions(
       options: { ...parsedOptions }
     };
   } catch (error) {
-    reporter.error(error);
+    logger.error(error);
     throw new Error("Invalid blob storage options");
   }
 }

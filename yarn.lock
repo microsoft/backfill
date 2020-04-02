@@ -380,7 +380,7 @@
 
 "@jest/reporters@^24.8.0":
   version "24.8.0"
-  resolved "https://registry.yarnpkg.com/@jest/reporters/-/reporters-24.8.0.tgz#075169cd029bddec54b8f2c0fc489fd0b9e05729"
+  resolved "https://registry.yarnpkg.com/@jest/reporters/-/loggers-24.8.0.tgz#075169cd029bddec54b8f2c0fc489fd0b9e05729"
   integrity sha512-eZ9TyUYpyIIXfYCrw0UHUWUvE35vx5I92HGMgS93Pv7du+GHIzl+/vh8Qj9MCWFK/4TqyttVBPakWMOfZRIfxw==
   dependencies:
     "@jest/environment" "^24.8.0"

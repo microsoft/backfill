@@ -6,7 +6,7 @@
     { "path": "../cache" },
     { "path": "../config" },
     { "path": "../hasher" },
-    { "path": "../reporting" },
+    { "path": "../logger" },
     { "path": "../utils-dotenv" },
     { "path": "../utils-test" }
   ]

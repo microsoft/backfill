@@ -2,7 +2,7 @@ import * as yargs from "yargs";
 
 import { loadDotenv } from "backfill-utils-dotenv";
 import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
-import { Reporter } from "backfill-reporting";
+import { Logger } from "backfill-logger";
 import { createConfig, Config } from "backfill-config";
 import {
   getRawBuildCommand,
@@ -23,7 +23,7 @@ export async function backfill(
   cacheStorage: ICacheStorage,
   buildCommand: BuildCommand,
   hasher: IHasher,
-  reporter: Reporter
+  logger: Logger
 ): Promise<void> {
   const {
     cacheStorageConfig,
@@ -35,9 +35,9 @@ export async function backfill(
     validateOutput
   } = config;
 
-  reporter.reportBuilder.setName(name);
-  reporter.reportBuilder.setMode(mode);
-  reporter.reportBuilder.setCacheProvider(cacheStorageConfig.provider);
+  logger.reportBuilder.setName(name);
+  logger.reportBuilder.setMode(mode);
+  logger.reportBuilder.setCacheProvider(cacheStorageConfig.provider);
 
   const createPackageHash = async () => await hasher.createPackageHash();
   const fetch = async (hash: string) => await cacheStorage.fetch(hash);
@@ -52,7 +52,7 @@ export async function backfill(
     try {
       await cacheStorage.put(hash, outputGlob);
     } catch (err) {
-      reporter.error(
+      logger.error(
         `Failed to persist the cache with the following error:\n\n${err}`
       );
     }
@@ -94,18 +94,18 @@ export async function backfill(
 
   if (validateOutput) {
     const hashOfOutput = await hasher.hashOfOutput();
-    reporter.reportBuilder.setHashOfOutput(hashOfOutput);
+    logger.reportBuilder.setHashOfOutput(hashOfOutput);
   }
 
   if (producePerformanceLogs) {
-    await reporter.reportBuilder.toFile(logFolder);
+    await logger.reportBuilder.toFile(logFolder);
   }
 }
 
 export async function main(): Promise<void> {
-  const reporter = new Reporter("info");
+  const logger = new Logger("info");
   try {
-    const config = createConfig(reporter);
+    const config = createConfig(logger);
     const {
       cacheStorageConfig,
       clearOutput,
@@ -118,7 +118,7 @@ export async function main(): Promise<void> {
     } = config;
 
     if (logLevel) {
-      reporter.changeLogLevel(logLevel);
+      logger.changeLogLevel(logLevel);
     }
 
     const helpString = "Backfills unchanged packages.";
@@ -137,19 +137,19 @@ export async function main(): Promise<void> {
       argv["_"],
       clearOutput,
       outputGlob,
-      reporter
+      logger
     );
 
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
       internalCacheFolder,
-      reporter
+      logger
     );
 
     const hasher = new Hasher(
       { packageRoot, outputGlob },
       getRawBuildCommand(),
-      reporter
+      logger
     );
 
     if (argv["audit"]) {
@@ -159,17 +159,17 @@ export async function main(): Promise<void> {
         logFolder,
         outputGlob,
         hashGlobs,
-        reporter
+        logger
       );
     }
 
-    await backfill(config, cacheStorage, buildCommand, hasher, reporter);
+    await backfill(config, cacheStorage, buildCommand, hasher, logger);
 
     if (argv["audit"]) {
-      await closeWatcher(reporter);
+      await closeWatcher(logger);
     }
   } catch (err) {
-    reporter.error(err);
+    logger.error(err);
     process.exit(1);
   }
 }

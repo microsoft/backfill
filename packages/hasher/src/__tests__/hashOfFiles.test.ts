@@ -2,14 +2,14 @@ import * as fs from "fs-extra";
 import { setupFixture } from "backfill-utils-test";
 
 import { generateHashOfFiles } from "../hashOfFiles";
-import { Reporter } from "backfill-reporting";
+import { Logger } from "backfill-logger";
 
 import { createConfig, Config } from "backfill-config";
 const { createDefaultConfig } = jest.requireActual("backfill-config");
 jest.mock("backfill-config");
 
 const mockedDependency = <jest.Mock<Config>>createConfig;
-const reporter = new Reporter("info");
+const logger = new Logger("info");
 
 describe("generateHashOfFiles()", () => {
   it("excludes files provided by backfill config", async () => {
@@ -18,7 +18,7 @@ describe("generateHashOfFiles()", () => {
 
     // Need to mock getting the config
     mockedDependency.mockReturnValue({ ...defaultConfig, hashGlobs: ["**"] });
-    const hashOfEverything = await generateHashOfFiles(packageRoot, reporter);
+    const hashOfEverything = await generateHashOfFiles(packageRoot, logger);
 
     mockedDependency.mockReturnValue({
       ...defaultConfig,
@@ -26,7 +26,7 @@ describe("generateHashOfFiles()", () => {
     });
     const hashExcludeNodeModules = await generateHashOfFiles(
       packageRoot,
-      reporter
+      logger
     );
 
     expect(hashOfEverything).not.toEqual(hashExcludeNodeModules);
@@ -38,19 +38,16 @@ describe("generateHashOfFiles()", () => {
 
     mockedDependency.mockReturnValue(defaultConfig);
 
-    const hashOfPackage = await generateHashOfFiles(packageRoot, reporter);
+    const hashOfPackage = await generateHashOfFiles(packageRoot, logger);
 
     fs.writeFileSync("foo.txt", "bar");
-    const hashOfPackageWithFoo = await generateHashOfFiles(
-      packageRoot,
-      reporter
-    );
+    const hashOfPackageWithFoo = await generateHashOfFiles(packageRoot, logger);
     expect(hashOfPackage).not.toEqual(hashOfPackageWithFoo);
 
     fs.writeFileSync("foo.txt", "foo");
     const hashOfPackageWithFoo2 = await generateHashOfFiles(
       packageRoot,
-      reporter
+      logger
     );
     expect(hashOfPackageWithFoo).not.toEqual(hashOfPackageWithFoo2);
 
@@ -58,7 +55,7 @@ describe("generateHashOfFiles()", () => {
 
     const hashOfPackageWithoutFoo = await generateHashOfFiles(
       packageRoot,
-      reporter
+      logger
     );
     expect(hashOfPackage).toEqual(hashOfPackageWithoutFoo);
   });

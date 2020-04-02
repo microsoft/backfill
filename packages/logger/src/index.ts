@@ -14,7 +14,7 @@ export type LevelFilter = {
   filter(logLevel: LogLevel): boolean;
 };
 
-export type ReporterOverrides = {
+export type LoggerOverrides = {
   console?: Console;
   timer?: Timer;
   outputFormatter?: OutputFormatter;
@@ -86,14 +86,14 @@ export function isCorrectLogLevel(level: string): level is LogLevel {
 
 export type LogLevel = keyof typeof logLevels;
 
-export class Reporter {
+export class Logger {
   private console: Console;
   private timer: Timer;
   private formatter: OutputFormatter;
   private filter: LevelFilter;
   public reportBuilder: ReportBuilder;
 
-  public constructor(logLevel: LogLevel, overrides?: ReporterOverrides) {
+  public constructor(logLevel: LogLevel, overrides?: LoggerOverrides) {
     this.console = (overrides && overrides.console) || console;
     this.timer = (overrides && overrides.timer) || defaultTimer;
     this.formatter =
@@ -189,44 +189,44 @@ export type ReportBuilder = {
   toFile(logFolder: string): Promise<void>;
 };
 
-function makeReportBuilder(reporter: Reporter): ReportBuilder {
+function makeReportBuilder(logger: Logger): ReportBuilder {
   return {
     setName(name: string) {
-      reporter.info(`Package name: ${name}`);
+      logger.info(`Package name: ${name}`);
       performanceReportData["name"] = name;
     },
 
     setHash(hash: string) {
-      reporter.verbose(`Package hash: ${hash}`);
+      logger.verbose(`Package hash: ${hash}`);
       performanceReportData["hash"] = hash;
     },
 
     setCacheProvider(cacheProvider: string) {
-      reporter.verbose(`Cache provider: ${cacheProvider}`);
+      logger.verbose(`Cache provider: ${cacheProvider}`);
       performanceReportData["cacheProvider"] = cacheProvider;
     },
 
     setHit(hit: boolean) {
-      reporter.info(hit ? `Cache hit!` : `Cache miss!`);
+      logger.info(hit ? `Cache hit!` : `Cache miss!`);
       performanceReportData["hit"] = hit;
     },
 
     setTime(type: Times): { stop(): void } {
-      return reporter.traceOperation(type);
+      return logger.traceOperation(type);
     },
 
     setMode(mode: string) {
       if (mode !== "READ_WRITE") {
-        reporter.info(`Running in ${mode} mode.`);
+        logger.info(`Running in ${mode} mode.`);
       } else {
-        reporter.verbose(`Running in ${mode} mode.`);
+        logger.verbose(`Running in ${mode} mode.`);
       }
 
       performanceReportData["mode"] = mode;
     },
 
     setHashOfOutput(hash: string) {
-      reporter.verbose(`Hash of output: ${hash}`);
+      logger.verbose(`Hash of output: ${hash}`);
       performanceReportData["hashOfOutput"] = hash;
     },
 
@@ -234,7 +234,7 @@ function makeReportBuilder(reporter: Reporter): ReportBuilder {
       const filepath = path.join(logFolder, createFileName());
       await fs.outputJson(filepath, performanceReportData, { spaces: 2 });
 
-      reporter.silly(`Performance log created at ${filepath}`);
+      logger.silly(`Performance log created at ${filepath}`);
     }
   };
 }

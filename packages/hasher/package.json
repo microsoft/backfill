@@ -18,7 +18,7 @@
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
     "backfill-config": "^3.0.0",
-    "backfill-reporting": "^3.0.0",
+    "backfill-logger": "^3.0.0",
     "fast-glob": "^3.0.4",
     "find-up": "^4.1.0",
     "find-yarn-workspace-root": "^1.2.1",

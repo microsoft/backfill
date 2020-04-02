@@ -11,7 +11,7 @@ import {
   findWorkspacePath,
   WorkspaceInfo
 } from "./yarnWorkspaces";
-import { Reporter } from "backfill-reporting";
+import { Logger } from "backfill-logger";
 
 export interface IHasher {
   createPackageHash: () => Promise<string>;
@@ -50,14 +50,14 @@ export class Hasher implements IHasher {
   constructor(
     private options: { packageRoot: string; outputGlob: string[] },
     private buildCommandSignature: string,
-    private reporter: Reporter
+    private logger: Logger
   ) {
     this.packageRoot = this.options.packageRoot;
     this.outputGlob = this.options.outputGlob;
   }
 
   public async createPackageHash(): Promise<string> {
-    const tracer = this.reporter.traceOperation("hasher:calculateHash");
+    const tracer = this.logger.traceOperation("hasher:calculateHash");
 
     const packageRoot = await getPackageRoot(this.packageRoot);
     const yarnLock = await parseLockFile(packageRoot);
@@ -77,7 +77,7 @@ export class Hasher implements IHasher {
         packageRoot,
         workspaces,
         yarnLock,
-        this.reporter
+        this.logger
       );
 
       addToQueue(packageHash.internalDependencies, queue, done, workspaces);
@@ -92,21 +92,17 @@ export class Hasher implements IHasher {
       buildCommandHash
     ]);
 
-    this.reporter.verbose(`Hash of internal packages: ${internalPackagesHash}`);
-    this.reporter.verbose(`Hash of build command: ${buildCommandHash}`);
-    this.reporter.verbose(`Combined hash: ${combinedHash}`);
+    this.logger.verbose(`Hash of internal packages: ${internalPackagesHash}`);
+    this.logger.verbose(`Hash of build command: ${buildCommandHash}`);
+    this.logger.verbose(`Combined hash: ${combinedHash}`);
 
     tracer.stop();
-    this.reporter.reportBuilder.setHash(combinedHash);
+    this.logger.reportBuilder.setHash(combinedHash);
 
     return combinedHash;
   }
 
   public async hashOfOutput(): Promise<string> {
-    return generateHashOfFiles(
-      this.packageRoot,
-      this.reporter,
-      this.outputGlob
-    );
+    return generateHashOfFiles(this.packageRoot, this.logger, this.outputGlob);
   }
 }

@@ -16,7 +16,7 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "backfill-reporting": "^3.0.0",
+    "backfill-logger": "^3.0.0",
     "find-up": "^4.0.0",
     "fs-extra": "^8.1.0",
     "pkg-dir": "^4.2.0"

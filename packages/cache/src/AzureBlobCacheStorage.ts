@@ -1,5 +1,5 @@
 import { BlobServiceClient } from "@azure/storage-blob";
-import { Reporter } from "backfill-reporting";
+import { Logger } from "backfill-logger";
 import * as tar from "tar";
 import * as fg from "fast-glob";
 
@@ -30,11 +30,8 @@ function createBlobClient(
 }
 
 export class AzureBlobCacheStorage extends CacheStorage {
-  constructor(
-    private options: AzureBlobCacheStorageOptions,
-    reporter: Reporter
-  ) {
-    super(reporter);
+  constructor(private options: AzureBlobCacheStorageOptions, logger: Logger) {
+    super(logger);
   }
 
   protected async _fetch(hash: string): Promise<boolean> {

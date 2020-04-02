@@ -1,4 +1,4 @@
-import { Reporter } from "backfill-reporting";
+import { Logger } from "backfill-logger";
 import * as fg from "fast-glob";
 
 export interface ICacheStorage {
@@ -7,20 +7,20 @@ export interface ICacheStorage {
 }
 
 export abstract class CacheStorage implements ICacheStorage {
-  public constructor(protected reporter: Reporter) {}
+  public constructor(protected logger: Logger) {}
   public async fetch(hash: string): Promise<Boolean> {
-    const tracer = this.reporter.reportBuilder.setTime("fetchTime");
+    const tracer = this.logger.reportBuilder.setTime("fetchTime");
 
     const result = await this._fetch(hash);
 
     tracer.stop();
 
-    this.reporter.reportBuilder.setHit(result);
+    this.logger.reportBuilder.setHit(result);
     return result;
   }
 
   public async put(hash: string, outputGlob: string[]): Promise<void> {
-    const tracer = this.reporter.reportBuilder.setTime("putTime");
+    const tracer = this.logger.reportBuilder.setTime("putTime");
 
     const filesBeingCached = fg.sync(outputGlob);
     if (filesBeingCached.length === 0) {

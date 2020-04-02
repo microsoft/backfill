@@ -1,7 +1,7 @@
 import * as execa from "execa";
 import * as fs from "fs-extra";
 import * as fg from "fast-glob";
-import { Reporter } from "backfill-reporting";
+import { Logger } from "backfill-logger";
 
 export type ExecaReturns = execa.ExecaChildProcess;
 export type BuildCommand = () => Promise<ExecaReturns | void>;
@@ -14,7 +14,7 @@ export function createBuildCommand(
   buildCommand: string[],
   clearOutput: boolean,
   outputGlob: string[],
-  reporter: Reporter
+  logger: Logger
 ): () => Promise<ExecaReturns | void> {
   return async (): Promise<ExecaReturns | void> => {
     const parsedBuildCommand = buildCommand.join(" ");
@@ -29,7 +29,7 @@ export function createBuildCommand(
     }
 
     // Set up runner
-    const tracer = reporter.reportBuilder.setTime("buildTime");
+    const tracer = logger.reportBuilder.setTime("buildTime");
     const runner = execa(parsedBuildCommand, {
       shell: true,
       ...(process.env.NODE_ENV !== "test" ? { stdio: "inherit" } : {})
@@ -44,7 +44,7 @@ export function createBuildCommand(
         // Catch to pretty-print the command that failed and re-throw
         .catch(err => {
           if (process.env.NODE_ENV !== "test") {
-            reporter.error(`Failed while running: "${parsedBuildCommand}"`);
+            logger.error(`Failed while running: "${parsedBuildCommand}"`);
           }
           throw err;
         })
