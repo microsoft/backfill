@@ -36,7 +36,7 @@ export async function backfill(
   } = config;
 
   logger.setName(name);
-  logger.setMode(mode);
+  logger.setMode(mode, mode === "READ_WRITE" ? "info" : "verbose");
   logger.setCacheProvider(cacheStorageConfig.provider);
 
   const createPackageHash = async () => await hasher.createPackageHash();

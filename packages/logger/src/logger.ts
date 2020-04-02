@@ -40,7 +40,7 @@ export type Logger = ConsoleLogger & {
   setCacheProvider(cacheProvider: string): void;
   setHit(hit: boolean): void;
   setTime(type: Times): { stop(): void };
-  setMode(mode: string): void;
+  setMode(mode: string, logLevel: "verbose" | "info"): void;
   setHashOfOutput(hash: string): void;
   toFile(logFolder: string): Promise<void>;
 };
@@ -61,6 +61,7 @@ export function makeLogger(
     info: consoleLogger.info,
     warn: consoleLogger.warn,
     error: consoleLogger.error,
+
     setName(name: string) {
       consoleLogger.info(`Package name: ${name}`);
       performanceReportData["name"] = name;
@@ -92,12 +93,10 @@ export function makeLogger(
       };
     },
 
-    setMode(mode: string) {
-      if (mode !== "READ_WRITE") {
-        consoleLogger.info(`Running in ${mode} mode.`);
-      } else {
-        consoleLogger.verbose(`Running in ${mode} mode.`);
-      }
+    setMode(mode: string, logLevel: "verbose" | "info") {
+      // if (mode !== "READ_WRITE") {
+      //   consoleLogger.info(`Running in ${mode} mode.`);
+      consoleLogger[logLevel](`Running in ${mode} mode.`);
 
       performanceReportData["mode"] = mode;
     },
