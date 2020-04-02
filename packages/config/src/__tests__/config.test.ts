@@ -22,7 +22,7 @@ describe("getName()", () => {
 
 describe("getEnvConfig()", () => {
   const originalEnv = process.env;
-  const logger = makeLogger("error");
+  const logger = makeLogger("mute");
 
   beforeEach(() => {
     process.env = { ...originalEnv };

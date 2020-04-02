@@ -13,7 +13,7 @@ const setupCacheStorage = async (fixtureName: string) => {
     provider: "local"
   };
   const internalCacheFolder = path.join("node_modules", ".cache", "backfill");
-  const logger = makeLogger("error");
+  const logger = makeLogger("mute");
 
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,

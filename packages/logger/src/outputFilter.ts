@@ -9,6 +9,10 @@ export const defaultFilter: (logLevel: LogLevel) => LevelFilter = (
 ) => {
   return {
     filter(level: LogLevel): boolean {
+      if (level === "mute") {
+        return false;
+      }
+
       return logLevelsObject[level] <= logLevelsObject[logLevel];
     }
   };

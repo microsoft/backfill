@@ -20,6 +20,8 @@ export const defaultFormatter = {
         return ["backfill:", chalk.redBright("x"), ...args];
       case "trace":
         return ["backfill:", chalk.cyan("\u2023"), ...args];
+      case "mute":
+        return [];
 
       default:
         return assertNever(logLevel);

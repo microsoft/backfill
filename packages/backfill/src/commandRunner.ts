@@ -34,9 +34,7 @@ export function createBuildCommand(
       shell: true
     });
 
-    if (process.env.NODE_ENV !== "test") {
-      logger.pipeProcessOutput(runner.stdout, runner.stderr);
-    }
+    logger.pipeProcessOutput(runner.stdout, runner.stderr);
 
     return (
       runner
@@ -46,9 +44,7 @@ export function createBuildCommand(
         })
         // Catch to pretty-print the command that failed and re-throw
         .catch(err => {
-          if (process.env.NODE_ENV !== "test") {
-            logger.error(`Failed while running: "${parsedBuildCommand}"`);
-          }
+          logger.error(`Failed while running: "${parsedBuildCommand}"`);
           throw err;
         })
     );

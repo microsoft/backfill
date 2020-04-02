@@ -6,7 +6,7 @@ import { Hasher, addToQueue } from "../index";
 import { WorkspaceInfo } from "../yarnWorkspaces";
 import { makeLogger } from "backfill-logger";
 
-const logger = makeLogger("error");
+const logger = makeLogger("mute");
 
 describe("addToQueue", () => {
   const setupAddToQueue = async () => {
