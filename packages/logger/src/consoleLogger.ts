@@ -18,7 +18,7 @@ export type ConsoleLogger = {
 export function makeConsoleLogger(
   logLevel: LogLevel,
   overrides?: LoggerOverrides
-): ConsoleLogger {
+): ConsoleLogger & { trace(...args: string[]): void } {
   let consoleOverride = (overrides && overrides.console) || defaultConsole;
   let formatter = defaultFormatter;
   let filter = defaultFilter(logLevel);
@@ -51,6 +51,12 @@ export function makeConsoleLogger(
     error(...args: string[]): void {
       if (filter.filter("error")) {
         consoleOverride.error(...formatter.format("error", ...args));
+      }
+    },
+
+    trace(...args: string[]): void {
+      if (filter.filter("verbose")) {
+        consoleOverride.error(...formatter.format("trace", ...args));
       }
     }
   };

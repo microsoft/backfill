@@ -2,10 +2,12 @@ export type Timer = { start(): { stop(): number } };
 
 export const defaultTimer = {
   start() {
-    const start = Date.now();
+    const start = process.hrtime();
     return {
       stop() {
-        return Date.now() - start;
+        const delta = process.hrtime(start);
+        const time = Math.round(delta[0] * 1000 + delta[1] / 1000000);
+        return time;
       }
     };
   }

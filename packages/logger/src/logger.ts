@@ -9,6 +9,7 @@ import {
   LoggerOverrides,
   makeConsoleLogger
 } from "./consoleLogger";
+import chalk from "chalk";
 
 export { isCorrectLogLevel, LogLevel } from "./logLevel";
 
@@ -87,7 +88,11 @@ export function makeLogger(
       return {
         stop: () => {
           const time = tracer.stop();
-          consoleLogger.verbose("Opreation", type, `took ${time} ms.`);
+          consoleLogger.trace(
+            `Profiling ${chalk.underline(type)} took ${chalk.cyanBright(
+              `${time} ms`
+            )}`
+          );
           performanceReportData[type] = time;
         }
       };

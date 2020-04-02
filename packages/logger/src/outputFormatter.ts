@@ -6,7 +6,7 @@ export type OutputFormatter = {
 };
 
 export const defaultFormatter = {
-  format(logLevel: LogLevel, ...args: string[]): string[] {
+  format(logLevel: LogLevel | "trace", ...args: string[]): string[] {
     switch (logLevel) {
       case "silly":
         return ["backfill:", chalk.gray("\u25C7"), ...args];
@@ -18,6 +18,8 @@ export const defaultFormatter = {
         return ["backfill:", chalk.yellow("\u25B2"), ...args];
       case "error":
         return ["backfill:", chalk.redBright("x"), ...args];
+      case "trace":
+        return ["backfill:", chalk.cyan("\u2023"), ...args];
 
       default:
         return assertNever(logLevel);
