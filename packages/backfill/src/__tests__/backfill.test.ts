@@ -16,7 +16,7 @@ describe("backfill", () => {
     //  Set up
     await setupFixture("basic");
 
-    const config = createConfig(logger);
+    const config = createConfig(logger, process.cwd());
     const {
       cacheStorageConfig,
       clearOutput,

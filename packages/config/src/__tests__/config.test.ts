@@ -84,10 +84,10 @@ describe("getSearchPaths()", () => {
     const packageRoot = await setupFixture("config");
 
     process.chdir(path.join(packageRoot, "packages", "package-1"));
-    const searchPathsFromPackage1 = getSearchPaths();
+    const searchPathsFromPackage1 = getSearchPaths(process.cwd());
 
     process.chdir(path.join(packageRoot, "packages", "package-2"));
-    const searchPathsFromPackage2 = getSearchPaths();
+    const searchPathsFromPackage2 = getSearchPaths(process.cwd());
 
     expect(searchPathsFromPackage1).toStrictEqual([
       path.join(packageRoot, "backfill.config.js"),
@@ -100,7 +100,7 @@ describe("getSearchPaths()", () => {
 
   it("returns empty list when no backfill.config.js can be found", async () => {
     await setupFixture("basic");
-    const searchPaths = getSearchPaths();
+    const searchPaths = getSearchPaths(process.cwd());
 
     expect(searchPaths).toStrictEqual([]);
   });
@@ -120,15 +120,16 @@ describe("createConfig()", () => {
 
   it("returns default config values when no config file and no ENV override is provided", async () => {
     await setupFixture("basic");
-    const config = createConfig(logger);
+    const config = createConfig(logger, process.cwd());
 
-    const defaultLocalCacheFolder = createDefaultConfig().internalCacheFolder;
+    const defaultLocalCacheFolder = createDefaultConfig(process.cwd())
+      .internalCacheFolder;
     expect(config.internalCacheFolder).toStrictEqual(defaultLocalCacheFolder);
   });
 
   it("returns config file value when config file is provided, and no ENV override", async () => {
     await setupFixture("config");
-    const config = createConfig(logger);
+    const config = createConfig(logger, process.cwd());
 
     expect(config.internalCacheFolder).toStrictEqual("foo");
   });
@@ -137,7 +138,7 @@ describe("createConfig()", () => {
     process.env["BACKFILL_INTERNAL_CACHE_FOLDER"] = "bar";
 
     await setupFixture("config");
-    const config = createConfig(logger);
+    const config = createConfig(logger, process.cwd());
 
     expect(config.internalCacheFolder).toStrictEqual("bar");
   });

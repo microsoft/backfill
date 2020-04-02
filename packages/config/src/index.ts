@@ -48,7 +48,7 @@ export function getName(packageRoot: string) {
   );
 }
 
-export function getSearchPaths(fromPath: string = process.cwd()) {
+export function getSearchPaths(fromPath: string) {
   const searchPaths = [];
 
   let nextPath: string | undefined = fromPath;
@@ -66,7 +66,7 @@ export function getSearchPaths(fromPath: string = process.cwd()) {
   return searchPaths.reverse();
 }
 
-export function createDefaultConfig(fromPath: string = process.cwd()): Config {
+export function createDefaultConfig(fromPath: string): Config {
   const packageRoot = pkgDir.sync(fromPath) || fromPath;
   const defaultCacheFolder = path.join("node_modules", ".cache", "backfill");
   const outputGlob = ["lib/**"];
@@ -94,10 +94,7 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
   };
 }
 
-export function createConfig(
-  logger: Logger,
-  fromPath: string = process.cwd()
-): Config {
+export function createConfig(logger: Logger, fromPath: string): Config {
   const defaultConfig = createDefaultConfig(fromPath);
   const fileBasedConfig = getSearchPaths(fromPath).reduce((acc, configPath) => {
     const config = require(configPath);
