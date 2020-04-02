@@ -10,7 +10,8 @@ export { ICacheStorage } from "./CacheStorage";
 export function getCacheStorageProvider(
   cacheStorageConfig: CacheStorageConfig,
   internalCacheFolder: string,
-  logger: Logger
+  logger: Logger,
+  cwd: string
 ): ICacheStorage {
   let cacheStorage: ICacheStorage;
 
@@ -18,15 +19,17 @@ export function getCacheStorageProvider(
     cacheStorage = new NpmCacheStorage(
       cacheStorageConfig.options,
       internalCacheFolder,
-      logger
+      logger,
+      cwd
     );
   } else if (cacheStorageConfig.provider === "azure-blob") {
     cacheStorage = new AzureBlobCacheStorage(
       cacheStorageConfig.options,
-      logger
+      logger,
+      cwd
     );
   } else {
-    cacheStorage = new LocalCacheStorage(internalCacheFolder, logger);
+    cacheStorage = new LocalCacheStorage(internalCacheFolder, logger, cwd);
   }
 
   return cacheStorage;

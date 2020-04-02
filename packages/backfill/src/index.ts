@@ -143,7 +143,8 @@ export async function main(): Promise<void> {
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
       internalCacheFolder,
-      logger
+      logger,
+      cwd
     );
 
     const hasher = new Hasher(

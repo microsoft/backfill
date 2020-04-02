@@ -29,7 +29,8 @@ describe("backfill", () => {
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
       internalCacheFolder,
-      logger
+      logger,
+      process.cwd()
     );
     const buildCommandRaw = "npm run compile";
     const buildCommand = createBuildCommand(

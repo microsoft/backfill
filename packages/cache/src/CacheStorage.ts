@@ -8,7 +8,7 @@ export interface ICacheStorage {
 }
 
 export abstract class CacheStorage implements ICacheStorage {
-  public constructor(protected logger: Logger) {}
+  public constructor(protected logger: Logger, protected cwd: string) {}
   public async fetch(hash: string): Promise<Boolean> {
     const tracer = this.logger.setTime("fetchTime");
 
@@ -23,7 +23,7 @@ export abstract class CacheStorage implements ICacheStorage {
   public async put(hash: string, outputGlob: string[]): Promise<void> {
     const tracer = this.logger.setTime("putTime");
 
-    const filesBeingCached = fg.sync(outputGlob);
+    const filesBeingCached = fg.sync(outputGlob, { cwd: this.cwd });
     if (filesBeingCached.length === 0) {
       throw new Error(
         `Couldn't find any file on disk matching the output glob (${outputGlob.join(
