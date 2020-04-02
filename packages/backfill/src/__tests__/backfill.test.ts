@@ -9,7 +9,7 @@ import { makeLogger } from "backfill-logger";
 import { backfill } from "../index";
 import { createBuildCommand } from "../commandRunner";
 
-const logger = makeLogger("info");
+const logger = makeLogger("error");
 
 describe("backfill", () => {
   it("with cache miss and then cache hit", async () => {

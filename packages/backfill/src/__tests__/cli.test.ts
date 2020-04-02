@@ -4,7 +4,7 @@ import { setupFixture } from "backfill-utils-test";
 import { createBuildCommand } from "../commandRunner";
 import { makeLogger } from "backfill-logger";
 
-const logger = makeLogger("info");
+const logger = makeLogger("error");
 
 describe("createBuildCommand", () => {
   it("runs a command successfully", async () => {

@@ -9,7 +9,7 @@ const { createDefaultConfig } = jest.requireActual("backfill-config");
 jest.mock("backfill-config");
 
 const mockedDependency = <jest.Mock<Config>>createConfig;
-const logger = makeLogger("info");
+const logger = makeLogger("error");
 
 describe("generateHashOfFiles()", () => {
   it("excludes files provided by backfill config", async () => {
