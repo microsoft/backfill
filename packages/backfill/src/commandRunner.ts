@@ -28,25 +28,20 @@ export function createBuildCommand(
       await Promise.all(filesToClear.map(async file => await fs.remove(file)));
     }
 
-    // Set up runner
-    const tracer = logger.setTime("buildTime");
-    const runner = execa(parsedBuildCommand, {
-      shell: true
-    });
+    try {
+      // Set up runner
+      const tracer = logger.setTime("buildTime");
+      const runner = execa(parsedBuildCommand, {
+        shell: true
+      });
 
-    logger.pipeProcessOutput(runner.stdout, runner.stderr);
+      logger.pipeProcessOutput(runner.stdout, runner.stderr);
 
-    return (
-      runner
-        // Add build time to the performance logger
-        .then(() => {
-          tracer.stop();
-        })
-        // Catch to pretty-print the command that failed and re-throw
-        .catch(err => {
-          logger.error(`Failed while running: "${parsedBuildCommand}"`);
-          throw err;
-        })
-    );
+      await runner;
+      tracer.stop();
+    } catch (e) {
+      logger.error(`Failed while running: "${parsedBuildCommand}"`);
+      throw e;
+    }
   };
 }

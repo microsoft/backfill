@@ -24,19 +24,35 @@ describe("createBuildCommand", () => {
   });
 
   it("prints the error command and throws if it fails", async () => {
+    const stderr: string[] = [];
+    const stdout: string[] = [];
+    const mockConsole = {
+      info(...args: string[]): void {
+        args.forEach(a => stdout.push(a));
+      },
+
+      warn(...args: string[]): void {
+        args.forEach(a => stderr.push(a));
+      },
+      error(...args: string[]): void {
+        args.forEach(a => stderr.push(a));
+      }
+    };
+
+    const logger = makeLogger("error", { console: mockConsole });
     const buildCommand = createBuildCommand(
       ["somecommand"],
       false,
       [""],
       logger
-    );
+    )();
 
     try {
-      await buildCommand();
-    } catch (err) {
-      expect(err.stderr).toContain("somecommand");
-      expect(err.code).not.toEqual(0);
-    }
+      await buildCommand;
+    } catch (e) {}
+
+    expect(buildCommand).rejects.toThrow();
+    expect(stderr.filter(m => m.includes("somecommand")).length).not.toBe(0);
   });
 
   it("clears the output folder", async () => {
