@@ -1,11 +1,11 @@
 import { setupFixture } from "backfill-utils-test";
 
-import { filterDependenciesInFixture } from "./resolveDependenciesHelper";
 import { getYarnWorkspaces } from "../yarnWorkspaces";
 import {
   filterInternalDependencies,
   resolveInternalDependencies
 } from "../resolveInternalDependencies";
+import { filterDependenciesInFixture } from "./resolveDependenciesHelper";
 
 describe("filterInternalDependencies()", () => {
   it("only lists internal dependencies", async () => {

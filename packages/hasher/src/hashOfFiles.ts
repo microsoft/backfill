@@ -1,7 +1,7 @@
 import * as crypto from "crypto";
+import * as path from "path";
 import * as fg from "fast-glob";
 import * as fs from "fs-extra";
-import * as path from "path";
 import { createConfig } from "backfill-config";
 import { hashStrings } from "./helpers";
 

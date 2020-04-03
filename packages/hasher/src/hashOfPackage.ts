@@ -3,9 +3,12 @@ import * as path from "path";
 import { logger } from "backfill-logger";
 
 import { resolveInternalDependencies } from "./resolveInternalDependencies";
-import { resolveExternalDependencies } from "./resolveExternalDependencies";
+import {
+  resolveExternalDependencies,
+  Dependencies
+} from "./resolveExternalDependencies";
 import { generateHashOfFiles } from "./hashOfFiles";
-import { Dependencies } from "./resolveExternalDependencies";
+
 import { hashStrings } from "./helpers";
 import { ParsedYarnLock } from "./yarnLock";
 import { WorkspaceInfo } from "./yarnWorkspaces";

@@ -1,10 +1,10 @@
-import * as fs from "fs-extra";
 import * as path from "path";
+import * as fs from "fs-extra";
 import execa = require("execa");
 import { setupFixture } from "backfill-utils-test";
 
-import { findPathToBackfill } from "./helper";
 import { sideEffectWarningString, noSideEffectString } from "../audit";
+import { findPathToBackfill } from "./helper";
 
 describe("Audit", () => {
   let pathToBackfill: string;

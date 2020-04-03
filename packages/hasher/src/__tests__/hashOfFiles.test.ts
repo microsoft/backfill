@@ -1,9 +1,9 @@
 import * as fs from "fs-extra";
 import { setupFixture } from "backfill-utils-test";
 
+import { createConfig, Config } from "backfill-config";
 import { generateHashOfFiles } from "../hashOfFiles";
 
-import { createConfig, Config } from "backfill-config";
 const { createDefaultConfig } = jest.requireActual("backfill-config");
 jest.mock("backfill-config");
 

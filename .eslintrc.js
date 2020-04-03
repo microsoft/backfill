@@ -6,6 +6,9 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
     "prettier/@typescript-eslint", // this disables the linting error which conflict with prettier
     "plugin:prettier/recommended" // [Has to be last] this does prettier as part of the linting
   ],
@@ -21,6 +24,8 @@ module.exports = {
     "@typescript-eslint/camelcase": "off",
     "prefer-const": "off",
     "no-prototype-builtins": "off",
-    "@typescript-eslint/consistent-type-assertions": "off"
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "import/namespace": "off",
+    "import/order": "warn"
   }
 };

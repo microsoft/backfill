@@ -1,6 +1,6 @@
+import * as path from "path";
 import * as findUp from "find-up";
 import * as fs from "fs-extra";
-import * as path from "path";
 import * as tempy from "tempy";
 
 async function findFixturePath(cwd: string, fixtureName: string) {

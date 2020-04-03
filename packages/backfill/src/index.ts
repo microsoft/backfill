@@ -4,12 +4,12 @@ import { loadDotenv } from "backfill-utils-dotenv";
 import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
 import { logger, setLogLevel } from "backfill-logger";
 import { createConfig, Config } from "backfill-config";
+import { IHasher, Hasher } from "backfill-hasher";
 import {
   getRawBuildCommand,
   createBuildCommand,
   BuildCommand
 } from "./commandRunner";
-import { IHasher, Hasher } from "backfill-hasher";
 
 export { createDefaultConfig } from "backfill-config";
 
