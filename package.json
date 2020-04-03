@@ -10,7 +10,8 @@
     "build": "lerna run --stream build",
     "postinstall": "yarn update-project-references",
     "lerna": "lerna",
-    "prepublishOnly": "lerna run build && lerna run test",
+    "lint": "eslint --fix . --ext .ts",
+    "prepublishOnly": "eslint . --ext .ts && -lerna run build && lerna run test",
     "test": "lerna run test",
     "prettier": "prettier \"{.,**}/*.{tsx,ts,js,json,md,yaml}\" --write",
     "update-project-references": "node tools/update-project-references.js",
@@ -45,6 +46,11 @@
       "git add"
     ],
     "**/*.{ts,js,json,md,yaml}": [
+      "prettier --write",
+      "git add"
+    ],
+    "**/*.{ts}": [
+      "eslint --fix",
       "prettier --write",
       "git add"
     ]
