@@ -1,6 +1,7 @@
-import * as path from "path";
-import * as fs from "fs-extra";
-import * as execa from "execa";
+import path from "path";
+import fs from "fs-extra";
+import execa from "execa";
+
 import { setupFixture } from "backfill-utils-test";
 
 import { findPathToBackfill } from "./helper";

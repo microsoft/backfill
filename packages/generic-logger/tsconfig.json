@@ -1,6 +1,0 @@
-{
-  "extends": "backfill-utils-tsconfig/tsconfig.default.json",
-  "include": ["src"],
-  "compilerOptions": { "rootDir": "src", "outDir": "lib" },
-  "references": []
-}

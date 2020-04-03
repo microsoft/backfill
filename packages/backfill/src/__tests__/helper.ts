@@ -1,5 +1,5 @@
-import * as findUp from "find-up";
-import * as path from "path";
+import findUp from "find-up";
+import path from "path";
 
 export async function findPathToBackfill() {
   const commandPath = await findUp(path.join("bin", "backfill.js"), {

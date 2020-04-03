@@ -1,12 +1,14 @@
-import * as fs from "fs-extra";
-import * as path from "path";
-import * as fg from "fast-glob";
+import fs from "fs-extra";
+import path from "path";
+import fg from "fast-glob";
+
+import { Logger } from "backfill-logger";
 
 import { CacheStorage } from "./CacheStorage";
 
 export class LocalCacheStorage extends CacheStorage {
-  constructor(private internalCacheFolder: string) {
-    super();
+  constructor(private internalCacheFolder: string, logger: Logger) {
+    super(logger);
   }
 
   protected getLocalCacheFolder(hash: string): string {

@@ -1,8 +1,11 @@
-import * as crypto from "crypto";
-import * as fg from "fast-glob";
-import * as fs from "fs-extra";
-import * as path from "path";
+import crypto from "crypto";
+import fg from "fast-glob";
+import fs from "fs-extra";
+import path from "path";
+
 import { createConfig } from "backfill-config";
+import { Logger } from "backfill-logger";
+
 import { hashStrings } from "./helpers";
 
 const newline = /\r\n|\r|\n/g;
@@ -10,10 +13,11 @@ const LF = "\n";
 
 export async function generateHashOfFiles(
   packageRoot: string,
+  logger: Logger,
   glob?: string[]
 ): Promise<string> {
   if (!glob) {
-    glob = createConfig(packageRoot).hashGlobs;
+    glob = createConfig(logger, packageRoot).hashGlobs;
   }
 
   const files = await fg(glob, {

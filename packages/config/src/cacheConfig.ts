@@ -1,4 +1,4 @@
-import { logger } from "backfill-generic-logger";
+import { Logger } from "backfill-logger";
 
 export type AzureBlobCacheStorageOptions = {
   connectionString: string;
@@ -29,7 +29,8 @@ export type CacheStorageConfig =
   | AzureBlobCacheStorageConfig;
 
 export function getNpmConfigFromSerializedOptions(
-  options: string
+  options: string,
+  logger: Logger
 ): NpmCacheStorageConfig {
   try {
     const parsedOptions = JSON.parse(options);
@@ -52,7 +53,8 @@ export function getNpmConfigFromSerializedOptions(
 }
 
 export function getAzureBlobConfigFromSerializedOptions(
-  options: string
+  options: string,
+  logger: Logger
 ): AzureBlobCacheStorageConfig {
   try {
     const parsedOptions = JSON.parse(options);

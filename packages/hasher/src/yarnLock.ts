@@ -1,6 +1,6 @@
-import * as findUp from "find-up";
-import * as fs from "fs-extra";
-import * as lockfile from "@yarnpkg/lockfile";
+import findUp from "find-up";
+import fs from "fs-extra";
+import { parse } from "@yarnpkg/lockfile";
 
 import { Dependencies } from "./resolveExternalDependencies";
 import { nameAtVersion } from "./helpers";
@@ -29,7 +29,7 @@ export async function parseLockFile(
   }
 
   const yarnLock = fs.readFileSync(yarnLockPath).toString();
-  return lockfile.parse(yarnLock);
+  return parse(yarnLock);
 }
 
 export function queryLockFile(

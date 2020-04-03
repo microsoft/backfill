@@ -1,7 +1,8 @@
-import * as execa from "execa";
-import * as fs from "fs-extra";
-import * as fg from "fast-glob";
-import { logger } from "backfill-logger";
+import execa from "execa";
+import fs from "fs-extra";
+import fg from "fast-glob";
+
+import { Logger } from "backfill-logger";
 
 export type ExecaReturns = execa.ExecaChildProcess;
 export type BuildCommand = () => Promise<ExecaReturns | void>;
@@ -13,7 +14,8 @@ export function getRawBuildCommand(): string {
 export function createBuildCommand(
   buildCommand: string[],
   clearOutput: boolean,
-  outputGlob: string[]
+  outputGlob: string[],
+  logger: Logger
 ): () => Promise<ExecaReturns | void> {
   return async (): Promise<ExecaReturns | void> => {
     const parsedBuildCommand = buildCommand.join(" ");
@@ -27,26 +29,20 @@ export function createBuildCommand(
       await Promise.all(filesToClear.map(async file => await fs.remove(file)));
     }
 
-    // Set up runner
-    logger.profile("buildCommand:run");
-    const runner = execa(parsedBuildCommand, {
-      shell: true,
-      ...(process.env.NODE_ENV !== "test" ? { stdio: "inherit" } : {})
-    });
+    try {
+      // Set up runner
+      const tracer = logger.setTime("buildTime");
+      const runner = execa(parsedBuildCommand, {
+        shell: true
+      });
 
-    return (
-      runner
-        // Add build time to the performance logger
-        .then(() => {
-          logger.setTime("buildTime", "buildCommand:run");
-        })
-        // Catch to pretty-print the command that failed and re-throw
-        .catch(err => {
-          if (process.env.NODE_ENV !== "test") {
-            logger.error(`Failed while running: "${parsedBuildCommand}"`);
-          }
-          throw err;
-        })
-    );
+      logger.pipeProcessOutput(runner.stdout, runner.stderr);
+
+      await runner;
+      tracer.stop();
+    } catch (e) {
+      logger.error(`Failed while running: "${parsedBuildCommand}"`);
+      throw e;
+    }
   };
 }

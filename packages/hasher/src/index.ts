@@ -1,4 +1,4 @@
-import { logger } from "backfill-logger";
+import { Logger } from "backfill-logger";
 
 import { generateHashOfFiles } from "./hashOfFiles";
 import {
@@ -50,14 +50,15 @@ export class Hasher implements IHasher {
 
   constructor(
     private options: { packageRoot: string; outputGlob: string[] },
-    private buildCommandSignature: string
+    private buildCommandSignature: string,
+    private logger: Logger
   ) {
     this.packageRoot = this.options.packageRoot;
     this.outputGlob = this.options.outputGlob;
   }
 
   public async createPackageHash(): Promise<string> {
-    logger.profile("hasher:calculateHash");
+    const tracer = this.logger.setTime("hashTime");
 
     const packageRoot = await getPackageRoot(this.packageRoot);
     const yarnLock = await parseLockFile(packageRoot);
@@ -76,7 +77,8 @@ export class Hasher implements IHasher {
       const packageHash = await getPackageHash(
         packageRoot,
         workspaces,
-        yarnLock
+        yarnLock,
+        this.logger
       );
 
       addToQueue(packageHash.internalDependencies, queue, done, workspaces);
@@ -85,23 +87,20 @@ export class Hasher implements IHasher {
     }
 
     const internalPackagesHash = generateHashOfInternalPackages(done);
-    const buildCommandHash = await hashStrings(this.buildCommandSignature);
-    const combinedHash = await hashStrings([
-      internalPackagesHash,
-      buildCommandHash
-    ]);
+    const buildCommandHash = hashStrings(this.buildCommandSignature);
+    const combinedHash = hashStrings([internalPackagesHash, buildCommandHash]);
 
-    logger.verbose(`Hash of internal packages: ${internalPackagesHash}`);
-    logger.verbose(`Hash of build command: ${buildCommandHash}`);
-    logger.verbose(`Combined hash: ${combinedHash}`);
+    this.logger.verbose(`Hash of internal packages: ${internalPackagesHash}`);
+    this.logger.verbose(`Hash of build command: ${buildCommandHash}`);
+    this.logger.verbose(`Combined hash: ${combinedHash}`);
 
-    logger.profile("hasher:calculateHash");
-    logger.setHash(combinedHash);
+    tracer.stop();
+    this.logger.setHash(combinedHash);
 
     return combinedHash;
   }
 
   public async hashOfOutput(): Promise<string> {
-    return generateHashOfFiles(this.packageRoot, this.outputGlob);
+    return generateHashOfFiles(this.packageRoot, this.logger, this.outputGlob);
   }
 }

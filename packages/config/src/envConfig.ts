@@ -1,12 +1,12 @@
+import { isCorrectLogLevel, Logger } from "backfill-logger";
+
 import {
   getAzureBlobConfigFromSerializedOptions,
   getNpmConfigFromSerializedOptions
 } from "./cacheConfig";
-import { isCorrectLogLevel } from "backfill-generic-logger";
-
 import { isCorrectMode, Config } from "./index";
 
-export function getEnvConfig() {
+export function getEnvConfig(logger: Logger) {
   const config: Partial<Config> = {};
 
   const cacheProvider = process.env["BACKFILL_CACHE_PROVIDER"];
@@ -15,11 +15,13 @@ export function getEnvConfig() {
 
   if (cacheProvider === "azure-blob" && serializedCacheProviderOptions) {
     config["cacheStorageConfig"] = getAzureBlobConfigFromSerializedOptions(
-      serializedCacheProviderOptions
+      serializedCacheProviderOptions,
+      logger
     );
   } else if (cacheProvider === "npm" && serializedCacheProviderOptions) {
     config["cacheStorageConfig"] = getNpmConfigFromSerializedOptions(
-      serializedCacheProviderOptions
+      serializedCacheProviderOptions,
+      logger
     );
   } else if (cacheProvider === "local") {
     // local cache has no config at the moment

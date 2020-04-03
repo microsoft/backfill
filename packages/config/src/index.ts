@@ -1,8 +1,8 @@
-import * as path from "path";
-import * as pkgDir from "pkg-dir";
-import * as findUp from "find-up";
+import path from "path";
+import pkgDir from "pkg-dir";
+import findUp from "find-up";
 
-import { LogLevels } from "backfill-generic-logger";
+import { LogLevel, Logger } from "backfill-logger";
 
 import { CacheStorageConfig } from "./cacheConfig";
 import { getEnvConfig } from "./envConfig";
@@ -27,7 +27,7 @@ export type Config = {
   hashGlobs: HashGlobs;
   internalCacheFolder: string;
   logFolder: string;
-  logLevel: LogLevels;
+  logLevel: LogLevel;
   name: string;
   mode: BackfillModes;
   outputGlob: string[];
@@ -94,7 +94,10 @@ export function createDefaultConfig(fromPath: string = process.cwd()): Config {
   };
 }
 
-export function createConfig(fromPath: string = process.cwd()): Config {
+export function createConfig(
+  logger: Logger,
+  fromPath: string = process.cwd()
+): Config {
   const defaultConfig = createDefaultConfig(fromPath);
   const fileBasedConfig = getSearchPaths(fromPath).reduce((acc, configPath) => {
     const config = require(configPath);
@@ -111,7 +114,7 @@ export function createConfig(fromPath: string = process.cwd()): Config {
     };
   }, {});
 
-  const envBasedConfig = getEnvConfig();
+  const envBasedConfig = getEnvConfig(logger);
 
   return {
     ...defaultConfig,
