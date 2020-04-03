@@ -6,8 +6,13 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint", // this disables the linting error which conflict with prettier
+    "plugin:prettier/recommended" // [Has to be last] this does prettier as part of the linting
   ],
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: "module"
+  },
   rules: {
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/interface-name-prefix": "off",
