@@ -47,7 +47,7 @@
       "prettier --write",
       "git add"
     ],
-    "**/*.{ts,js,json,md,yaml}": [
+    "**/*.{js,json,md,yaml}": [
       "prettier --write",
       "git add"
     ],
