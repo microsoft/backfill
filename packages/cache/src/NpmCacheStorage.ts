@@ -1,7 +1,7 @@
-import * as execa from "execa";
-import * as fs from "fs-extra";
-import * as path from "path";
-import * as fg from "fast-glob";
+import execa from "execa";
+import fs from "fs-extra";
+import path from "path";
+import fg from "fast-glob";
 
 import { NpmCacheStorageOptions } from "backfill-config";
 import { Logger } from "backfill-logger";

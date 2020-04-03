@@ -1,9 +1,9 @@
+import { isCorrectLogLevel, Logger } from "backfill-logger";
+
 import {
   getAzureBlobConfigFromSerializedOptions,
   getNpmConfigFromSerializedOptions
 } from "./cacheConfig";
-import { isCorrectLogLevel, Logger } from "backfill-logger";
-
 import { isCorrectMode, Config } from "./index";
 
 export function getEnvConfig(logger: Logger) {

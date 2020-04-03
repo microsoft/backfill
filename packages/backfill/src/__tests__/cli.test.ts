@@ -1,8 +1,9 @@
-import * as fs from "fs-extra";
+import fs from "fs-extra";
+
 import { setupFixture } from "backfill-utils-test";
+import { makeLogger } from "backfill-logger";
 
 import { createBuildCommand } from "../commandRunner";
-import { makeLogger } from "backfill-logger";
 
 const logger = makeLogger("mute");
 

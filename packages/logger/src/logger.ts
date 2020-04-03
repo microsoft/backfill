@@ -1,7 +1,8 @@
-import * as fs from "fs-extra";
-import * as path from "path";
+import fs from "fs-extra";
+import path from "path";
 import filenamify from "filenamify";
 import { Readable } from "stream";
+import chalk from "chalk";
 
 import { LogLevel } from "./logLevel";
 import { defaultTimer, Timer } from "./timer";
@@ -10,8 +11,6 @@ import {
   LoggerOverrides,
   makeConsoleLogger
 } from "./consoleLogger";
-import chalk from "chalk";
-
 export { isCorrectLogLevel, LogLevel } from "./logLevel";
 
 type PerformanceReportData = {

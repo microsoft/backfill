@@ -1,9 +1,10 @@
-import * as fs from "fs-extra";
-import * as path from "path";
+import fs from "fs-extra";
+import path from "path";
 
 import { makeLogger } from "backfill-logger";
 import { setupFixture } from "backfill-utils-test";
 import { CacheStorageConfig } from "backfill-config";
+
 import { getCacheStorageProvider } from "../index";
 
 const setupCacheStorage = async (fixtureName: string) => {

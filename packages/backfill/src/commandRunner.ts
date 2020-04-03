@@ -1,6 +1,7 @@
-import * as execa from "execa";
-import * as fs from "fs-extra";
-import * as fg from "fast-glob";
+import execa from "execa";
+import fs from "fs-extra";
+import fg from "fast-glob";
+
 import { Logger } from "backfill-logger";
 
 export type ExecaReturns = execa.ExecaChildProcess;

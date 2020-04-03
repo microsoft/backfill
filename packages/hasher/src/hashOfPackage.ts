@@ -1,5 +1,7 @@
-import * as crypto from "crypto";
-import * as path from "path";
+import crypto from "crypto";
+import path from "path";
+
+import { Logger } from "backfill-logger";
 
 import { resolveInternalDependencies } from "./resolveInternalDependencies";
 import { resolveExternalDependencies } from "./resolveExternalDependencies";
@@ -8,7 +10,6 @@ import { Dependencies } from "./resolveExternalDependencies";
 import { hashStrings } from "./helpers";
 import { ParsedYarnLock } from "./yarnLock";
 import { WorkspaceInfo } from "./yarnWorkspaces";
-import { Logger } from "backfill-logger";
 
 export type PackageHashInfo = {
   name: string;

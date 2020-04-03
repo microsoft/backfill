@@ -1,10 +1,11 @@
-import * as path from "path";
+import path from "path";
+
 import { setupFixture } from "backfill-utils-test";
+import { makeLogger } from "backfill-logger";
 
 import { PackageHashInfo } from "../hashOfPackage";
 import { Hasher, addToQueue } from "../index";
 import { WorkspaceInfo } from "../yarnWorkspaces";
-import { makeLogger } from "backfill-logger";
 
 const logger = makeLogger("mute");
 

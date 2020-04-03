@@ -1,4 +1,4 @@
-import * as path from "path";
+import path from "path";
 
 import { setupFixture } from "backfill-utils-test";
 import { makeLogger } from "backfill-logger";

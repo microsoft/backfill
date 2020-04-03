@@ -1,5 +1,6 @@
+import fg from "fast-glob";
+
 import { Logger } from "backfill-logger";
-import * as fg from "fast-glob";
 
 export interface ICacheStorage {
   fetch: (hash: string) => Promise<Boolean>;

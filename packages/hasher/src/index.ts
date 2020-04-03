@@ -1,3 +1,5 @@
+import { Logger } from "backfill-logger";
+
 import { generateHashOfFiles } from "./hashOfFiles";
 import {
   PackageHashInfo,
@@ -11,7 +13,6 @@ import {
   findWorkspacePath,
   WorkspaceInfo
 } from "./yarnWorkspaces";
-import { Logger } from "backfill-logger";
 
 export interface IHasher {
   createPackageHash: () => Promise<string>;

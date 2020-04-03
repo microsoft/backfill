@@ -1,18 +1,17 @@
-import * as yargs from "yargs";
+import yargs from "yargs";
 
 import { loadDotenv } from "backfill-utils-dotenv";
 import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
 import { Logger, makeLogger } from "backfill-logger";
 import { createConfig, Config } from "backfill-config";
+import { IHasher, Hasher } from "backfill-hasher";
+export { createDefaultConfig } from "backfill-config";
+
 import {
   getRawBuildCommand,
   createBuildCommand,
   BuildCommand
 } from "./commandRunner";
-import { IHasher, Hasher } from "backfill-hasher";
-
-export { createDefaultConfig } from "backfill-config";
-
 import { initializeWatcher, closeWatcher } from "./audit";
 
 // Load environment variables

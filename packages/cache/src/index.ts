@@ -5,7 +5,6 @@ import { ICacheStorage } from "./CacheStorage";
 import { AzureBlobCacheStorage } from "./AzureBlobCacheStorage";
 import { LocalCacheStorage } from "./LocalCacheStorage";
 import { NpmCacheStorage } from "./NpmCacheStorage";
-
 export { ICacheStorage } from "./CacheStorage";
 
 export function getCacheStorageProvider(

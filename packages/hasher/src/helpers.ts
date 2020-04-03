@@ -1,6 +1,6 @@
-import * as path from "path";
-import * as crypto from "crypto";
-import * as findUp from "find-up";
+import path from "path";
+import crypto from "crypto";
+import findUp from "find-up";
 
 export function hashStrings(strings: string | string[]): string {
   const hasher = crypto.createHash("sha1");

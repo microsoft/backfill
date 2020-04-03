@@ -1,8 +1,10 @@
-import * as chokidar from "chokidar";
-import * as findUp from "find-up";
-import * as path from "path";
+import chokidar from "chokidar";
+import findUp from "find-up";
+import path from "path";
 import anymatch from "anymatch";
+
 import { Logger } from "backfill-logger";
+
 let changedFilesOutsideScope: string[] = [];
 let changedFilesInsideScope: string[] = [];
 

@@ -1,6 +1,6 @@
-import * as path from "path";
-import * as pkgDir from "pkg-dir";
-import * as findUp from "find-up";
+import path from "path";
+import pkgDir from "pkg-dir";
+import findUp from "find-up";
 
 import { LogLevel, Logger } from "backfill-logger";
 
