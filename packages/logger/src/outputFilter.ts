@@ -1,14 +1,14 @@
 import { LogLevel, logLevelsObject } from "./logLevel";
 
-export type LevelFilter = {
-  filter(logLevel: LogLevel): boolean;
+export type LogFilter = {
+  shouldLog(logLevel: LogLevel): boolean;
 };
 
-export const defaultFilter: (logLevel: LogLevel) => LevelFilter = (
+export const defaultLogFilter: (logLevel: LogLevel) => LogFilter = (
   logLevel: LogLevel
 ) => {
   return {
-    filter(level: LogLevel): boolean {
+    shouldLog(level: LogLevel): boolean {
       if (level === "mute") {
         return false;
       }

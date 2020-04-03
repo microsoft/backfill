@@ -1,7 +1,7 @@
 import { LogLevel } from ".";
 import { Console, defaultConsole } from "./console";
 import { defaultFormatter } from "./outputFormatter";
-import { defaultFilter } from "./outputFilter";
+import { defaultLogFilter } from "./outputFilter";
 
 export type LoggerOverrides = {
   console?: Console;
@@ -24,42 +24,42 @@ export function makeConsoleLogger(
 } {
   let consoleOverride = (overrides && overrides.console) || defaultConsole;
   let formatter = defaultFormatter;
-  let filter = defaultFilter(logLevel);
+  let logFilter = defaultLogFilter(logLevel);
 
   return {
     consoleOverride,
     silly(...args: string[]): void {
-      if (filter.filter("silly")) {
+      if (logFilter.shouldLog("silly")) {
         consoleOverride.info(...formatter.format("silly", ...args));
       }
     },
 
     verbose(...args: string[]): void {
-      if (filter.filter("verbose")) {
+      if (logFilter.shouldLog("verbose")) {
         consoleOverride.info(...formatter.format("verbose", ...args));
       }
     },
 
     info(...args: string[]): void {
-      if (filter.filter("info")) {
+      if (logFilter.shouldLog("info")) {
         consoleOverride.info(...formatter.format("info", ...args));
       }
     },
 
     warn(...args: string[]): void {
-      if (filter.filter("warn")) {
+      if (logFilter.shouldLog("warn")) {
         consoleOverride.warn(...formatter.format("warn", ...args));
       }
     },
 
     error(...args: string[]): void {
-      if (filter.filter("error")) {
+      if (logFilter.shouldLog("error")) {
         consoleOverride.error(...formatter.format("error", ...args));
       }
     },
 
     trace(...args: string[]): void {
-      if (filter.filter("verbose")) {
+      if (logFilter.shouldLog("verbose")) {
         consoleOverride.error(...formatter.format("trace", ...args));
       }
     }
