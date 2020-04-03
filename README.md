@@ -9,11 +9,18 @@ A JavaScript caching library for reducing build time.
 configuration and environment variable overrides
 
 _backfill is under active development and should probably not be used in
-production, yet. We will initially focus on stability improvements. We will then
-look into various optimization strategies, adding more customization, and
-introducing an API for only running scripts in packages that have changed and
-skipping others altogether. This is particularly useful for tests (such as Jest)
-and for other dev tools that simply don't need to run if nothing has changed._
+production, yet. We will initially focus on stability improvements. We will look
+into various optimization strategies, adding more customization, and introducing
+an API for only running scripts in packages that have changed and skipping
+others altogether._
+
+_Current prerequisites:_
+
+- git (for running `--audit`)
+- yarn.lock and yarn workspaces (for optimized hashing)
+
+These prerequisites can easily be loosened to make backfill work with npm, Rush,
+and Lerna.
 
 ## Why
 
@@ -36,12 +43,6 @@ Install backfill using yarn:
 
 ```
 $ yarn add --dev backfill
-```
-
-Or npm:
-
-```
-$ npm install --save-dev backfill
 ```
 
 ## Usage
