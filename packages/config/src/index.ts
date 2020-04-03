@@ -68,7 +68,12 @@ export function getSearchPaths(fromPath: string) {
 
 export function createDefaultConfig(fromPath: string): Config {
   const packageRoot = pkgDir.sync(fromPath) || fromPath;
-  const defaultCacheFolder = path.join("node_modules", ".cache", "backfill");
+  const defaultCacheFolder = path.join(
+    packageRoot,
+    "node_modules",
+    ".cache",
+    "backfill"
+  );
   const outputGlob = ["lib/**"];
 
   return {
