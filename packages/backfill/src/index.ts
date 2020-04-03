@@ -104,6 +104,7 @@ export async function backfill(
 export async function main(): Promise<void> {
   let logger = makeLogger("info");
   const cwd = process.cwd();
+
   try {
     const config = createConfig(logger, cwd);
     const {
