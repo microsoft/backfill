@@ -1,7 +1,6 @@
 import yargs from "yargs";
 
 import { loadDotenv } from "backfill-utils-dotenv";
-import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
 import { Logger, makeLogger } from "backfill-logger";
 import { createConfig, Config } from "backfill-config";
 export { createDefaultConfig } from "backfill-config";
@@ -12,21 +11,24 @@ import {
   BuildCommand
 } from "./commandRunner";
 import { initializeWatcher, closeWatcher } from "./audit";
-import { fetch as fetch_api, computeHash, computeHashOfOutput } from "./api";
+import {
+  put as put_api,
+  fetch as fetch_api,
+  computeHash,
+  computeHashOfOutput
+} from "./api";
 
 // Load environment variables
 loadDotenv();
 
 export async function backfill(
   config: Config,
-  cacheStorage: ICacheStorage,
   buildCommand: BuildCommand,
   hashSalt: string,
   logger: Logger
 ): Promise<void> {
   const {
     cacheStorageConfig,
-    outputGlob,
     name,
     mode,
     logFolder,
@@ -52,7 +54,7 @@ export async function backfill(
   };
   const put = async (hash: string) => {
     try {
-      await cacheStorage.put(hash, outputGlob);
+      await put_api(packageRoot, hash, logger);
     } catch (err) {
       logger.error(
         `Failed to persist the cache with the following error:\n\n${err}`
@@ -110,7 +112,6 @@ export async function main(): Promise<void> {
   try {
     const config = createConfig(logger, cwd);
     const {
-      cacheStorageConfig,
       clearOutput,
       hashGlobs,
       internalCacheFolder,
@@ -143,13 +144,6 @@ export async function main(): Promise<void> {
       logger
     );
 
-    const cacheStorage = getCacheStorageProvider(
-      cacheStorageConfig,
-      internalCacheFolder,
-      logger,
-      cwd
-    );
-
     if (argv["audit"]) {
       initializeWatcher(
         packageRoot,
@@ -161,13 +155,7 @@ export async function main(): Promise<void> {
       );
     }
 
-    await backfill(
-      config,
-      cacheStorage,
-      buildCommand,
-      getRawBuildCommand(),
-      logger
-    );
+    await backfill(config, buildCommand, getRawBuildCommand(), logger);
 
     if (argv["audit"]) {
       await closeWatcher(logger);

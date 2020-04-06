@@ -1,7 +1,6 @@
 import fs from "fs-extra";
 
 import { setupFixture } from "backfill-utils-test";
-import { getCacheStorageProvider } from "backfill-cache";
 import { createConfig } from "backfill-config";
 import { makeLogger } from "backfill-logger";
 
@@ -15,15 +14,6 @@ describe("backfill", () => {
     await setupFixture("basic");
 
     const config = createConfig(logger, process.cwd());
-    const { cacheStorageConfig, internalCacheFolder } = config;
-
-    // Arrange
-    const cacheStorage = getCacheStorageProvider(
-      cacheStorageConfig,
-      internalCacheFolder,
-      logger,
-      process.cwd()
-    );
 
     const salt = "fooBar";
     let buildCalled = 0;
@@ -35,7 +25,7 @@ describe("backfill", () => {
     };
 
     // Execute
-    await backfill(config, cacheStorage, buildCommand, salt, logger);
+    await backfill(config, buildCommand, salt, logger);
 
     // Assert
     expect(buildCalled).toBe(1);
@@ -49,7 +39,7 @@ describe("backfill", () => {
     );
 
     // Execute
-    await backfill(config, cacheStorage, buildCommand, salt, logger);
+    await backfill(config, buildCommand, salt, logger);
 
     // Assert
     expect(buildCalled).toBe(0);

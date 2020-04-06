@@ -216,8 +216,9 @@ const packagehash = await backfill.computHash(process.cwd(), hashSalt, logger);
 
 const fetchSuccess = await backfill.fetch(process.cwd(), packageHash, logger);
 
-if (fetchSuccess) {
-  return;
+if (!fetchSuccess) {
+  await runBuildCommand();
+  await backfill.put(process.cwd(), packageHash, logger);
 }
 
 

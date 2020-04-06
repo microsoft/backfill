@@ -69,3 +69,21 @@ export async function fetch(
   const fetch = await cacheStorage.fetch(hash);
   return fetch;
 }
+
+export async function put(
+  cwd: string,
+  hash: string,
+  logger: Logger
+): Promise<void> {
+  const { cacheStorageConfig, internalCacheFolder, outputGlob } = createConfig(
+    logger,
+    cwd
+  );
+  const cacheStorage = getCacheStorageProvider(
+    cacheStorageConfig,
+    internalCacheFolder,
+    logger,
+    cwd
+  );
+  await cacheStorage.put(hash, outputGlob);
+}
