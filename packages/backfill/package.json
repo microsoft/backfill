@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "3.0.1-a.0",
+  "version": "4.0.0-a.0",
   "main": "lib/index.js",
   "bin": {
     "backfill": "./bin/backfill.js"
