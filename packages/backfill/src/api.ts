@@ -14,13 +14,13 @@ import { getCacheStorageProvider } from "backfill-cache";
 function makeConsole(stdout: Writable, stderr: Writable): Console {
   return {
     info(...args: string[]): void {
-      stdout.write(args.join(EOL) + EOL);
+      stdout.write(args.join(" ") + EOL);
     },
     warn(...args: string[]): void {
-      stderr.write(args.join(EOL) + EOL);
+      stderr.write(args.join(" ") + EOL);
     },
     error(...args: string[]): void {
-      stderr.write(args.join(EOL) + EOL);
+      stderr.write(args.join(" ") + EOL);
     }
   };
 }
