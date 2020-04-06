@@ -16,7 +16,7 @@ describe("backfill", () => {
     //  Set up
     await setupFixture("basic");
 
-    const config = createConfig(logger);
+    const config = createConfig(logger, process.cwd());
     const {
       cacheStorageConfig,
       clearOutput,
@@ -29,7 +29,8 @@ describe("backfill", () => {
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
       internalCacheFolder,
-      logger
+      logger,
+      process.cwd()
     );
     const buildCommandRaw = "npm run compile";
     const buildCommand = createBuildCommand(

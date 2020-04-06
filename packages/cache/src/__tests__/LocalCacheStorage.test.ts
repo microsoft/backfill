@@ -19,7 +19,8 @@ const setupCacheStorage = async (fixtureName: string) => {
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
     internalCacheFolder,
-    logger
+    logger,
+    process.cwd()
   );
 
   return { cacheStorage, internalCacheFolder };

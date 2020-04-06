@@ -12,9 +12,10 @@ export class NpmCacheStorage extends CacheStorage {
   constructor(
     private options: NpmCacheStorageOptions,
     private internalCacheFolder: string,
-    logger: Logger
+    logger: Logger,
+    cwd: string
   ) {
-    super(logger);
+    super(logger, cwd);
   }
 
   protected async _fetch(hash: string): Promise<boolean> {
@@ -67,13 +68,16 @@ export class NpmCacheStorage extends CacheStorage {
     }
 
     const files = await fg(`**/*`, {
-      cwd: path.join(process.cwd(), packageFolderInTemporaryFolder)
+      cwd: path.join(this.cwd, packageFolderInTemporaryFolder)
     });
 
     await Promise.all(
       files.map(async file => {
-        await fs.mkdirp(path.dirname(file));
-        await fs.copy(path.join(packageFolderInTemporaryFolder, file), file);
+        await fs.mkdirp(path.dirname(path.join(this.cwd, file)));
+        await fs.copy(
+          path.join(packageFolderInTemporaryFolder, file),
+          path.join(this.cwd, file)
+        );
       })
     );
 
@@ -96,7 +100,7 @@ export class NpmCacheStorage extends CacheStorage {
       version: `0.0.0-${hash}`
     });
 
-    const files = await fg(outputGlob);
+    const files = await fg(outputGlob, { cwd: this.cwd });
 
     await Promise.all(
       files.map(async file => {
@@ -105,7 +109,10 @@ export class NpmCacheStorage extends CacheStorage {
           path.dirname(file)
         );
         await fs.mkdirp(destinationFolder);
-        await fs.copy(file, path.join(temporaryNpmOutputFolder, file));
+        await fs.copy(
+          path.join(this.cwd, file),
+          path.join(temporaryNpmOutputFolder, file)
+        );
       })
     );
 
