@@ -1,7 +1,7 @@
-import { LogLevel } from ".";
 import { Console, defaultConsole } from "./console";
 import { defaultFormatter } from "./outputFormatter";
 import { defaultLogFilter } from "./outputFilter";
+import { LogLevel } from ".";
 
 export type LoggerOverrides = {
   console?: Console;

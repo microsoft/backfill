@@ -6,6 +6,10 @@ export type OutputFormatter = {
   format(logLevel: LogLevel, ...args: string[]): string[];
 };
 
+function assertNever(x: never): never {
+  throw new Error("Unexpected object: " + x);
+}
+
 export const defaultFormatter = {
   format(logLevel: LogLevel | "trace", ...args: string[]): string[] {
     switch (logLevel) {
@@ -29,7 +33,3 @@ export const defaultFormatter = {
     }
   }
 };
-
-function assertNever(x: never): never {
-  throw new Error("Unexpected object: " + x);
-}

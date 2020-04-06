@@ -1,5 +1,5 @@
-import fs from "fs-extra";
 import path from "path";
+import fs from "fs-extra";
 
 import { makeLogger } from "backfill-logger";
 import { setupFixture } from "backfill-utils-test";

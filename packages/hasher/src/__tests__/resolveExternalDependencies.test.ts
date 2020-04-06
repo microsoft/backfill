@@ -1,6 +1,5 @@
 import { setupFixture } from "backfill-utils-test";
 
-import { filterDependenciesInFixture } from "./resolveDependenciesHelper";
 import { getYarnWorkspaces } from "../yarnWorkspaces";
 import {
   filterExternalDependencies,
@@ -8,6 +7,7 @@ import {
   addToQueue
 } from "../resolveExternalDependencies";
 import { parseLockFile } from "../yarnLock";
+import { filterDependenciesInFixture } from "./resolveDependenciesHelper";
 
 describe("filterExternalDependencies()", () => {
   it("only lists external dependencies", async () => {

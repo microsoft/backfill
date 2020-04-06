@@ -3,13 +3,13 @@ import fg from "fast-glob";
 import { Logger } from "backfill-logger";
 
 export interface ICacheStorage {
-  fetch: (hash: string) => Promise<Boolean>;
+  fetch: (hash: string) => Promise<boolean>;
   put: (hash: string, outputGlob: string[]) => Promise<void>;
 }
 
 export abstract class CacheStorage implements ICacheStorage {
   public constructor(protected logger: Logger, protected cwd: string) {}
-  public async fetch(hash: string): Promise<Boolean> {
+  public async fetch(hash: string): Promise<boolean> {
     const tracer = this.logger.setTime("fetchTime");
 
     const result = await this._fetch(hash);

@@ -95,7 +95,7 @@ describe("addToQueue", () => {
 });
 
 describe("The main Hasher class", () => {
-  const setupFixtureAndReturnHash = async (fixture: string = "monorepo") => {
+  const setupFixtureAndReturnHash = async (fixture = "monorepo") => {
     const packageRoot = await setupFixture(fixture);
 
     const options = { packageRoot, outputGlob: ["lib/**"] };

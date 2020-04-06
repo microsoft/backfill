@@ -1,6 +1,6 @@
+import path from "path";
 import chokidar from "chokidar";
 import findUp from "find-up";
-import path from "path";
 import anymatch from "anymatch";
 
 import { Logger } from "backfill-logger";

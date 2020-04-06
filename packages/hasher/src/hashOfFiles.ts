@@ -1,7 +1,7 @@
 import crypto from "crypto";
+import path from "path";
 import fg from "fast-glob";
 import fs from "fs-extra";
-import path from "path";
 
 import { createConfig } from "backfill-config";
 import { Logger } from "backfill-logger";

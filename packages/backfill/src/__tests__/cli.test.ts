@@ -50,7 +50,9 @@ describe("createBuildCommand", () => {
 
     try {
       await buildCommand;
-    } catch (e) {}
+    } catch (e) {
+      /* comment to prevent eslint from complaining */
+    }
 
     expect(buildCommand).rejects.toThrow();
     expect(stderr.filter(m => m.includes("somecommand")).length).not.toBe(0);
