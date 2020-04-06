@@ -1,4 +1,4 @@
-import { anyString, anything, spy, verify, resetCalls } from "ts-mockito";
+import fs from "fs-extra";
 
 import { setupFixture } from "backfill-utils-test";
 import { getCacheStorageProvider } from "backfill-cache";
@@ -6,7 +6,6 @@ import { createConfig } from "backfill-config";
 import { makeLogger } from "backfill-logger";
 
 import { backfill } from "../index";
-import { createBuildCommand } from "../commandRunner";
 
 const logger = makeLogger("mute");
 
@@ -16,12 +15,7 @@ describe("backfill", () => {
     await setupFixture("basic");
 
     const config = createConfig(logger, process.cwd());
-    const {
-      cacheStorageConfig,
-      clearOutput,
-      internalCacheFolder,
-      outputGlob
-    } = config;
+    const { cacheStorageConfig, internalCacheFolder } = config;
 
     // Arrange
     const cacheStorage = getCacheStorageProvider(
@@ -30,41 +24,35 @@ describe("backfill", () => {
       logger,
       process.cwd()
     );
-    const buildCommandRaw = "npm run compile";
-    const buildCommand = createBuildCommand(
-      [buildCommandRaw],
-      clearOutput,
-      outputGlob,
-      logger
-    );
 
-    // Spy
-    const spiedCacheStorage = spy(cacheStorage);
-    const spiedBuildCommand = jest.fn(buildCommand);
+    const salt = "fooBar";
+    let buildCalled = 0;
+    const outputContent = `console.log("foo");`;
+    const buildCommand = async (): Promise<void> => {
+      await fs.mkdirp("lib");
+      await fs.writeFile("lib/output.js", outputContent);
+      buildCalled += 1;
+    };
 
     // Execute
-    await backfill(
-      config,
-      cacheStorage,
-      spiedBuildCommand,
-      buildCommandRaw,
-      logger
+    await backfill(config, cacheStorage, buildCommand, salt, logger);
+
+    // Assert
+    expect(buildCalled).toBe(1);
+    expect(fs.readFileSync("lib/output.js").toString()).toBe(outputContent);
+
+    // Reset
+    buildCalled = 0;
+    await fs.writeFile(
+      "lib/output.js",
+      "This output should be overriden by backfill during fetch"
     );
 
-    // Assert
-    expect(spiedBuildCommand).toHaveBeenCalled();
-    verify(spiedCacheStorage.fetch(anyString())).once();
-    verify(spiedCacheStorage.put(anyString(), anything())).once();
-
-    resetCalls(spiedCacheStorage);
-    jest.clearAllMocks();
-
     // Execute
-    await backfill(config, cacheStorage, buildCommand, buildCommandRaw, logger);
+    await backfill(config, cacheStorage, buildCommand, salt, logger);
 
     // Assert
-    expect(spiedBuildCommand).not.toHaveBeenCalled();
-    verify(spiedCacheStorage.fetch(anyString())).once();
-    verify(spiedCacheStorage.put(anyString(), anyString())).never();
+    expect(buildCalled).toBe(0);
+    expect(fs.readFileSync("lib/output.js").toString()).toBe(outputContent);
   });
 });

@@ -56,20 +56,16 @@ export async function computeHashOfOutput(
 
 export async function fetch(
   cwd: string,
-  hashSalt: string,
+  hash: string,
   logger: Logger
 ): Promise<boolean> {
-  const { cacheStorageConfig, internalCacheFolder, packageRoot } = createConfig(
-    logger,
-    cwd
-  );
+  const { cacheStorageConfig, internalCacheFolder } = createConfig(logger, cwd);
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
     internalCacheFolder,
     logger,
     cwd
   );
-  const hash = await computeHash(packageRoot, hashSalt, logger);
   const fetch = await cacheStorage.fetch(hash);
   return fetch;
 }

@@ -12,7 +12,7 @@ import {
   BuildCommand
 } from "./commandRunner";
 import { initializeWatcher, closeWatcher } from "./audit";
-import { computeHash, computeHashOfOutput } from "./api";
+import { fetch as fetch_api, computeHash, computeHashOfOutput } from "./api";
 
 // Load environment variables
 loadDotenv();
@@ -41,7 +41,8 @@ export async function backfill(
 
   const createPackageHash = async () =>
     await computeHash(packageRoot, hashSalt, logger);
-  const fetch = async (hash: string) => await cacheStorage.fetch(hash);
+  const fetch = async (hash: string) =>
+    await fetch_api(packageRoot, hash, logger);
   const run = async () => {
     try {
       await buildCommand();
@@ -62,9 +63,9 @@ export async function backfill(
   switch (mode) {
     case "READ_WRITE": {
       const hash = await createPackageHash();
-
       if (!(await fetch(hash))) {
         await run();
+
         await put(hash);
       }
 
@@ -72,7 +73,6 @@ export async function backfill(
     }
     case "READ_ONLY": {
       const hash = await createPackageHash();
-
       if (!(await fetch(hash))) {
         await run();
       }
@@ -80,9 +80,9 @@ export async function backfill(
       break;
     }
     case "WRITE_ONLY": {
-      const hash = await createPackageHash();
-
       await run();
+
+      const hash = await createPackageHash();
       await put(hash);
 
       break;

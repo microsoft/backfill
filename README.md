@@ -214,7 +214,7 @@ const hashSalt = await getEnvironementHash();
 const logger = await backfill.makeLogger("verbose", process.stdout, process.stderr);
 const packagehash = await backfill.computHash(process.cwd(), hashSalt, logger);
 
-const fetchSuccess = await backfill.fetch(process.cwd(), hashSalt, logger);
+const fetchSuccess = await backfill.fetch(process.cwd(), packageHash, logger);
 
 if (fetchSuccess) {
   return;
