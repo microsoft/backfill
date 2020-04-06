@@ -17,7 +17,7 @@ export type ParsedYarnLock = {
   };
 };
 
-const memoization: { [path: string]: ParsedYarnLock };
+const memoization: { [path: string]: ParsedYarnLock } = {};
 
 export async function parseLockFile(
   packageRoot: string

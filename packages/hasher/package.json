@@ -35,5 +35,6 @@
     "ts-jest": "^25.1.0",
     "typescript": "3.7.4"
   },
+  "gitHead": "3475168710cc09c4d6800c3184f66d5db3fba183",
   "salt": "dsf"
 }
