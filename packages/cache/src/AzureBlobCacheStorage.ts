@@ -1,7 +1,8 @@
 import { BlobServiceClient } from "@azure/storage-blob";
-import * as tar from "tar";
-import * as fg from "fast-glob";
+import tar from "tar";
+import fg from "fast-glob";
 
+import { Logger } from "backfill-logger";
 import { AzureBlobCacheStorageOptions } from "backfill-config";
 
 import { CacheStorage } from "./CacheStorage";
@@ -29,8 +30,12 @@ function createBlobClient(
 }
 
 export class AzureBlobCacheStorage extends CacheStorage {
-  constructor(private options: AzureBlobCacheStorageOptions) {
-    super();
+  constructor(
+    private options: AzureBlobCacheStorageOptions,
+    logger: Logger,
+    cwd: string
+  ) {
+    super(logger, cwd);
   }
 
   protected async _fetch(hash: string): Promise<boolean> {
@@ -48,7 +53,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
         throw new Error("Unable to fetch blob.");
       }
 
-      const tarWritableStream = tar.extract({});
+      const tarWritableStream = tar.extract({ cwd: this.cwd });
 
       blobReadableStream.pipe(tarWritableStream);
 
@@ -78,8 +83,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
     const blockBlobClient = blobClient.getBlockBlobClient();
 
-    const filesToCopy = await fg(outputGlob);
-    const tarStream = tar.create({ gzip: false }, filesToCopy);
+    const filesToCopy = await fg(outputGlob, { cwd: this.cwd });
+    const tarStream = tar.create({ gzip: false, cwd: this.cwd }, filesToCopy);
 
     await blockBlobClient.uploadStream(
       tarStream,

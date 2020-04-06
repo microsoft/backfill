@@ -1,6 +1,6 @@
 # `backfill-logger`
 
-> Backfill Logger
+> Backfill logger
 
 ## Usage
 

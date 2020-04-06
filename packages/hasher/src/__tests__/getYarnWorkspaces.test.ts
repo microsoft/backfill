@@ -1,6 +1,7 @@
-import * as path from "path";
+import path from "path";
+import normalize from "normalize-path";
+
 import { setupFixture } from "backfill-utils-test";
-import normalize = require("normalize-path");
 
 import { getYarnWorkspaces } from "../yarnWorkspaces";
 

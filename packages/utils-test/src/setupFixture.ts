@@ -1,7 +1,7 @@
-import * as path from "path";
-import * as findUp from "find-up";
-import * as fs from "fs-extra";
-import * as tempy from "tempy";
+import path from "path";
+import findUp from "find-up";
+import fs from "fs-extra";
+import tempy from "tempy";
 
 async function findFixturePath(cwd: string, fixtureName: string) {
   return await findUp(path.join("__fixtures__", fixtureName), {

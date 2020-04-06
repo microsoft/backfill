@@ -7,6 +7,7 @@
     "inlineSources": false,
     "jsx": "react",
     "module": "commonjs",
+    "esModuleInterop": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "lib",

@@ -1,18 +1,17 @@
-import * as yargs from "yargs";
+import yargs from "yargs";
 
 import { loadDotenv } from "backfill-utils-dotenv";
 import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
-import { logger, setLogLevel } from "backfill-logger";
+import { Logger, makeLogger } from "backfill-logger";
 import { createConfig, Config } from "backfill-config";
 import { IHasher, Hasher } from "backfill-hasher";
+export { createDefaultConfig } from "backfill-config";
+
 import {
   getRawBuildCommand,
   createBuildCommand,
   BuildCommand
 } from "./commandRunner";
-
-export { createDefaultConfig } from "backfill-config";
-
 import { initializeWatcher, closeWatcher } from "./audit";
 
 // Load environment variables
@@ -22,7 +21,8 @@ export async function backfill(
   config: Config,
   cacheStorage: ICacheStorage,
   buildCommand: BuildCommand,
-  hasher: IHasher
+  hasher: IHasher,
+  logger: Logger
 ): Promise<void> {
   const {
     cacheStorageConfig,
@@ -35,7 +35,7 @@ export async function backfill(
   } = config;
 
   logger.setName(name);
-  logger.setMode(mode);
+  logger.setMode(mode, mode === "READ_WRITE" ? "info" : "verbose");
   logger.setCacheProvider(cacheStorageConfig.provider);
 
   const createPackageHash = async () => await hasher.createPackageHash();
@@ -102,8 +102,11 @@ export async function backfill(
 }
 
 export async function main(): Promise<void> {
+  let logger = makeLogger("info");
+  const cwd = process.cwd();
+
   try {
-    const config = createConfig();
+    const config = createConfig(logger, cwd);
     const {
       cacheStorageConfig,
       clearOutput,
@@ -116,7 +119,7 @@ export async function main(): Promise<void> {
     } = config;
 
     if (logLevel) {
-      setLogLevel(logLevel);
+      logger = makeLogger(logLevel);
     }
 
     const helpString = "Backfills unchanged packages.";
@@ -131,16 +134,24 @@ export async function main(): Promise<void> {
         type: "boolean"
       }).argv;
 
-    const buildCommand = createBuildCommand(argv["_"], clearOutput, outputGlob);
+    const buildCommand = createBuildCommand(
+      argv["_"],
+      clearOutput,
+      outputGlob,
+      logger
+    );
 
     const cacheStorage = getCacheStorageProvider(
       cacheStorageConfig,
-      internalCacheFolder
+      internalCacheFolder,
+      logger,
+      cwd
     );
 
     const hasher = new Hasher(
       { packageRoot, outputGlob },
-      getRawBuildCommand()
+      getRawBuildCommand(),
+      logger
     );
 
     if (argv["audit"]) {
@@ -149,14 +160,15 @@ export async function main(): Promise<void> {
         internalCacheFolder,
         logFolder,
         outputGlob,
-        hashGlobs
+        hashGlobs,
+        logger
       );
     }
 
-    await backfill(config, cacheStorage, buildCommand, hasher);
+    await backfill(config, cacheStorage, buildCommand, hasher, logger);
 
     if (argv["audit"]) {
-      await closeWatcher();
+      await closeWatcher(logger);
     }
   } catch (err) {
     logger.error(err);

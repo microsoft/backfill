@@ -1,6 +1,7 @@
-import * as path from "path";
+import path from "path";
 
 import { setupFixture } from "backfill-utils-test";
+import { makeLogger } from "backfill-logger";
 
 import {
   getName,
@@ -21,6 +22,7 @@ describe("getName()", () => {
 
 describe("getEnvConfig()", () => {
   const originalEnv = process.env;
+  const logger = makeLogger("mute");
 
   beforeEach(() => {
     process.env = { ...originalEnv };
@@ -33,21 +35,21 @@ describe("getEnvConfig()", () => {
   it("sets log folder through ENV variable", async () => {
     process.env["BACKFILL_LOG_FOLDER"] = "foo";
 
-    const config = getEnvConfig();
+    const config = getEnvConfig(logger);
     expect(config).toStrictEqual({ logFolder: "foo" });
   });
 
   it("sets the performance logging flag through ENV variable", async () => {
     process.env["BACKFILL_PRODUCE_PERFORMANCE_LOGS"] = "true";
 
-    const config = getEnvConfig();
+    const config = getEnvConfig(logger);
     expect(config).toStrictEqual({ producePerformanceLogs: true });
   });
 
   it("sets local cache folder through ENV variable", async () => {
     process.env["BACKFILL_INTERNAL_CACHE_FOLDER"] = "bar";
 
-    const config = getEnvConfig();
+    const config = getEnvConfig(logger);
     expect(config).toStrictEqual({ internalCacheFolder: "bar" });
   });
 
@@ -65,14 +67,14 @@ describe("getEnvConfig()", () => {
       cacheStorageConfig.options
     );
 
-    const config = getEnvConfig();
+    const config = getEnvConfig(logger);
     expect(config).toStrictEqual({ cacheStorageConfig: cacheStorageConfig });
   });
 
   it("sets performance report name through ENV variable", async () => {
     process.env["BACKFILL_PERFORMANCE_REPORT_NAME"] = "report";
 
-    const config = getEnvConfig();
+    const config = getEnvConfig(logger);
     expect(config).toStrictEqual({ performanceReportName: "report" });
   });
 });
@@ -82,10 +84,10 @@ describe("getSearchPaths()", () => {
     const packageRoot = await setupFixture("config");
 
     process.chdir(path.join(packageRoot, "packages", "package-1"));
-    const searchPathsFromPackage1 = getSearchPaths();
+    const searchPathsFromPackage1 = getSearchPaths(process.cwd());
 
     process.chdir(path.join(packageRoot, "packages", "package-2"));
-    const searchPathsFromPackage2 = getSearchPaths();
+    const searchPathsFromPackage2 = getSearchPaths(process.cwd());
 
     expect(searchPathsFromPackage1).toStrictEqual([
       path.join(packageRoot, "backfill.config.js"),
@@ -98,7 +100,7 @@ describe("getSearchPaths()", () => {
 
   it("returns empty list when no backfill.config.js can be found", async () => {
     await setupFixture("basic");
-    const searchPaths = getSearchPaths();
+    const searchPaths = getSearchPaths(process.cwd());
 
     expect(searchPaths).toStrictEqual([]);
   });
@@ -106,6 +108,7 @@ describe("getSearchPaths()", () => {
 
 describe("createConfig()", () => {
   const originalEnv = process.env;
+  const logger = makeLogger("info");
 
   beforeAll(() => {
     process.env = { ...originalEnv };
@@ -117,15 +120,16 @@ describe("createConfig()", () => {
 
   it("returns default config values when no config file and no ENV override is provided", async () => {
     await setupFixture("basic");
-    const config = createConfig();
+    const config = createConfig(logger, process.cwd());
 
-    const defaultLocalCacheFolder = createDefaultConfig().internalCacheFolder;
+    const defaultLocalCacheFolder = createDefaultConfig(process.cwd())
+      .internalCacheFolder;
     expect(config.internalCacheFolder).toStrictEqual(defaultLocalCacheFolder);
   });
 
   it("returns config file value when config file is provided, and no ENV override", async () => {
     await setupFixture("config");
-    const config = createConfig();
+    const config = createConfig(logger, process.cwd());
 
     expect(config.internalCacheFolder).toStrictEqual("foo");
   });
@@ -134,7 +138,7 @@ describe("createConfig()", () => {
     process.env["BACKFILL_INTERNAL_CACHE_FOLDER"] = "bar";
 
     await setupFixture("config");
-    const config = createConfig();
+    const config = createConfig(logger, process.cwd());
 
     expect(config.internalCacheFolder).toStrictEqual("bar");
   });

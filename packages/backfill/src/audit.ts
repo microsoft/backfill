@@ -1,8 +1,9 @@
-import * as path from "path";
-import * as chokidar from "chokidar";
-import * as findUp from "find-up";
+import path from "path";
+import chokidar from "chokidar";
+import findUp from "find-up";
 import anymatch from "anymatch";
-import { logger } from "backfill-logger";
+
+import { Logger } from "backfill-logger";
 
 let changedFilesOutsideScope: string[] = [];
 let changedFilesInsideScope: string[] = [];
@@ -35,7 +36,8 @@ export function initializeWatcher(
   internalCacheFolder: string,
   logFolder: string,
   outputGlob: string[],
-  hashGlobs: string[]
+  hashGlobs: string[],
+  logger: Logger
 ) {
   // Trying to find the git root and using it as an approximation of code boundary
   const repositoryRoot = getGitRepositoryRoot(packageRoot);
@@ -94,7 +96,7 @@ async function delay(time: number) {
   });
 }
 
-export async function closeWatcher() {
+export async function closeWatcher(logger: Logger) {
   // Wait for one second before closing, giving time for file changes to propagate
   await delay(1000);
 

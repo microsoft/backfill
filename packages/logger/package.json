@@ -1,8 +1,8 @@
 {
   "name": "backfill-logger",
-  "description": "Backfill Logger",
+  "description": "Handle backfill output",
   "license": "MIT",
-  "author": "Benjamin Weggersen <bewegger@microsoft.com>",
+  "author": "Vincent Bailly <vibailly@microsoft.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
@@ -15,10 +15,12 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "backfill-generic-logger": "^3.0.0",
-    "backfill-performance-logger": "^3.0.0"
+    "chalk": "^3.0.0",
+    "filenamify": "^4.1.0",
+    "fs-extra": "^8.1.0"
   },
   "devDependencies": {
+    "@types/node": "^12.0.0",
     "backfill-utils-tsconfig": "^2.0.3",
     "typescript": "3.7.4"
   }

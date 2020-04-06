@@ -1,9 +1,13 @@
-import * as path from "path";
+import path from "path";
+
 import { setupFixture } from "backfill-utils-test";
+import { makeLogger } from "backfill-logger";
 
 import { PackageHashInfo } from "../hashOfPackage";
 import { Hasher, addToQueue } from "../index";
 import { WorkspaceInfo } from "../yarnWorkspaces";
+
+const logger = makeLogger("mute");
 
 describe("addToQueue", () => {
   const setupAddToQueue = async () => {
@@ -97,7 +101,7 @@ describe("The main Hasher class", () => {
     const options = { packageRoot, outputGlob: ["lib/**"] };
     const buildSignature = "yarn build";
 
-    const hasher = new Hasher(options, buildSignature);
+    const hasher = new Hasher(options, buildSignature, logger);
     const hash = await hasher.createPackageHash();
 
     return hash;

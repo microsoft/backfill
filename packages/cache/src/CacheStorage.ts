@@ -1,5 +1,6 @@
-import { logger } from "backfill-logger";
-import * as fg from "fast-glob";
+import fg from "fast-glob";
+
+import { Logger } from "backfill-logger";
 
 export interface ICacheStorage {
   fetch: (hash: string) => Promise<boolean>;
@@ -7,20 +8,22 @@ export interface ICacheStorage {
 }
 
 export abstract class CacheStorage implements ICacheStorage {
+  public constructor(protected logger: Logger, protected cwd: string) {}
   public async fetch(hash: string): Promise<boolean> {
-    logger.profile("cache:fetch");
+    const tracer = this.logger.setTime("fetchTime");
 
     const result = await this._fetch(hash);
-    logger.setTime("fetchTime", "cache:fetch");
 
-    logger.setHit(result);
+    tracer.stop();
+
+    this.logger.setHit(result);
     return result;
   }
 
   public async put(hash: string, outputGlob: string[]): Promise<void> {
-    logger.profile("cache:put");
+    const tracer = this.logger.setTime("putTime");
 
-    const filesBeingCached = fg.sync(outputGlob);
+    const filesBeingCached = fg.sync(outputGlob, { cwd: this.cwd });
     if (filesBeingCached.length === 0) {
       throw new Error(
         `Couldn't find any file on disk matching the output glob (${outputGlob.join(
@@ -30,7 +33,7 @@ export abstract class CacheStorage implements ICacheStorage {
     }
 
     await this._put(hash, outputGlob);
-    logger.setTime("putTime", "cache:put");
+    tracer.stop();
   }
 
   protected abstract async _fetch(hash: string): Promise<boolean>;

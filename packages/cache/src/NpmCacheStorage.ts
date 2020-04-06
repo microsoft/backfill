@@ -1,18 +1,21 @@
-import * as path from "path";
-import * as execa from "execa";
-import * as fs from "fs-extra";
-import * as fg from "fast-glob";
+import path from "path";
+import execa from "execa";
+import fs from "fs-extra";
+import fg from "fast-glob";
 
 import { NpmCacheStorageOptions } from "backfill-config";
+import { Logger } from "backfill-logger";
 
 import { CacheStorage } from "./CacheStorage";
 
 export class NpmCacheStorage extends CacheStorage {
   constructor(
     private options: NpmCacheStorageOptions,
-    private internalCacheFolder: string
+    private internalCacheFolder: string,
+    logger: Logger,
+    cwd: string
   ) {
-    super();
+    super(logger, cwd);
   }
 
   protected async _fetch(hash: string): Promise<boolean> {
@@ -34,25 +37,25 @@ export class NpmCacheStorage extends CacheStorage {
       fs.mkdirpSync(temporaryNpmOutputFolder);
 
       try {
-        await execa(
-          "npm",
-          [
-            "install",
-            "--prefix",
-            temporaryNpmOutputFolder,
-            `${npmPackageName}@0.0.0-${hash}`,
-            "--registry",
-            registryUrl,
-            "--prefer-offline",
-            "--ignore-scripts",
-            "--no-shrinkwrap",
-            "--no-package-lock",
-            "--loglevel",
-            "error",
-            ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
-          ],
-          { stdout: "inherit" }
-        );
+        const runner = execa("npm", [
+          "install",
+          "--prefix",
+          temporaryNpmOutputFolder,
+          `${npmPackageName}@0.0.0-${hash}`,
+          "--registry",
+          registryUrl,
+          "--prefer-offline",
+          "--ignore-scripts",
+          "--no-shrinkwrap",
+          "--no-package-lock",
+          "--loglevel",
+          "error",
+          ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
+        ]);
+
+        this.logger.pipeProcessOutput(runner.stdout, runner.stderr);
+
+        await runner;
       } catch (error) {
         fs.removeSync(temporaryNpmOutputFolder);
 
@@ -65,13 +68,16 @@ export class NpmCacheStorage extends CacheStorage {
     }
 
     const files = await fg(`**/*`, {
-      cwd: path.join(process.cwd(), packageFolderInTemporaryFolder)
+      cwd: path.join(this.cwd, packageFolderInTemporaryFolder)
     });
 
     await Promise.all(
       files.map(async file => {
-        await fs.mkdirp(path.dirname(file));
-        await fs.copy(path.join(packageFolderInTemporaryFolder, file), file);
+        await fs.mkdirp(path.dirname(path.join(this.cwd, file)));
+        await fs.copy(
+          path.join(packageFolderInTemporaryFolder, file),
+          path.join(this.cwd, file)
+        );
       })
     );
 
@@ -94,7 +100,7 @@ export class NpmCacheStorage extends CacheStorage {
       version: `0.0.0-${hash}`
     });
 
-    const files = await fg(outputGlob);
+    const files = await fg(outputGlob, { cwd: this.cwd });
 
     await Promise.all(
       files.map(async file => {
@@ -103,13 +109,16 @@ export class NpmCacheStorage extends CacheStorage {
           path.dirname(file)
         );
         await fs.mkdirp(destinationFolder);
-        await fs.copy(file, path.join(temporaryNpmOutputFolder, file));
+        await fs.copy(
+          path.join(this.cwd, file),
+          path.join(temporaryNpmOutputFolder, file)
+        );
       })
     );
 
     // Upload package
     try {
-      await execa(
+      const runner = execa(
         "npm",
         [
           "publish",
@@ -124,6 +133,10 @@ export class NpmCacheStorage extends CacheStorage {
           stdout: "inherit"
         }
       );
+
+      this.logger.pipeProcessOutput(runner.stdout, runner.stderr);
+
+      await runner;
     } catch (error) {
       if (error.stderr.toString().indexOf("403") === -1) {
         throw new Error(error);

@@ -1,7 +1,6 @@
-import * as path from "path";
-import * as fg from "fast-glob";
-
-import * as findWorkspaceRoot from "find-yarn-workspace-root";
+import path from "path";
+import fg from "fast-glob";
+import findWorkspaceRoot from "find-yarn-workspace-root";
 
 type PackageJsonWorkspaces = {
   workspaces?:

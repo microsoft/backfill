@@ -1,6 +1,7 @@
-import * as crypto from "crypto";
-import * as path from "path";
-import { logger } from "backfill-logger";
+import crypto from "crypto";
+import path from "path";
+
+import { Logger } from "backfill-logger";
 
 import { resolveInternalDependencies } from "./resolveInternalDependencies";
 import {
@@ -38,7 +39,8 @@ export function generateHashOfInternalPackages(
 export async function getPackageHash(
   packageRoot: string,
   workspaces: WorkspaceInfo,
-  yarnLock: ParsedYarnLock
+  yarnLock: ParsedYarnLock,
+  logger: Logger
 ): Promise<PackageHashInfo> {
   const { name, dependencies, devDependencies } = require(path.join(
     packageRoot,
@@ -66,7 +68,7 @@ export async function getPackageHash(
     ...externalDeoendencies
   ];
 
-  const filesHash = await generateHashOfFiles(packageRoot);
+  const filesHash = await generateHashOfFiles(packageRoot, logger);
   const dependenciesHash = hashStrings(resolvedDependencies);
 
   logger.silly(name);

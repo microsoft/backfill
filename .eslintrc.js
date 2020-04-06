@@ -26,6 +26,7 @@ module.exports = {
     "no-prototype-builtins": "off",
     "@typescript-eslint/consistent-type-assertions": "off",
     "import/namespace": "off",
-    "import/order": "warn"
+    "import/order": "warn",
+    "import/default": "off"
   }
 };

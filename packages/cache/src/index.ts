@@ -1,27 +1,35 @@
 import { CacheStorageConfig } from "backfill-config";
+import { Logger } from "backfill-logger";
 
 import { ICacheStorage } from "./CacheStorage";
 import { AzureBlobCacheStorage } from "./AzureBlobCacheStorage";
 import { LocalCacheStorage } from "./LocalCacheStorage";
 import { NpmCacheStorage } from "./NpmCacheStorage";
-
 export { ICacheStorage } from "./CacheStorage";
 
 export function getCacheStorageProvider(
   cacheStorageConfig: CacheStorageConfig,
-  internalCacheFolder: string
+  internalCacheFolder: string,
+  logger: Logger,
+  cwd: string
 ): ICacheStorage {
   let cacheStorage: ICacheStorage;
 
   if (cacheStorageConfig.provider === "npm") {
     cacheStorage = new NpmCacheStorage(
       cacheStorageConfig.options,
-      internalCacheFolder
+      internalCacheFolder,
+      logger,
+      cwd
     );
   } else if (cacheStorageConfig.provider === "azure-blob") {
-    cacheStorage = new AzureBlobCacheStorage(cacheStorageConfig.options);
+    cacheStorage = new AzureBlobCacheStorage(
+      cacheStorageConfig.options,
+      logger,
+      cwd
+    );
   } else {
-    cacheStorage = new LocalCacheStorage(internalCacheFolder);
+    cacheStorage = new LocalCacheStorage(internalCacheFolder, logger, cwd);
   }
 
   return cacheStorage;
