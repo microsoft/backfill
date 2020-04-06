@@ -8,5 +8,6 @@
     "url": "https://github.com/microsoft/backfill"
   },
   "version": "3.0.1-backfill-api.0",
-  "main": "tsconfig.default.json"
+  "main": "tsconfig.default.json",
+  "gitHead": "ab27cdae75c32886dd0629fb14b0623c8caf6bcc"
 }

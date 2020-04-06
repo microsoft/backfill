@@ -23,5 +23,6 @@
     "@types/fs-extra": "^8.0.0",
     "backfill-utils-tsconfig": "^3.0.1-backfill-api.0",
     "typescript": "3.7.4"
-  }
+  },
+  "gitHead": "ab27cdae75c32886dd0629fb14b0623c8caf6bcc"
 }

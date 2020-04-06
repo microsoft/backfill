@@ -43,5 +43,6 @@
     "ts-jest": "^25.1.0",
     "ts-mockito": "^2.3.1",
     "typescript": "3.7.4"
-  }
+  },
+  "gitHead": "ab27cdae75c32886dd0629fb14b0623c8caf6bcc"
 }
