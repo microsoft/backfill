@@ -36,12 +36,18 @@ export function generateHashOfInternalPackages(
   return hasher.digest("hex");
 }
 
+const memoization: { [key: string]: PackageHashInfo } = {};
+
 export async function getPackageHash(
   packageRoot: string,
   workspaces: WorkspaceInfo,
   yarnLock: ParsedYarnLock,
   logger: Logger
 ): Promise<PackageHashInfo> {
+  if (memoization[packageRoot]) {
+    return memoization[packageRoot];
+  }
+
   const { name, dependencies, devDependencies } = require(path.join(
     packageRoot,
     "package.json"
@@ -81,6 +87,8 @@ export async function getPackageHash(
     dependenciesHash,
     internalDependencies
   };
+
+  memoization[packageRoot] = packageHash;
 
   return packageHash;
 }
