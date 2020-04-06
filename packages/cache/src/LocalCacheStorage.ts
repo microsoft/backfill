@@ -27,7 +27,7 @@ export class LocalCacheStorage extends CacheStorage {
     }
 
     const files = await fg(`**/*`, {
-      cwd: path.join(this.cwd, localCacheFolder)
+      cwd: localCacheFolder
     });
 
     await Promise.all(

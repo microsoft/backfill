@@ -68,7 +68,7 @@ export class NpmCacheStorage extends CacheStorage {
     }
 
     const files = await fg(`**/*`, {
-      cwd: path.join(this.cwd, packageFolderInTemporaryFolder)
+      cwd: packageFolderInTemporaryFolder
     });
 
     await Promise.all(
