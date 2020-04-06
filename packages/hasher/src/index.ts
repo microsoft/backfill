@@ -15,7 +15,7 @@ import {
 } from "./yarnWorkspaces";
 
 export interface IHasher {
-  createPackageHash: () => Promise<string>;
+  createPackageHash: (salt: string) => Promise<string>;
   hashOfOutput: () => Promise<string>;
 }
 
@@ -50,14 +50,13 @@ export class Hasher implements IHasher {
 
   constructor(
     private options: { packageRoot: string; outputGlob: string[] },
-    private buildCommandSignature: string,
     private logger: Logger
   ) {
     this.packageRoot = this.options.packageRoot;
     this.outputGlob = this.options.outputGlob;
   }
 
-  public async createPackageHash(): Promise<string> {
+  public async createPackageHash(salt: string): Promise<string> {
     const tracer = this.logger.setTime("hashTime");
 
     const packageRoot = await getPackageRoot(this.packageRoot);
@@ -87,7 +86,7 @@ export class Hasher implements IHasher {
     }
 
     const internalPackagesHash = generateHashOfInternalPackages(done);
-    const buildCommandHash = hashStrings(this.buildCommandSignature);
+    const buildCommandHash = hashStrings(salt);
     const combinedHash = hashStrings([internalPackagesHash, buildCommandHash]);
 
     this.logger.verbose(`Hash of internal packages: ${internalPackagesHash}`);

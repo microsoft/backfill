@@ -2,7 +2,6 @@ import { anyString, anything, spy, verify, resetCalls } from "ts-mockito";
 
 import { setupFixture } from "backfill-utils-test";
 import { getCacheStorageProvider } from "backfill-cache";
-import { Hasher } from "backfill-hasher";
 import { createConfig } from "backfill-config";
 import { makeLogger } from "backfill-logger";
 
@@ -21,8 +20,7 @@ describe("backfill", () => {
       cacheStorageConfig,
       clearOutput,
       internalCacheFolder,
-      outputGlob,
-      packageRoot
+      outputGlob
     } = config;
 
     // Arrange
@@ -39,35 +37,32 @@ describe("backfill", () => {
       outputGlob,
       logger
     );
-    const hasher = new Hasher(
-      { packageRoot, outputGlob },
-      buildCommandRaw,
-      logger
-    );
 
     // Spy
     const spiedCacheStorage = spy(cacheStorage);
     const spiedBuildCommand = jest.fn(buildCommand);
-    const spiedHasher = spy(hasher);
 
     // Execute
-    await backfill(config, cacheStorage, spiedBuildCommand, hasher, logger);
+    await backfill(
+      config,
+      cacheStorage,
+      spiedBuildCommand,
+      buildCommandRaw,
+      logger
+    );
 
     // Assert
-    verify(spiedHasher.createPackageHash()).once();
     expect(spiedBuildCommand).toHaveBeenCalled();
     verify(spiedCacheStorage.fetch(anyString())).once();
     verify(spiedCacheStorage.put(anyString(), anything())).once();
 
-    resetCalls(spiedHasher);
     resetCalls(spiedCacheStorage);
     jest.clearAllMocks();
 
     // Execute
-    await backfill(config, cacheStorage, buildCommand, hasher, logger);
+    await backfill(config, cacheStorage, buildCommand, buildCommandRaw, logger);
 
     // Assert
-    verify(spiedHasher.createPackageHash()).once();
     expect(spiedBuildCommand).not.toHaveBeenCalled();
     verify(spiedCacheStorage.fetch(anyString())).once();
     verify(spiedCacheStorage.put(anyString(), anyString())).never();

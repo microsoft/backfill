@@ -4,7 +4,6 @@ import { loadDotenv } from "backfill-utils-dotenv";
 import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
 import { Logger, makeLogger } from "backfill-logger";
 import { createConfig, Config } from "backfill-config";
-import { IHasher, Hasher } from "backfill-hasher";
 export { createDefaultConfig } from "backfill-config";
 
 import {
@@ -13,6 +12,7 @@ import {
   BuildCommand
 } from "./commandRunner";
 import { initializeWatcher, closeWatcher } from "./audit";
+import { computeHash, computeHashOfOutput } from "./api";
 
 // Load environment variables
 loadDotenv();
@@ -21,7 +21,7 @@ export async function backfill(
   config: Config,
   cacheStorage: ICacheStorage,
   buildCommand: BuildCommand,
-  hasher: IHasher,
+  hashSalt: string,
   logger: Logger
 ): Promise<void> {
   const {
@@ -30,6 +30,7 @@ export async function backfill(
     name,
     mode,
     logFolder,
+    packageRoot,
     producePerformanceLogs,
     validateOutput
   } = config;
@@ -38,7 +39,8 @@ export async function backfill(
   logger.setMode(mode, mode === "READ_WRITE" ? "info" : "verbose");
   logger.setCacheProvider(cacheStorageConfig.provider);
 
-  const createPackageHash = async () => await hasher.createPackageHash();
+  const createPackageHash = async () =>
+    await computeHash(packageRoot, hashSalt, logger);
   const fetch = async (hash: string) => await cacheStorage.fetch(hash);
   const run = async () => {
     try {
@@ -92,7 +94,7 @@ export async function backfill(
   }
 
   if (validateOutput) {
-    const hashOfOutput = await hasher.hashOfOutput();
+    const hashOfOutput = await computeHashOfOutput(packageRoot, logger);
     logger.setHashOfOutput(hashOfOutput);
   }
 
@@ -148,12 +150,6 @@ export async function main(): Promise<void> {
       cwd
     );
 
-    const hasher = new Hasher(
-      { packageRoot, outputGlob },
-      getRawBuildCommand(),
-      logger
-    );
-
     if (argv["audit"]) {
       initializeWatcher(
         packageRoot,
@@ -165,7 +161,13 @@ export async function main(): Promise<void> {
       );
     }
 
-    await backfill(config, cacheStorage, buildCommand, hasher, logger);
+    await backfill(
+      config,
+      cacheStorage,
+      buildCommand,
+      getRawBuildCommand(),
+      logger
+    );
 
     if (argv["audit"]) {
       await closeWatcher(logger);

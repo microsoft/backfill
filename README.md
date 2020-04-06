@@ -45,7 +45,7 @@ Install backfill using yarn:
 $ yarn add --dev backfill
 ```
 
-## Usage
+## Usage - CLI
 
 ```
 backfill -- [command]
@@ -200,6 +200,22 @@ You can also configure NPM package cache using environment variables.
 ```
 BACKFILL_CACHE_PROVIDER="npm"
 BACKFILL_CACHE_PROVIDER_OPTIONS='{"npmPackageName":"...","registryUrl":"..."}'
+```
+
+## API
+
+Backfill provides an API, this allows for more complex scenarios, and
+performance optimizations.
+
+```
+const backfill = require("backfill/lib/api");
+
+const hashSalt = await getEnvironementHash();
+const logger = await backfill.makeLogger("verbose", process.stdout, process.stderr);
+cosnt packagehash = await backfill.computHash(process.cwd(), hashSalt, logger);
+
+// work in progress
+
 ```
 
 ## Performance Logs

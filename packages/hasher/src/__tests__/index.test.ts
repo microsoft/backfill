@@ -101,8 +101,8 @@ describe("The main Hasher class", () => {
     const options = { packageRoot, outputGlob: ["lib/**"] };
     const buildSignature = "yarn build";
 
-    const hasher = new Hasher(options, buildSignature, logger);
-    const hash = await hasher.createPackageHash();
+    const hasher = new Hasher(options, logger);
+    const hash = await hasher.createPackageHash(buildSignature);
 
     return hash;
   };
