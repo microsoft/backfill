@@ -212,9 +212,14 @@ const backfill = require("backfill/lib/api");
 
 const hashSalt = await getEnvironementHash();
 const logger = await backfill.makeLogger("verbose", process.stdout, process.stderr);
-cosnt packagehash = await backfill.computHash(process.cwd(), hashSalt, logger);
+const packagehash = await backfill.computHash(process.cwd(), hashSalt, logger);
 
-// work in progress
+const fetchSuccess = await backfill.fetch(process.cwd(), hashSalt, logger);
+
+if (fetchSuccess) {
+  return;
+}
+
 
 ```
 
