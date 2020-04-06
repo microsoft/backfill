@@ -2,7 +2,7 @@
   "private": true,
   "name": "backfill-sample",
   "license": "MIT",
-  "version": "3.0.1-api.0",
+  "version": "3.0.2-api.0",
   "main": "lib/index.js",
   "scripts": {
     "build": "backfill -- yarn compile",
@@ -10,10 +10,10 @@
     "generate-report": "backfill --generate-performance-report"
   },
   "dependencies": {
-    "backfill-sample-dependency": "^3.0.1-api.0"
+    "backfill-sample-dependency": "^3.0.2-api.0"
   },
   "devDependencies": {
-    "backfill": "^3.0.1-api.0",
+    "backfill": "^3.0.2-api.0",
     "backfill-utils-tsconfig": "^3.0.1-api.0",
     "typescript": "3.7.4"
   }
