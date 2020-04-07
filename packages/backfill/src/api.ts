@@ -38,8 +38,8 @@ export async function computeHash(
   hashSalt: string,
   logger: Logger
 ): Promise<string> {
-  const { outputGlob, packageRoot } = createConfig(logger, cwd);
-  const hasher = new Hasher({ packageRoot, outputGlob }, logger);
+  const { outputGlob, packageRoot, hashGlobs } = createConfig(logger, cwd);
+  const hasher = new Hasher({ packageRoot, outputGlob, hashGlobs }, logger);
   const hash = await hasher.createPackageHash(hashSalt);
   return hash;
 }
@@ -48,8 +48,8 @@ export async function computeHashOfOutput(
   cwd: string,
   logger: Logger
 ): Promise<string> {
-  const { outputGlob, packageRoot } = createConfig(logger, cwd);
-  const hasher = new Hasher({ packageRoot, outputGlob }, logger);
+  const { outputGlob, packageRoot, hashGlobs } = createConfig(logger, cwd);
+  const hasher = new Hasher({ packageRoot, outputGlob, hashGlobs }, logger);
   const hash = await hasher.hashOfOutput();
   return hash;
 }
