@@ -42,7 +42,8 @@ export async function getPackageHash(
   packageRoot: string,
   workspaces: WorkspaceInfo,
   yarnLock: ParsedYarnLock,
-  logger: Logger
+  logger: Logger,
+  hashGlobs: string[]
 ): Promise<PackageHashInfo> {
   if (memoization[packageRoot]) {
     return memoization[packageRoot];
@@ -74,7 +75,7 @@ export async function getPackageHash(
     ...externalDeoendencies
   ];
 
-  const filesHash = await generateHashOfFiles(packageRoot, logger);
+  const filesHash = await generateHashOfFiles(packageRoot, hashGlobs);
   const dependenciesHash = hashStrings(resolvedDependencies);
 
   logger.silly(name);

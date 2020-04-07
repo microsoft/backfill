@@ -3,9 +3,6 @@ import path from "path";
 import fg from "fast-glob";
 import fs from "fs-extra";
 
-import { createConfig } from "backfill-config";
-import { Logger } from "backfill-logger";
-
 import { hashStrings } from "./helpers";
 
 const newline = /\r\n|\r|\n/g;
@@ -13,14 +10,9 @@ const LF = "\n";
 
 export async function generateHashOfFiles(
   packageRoot: string,
-  logger: Logger,
-  glob?: string[]
+  globs: string[]
 ): Promise<string> {
-  if (!glob) {
-    glob = createConfig(logger, packageRoot).hashGlobs;
-  }
-
-  const files = await fg(glob, {
+  const files = await fg(globs, {
     cwd: packageRoot,
     onlyFiles: false,
     objectMode: true

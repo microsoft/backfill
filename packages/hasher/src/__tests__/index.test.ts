@@ -98,7 +98,7 @@ describe("The main Hasher class", () => {
   const setupFixtureAndReturnHash = async (fixture = "monorepo") => {
     const packageRoot = await setupFixture(fixture);
 
-    const options = { packageRoot, outputGlob: ["lib/**"] };
+    const options = { packageRoot, outputGlob: ["lib/**"], hashGlobs: ["**"] };
     const buildSignature = "yarn build";
 
     const hasher = new Hasher(options, logger);

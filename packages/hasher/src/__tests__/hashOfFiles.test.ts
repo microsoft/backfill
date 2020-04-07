@@ -1,7 +1,6 @@
 import fs from "fs-extra";
 
 import { setupFixture } from "backfill-utils-test";
-import { makeLogger } from "backfill-logger";
 import { createConfig, Config } from "backfill-config";
 
 import { generateHashOfFiles } from "../hashOfFiles";
@@ -10,25 +9,18 @@ const { createDefaultConfig } = jest.requireActual("backfill-config");
 jest.mock("backfill-config");
 
 const mockedDependency = <jest.Mock<Config>>createConfig;
-const logger = makeLogger("mute");
 
 describe("generateHashOfFiles()", () => {
   it("excludes files provided by backfill config", async () => {
     const packageRoot = await setupFixture("monorepo");
-    const defaultConfig = createDefaultConfig();
 
     // Need to mock getting the config
-    mockedDependency.mockReturnValue({ ...defaultConfig, hashGlobs: ["**"] });
-    const hashOfEverything = await generateHashOfFiles(packageRoot, logger);
+    const hashOfEverything = await generateHashOfFiles(packageRoot, ["**"]);
 
-    mockedDependency.mockReturnValue({
-      ...defaultConfig,
-      hashGlobs: ["**", "!**/node_modules/**"]
-    });
-    const hashExcludeNodeModules = await generateHashOfFiles(
-      packageRoot,
-      logger
-    );
+    const hashExcludeNodeModules = await generateHashOfFiles(packageRoot, [
+      "**",
+      "!**/node_modules/**"
+    ]);
 
     expect(hashOfEverything).not.toEqual(hashExcludeNodeModules);
   });
@@ -39,25 +31,31 @@ describe("generateHashOfFiles()", () => {
 
     mockedDependency.mockReturnValue(defaultConfig);
 
-    const hashOfPackage = await generateHashOfFiles(packageRoot, logger);
+    const hashOfPackage = await generateHashOfFiles(packageRoot, [
+      "**",
+      "!**/node_modules/**"
+    ]);
 
     fs.writeFileSync("foo.txt", "bar");
-    const hashOfPackageWithFoo = await generateHashOfFiles(packageRoot, logger);
+    const hashOfPackageWithFoo = await generateHashOfFiles(packageRoot, [
+      "**",
+      "!**/node_modules/**"
+    ]);
     expect(hashOfPackage).not.toEqual(hashOfPackageWithFoo);
 
     fs.writeFileSync("foo.txt", "foo");
-    const hashOfPackageWithFoo2 = await generateHashOfFiles(
-      packageRoot,
-      logger
-    );
+    const hashOfPackageWithFoo2 = await generateHashOfFiles(packageRoot, [
+      "**",
+      "!**/node_modules/**"
+    ]);
     expect(hashOfPackageWithFoo).not.toEqual(hashOfPackageWithFoo2);
 
     fs.unlinkSync("foo.txt");
 
-    const hashOfPackageWithoutFoo = await generateHashOfFiles(
-      packageRoot,
-      logger
-    );
+    const hashOfPackageWithoutFoo = await generateHashOfFiles(packageRoot, [
+      "**",
+      "!**/node_modules/**"
+    ]);
     expect(hashOfPackage).toEqual(hashOfPackageWithoutFoo);
   });
 });
