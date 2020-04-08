@@ -45,8 +45,10 @@ export async function getPackageHash(
   logger: Logger,
   hashGlobs: string[]
 ): Promise<PackageHashInfo> {
-  if (memoization[packageRoot]) {
-    return memoization[packageRoot];
+  const memoizationKey = path.resolve(packageRoot);
+
+  if (memoization[memoizationKey]) {
+    return memoization[memoizationKey];
   }
 
   const { name, dependencies, devDependencies } = require(path.join(
@@ -89,7 +91,7 @@ export async function getPackageHash(
     internalDependencies
   };
 
-  memoization[packageRoot] = packageHash;
+  memoization[memoizationKey] = packageHash;
 
   return packageHash;
 }
