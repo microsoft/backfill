@@ -65,7 +65,8 @@ function getPackagePaths(
 }
 
 export function getWorkspacePackageInfo(
-  workspacePaths?: string[]
+  workspacePaths: string[],
+  cwd: string
 ): WorkspaceInfo {
   if (!workspacePaths) {
     return [];
@@ -84,7 +85,7 @@ export function getWorkspacePackageInfo(
       ...returnValue,
       {
         name,
-        path: workspacePath
+        path: path.resolve(cwd, workspacePath)
       }
     ];
   }, []);
@@ -113,7 +114,7 @@ export function getYarnWorkspaces(cwd: string): WorkspaceInfo {
     const rootPackageJson = getRootPackageJson(yarnWorkspacesRoot);
     const packages = getPackages(rootPackageJson);
     const packagePaths = getPackagePaths(yarnWorkspacesRoot, packages);
-    const workspaceInfo = getWorkspacePackageInfo(packagePaths);
+    const workspaceInfo = getWorkspacePackageInfo(packagePaths, cwd);
 
     return workspaceInfo;
   } catch {
