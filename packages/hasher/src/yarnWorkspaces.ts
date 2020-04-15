@@ -85,7 +85,7 @@ export function getWorkspacePackageInfo(
       ...returnValue,
       {
         name,
-        path: path.resolve(cwd, workspacePath)
+        path: path.resolve(cwd, workspacePath).replace(/\\/g, "/")
       }
     ];
   }, []);
