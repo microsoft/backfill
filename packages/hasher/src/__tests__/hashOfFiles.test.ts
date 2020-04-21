@@ -14,7 +14,6 @@ describe("generateHashOfFiles()", () => {
   it("excludes files provided by backfill config", async () => {
     const packageRoot = await setupFixture("monorepo");
 
-    // Need to mock getting the config
     const hashOfEverything = await generateHashOfFiles(packageRoot, ["**"]);
 
     const hashExcludeNodeModules = await generateHashOfFiles(packageRoot, [
