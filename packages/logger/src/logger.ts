@@ -99,7 +99,7 @@ export function makeLogger(
       return {
         stop: () => {
           const time = tracer.stop();
-          consoleLogger.trace(
+          consoleLogger.verbose(
             `Profiling ${chalk.underline(type)} took ${chalk.cyanBright(
               `${time} ms`
             )}`
