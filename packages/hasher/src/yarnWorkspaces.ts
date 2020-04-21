@@ -59,9 +59,15 @@ function getPackagePaths(
     })
   );
 
-  return packagePaths.reduce((acc, cur) => {
-    return [...acc, ...cur];
-  });
+  /*
+   * fast-glob returns unix style path,
+   * so we use path.join to align the path with the platform.
+   */
+  return packagePaths
+    .reduce((acc, cur) => {
+      return [...acc, ...cur];
+    })
+    .map(p => path.join(p));
 }
 
 export function getWorkspacePackageInfo(
