@@ -1,14 +1,8 @@
 import fs from "fs-extra";
 
 import { setupFixture } from "backfill-utils-test";
-import { createConfig, Config } from "backfill-config";
 
 import { generateHashOfFiles } from "../hashOfFiles";
-
-const { createDefaultConfig } = jest.requireActual("backfill-config");
-jest.mock("backfill-config");
-
-const mockedDependency = <jest.Mock<Config>>createConfig;
 
 describe("generateHashOfFiles()", () => {
   it("excludes files provided by backfill config", async () => {
@@ -26,9 +20,6 @@ describe("generateHashOfFiles()", () => {
 
   it("creates different hashes for different hashes", async () => {
     const packageRoot = await setupFixture("monorepo");
-    const defaultConfig = createDefaultConfig();
-
-    mockedDependency.mockReturnValue(defaultConfig);
 
     const hashOfPackage = await generateHashOfFiles(packageRoot, [
       "**",
