@@ -21,7 +21,8 @@ export class NpmCacheStorage extends CacheStorage {
   protected async _fetch(hash: string): Promise<boolean> {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
-    const temporaryNpmOutputFolder = path.join(
+    const temporaryNpmOutputFolder = path.resolve(
+      this.cwd,
       this.internalCacheFolder,
       "npm",
       hash
@@ -87,7 +88,8 @@ export class NpmCacheStorage extends CacheStorage {
   protected async _put(hash: string, outputGlob: string[]) {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
-    const temporaryNpmOutputFolder = path.join(
+    const temporaryNpmOutputFolder = path.resolve(
+      this.cwd,
       this.internalCacheFolder,
       "npm",
       hash,
