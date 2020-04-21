@@ -60,7 +60,7 @@ export function makeConsoleLogger(
 
     trace(...args: string[]): void {
       if (logFilter.shouldLog("verbose")) {
-        consoleOverride.error(...formatter.format("verbose", ...args));
+        consoleOverride.error(...formatter.format("trace", ...args));
       }
     }
   };
