@@ -210,15 +210,23 @@ performance optimizations.
 ```
 const backfill = require("backfill/lib/api");
 
-const hashSalt = await getEnvironementHash();
-const logger = await backfill.makeLogger("verbose", process.stdout, process.stderr);
-const packagehash = await backfill.computHash(process.cwd(), hashSalt, logger);
+/*
+ * Backfill computes the hash of packages using a salt. This is used to add
+ * more dependencies to the hash. For instance we can use this to invalidate
+ * the backfill cache when the node version changes.
+ */
+const hashSalt = await getNodeVersion();
 
-const fetchSuccess = await backfill.fetch(process.cwd(), packageHash, logger);
+const packagePath = getPath(packageName);
+
+const logger = await backfill.makeLogger("verbose", process.stdout, process.stderr);
+const packagehash = await backfill.computHash(packagePath, hashSalt, logger);
+
+const fetchSuccess = await backfill.fetch(packagePath, packageHash, logger);
 
 if (!fetchSuccess) {
   await runBuildCommand();
-  await backfill.put(process.cwd(), packageHash, logger);
+  await backfill.put(packagePath, packageHash, logger);
 }
 
 
