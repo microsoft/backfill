@@ -1,10 +1,8 @@
 import yargs from "yargs";
 
 import { loadDotenv } from "backfill-utils-dotenv";
-import { getCacheStorageProvider, ICacheStorage } from "backfill-cache";
 import { Logger, makeLogger } from "backfill-logger";
 import { createConfig, Config } from "backfill-config";
-import { IHasher, Hasher } from "backfill-hasher";
 export { createDefaultConfig } from "backfill-config";
 
 import {
@@ -13,23 +11,28 @@ import {
   BuildCommand
 } from "./commandRunner";
 import { initializeWatcher, closeWatcher } from "./audit";
+import {
+  put as put_api,
+  fetch as fetch_api,
+  computeHash,
+  computeHashOfOutput
+} from "./api";
 
 // Load environment variables
 loadDotenv();
 
 export async function backfill(
   config: Config,
-  cacheStorage: ICacheStorage,
   buildCommand: BuildCommand,
-  hasher: IHasher,
+  hashSalt: string,
   logger: Logger
 ): Promise<void> {
   const {
     cacheStorageConfig,
-    outputGlob,
     name,
     mode,
     logFolder,
+    packageRoot,
     producePerformanceLogs,
     validateOutput
   } = config;
@@ -38,8 +41,10 @@ export async function backfill(
   logger.setMode(mode, mode === "READ_WRITE" ? "info" : "verbose");
   logger.setCacheProvider(cacheStorageConfig.provider);
 
-  const createPackageHash = async () => await hasher.createPackageHash();
-  const fetch = async (hash: string) => await cacheStorage.fetch(hash);
+  const createPackageHash = async () =>
+    await computeHash(packageRoot, logger, hashSalt);
+  const fetch = async (hash: string) =>
+    await fetch_api(packageRoot, hash, logger);
   const run = async () => {
     try {
       await buildCommand();
@@ -49,7 +54,7 @@ export async function backfill(
   };
   const put = async (hash: string) => {
     try {
-      await cacheStorage.put(hash, outputGlob);
+      await put_api(packageRoot, hash, logger);
     } catch (err) {
       logger.error(
         `Failed to persist the cache with the following error:\n\n${err}`
@@ -60,9 +65,9 @@ export async function backfill(
   switch (mode) {
     case "READ_WRITE": {
       const hash = await createPackageHash();
-
       if (!(await fetch(hash))) {
         await run();
+
         await put(hash);
       }
 
@@ -70,7 +75,6 @@ export async function backfill(
     }
     case "READ_ONLY": {
       const hash = await createPackageHash();
-
       if (!(await fetch(hash))) {
         await run();
       }
@@ -78,9 +82,9 @@ export async function backfill(
       break;
     }
     case "WRITE_ONLY": {
-      const hash = await createPackageHash();
-
       await run();
+
+      const hash = await createPackageHash();
       await put(hash);
 
       break;
@@ -92,7 +96,7 @@ export async function backfill(
   }
 
   if (validateOutput) {
-    const hashOfOutput = await hasher.hashOfOutput();
+    const hashOfOutput = await computeHashOfOutput(packageRoot, logger);
     logger.setHashOfOutput(hashOfOutput);
   }
 
@@ -108,7 +112,6 @@ export async function main(): Promise<void> {
   try {
     const config = createConfig(logger, cwd);
     const {
-      cacheStorageConfig,
       clearOutput,
       hashGlobs,
       internalCacheFolder,
@@ -141,19 +144,6 @@ export async function main(): Promise<void> {
       logger
     );
 
-    const cacheStorage = getCacheStorageProvider(
-      cacheStorageConfig,
-      internalCacheFolder,
-      logger,
-      cwd
-    );
-
-    const hasher = new Hasher(
-      { packageRoot, outputGlob },
-      getRawBuildCommand(),
-      logger
-    );
-
     if (argv["audit"]) {
       initializeWatcher(
         packageRoot,
@@ -165,7 +155,7 @@ export async function main(): Promise<void> {
       );
     }
 
-    await backfill(config, cacheStorage, buildCommand, hasher, logger);
+    await backfill(config, buildCommand, getRawBuildCommand(), logger);
 
     if (argv["audit"]) {
       await closeWatcher(logger);

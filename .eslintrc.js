@@ -27,6 +27,7 @@ module.exports = {
     "@typescript-eslint/consistent-type-assertions": "off",
     "import/namespace": "off",
     "import/order": "warn",
+    "import/no-unresolved": "off",
     "import/default": "off"
   }
 };

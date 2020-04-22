@@ -16,7 +16,7 @@ export class LocalCacheStorage extends CacheStorage {
   }
 
   protected getLocalCacheFolder(hash: string): string {
-    return path.join(this.internalCacheFolder, hash);
+    return path.resolve(this.cwd, this.internalCacheFolder, hash);
   }
 
   protected async _fetch(hash: string): Promise<boolean> {
@@ -27,7 +27,7 @@ export class LocalCacheStorage extends CacheStorage {
     }
 
     const files = await fg(`**/*`, {
-      cwd: path.join(this.cwd, localCacheFolder)
+      cwd: localCacheFolder
     });
 
     await Promise.all(

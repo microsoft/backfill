@@ -17,6 +17,8 @@ export type ParsedYarnLock = {
   };
 };
 
+const memoization: { [path: string]: ParsedYarnLock } = {};
+
 export async function parseLockFile(
   packageRoot: string
 ): Promise<ParsedYarnLock> {
@@ -28,8 +30,16 @@ export async function parseLockFile(
     );
   }
 
+  if (memoization[yarnLockPath]) {
+    return memoization[yarnLockPath];
+  }
+
   const yarnLock = fs.readFileSync(yarnLockPath).toString();
-  return parse(yarnLock);
+  const parsed = parse(yarnLock);
+
+  memoization[yarnLockPath] = parsed;
+
+  return parsed;
 }
 
 export function queryLockFile(

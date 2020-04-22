@@ -1,13 +1,10 @@
-import { anyString, anything, spy, verify, resetCalls } from "ts-mockito";
+import fs from "fs-extra";
 
 import { setupFixture } from "backfill-utils-test";
-import { getCacheStorageProvider } from "backfill-cache";
-import { Hasher } from "backfill-hasher";
 import { createConfig } from "backfill-config";
 import { makeLogger } from "backfill-logger";
 
 import { backfill } from "../index";
-import { createBuildCommand } from "../commandRunner";
 
 const logger = makeLogger("mute");
 
@@ -17,59 +14,35 @@ describe("backfill", () => {
     await setupFixture("basic");
 
     const config = createConfig(logger, process.cwd());
-    const {
-      cacheStorageConfig,
-      clearOutput,
-      internalCacheFolder,
-      outputGlob,
-      packageRoot
-    } = config;
 
-    // Arrange
-    const cacheStorage = getCacheStorageProvider(
-      cacheStorageConfig,
-      internalCacheFolder,
-      logger,
-      process.cwd()
-    );
-    const buildCommandRaw = "npm run compile";
-    const buildCommand = createBuildCommand(
-      [buildCommandRaw],
-      clearOutput,
-      outputGlob,
-      logger
-    );
-    const hasher = new Hasher(
-      { packageRoot, outputGlob },
-      buildCommandRaw,
-      logger
-    );
-
-    // Spy
-    const spiedCacheStorage = spy(cacheStorage);
-    const spiedBuildCommand = jest.fn(buildCommand);
-    const spiedHasher = spy(hasher);
+    const salt = "fooBar";
+    let buildCalled = 0;
+    const outputContent = `console.log("foo");`;
+    const buildCommand = async (): Promise<void> => {
+      await fs.mkdirp("lib");
+      await fs.writeFile("lib/output.js", outputContent);
+      buildCalled += 1;
+    };
 
     // Execute
-    await backfill(config, cacheStorage, spiedBuildCommand, hasher, logger);
+    await backfill(config, buildCommand, salt, logger);
 
     // Assert
-    verify(spiedHasher.createPackageHash()).once();
-    expect(spiedBuildCommand).toHaveBeenCalled();
-    verify(spiedCacheStorage.fetch(anyString())).once();
-    verify(spiedCacheStorage.put(anyString(), anything())).once();
+    expect(buildCalled).toBe(1);
+    expect(fs.readFileSync("lib/output.js").toString()).toBe(outputContent);
 
-    resetCalls(spiedHasher);
-    resetCalls(spiedCacheStorage);
-    jest.clearAllMocks();
+    // Reset
+    buildCalled = 0;
+    await fs.writeFile(
+      "lib/output.js",
+      "This output should be overriden by backfill during fetch"
+    );
 
     // Execute
-    await backfill(config, cacheStorage, buildCommand, hasher, logger);
+    await backfill(config, buildCommand, salt, logger);
 
     // Assert
-    verify(spiedHasher.createPackageHash()).once();
-    expect(spiedBuildCommand).not.toHaveBeenCalled();
-    verify(spiedCacheStorage.fetch(anyString())).once();
-    verify(spiedCacheStorage.put(anyString(), anyString())).never();
+    expect(buildCalled).toBe(0);
+    expect(fs.readFileSync("lib/output.js").toString()).toBe(outputContent);
   });
 });
