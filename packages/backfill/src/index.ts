@@ -42,7 +42,7 @@ export async function backfill(
   logger.setCacheProvider(cacheStorageConfig.provider);
 
   const createPackageHash = async () =>
-    await computeHash(packageRoot, hashSalt, logger);
+    await computeHash(packageRoot, logger, hashSalt);
   const fetch = async (hash: string) =>
     await fetch_api(packageRoot, hash, logger);
   const run = async () => {

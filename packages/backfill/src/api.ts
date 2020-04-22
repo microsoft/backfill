@@ -35,13 +35,13 @@ export function makeLogger(
 
 export async function computeHash(
   cwd: string,
-  hashSalt: string,
-  logger: Logger
+  logger: Logger,
+  hashSalt?: string
 ): Promise<string> {
   const { outputGlob, packageRoot, hashGlobs } = createConfig(logger, cwd);
   const hasher = new Hasher({ packageRoot, outputGlob, hashGlobs }, logger);
 
-  const hash = await hasher.createPackageHash(hashSalt);
+  const hash = await hasher.createPackageHash(hashSalt || "");
   return hash;
 }
 
