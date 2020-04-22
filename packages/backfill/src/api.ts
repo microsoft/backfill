@@ -40,6 +40,7 @@ export async function computeHash(
 ): Promise<string> {
   const { outputGlob, packageRoot, hashGlobs } = createConfig(logger, cwd);
   const hasher = new Hasher({ packageRoot, outputGlob, hashGlobs }, logger);
+
   const hash = await hasher.createPackageHash(hashSalt);
   return hash;
 }
