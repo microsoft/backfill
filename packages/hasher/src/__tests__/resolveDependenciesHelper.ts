@@ -1,13 +1,31 @@
 import { setupFixture } from "backfill-utils-test";
 
 import { getYarnWorkspaces } from "../yarn/yarnWorkspaces";
+import { getPnpmWorkspaces } from "../pnpm/pnpmWorkspace";
 
-export async function filterDependenciesInFixture(
+export async function filterDependenciesInYarnFixture(
   fixture: string,
   filterFunction: any
 ) {
   const packageRoot = await setupFixture(fixture);
   const workspacesPackageInfo = getYarnWorkspaces(packageRoot);
+
+  const dependencies = { "package-a": "1.0.0", foo: "1.0.0" };
+
+  const filteredDependencies = filterFunction(
+    dependencies,
+    workspacesPackageInfo
+  );
+
+  return filteredDependencies;
+}
+
+export async function filterDependenciesInPnpmFixture(
+  fixture: string,
+  filterFunction: any
+) {
+  const packageRoot = await setupFixture(fixture);
+  const workspacesPackageInfo = getPnpmWorkspaces(packageRoot);
 
   const dependencies = { "package-a": "1.0.0", foo: "1.0.0" };
 

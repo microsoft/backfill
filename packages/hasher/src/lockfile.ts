@@ -46,9 +46,8 @@ export async function parseLockFile(packageRoot: string): Promise<ParsedLock> {
       return memoization[pnpmLockPath];
     }
 
-    // const pnpmLock = fs.readFileSync(pnpmLockPath).toString();
     const parsed = await readWantedLockfile(path.dirname(pnpmLockPath), {
-      ignoreIncompatible: false
+      ignoreIncompatible: true
     });
 
     const object: {
@@ -56,9 +55,17 @@ export async function parseLockFile(packageRoot: string): Promise<ParsedLock> {
     } = {};
 
     if (parsed && parsed.packages) {
-      for (const [pkg, snapshot] of Object.entries(parsed.packages)) {
-        object[pkg] = {
-          version: snapshot.version!,
+      for (const [pkgSpec, snapshot] of Object.entries(parsed.packages)) {
+        const specParts = pkgSpec.split(/\//);
+
+        const name = `${specParts[0] !== "" ? `@${specParts[0]}/` : ""}${
+          specParts[1]
+        }`;
+
+        const version = specParts[2];
+
+        object[nameAtVersion(name, version)] = {
+          version,
           dependencies: snapshot.dependencies
         };
       }

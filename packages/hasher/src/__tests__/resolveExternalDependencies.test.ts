@@ -7,11 +7,12 @@ import {
   addToQueue
 } from "../resolveExternalDependencies";
 import { parseLockFile } from "../lockfile";
-import { filterDependenciesInFixture } from "./resolveDependenciesHelper";
+import { getPnpmWorkspaces } from "../pnpm/pnpmWorkspace";
+import { filterDependenciesInYarnFixture } from "./resolveDependenciesHelper";
 
 describe("filterExternalDependencies()", () => {
   it("only lists external dependencies", async () => {
-    const results = await filterDependenciesInFixture(
+    const results = await filterDependenciesInYarnFixture(
       "monorepo",
       filterExternalDependencies
     );
@@ -19,7 +20,7 @@ describe("filterExternalDependencies()", () => {
   });
 
   it("identifies all dependencies as external packages if there are no workspaces", async () => {
-    const results = await filterDependenciesInFixture(
+    const results = await filterDependenciesInYarnFixture(
       "basic",
       filterExternalDependencies
     );
@@ -61,20 +62,41 @@ describe("addToQueue()", () => {
   });
 });
 
-describe("resolveExternalDependencies()", () => {
+describe("resolveExternalDependencies() - yarn", () => {
   it("given a list of external dependencies and a parsed Lock file, add all dependencies, transitively", async () => {
     const packageRoot = await setupFixture("monorepo");
     const workspaces = getYarnWorkspaces(packageRoot);
 
     const allDependencies = { "package-a": "1.0.0", foo: "1.0.0" };
-    const parsedLockeFile = await parseLockFile(packageRoot);
+    const parsedLockFile = await parseLockFile(packageRoot);
 
     const resolvedDependencies = resolveExternalDependencies(
       allDependencies,
       workspaces,
-      parsedLockeFile
+      parsedLockFile
     );
 
     expect(resolvedDependencies).toEqual(["foo@1.0.0", "bar@^1.0.0"]);
+  });
+});
+
+describe("resolveExternalDependencies() - pnpm", () => {
+  it("given a list of external dependencies and a parsed Lock file, add all dependencies, transitively", async () => {
+    const packageRoot = await setupFixture("monorepo-pnpm");
+    const workspaces = getPnpmWorkspaces(packageRoot);
+
+    const allDependencies = {
+      "package-a": "1.0.0",
+      once: "1.4.0"
+    };
+    const parsedLockFile = await parseLockFile(packageRoot);
+
+    const resolvedDependencies = resolveExternalDependencies(
+      allDependencies,
+      workspaces,
+      parsedLockFile
+    );
+
+    expect(resolvedDependencies).toEqual(["once@1.4.0", "wrappy@1.0.2"]);
   });
 });

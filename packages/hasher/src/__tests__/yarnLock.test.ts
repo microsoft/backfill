@@ -14,7 +14,7 @@ describe("parseLockFile()", () => {
     const packageRoot = await setupFixture("basic-without-lock-file");
 
     await expect(parseLockFile(packageRoot)).rejects.toThrow(
-      "Could not find a yarn.lock file"
+      "You do not have either yarn.lock nor pnpm-lock.yaml. Please use one of these package managers"
     );
   });
 });

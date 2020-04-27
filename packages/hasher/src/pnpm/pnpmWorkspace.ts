@@ -78,7 +78,7 @@ export function findWorkspacePath(
 
 export function getPnpmWorkspaces(cwd: string): WorkspaceInfo {
   try {
-    const pnpmWorkspacesFile = findUp.sync("pnpm-workspaces.yaml", { cwd })!;
+    const pnpmWorkspacesFile = findUp.sync("pnpm-workspace.yaml", { cwd })!;
     const pnpmWorkspacesRoot = path.dirname(pnpmWorkspacesFile);
 
     const pnpmWorkspaces = readYaml<PnpmWorkspaces>(pnpmWorkspacesFile);
