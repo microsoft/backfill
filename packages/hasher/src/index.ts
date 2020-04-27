@@ -46,20 +46,14 @@ export function addToQueue(
 
 export class Hasher implements IHasher {
   private packageRoot: string;
-  private outputGlob: string[];
-  private hashGlobs: string[];
 
   constructor(
     private options: {
       packageRoot: string;
-      outputGlob: string[];
-      hashGlobs: string[];
     },
     private logger: Logger
   ) {
     this.packageRoot = this.options.packageRoot;
-    this.outputGlob = this.options.outputGlob;
-    this.hashGlobs = this.options.hashGlobs;
   }
 
   public async createPackageHash(salt: string): Promise<string> {
@@ -83,8 +77,7 @@ export class Hasher implements IHasher {
         packageRoot,
         workspaces,
         yarnLock,
-        this.logger,
-        this.hashGlobs
+        this.logger
       );
 
       addToQueue(packageHash.internalDependencies, queue, done, workspaces);
@@ -107,6 +100,6 @@ export class Hasher implements IHasher {
   }
 
   public async hashOfOutput(): Promise<string> {
-    return generateHashOfFiles(this.packageRoot, this.outputGlob);
+    return generateHashOfFiles(this.packageRoot);
   }
 }

@@ -1,7 +1,8 @@
 import crypto from "crypto";
 import path from "path";
-import fg from "fast-glob";
+import globby from "globby";
 import fs from "fs-extra";
+import findUp from "find-up";
 
 import { hashStrings } from "./helpers";
 
@@ -9,27 +10,40 @@ const newline = /\r\n|\r|\n/g;
 const LF = "\n";
 
 export async function generateHashOfFiles(
-  packageRoot: string,
-  globs: string[]
+  packageRoot: string
 ): Promise<string> {
-  const files = await fg(globs, {
+  const nearestGitFolder = await findUp(".git", {
     cwd: packageRoot,
-    onlyFiles: false,
-    objectMode: true
+    type: "directory"
   });
 
-  files.sort((a, b) => a.path.localeCompare(b.path));
+  if (nearestGitFolder === undefined) {
+    throw new Error(
+      `It does not seem that this package is in a git repo: ${packageRoot}`
+    );
+  }
+
+  const repoRoot = path.dirname(nearestGitFolder);
+
+  // If the package is a git repo by itself then the search pattern is all the files
+  const relativePackagePath = path.relative(repoRoot, packageRoot) || "**/*";
+
+  // Note: globby does not support objectMode
+  const files = await globby(relativePackagePath, {
+    cwd: repoRoot,
+    gitignore: true
+  });
+
+  files.sort((a, b) => a.localeCompare(b));
 
   const hashes = await Promise.all(
     files.map(async file => {
       const hasher = crypto.createHash("sha1");
-      hasher.update(file.path);
+      hasher.update(file);
 
-      if (!file.dirent.isDirectory()) {
-        const fileBuffer = await fs.readFile(path.join(packageRoot, file.path));
-        const data = fileBuffer.toString().replace(newline, LF);
-        hasher.update(data);
-      }
+      const fileBuffer = await fs.readFile(path.join(repoRoot, file));
+      const data = fileBuffer.toString().replace(newline, LF);
+      hasher.update(data);
 
       return hasher.digest("hex");
     })

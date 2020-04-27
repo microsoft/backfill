@@ -95,7 +95,6 @@ The default configuration object is:
 {
   cacheStorageConfig: { provider: "local" },
   clearOutputFolder: false,
-  hashGlobs: ["**/*", "!**/node_modules/**", "!lib/**", "!**/tsconfig.tsbuildinfo"],
   internalCacheFolder: "node_modules/.cache/backfill",
   logFolder: "node_modules/.cache/backfill",
   logLevel: "info",
@@ -120,7 +119,6 @@ The configuration type is:
 export type Config = {
   cacheStorageConfig: CacheStorageConfig;
   clearOutputFolder: boolean;
-  hashGlobs: HashGlobs;
   internalCacheFolder: string;
   logFolder: string;
   logLevel: LogLevels;
