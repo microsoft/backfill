@@ -1,6 +1,6 @@
 import { nameAtVersion } from "./helpers";
-import { ParsedYarnLock, queryLockFile } from "./yarnLock";
-import { WorkspaceInfo, listOfWorkspacePackageNames } from "./yarnWorkspaces";
+import { ParsedLock, queryLockFile } from "./lockfile";
+import { WorkspaceInfo, listOfWorkspacePackageNames } from "./workspaces";
 
 export type Dependencies = { [key in string]: string };
 
@@ -59,7 +59,7 @@ export function addToQueue(
 export function resolveExternalDependencies(
   allDependencies: Dependencies,
   workspaces: WorkspaceInfo,
-  yarnLock: ParsedYarnLock
+  lockInfo: ParsedLock
 ): string[] {
   const externalDependencies = filterExternalDependencies(
     allDependencies,
@@ -80,7 +80,7 @@ export function resolveExternalDependencies(
     const [name, versionRange] = next;
     doneRange.push(nameAtVersion(name, versionRange));
 
-    const lockFileResult = queryLockFile(name, versionRange, yarnLock);
+    const lockFileResult = queryLockFile(name, versionRange, lockInfo);
 
     if (lockFileResult) {
       const { version, dependencies } = lockFileResult;

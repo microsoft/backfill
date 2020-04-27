@@ -1,6 +1,6 @@
 import { setupFixture } from "backfill-utils-test";
 
-import { parseLockFile } from "../yarnLock";
+import { parseLockFile } from "../yarn/yarnLock";
 
 describe("parseLockFile()", () => {
   it("parses yarn.lock file when it is found", async () => {

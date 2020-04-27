@@ -11,8 +11,8 @@ import {
 import { generateHashOfFiles } from "./hashOfFiles";
 
 import { hashStrings } from "./helpers";
-import { ParsedYarnLock } from "./yarnLock";
-import { WorkspaceInfo } from "./yarnWorkspaces";
+import { ParsedLock } from "./lockfile";
+import { WorkspaceInfo } from "./workspaces";
 
 export type PackageHashInfo = {
   name: string;
@@ -41,7 +41,7 @@ const memoization: { [key: string]: PackageHashInfo } = {};
 export async function getPackageHash(
   packageRoot: string,
   workspaces: WorkspaceInfo,
-  yarnLock: ParsedYarnLock,
+  yarnLock: ParsedLock,
   logger: Logger,
   hashGlobs: string[]
 ): Promise<PackageHashInfo> {

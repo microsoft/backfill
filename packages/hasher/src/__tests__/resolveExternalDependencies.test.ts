@@ -1,12 +1,12 @@
 import { setupFixture } from "backfill-utils-test";
 
-import { getYarnWorkspaces } from "../yarnWorkspaces";
+import { getYarnWorkspaces } from "../yarn/yarnWorkspaces";
 import {
   filterExternalDependencies,
   resolveExternalDependencies,
   addToQueue
 } from "../resolveExternalDependencies";
-import { parseLockFile } from "../yarnLock";
+import { parseLockFile } from "../yarn/yarnLock";
 import { filterDependenciesInFixture } from "./resolveDependenciesHelper";
 
 describe("filterExternalDependencies()", () => {
