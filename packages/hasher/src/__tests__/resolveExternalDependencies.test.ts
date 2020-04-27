@@ -6,7 +6,7 @@ import {
   resolveExternalDependencies,
   addToQueue
 } from "../resolveExternalDependencies";
-import { parseLockFile } from "../yarn/yarnLock";
+import { parseLockFile } from "../lockfile";
 import { filterDependenciesInFixture } from "./resolveDependenciesHelper";
 
 describe("filterExternalDependencies()", () => {

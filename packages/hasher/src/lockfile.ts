@@ -55,11 +55,13 @@ export async function parseLockFile(packageRoot: string): Promise<ParsedLock> {
       [key in string]: LockDependency;
     } = {};
 
-    for (const [pkg, snapshot] of Object.entries(parsed?.packages!)) {
-      object[pkg] = {
-        version: snapshot.version!,
-        dependencies: snapshot.dependencies
-      };
+    if (parsed && parsed.packages) {
+      for (const [pkg, snapshot] of Object.entries(parsed.packages)) {
+        object[pkg] = {
+          version: snapshot.version!,
+          dependencies: snapshot.dependencies
+        };
+      }
     }
 
     memoization[pnpmLockPath] = { object, type: "success" };
