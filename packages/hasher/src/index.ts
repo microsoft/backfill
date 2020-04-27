@@ -8,11 +8,7 @@ import {
 } from "./hashOfPackage";
 import { hashStrings, getPackageRoot } from "./helpers";
 import { parseLockFile } from "./lockfile";
-import {
-  getYarnWorkspaces,
-  findWorkspacePath,
-  WorkspaceInfo
-} from "./yarn/yarnWorkspaces";
+import { getWorkspaces, findWorkspacePath, WorkspaceInfo } from "./workspaces";
 
 export interface IHasher {
   createPackageHash: (salt: string) => Promise<string>;
@@ -67,7 +63,7 @@ export class Hasher implements IHasher {
 
     const packageRoot = await getPackageRoot(this.packageRoot);
     const lockInfo = await parseLockFile(packageRoot);
-    const workspaces = getYarnWorkspaces(packageRoot);
+    const workspaces = getWorkspaces(packageRoot);
 
     const queue = [packageRoot];
     const done: PackageHashInfo[] = [];
