@@ -21,7 +21,10 @@ export type ParsedLock = {
 const memoization: { [path: string]: ParsedLock } = {};
 
 export async function parseLockFile(packageRoot: string): Promise<ParsedLock> {
-  const yarnLockPath = await findUp("yarn.lock", { cwd: packageRoot });
+  const yarnLockPath = await findUp(
+    ["yarn.lock", "common/config/rush/yarn.lock"],
+    { cwd: packageRoot }
+  );
 
   // First, test out whether this works for yarn
   if (yarnLockPath) {
@@ -38,8 +41,10 @@ export async function parseLockFile(packageRoot: string): Promise<ParsedLock> {
   }
 
   // Second, test out whether this works for pnpm
-  // TODO: support rush common\config\rush\pnpm-lock.yaml
-  let pnpmLockPath = await findUp("pnpm-lock.yaml", { cwd: packageRoot });
+  let pnpmLockPath = await findUp(
+    ["pnpm-lock.yaml", "common/config/rush/pnpm-lock.yaml"],
+    { cwd: packageRoot }
+  );
 
   if (pnpmLockPath) {
     if (memoization[pnpmLockPath]) {

@@ -16,6 +16,7 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
+    "@microsoft/rush-lib": "^5.23.2",
     "@pnpm/lockfile-file": "^3.0.7",
     "@pnpm/logger": "^3.2.2",
     "@yarnpkg/lockfile": "^1.1.0",

@@ -2,6 +2,8 @@ import path from "path";
 import fg from "fast-glob";
 import findWorkspaceRoot from "find-yarn-workspace-root";
 
+import { WorkspaceInfo, getWorkspacePackageInfo } from "../workspaces";
+
 type PackageJsonWorkspaces = {
   workspaces?:
     | {
@@ -10,8 +12,6 @@ type PackageJsonWorkspaces = {
       }
     | string[];
 };
-
-export type WorkspaceInfo = { name: string; path: string }[];
 
 function getYarnWorkspaceRoot(cwd: string): string {
   const yarnWorkspacesRoot = findWorkspaceRoot(cwd);
@@ -68,38 +68,6 @@ function getPackagePaths(
       return [...acc, ...cur];
     })
     .map(p => path.join(p));
-}
-
-export function getWorkspacePackageInfo(
-  workspacePaths: string[]
-): WorkspaceInfo {
-  if (!workspacePaths) {
-    return [];
-  }
-
-  return workspacePaths.reduce<WorkspaceInfo>((returnValue, workspacePath) => {
-    let name: string;
-
-    try {
-      name = require(path.join(workspacePath, "package.json")).name;
-    } catch {
-      return returnValue;
-    }
-
-    return [
-      ...returnValue,
-      {
-        name,
-        path: workspacePath
-      }
-    ];
-  }, []);
-}
-
-export function listOfWorkspacePackageNames(
-  workspaces: WorkspaceInfo
-): string[] {
-  return workspaces.map(({ name }) => name);
 }
 
 export function findWorkspacePath(
