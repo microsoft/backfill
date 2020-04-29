@@ -2,7 +2,7 @@ import path from "path";
 
 import { setupFixture } from "backfill-utils-test";
 
-import { getYarnWorkspaces } from "../yarn/yarnWorkspaces";
+import { getYarnWorkspaces } from "../workspaces/yarnWorkspaces";
 
 describe("getYarnWorkspaces()", () => {
   it("gets the name and path of the workspaces", async () => {

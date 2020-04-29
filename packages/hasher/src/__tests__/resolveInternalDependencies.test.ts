@@ -1,12 +1,12 @@
 import { setupFixture } from "backfill-utils-test";
 
-import { getYarnWorkspaces } from "../yarn/yarnWorkspaces";
+import { getYarnWorkspaces } from "../workspaces/yarnWorkspaces";
 import {
   filterInternalDependencies,
   resolveInternalDependencies
 } from "../resolveInternalDependencies";
-import { getPnpmWorkspaces } from "../pnpm/pnpmWorkspaces";
-import { getRushWorkspaces } from "../rush/rushWorkspaces";
+import { getPnpmWorkspaces } from "../workspaces/pnpmWorkspaces";
+import { getRushWorkspaces } from "../workspaces/rushWorkspaces";
 import {
   filterDependenciesInYarnFixture,
   filterDependenciesInPnpmFixture,

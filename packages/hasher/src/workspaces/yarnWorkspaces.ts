@@ -1,8 +1,9 @@
 import path from "path";
-import fg from "fast-glob";
+
 import findWorkspaceRoot from "find-yarn-workspace-root";
 
-import { WorkspaceInfo, getWorkspacePackageInfo } from "../workspaces";
+import { getPackagePaths } from "./getPackagePaths";
+import { WorkspaceInfo, getWorkspacePackageInfo } from ".";
 
 type PackageJsonWorkspaces = {
   workspaces?:
@@ -45,40 +46,6 @@ function getPackages(packageJson: PackageJsonWorkspaces): string[] {
   }
 
   return workspaces.packages;
-}
-
-function getPackagePaths(
-  yarnWorkspacesRoot: string,
-  packages: string[]
-): string[] {
-  const packagePaths = packages.map(glob =>
-    fg.sync(glob, {
-      cwd: yarnWorkspacesRoot,
-      onlyDirectories: true,
-      absolute: true
-    })
-  );
-
-  /*
-   * fast-glob returns unix style path,
-   * so we use path.join to align the path with the platform.
-   */
-  return packagePaths
-    .reduce((acc, cur) => {
-      return [...acc, ...cur];
-    })
-    .map(p => path.join(p));
-}
-
-export function findWorkspacePath(
-  workspaces: WorkspaceInfo,
-  packageName: string
-): string | undefined {
-  const workspace = workspaces.find(({ name }) => name === packageName);
-
-  if (workspace) {
-    return workspace.path;
-  }
 }
 
 export function getYarnWorkspaces(cwd: string): WorkspaceInfo {

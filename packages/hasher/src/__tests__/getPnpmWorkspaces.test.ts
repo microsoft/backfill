@@ -2,7 +2,7 @@ import path from "path";
 
 import { setupFixture } from "backfill-utils-test";
 
-import { getPnpmWorkspaces } from "../pnpm/pnpmWorkspaces";
+import { getPnpmWorkspaces } from "../workspaces/pnpmWorkspaces";
 
 describe("getPnpmWorkspaces()", () => {
   it("gets the name and path of the workspaces", async () => {

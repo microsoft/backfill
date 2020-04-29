@@ -2,7 +2,7 @@ import path from "path";
 
 import { setupFixture } from "backfill-utils-test";
 
-import { getRushWorkspaces } from "../rush/rushWorkspaces";
+import { getRushWorkspaces } from "../workspaces/rushWorkspaces";
 
 describe("getRushWorkspaces()", () => {
   it("gets the name and path of the workspaces", async () => {

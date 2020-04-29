@@ -1,7 +1,7 @@
 import findUp from "find-up";
 import { RushConfiguration } from "@microsoft/rush-lib";
 
-import { WorkspaceInfo } from "../workspaces";
+import { WorkspaceInfo } from ".";
 
 export function getRushWorkspaces(cwd: string): WorkspaceInfo {
   try {
