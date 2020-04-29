@@ -5,7 +5,7 @@ import {
   filterInternalDependencies,
   resolveInternalDependencies
 } from "../resolveInternalDependencies";
-import { getPnpmWorkspaces } from "../pnpm/pnpmWorkspace";
+import { getPnpmWorkspaces } from "../pnpm/pnpmWorkspaces";
 import { getRushWorkspaces } from "../rush/rushWorkspaces";
 import {
   filterDependenciesInYarnFixture,

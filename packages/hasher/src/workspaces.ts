@@ -1,6 +1,6 @@
 import path from "path";
 import findUp from "find-up";
-import { getPnpmWorkspaces } from "./pnpm/pnpmWorkspace";
+import { getPnpmWorkspaces } from "./pnpm/pnpmWorkspaces";
 import { getYarnWorkspaces } from "./yarn/yarnWorkspaces";
 import { getRushWorkspaces } from "./rush/rushWorkspaces";
 

@@ -61,13 +61,13 @@ export async function parseLockFile(packageRoot: string): Promise<ParsedLock> {
 
     if (parsed && parsed.packages) {
       for (const [pkgSpec, snapshot] of Object.entries(parsed.packages)) {
+        // TODO: handle file:foo.tgz syntax (rush uses this for internal package links)
         const specParts = pkgSpec.split(/\//);
-
-        const name = `${specParts[0] !== "" ? `@${specParts[0]}/` : ""}${
-          specParts[1]
-        }`;
-
-        const version = specParts[2];
+        const name =
+          specParts.length > 3
+            ? `${specParts[1]}/${specParts[2]}`
+            : specParts[1];
+        const version = specParts.length > 3 ? specParts[3] : specParts[2];
 
         object[nameAtVersion(name, version)] = {
           version,

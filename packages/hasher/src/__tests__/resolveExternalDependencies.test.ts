@@ -7,7 +7,7 @@ import {
   addToQueue
 } from "../resolveExternalDependencies";
 import { parseLockFile } from "../lockfile";
-import { getPnpmWorkspaces } from "../pnpm/pnpmWorkspace";
+import { getPnpmWorkspaces } from "../pnpm/pnpmWorkspaces";
 import { getRushWorkspaces } from "../rush/rushWorkspaces";
 import { filterDependenciesInYarnFixture } from "./resolveDependenciesHelper";
 

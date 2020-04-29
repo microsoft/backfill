@@ -9,13 +9,10 @@ type PnpmWorkspaces = {
   packages: string[];
 };
 
-function getPackagePaths(
-  yarnWorkspacesRoot: string,
-  packages: string[]
-): string[] {
+function getPackagePaths(workspacesRoot: string, packages: string[]): string[] {
   const packagePaths = packages.map(glob =>
     fg.sync(glob, {
-      cwd: yarnWorkspacesRoot,
+      cwd: workspacesRoot,
       onlyDirectories: true,
       absolute: true
     })
