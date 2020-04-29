@@ -2,6 +2,7 @@ import { setupFixture } from "backfill-utils-test";
 
 import { getYarnWorkspaces } from "../yarn/yarnWorkspaces";
 import { getPnpmWorkspaces } from "../pnpm/pnpmWorkspace";
+import { getRushWorkspaces } from "../rush/rushWorkspaces";
 
 export async function filterDependenciesInYarnFixture(
   fixture: string,
@@ -26,6 +27,23 @@ export async function filterDependenciesInPnpmFixture(
 ) {
   const packageRoot = await setupFixture(fixture);
   const workspacesPackageInfo = getPnpmWorkspaces(packageRoot);
+
+  const dependencies = { "package-a": "1.0.0", foo: "1.0.0" };
+
+  const filteredDependencies = filterFunction(
+    dependencies,
+    workspacesPackageInfo
+  );
+
+  return filteredDependencies;
+}
+
+export async function filterDependenciesInRushFixture(
+  fixture: string,
+  filterFunction: any
+) {
+  const packageRoot = await setupFixture(fixture);
+  const workspacesPackageInfo = getRushWorkspaces(packageRoot);
 
   const dependencies = { "package-a": "1.0.0", foo: "1.0.0" };
 

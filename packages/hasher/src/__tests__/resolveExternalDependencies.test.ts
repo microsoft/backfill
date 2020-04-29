@@ -8,6 +8,7 @@ import {
 } from "../resolveExternalDependencies";
 import { parseLockFile } from "../lockfile";
 import { getPnpmWorkspaces } from "../pnpm/pnpmWorkspace";
+import { getRushWorkspaces } from "../rush/rushWorkspaces";
 import { filterDependenciesInYarnFixture } from "./resolveDependenciesHelper";
 
 describe("filterExternalDependencies()", () => {
@@ -84,6 +85,48 @@ describe("resolveExternalDependencies() - pnpm", () => {
   it("given a list of external dependencies and a parsed Lock file, add all dependencies, transitively", async () => {
     const packageRoot = await setupFixture("monorepo-pnpm");
     const workspaces = getPnpmWorkspaces(packageRoot);
+
+    const allDependencies = {
+      "package-a": "1.0.0",
+      once: "1.4.0"
+    };
+    const parsedLockFile = await parseLockFile(packageRoot);
+
+    const resolvedDependencies = resolveExternalDependencies(
+      allDependencies,
+      workspaces,
+      parsedLockFile
+    );
+
+    expect(resolvedDependencies).toEqual(["once@1.4.0", "wrappy@1.0.2"]);
+  });
+});
+
+describe("resolveExternalDependencies() - rush+pnpm", () => {
+  it("given a list of external dependencies and a parsed Lock file, add all dependencies, transitively", async () => {
+    const packageRoot = await setupFixture("monorepo-rush-pnpm");
+    const workspaces = getRushWorkspaces(packageRoot);
+
+    const allDependencies = {
+      "package-a": "1.0.0",
+      once: "1.4.0"
+    };
+    const parsedLockFile = await parseLockFile(packageRoot);
+
+    const resolvedDependencies = resolveExternalDependencies(
+      allDependencies,
+      workspaces,
+      parsedLockFile
+    );
+
+    expect(resolvedDependencies).toEqual(["once@1.4.0", "wrappy@1.0.2"]);
+  });
+});
+
+describe("resolveExternalDependencies() - rush+yarn", () => {
+  it("given a list of external dependencies and a parsed Lock file, add all dependencies, transitively", async () => {
+    const packageRoot = await setupFixture("monorepo-rush-yarn");
+    const workspaces = getRushWorkspaces(packageRoot);
 
     const allDependencies = {
       "package-a": "1.0.0",
