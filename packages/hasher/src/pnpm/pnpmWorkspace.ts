@@ -1,14 +1,13 @@
 import path from "path";
 import fg from "fast-glob";
 import findUp from "find-up";
-
 import { sync as readYaml } from "read-yaml-file";
+
+import { WorkspaceInfo, getWorkspacePackageInfo } from "../workspaces";
 
 type PnpmWorkspaces = {
   packages: string[];
 };
-
-export type WorkspaceInfo = { name: string; path: string }[];
 
 function getPackagePaths(
   yarnWorkspacesRoot: string,
@@ -33,38 +32,6 @@ function getPackagePaths(
     .map(p => path.join(p));
 }
 
-export function getWorkspacePackageInfo(
-  workspacePaths: string[]
-): WorkspaceInfo {
-  if (!workspacePaths) {
-    return [];
-  }
-
-  return workspacePaths.reduce<WorkspaceInfo>((returnValue, workspacePath) => {
-    let name: string;
-
-    try {
-      name = require(path.join(workspacePath, "package.json")).name;
-    } catch {
-      return returnValue;
-    }
-
-    return [
-      ...returnValue,
-      {
-        name,
-        path: workspacePath
-      }
-    ];
-  }, []);
-}
-
-export function listOfWorkspacePackageNames(
-  workspaces: WorkspaceInfo
-): string[] {
-  return workspaces.map(({ name }) => name);
-}
-
 export function findWorkspacePath(
   workspaces: WorkspaceInfo,
   packageName: string
@@ -78,7 +45,11 @@ export function findWorkspacePath(
 
 export function getPnpmWorkspaces(cwd: string): WorkspaceInfo {
   try {
-    const pnpmWorkspacesFile = findUp.sync("pnpm-workspace.yaml", { cwd })!;
+    const pnpmWorkspacesFile = findUp.sync("pnpm-workspace.yaml", { cwd });
+    if (!pnpmWorkspacesFile) {
+      return [];
+    }
+
     const pnpmWorkspacesRoot = path.dirname(pnpmWorkspacesFile);
 
     const pnpmWorkspaces = readYaml<PnpmWorkspaces>(pnpmWorkspacesFile);

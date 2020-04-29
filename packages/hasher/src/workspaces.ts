@@ -2,6 +2,7 @@ import path from "path";
 import findUp from "find-up";
 import { getPnpmWorkspaces } from "./pnpm/pnpmWorkspace";
 import { getYarnWorkspaces } from "./yarn/yarnWorkspaces";
+import { getRushWorkspaces } from "./rush/rushWorkspaces";
 
 export type WorkspaceInfo = { name: string; path: string }[];
 
@@ -50,15 +51,18 @@ export function findWorkspacePath(
 
 export function getWorkspaces(cwd: string): WorkspaceInfo {
   const yarnLockPath = findUp.sync("yarn.lock", { cwd });
-
   if (yarnLockPath) {
     return getYarnWorkspaces(cwd);
   }
 
   const pnpmLockPath = findUp.sync("pnpm-workspace.yaml", { cwd });
-
   if (pnpmLockPath) {
     return getPnpmWorkspaces(cwd);
+  }
+
+  const rushJsonPath = findUp.sync("rush.json", { cwd });
+  if (rushJsonPath) {
+    return getRushWorkspaces(cwd);
   }
 
   return [];
