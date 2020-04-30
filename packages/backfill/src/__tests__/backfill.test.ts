@@ -1,3 +1,4 @@
+import path from "path";
 import fs from "fs-extra";
 
 import { setupFixture } from "backfill-utils-test";
@@ -11,7 +12,7 @@ const logger = makeLogger("mute");
 describe("backfill", () => {
   it("with cache miss and then cache hit", async () => {
     //  Set up
-    await setupFixture("basic");
+    const fixtureLocation = await setupFixture("basic");
 
     const config = createConfig(logger, process.cwd());
 
@@ -19,8 +20,11 @@ describe("backfill", () => {
     let buildCalled = 0;
     const outputContent = `console.log("foo");`;
     const buildCommand = async (): Promise<void> => {
-      await fs.mkdirp("lib");
-      await fs.writeFile("lib/output.js", outputContent);
+      await fs.mkdirp(path.join(fixtureLocation, "lib"));
+      await fs.writeFile(
+        path.join(fixtureLocation, "lib/output.js"),
+        outputContent
+      );
       buildCalled += 1;
     };
 
