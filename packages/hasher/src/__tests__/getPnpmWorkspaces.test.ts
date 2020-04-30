@@ -9,8 +9,6 @@ describe("getPnpmWorkspaces()", () => {
     const packageRoot = await setupFixture("monorepo-pnpm");
     const workspacesPackageInfo = getPnpmWorkspaces(packageRoot);
 
-    console.log(packageRoot, workspacesPackageInfo);
-
     const packageAPath = path.join(packageRoot, "packages", "package-a");
     const packageBPath = path.join(packageRoot, "packages", "package-b");
 
