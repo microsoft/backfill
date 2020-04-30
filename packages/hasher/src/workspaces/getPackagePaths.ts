@@ -2,7 +2,7 @@ import path from "path";
 import fg from "fast-glob";
 
 export function getPackagePaths(
-  yarnWorkspacesRoot: string,
+  workspacesRoot: string,
   packages: string[]
 ): string[] {
   const packagePaths = packages.map(glob =>
