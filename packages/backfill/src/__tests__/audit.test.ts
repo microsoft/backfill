@@ -21,7 +21,7 @@ describe("Audit", () => {
     const monorepoPath = await setupFixture("monorepo");
 
     // Create a .git folder to help `--audit` identify the boundaries of the repo
-    fs.mkdirpSync(".git");
+    fs.mkdirpSync(path.join(monorepoPath, ".git"));
 
     const packageAPath = path.join(monorepoPath, "packages", "package-a");
     process.chdir(packageAPath);
@@ -40,7 +40,11 @@ describe("Audit", () => {
   it("correctly warns about side-effects", async () => {
     backfillOutput = await execa(
       "node",
-      [pathToBackfill, "--audit", "npm run compile && npm run side-effect"],
+      [
+        pathToBackfill,
+        "--audit",
+        "npm run compile --scripts-prepend-node-path && npm run side-effect --scripts-prepend-node-path"
+      ],
       { all: true }
     );
 
