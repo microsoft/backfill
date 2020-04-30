@@ -7,7 +7,7 @@ export function getPackagePaths(
 ): string[] {
   const packagePaths = packages.map(glob =>
     fg.sync(glob, {
-      cwd: yarnWorkspacesRoot,
+      cwd: workspacesRoot,
       onlyDirectories: true,
       absolute: true
     })
