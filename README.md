@@ -14,10 +14,6 @@ into various optimization strategies, adding more customization, and introducing
 an API for only running scripts in packages that have changed and skipping
 others altogether._
 
-_Current prerequisites:_
-
-- git (for running `--audit`)
-
 ## Why
 
 When you're working in a multi-package repo you don't want to re-build packages
