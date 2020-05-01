@@ -17,10 +17,6 @@ others altogether._
 _Current prerequisites:_
 
 - git (for running `--audit`)
-- yarn.lock and yarn workspaces (for optimized hashing)
-
-These prerequisites can easily be loosened to make backfill work with npm, Rush,
-and Lerna.
 
 ## Why
 
@@ -160,9 +156,9 @@ module.exports = {
     provider: "azure-blob",
     options: {
       connectionString: "...",
-      container: "..."
-    }
-  }
+      container: "...",
+    },
+  },
 };
 ```
 
@@ -185,9 +181,9 @@ module.exports = {
     provider: "npm",
     options: {
       npmPackageName: "...",
-      registryUrl: "..."
-    }
-  }
+      registryUrl: "...",
+    },
+  },
 };
 ```
 
