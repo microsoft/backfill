@@ -1,7 +1,7 @@
 import path from "path";
 import execa from "execa";
 import fs from "fs-extra";
-import fg from "fast-glob";
+import globby from "globby";
 
 import { NpmCacheStorageOptions } from "backfill-config";
 import { Logger } from "backfill-logger";
@@ -68,7 +68,7 @@ export class NpmCacheStorage extends CacheStorage {
       }
     }
 
-    const files = await fg(`**/*`, {
+    const files = await globby(`**/*`, {
       cwd: packageFolderInTemporaryFolder
     });
 
@@ -102,7 +102,7 @@ export class NpmCacheStorage extends CacheStorage {
       version: `0.0.0-${hash}`
     });
 
-    const files = await fg(outputGlob, { cwd: this.cwd });
+    const files = await globby(outputGlob, { cwd: this.cwd });
 
     await Promise.all(
       files.map(async file => {
