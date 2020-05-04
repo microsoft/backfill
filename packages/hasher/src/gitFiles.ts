@@ -2,6 +2,8 @@ import path from "path";
 import globby from "globby";
 import findUp from "find-up";
 
+const toUnixPath = (path: string) => path.replace(/\\/g, "/");
+
 export async function getListOfGitFiles(
   packageRoot: string
 ): Promise<string[]> {
@@ -16,10 +18,13 @@ export async function getListOfGitFiles(
     );
   }
 
-  const repoRoot = path.dirname(nearestGitFolder);
+  // Globby expects its input to be in unix format.
+  const repoRoot = toUnixPath(path.dirname(nearestGitFolder));
 
-  // If the package is a git repo by itself then the search pattern is all the files
-  const relativePackagePath = path.relative(repoRoot, packageRoot) || "**/*";
+  // If the package is a git repo by itself then the search pattern is all the files.
+  // Globby expects its input to be in unix format.
+  const relativePackagePath =
+    toUnixPath(path.relative(repoRoot, packageRoot)) || "**/*";
 
   /*
    * We use globby to find of the files tracked by git because
