@@ -28,10 +28,9 @@ export async function setupFixture(fixtureName: string) {
   const cwd = path.join(tempDir, fixtureName);
 
   fs.mkdirpSync(cwd);
-  process.chdir(cwd);
   fs.copySync(fixturePath, cwd);
 
-  await execa("git", ["init"]);
+  await execa("git", ["init"], { cwd });
   fs.writeFileSync(path.join(cwd, ".gitignore"), `node_modules${EOL}lib`);
 
   return cwd;

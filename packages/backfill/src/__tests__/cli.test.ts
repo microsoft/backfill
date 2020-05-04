@@ -1,3 +1,4 @@
+import path from "path";
 import fs from "fs-extra";
 
 import { setupFixture } from "backfill-utils-test";
@@ -59,17 +60,21 @@ describe("createBuildCommand", () => {
   });
 
   it("clears the output folder", async () => {
-    await setupFixture("pre-built");
+    const fixtureLocation = await setupFixture("pre-built");
     const buildCommand = createBuildCommand(
       ["echo foo"],
       true,
-      ["lib/**"],
+      [path.join(fixtureLocation, "lib/**").replace(/\\/g, "/")],
       logger
     );
 
-    const index_js_ExistsBeforeBuild = await fs.pathExists("lib/index.js");
+    const index_js_ExistsBeforeBuild = await fs.pathExists(
+      path.join(fixtureLocation, "lib", "index.js")
+    );
     await buildCommand();
-    const index_js_ExistsAfterBuild = await fs.pathExists("lib/index.js");
+    const index_js_ExistsAfterBuild = await fs.pathExists(
+      path.join(fixtureLocation, "lib", "index.js")
+    );
 
     expect(index_js_ExistsBeforeBuild).toEqual(true);
     expect(index_js_ExistsAfterBuild).toEqual(false);
