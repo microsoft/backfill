@@ -60,7 +60,7 @@ function getPackagePaths(
   );
 
   /*
-   * fast-glob returns unix style path,
+   * globby returns unix style path,
    * so we use path.join to align the path with the platform.
    */
   return packagePaths
