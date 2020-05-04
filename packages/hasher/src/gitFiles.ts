@@ -34,6 +34,7 @@ export async function getListOfGitFiles(
   const absoluteFiles = await globby(relativePackagePath, {
     cwd: repoRoot,
     gitignore: true,
+    onlyFiles: false,
     absolute: true
   });
 

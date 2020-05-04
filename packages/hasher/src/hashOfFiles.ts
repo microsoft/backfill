@@ -19,9 +19,12 @@ export async function generateHashOfFiles(
       const hasher = crypto.createHash("sha1");
       hasher.update(file);
 
-      const fileBuffer = await fs.readFile(path.join(packageRoot, file));
-      const data = fileBuffer.toString().replace(newline, LF);
-      hasher.update(data);
+      const stat = await fs.stat(path.join(packageRoot, file));
+      if (stat.isFile()) {
+        const fileBuffer = await fs.readFile(path.join(packageRoot, file));
+        const data = fileBuffer.toString().replace(newline, LF);
+        hasher.update(data);
+      }
 
       return hasher.digest("hex");
     })

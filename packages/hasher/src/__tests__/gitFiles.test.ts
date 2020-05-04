@@ -27,7 +27,7 @@ describe("getFilesTrackedByGit()", () => {
 
     const files = await getListOfGitFiles(cwd);
 
-    const expectedFiles = ["package.json", path.join("src", "index.ts")];
+    const expectedFiles = ["package.json", "src", path.join("src", "index.ts")];
 
     expectAreSame(files, expectedFiles);
   });
@@ -56,8 +56,10 @@ describe("getFilesTrackedByGit()", () => {
     const files = await getListOfGitFiles(packageRoot);
 
     const expectedFiles = [
+      "lib",
       path.join("lib", "index.d.ts"),
       "package.json",
+      "src",
       path.join("src", "index.ts")
     ];
 
