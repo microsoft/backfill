@@ -19,7 +19,7 @@ describe("generateHashOfFiles()", () => {
     expect(hashOfEverything).not.toEqual(hashExcludeNodeModules);
   });
 
-  it.only("creates different hashes for different hashes", async () => {
+  it("creates different hashes for different hashes", async () => {
     const packageRoot = await setupFixture("monorepo");
 
     const hashOfPackage = await generateHashOfFiles(packageRoot, [
