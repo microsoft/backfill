@@ -5,7 +5,7 @@ import { makeLogger } from "backfill-logger";
 
 import { PackageHashInfo } from "../hashOfPackage";
 import { Hasher, addToQueue } from "../index";
-import { WorkspaceInfo } from "../yarnWorkspaces";
+import { WorkspaceInfo } from "../workspaces";
 
 const logger = makeLogger("mute");
 

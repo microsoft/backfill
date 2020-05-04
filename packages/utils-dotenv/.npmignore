@@ -1,5 +1,5 @@
 **/*
-!lib/*
+!lib/**/*
 lib/**/__tests__/*
 lib/**/*.d.ts.map
 !bin/**/*

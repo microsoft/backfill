@@ -1,4 +1,4 @@
-import { WorkspaceInfo, listOfWorkspacePackageNames } from "./yarnWorkspaces";
+import { WorkspaceInfo, listOfWorkspacePackageNames } from "./workspaces";
 
 export type Dependencies = { [key in string]: string };
 

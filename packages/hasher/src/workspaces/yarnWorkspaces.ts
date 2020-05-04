@@ -1,6 +1,8 @@
 import path from "path";
-import globby from "globby";
 import findWorkspaceRoot from "find-yarn-workspace-root";
+
+import { getPackagePaths } from "./getPackagePaths";
+import { WorkspaceInfo, getWorkspacePackageInfo } from ".";
 
 type PackageJsonWorkspaces = {
   workspaces?:
@@ -10,8 +12,6 @@ type PackageJsonWorkspaces = {
       }
     | string[];
 };
-
-export type WorkspaceInfo = { name: string; path: string }[];
 
 function getYarnWorkspaceRoot(cwd: string): string {
   const yarnWorkspacesRoot = findWorkspaceRoot(cwd);
@@ -45,72 +45,6 @@ function getPackages(packageJson: PackageJsonWorkspaces): string[] {
   }
 
   return workspaces.packages;
-}
-
-function getPackagePaths(
-  yarnWorkspacesRoot: string,
-  packages: string[]
-): string[] {
-  const packagePaths = packages.map(glob =>
-    globby.sync(glob, {
-      cwd: yarnWorkspacesRoot,
-      onlyDirectories: true,
-      absolute: true
-    })
-  );
-
-  /*
-   * globby returns unix style path,
-   * so we use path.join to align the path with the platform.
-   */
-  return packagePaths
-    .reduce((acc, cur) => {
-      return [...acc, ...cur];
-    })
-    .map(p => path.join(p));
-}
-
-export function getWorkspacePackageInfo(
-  workspacePaths: string[]
-): WorkspaceInfo {
-  if (!workspacePaths) {
-    return [];
-  }
-
-  return workspacePaths.reduce<WorkspaceInfo>((returnValue, workspacePath) => {
-    let name: string;
-
-    try {
-      name = require(path.join(workspacePath, "package.json")).name;
-    } catch {
-      return returnValue;
-    }
-
-    return [
-      ...returnValue,
-      {
-        name,
-        path: workspacePath
-      }
-    ];
-  }, []);
-}
-
-export function listOfWorkspacePackageNames(
-  workspaces: WorkspaceInfo
-): string[] {
-  return workspaces.map(({ name }) => name);
-}
-
-export function findWorkspacePath(
-  workspaces: WorkspaceInfo,
-  packageName: string
-): string | undefined {
-  const workspace = workspaces.find(({ name }) => name === packageName);
-
-  if (workspace) {
-    return workspace.path;
-  }
 }
 
 export function getYarnWorkspaces(cwd: string): WorkspaceInfo {
