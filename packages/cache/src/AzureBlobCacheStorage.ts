@@ -1,6 +1,6 @@
 import { BlobServiceClient } from "@azure/storage-blob";
 import tar from "tar";
-import fg from "fast-glob";
+import globby from "globby";
 
 import { Logger } from "backfill-logger";
 import { AzureBlobCacheStorageOptions } from "backfill-config";
@@ -83,7 +83,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
     const blockBlobClient = blobClient.getBlockBlobClient();
 
-    const filesToCopy = await fg(outputGlob, { cwd: this.cwd });
+    const filesToCopy = await globby(outputGlob, { cwd: this.cwd });
     const tarStream = tar.create({ gzip: false, cwd: this.cwd }, filesToCopy);
 
     await blockBlobClient.uploadStream(
