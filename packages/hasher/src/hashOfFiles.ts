@@ -8,6 +8,7 @@ import { hashStrings } from "./helpers";
 const newline = /\r\n|\r|\n/g;
 const LF = "\n";
 
+// We have to force the types because globby types are wrong
 export async function generateHashOfFiles(
   packageRoot: string
 ): Promise<string> {

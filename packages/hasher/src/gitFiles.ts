@@ -30,7 +30,7 @@ export async function getListOfGitFiles(
    * We need to search from the repo root to git globby take
    * all the gitignore files in consideration.
    */
-  // Note: globby does not support objectMode
+  // Note: globby does not support objectMode when using gitignore
   const absoluteFiles = await globby(relativePackagePath, {
     cwd: repoRoot,
     gitignore: true,
