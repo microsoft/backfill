@@ -16,7 +16,9 @@ export async function getListOfGitFiles(
     );
   }
 
-  const repoRoot = path.dirname(nearestGitFolder);
+  // findUp returns unix like path so we use path.join to convert them
+  // on Windows.
+  const repoRoot = path.dirname(path.join(nearestGitFolder));
 
   // If the package is a git repo by itself then the search pattern is all the files
   const relativePackagePath = path.relative(repoRoot, packageRoot) || "**/*";
