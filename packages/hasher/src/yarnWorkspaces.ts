@@ -1,5 +1,5 @@
 import path from "path";
-import fg from "fast-glob";
+import globby from "globby";
 import findWorkspaceRoot from "find-yarn-workspace-root";
 
 type PackageJsonWorkspaces = {
@@ -52,7 +52,7 @@ function getPackagePaths(
   packages: string[]
 ): string[] {
   const packagePaths = packages.map(glob =>
-    fg.sync(glob, {
+    globby.sync(glob, {
       cwd: yarnWorkspacesRoot,
       onlyDirectories: true,
       absolute: true

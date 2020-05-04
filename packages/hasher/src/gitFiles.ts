@@ -21,7 +21,6 @@ export async function getListOfGitFiles(
   // If the package is a git repo by itself then the search pattern is all the files
   const relativePackagePath = path.relative(repoRoot, packageRoot) || "**/*";
 
-  // TODO: before merging, replace all usage of fast-glob by globby
   /*
    * We use globby to find of the files tracked by git because
    * it implements excluding the git-ignored content on top of

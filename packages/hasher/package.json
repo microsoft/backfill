@@ -19,7 +19,6 @@
     "@yarnpkg/lockfile": "^1.1.0",
     "backfill-config": "^4.0.0",
     "backfill-logger": "^4.0.0",
-    "fast-glob": "^3.0.4",
     "globby": "^11.0.0",
     "find-up": "^4.1.0",
     "find-yarn-workspace-root": "^1.2.1",
