@@ -16,7 +16,7 @@ others altogether._
 
 _Current prerequisites:_
 
-- git (for running `--audit`)
+- git (the git ignored files are ignored for hash computation)
 - yarn.lock and yarn workspaces (for optimized hashing)
 
 These prerequisites can easily be loosened to make backfill work with npm, Rush,
