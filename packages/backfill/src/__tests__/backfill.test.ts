@@ -33,6 +33,9 @@ describe("backfill", () => {
 
     // Reset
     buildCalled = 0;
+
+    // Change the output file to check that it is later properly retrieved from cache
+    // and to check that it does not change the package hash because it is gitignored.
     await fs.writeFile(
       "lib/output.js",
       "This output should be overriden by backfill during fetch"
