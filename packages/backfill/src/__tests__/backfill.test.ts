@@ -14,7 +14,7 @@ describe("backfill", () => {
     //  Set up
     const fixtureLocation = await setupFixture("basic");
 
-    const config = createConfig(logger, process.cwd());
+    const config = createConfig(logger, fixtureLocation);
 
     const salt = "fooBar";
     let buildCalled = 0;
@@ -22,7 +22,7 @@ describe("backfill", () => {
     const buildCommand = async (): Promise<void> => {
       await fs.mkdirp(path.join(fixtureLocation, "lib"));
       await fs.writeFile(
-        path.join(fixtureLocation, "lib/output.js"),
+        path.join(fixtureLocation, "lib", "output.js"),
         outputContent
       );
       buildCalled += 1;
@@ -33,12 +33,14 @@ describe("backfill", () => {
 
     // Assert
     expect(buildCalled).toBe(1);
-    expect(fs.readFileSync("lib/output.js").toString()).toBe(outputContent);
+    expect(
+      fs.readFileSync(path.join(fixtureLocation, "lib", "output.js")).toString()
+    ).toBe(outputContent);
 
     // Reset
     buildCalled = 0;
     await fs.writeFile(
-      "lib/output.js",
+      path.join(fixtureLocation, "lib", "output.js"),
       "This output should be overriden by backfill during fetch"
     );
 
@@ -47,6 +49,8 @@ describe("backfill", () => {
 
     // Assert
     expect(buildCalled).toBe(0);
-    expect(fs.readFileSync("lib/output.js").toString()).toBe(outputContent);
+    expect(
+      fs.readFileSync(path.join(fixtureLocation, "lib", "output.js")).toString()
+    ).toBe(outputContent);
   });
 });

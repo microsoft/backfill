@@ -26,7 +26,6 @@ export async function setupFixture(fixtureName: string) {
   const cwd = path.join(tempDir, fixtureName);
 
   fs.mkdirpSync(cwd);
-  process.chdir(cwd);
   fs.copySync(fixturePath, cwd);
 
   return cwd;

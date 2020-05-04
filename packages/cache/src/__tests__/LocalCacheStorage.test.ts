@@ -20,7 +20,7 @@ const setupCacheStorage = async (fixtureName: string) => {
     cacheStorageConfig,
     internalCacheFolder,
     logger,
-    process.cwd()
+    fixtureLocation
   );
 
   return { cacheStorage, internalCacheFolder, fixtureLocation };
@@ -56,20 +56,26 @@ async function fetchFromCache({
   hash,
   expectSuccess = true
 }: CacheHelper) {
-  const { cacheStorage, internalCacheFolder } = await setupCacheStorage(
-    fixtureName
-  );
+  const {
+    cacheStorage,
+    internalCacheFolder,
+    fixtureLocation
+  } = await setupCacheStorage(fixtureName);
 
   const secretFile = "qwerty";
 
   if (expectSuccess) {
-    createFileInFolder(path.join(internalCacheFolder, hash), secretFile, true);
+    createFileInFolder(
+      path.join(fixtureLocation, internalCacheFolder, hash),
+      secretFile,
+      true
+    );
   }
 
   const fetchResult = await cacheStorage.fetch(hash);
   expect(fetchResult).toBe(expectSuccess);
 
-  expectPathExists(secretFile, expectSuccess);
+  expectPathExists(path.join(fixtureLocation, secretFile), expectSuccess);
 }
 
 async function putInCache({
@@ -113,7 +119,7 @@ async function putInCache({
       ? path.join(internalCacheFolder, hash, f)
       : internalCacheFolder;
 
-    expectPathExists(pathToCheck, expectSuccess);
+    expectPathExists(path.join(fixtureLocation, pathToCheck), expectSuccess);
   });
 }
 
