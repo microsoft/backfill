@@ -6,7 +6,7 @@ import { setupFixture } from "backfill-utils-test";
 import { generateHashOfFiles } from "../hashOfFiles";
 
 describe("generateHashOfFiles()", () => {
-  it.only("creates different hashes for different hashes", async () => {
+  it("creates different hashes for different hashes", async () => {
     const packageRoot = await setupFixture("monorepo");
 
     const hashOfPackage = await generateHashOfFiles(packageRoot);
