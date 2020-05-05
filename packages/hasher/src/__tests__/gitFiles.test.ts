@@ -5,13 +5,6 @@ import tempy from "tempy";
 
 import { getListOfGitFiles } from "../gitFiles";
 
-function expectAreSame<T>(array1: T[], array2: T[]): void {
-  expect(array1.length).toBe(array2.length);
-  array1.forEach((value, index) => {
-    expect(value).toBe(array2[index]);
-  });
-}
-
 describe("getFilesTrackedByGit()", () => {
   it("when packageRoot is also repo root", async () => {
     const cwd = tempy.directory();
@@ -27,9 +20,9 @@ describe("getFilesTrackedByGit()", () => {
 
     const files = await getListOfGitFiles(cwd);
 
-    const expectedFiles = ["package.json", "src", path.join("src", "index.ts")];
+    const expectedFiles = ["package.json", path.join("src", "index.ts")];
 
-    expectAreSame(files, expectedFiles);
+    expect(files).toStrictEqual(expectedFiles);
   });
   it("when packageRoot is not repo root", async () => {
     const repoRoot = tempy.directory();
@@ -56,15 +49,11 @@ describe("getFilesTrackedByGit()", () => {
     const files = await getListOfGitFiles(packageRoot);
 
     const expectedFiles = [
-      "lib",
       path.join("lib", "index.d.ts"),
       "package.json",
-      "src",
       path.join("src", "index.ts")
     ];
 
-    console.log(files);
-
-    expectAreSame(files, expectedFiles);
+    expect(files).toStrictEqual(expectedFiles);
   });
 });

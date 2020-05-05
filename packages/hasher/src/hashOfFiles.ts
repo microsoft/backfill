@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import path from "path";
 import fs from "fs-extra";
+
 import { getListOfGitFiles } from "./gitFiles";
 
 import { hashStrings } from "./helpers";
@@ -24,12 +25,9 @@ export async function generateHashOfFiles(
       // hash across platforms.
       hasher.update(toUnixPath(file));
 
-      const stat = await fs.stat(path.join(packageRoot, file));
-      if (stat.isFile()) {
-        const fileBuffer = await fs.readFile(path.join(packageRoot, file));
-        const data = fileBuffer.toString().replace(newline, LF);
-        hasher.update(data);
-      }
+      const fileBuffer = await fs.readFile(path.join(packageRoot, file));
+      const data = fileBuffer.toString().replace(newline, LF);
+      hasher.update(data);
 
       return hasher.digest("hex");
     })
