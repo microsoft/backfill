@@ -11,6 +11,8 @@ async function findFixturePath(cwd: string, fixtureName: string) {
   });
 }
 
+let tmpIndex = 0;
+
 export async function setupFixture(fixtureName: string) {
   const fixturePath = await findFixturePath(__dirname, fixtureName);
 
@@ -24,14 +26,15 @@ export async function setupFixture(fixtureName: string) {
   }
 
   const tempDir = tempy.directory();
-  const cwd = path.join(tempDir, fixtureName);
+  const tmpIndexSegment = `${tmpIndex++}`;
+  const cwd = path.join(tempDir, tmpIndexSegment, fixtureName);
 
   fs.mkdirpSync(cwd);
   fs.copySync(fixturePath, cwd);
 
-  execa.sync("git", ["init"]);
-  execa.sync("git", ["add", "."]);
-  execa.sync("git", ["commit", "-m", "test"]);
+  execa.sync("git", ["init"], { cwd });
+  execa.sync("git", ["add", "."], { cwd });
+  execa.sync("git", ["commit", "-m", "test"], { cwd });
 
   return cwd;
 }

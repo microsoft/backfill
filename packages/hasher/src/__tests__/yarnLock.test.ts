@@ -5,6 +5,7 @@ import { parseLockFile } from "../lockfile";
 describe("parseLockFile()", () => {
   it("parses yarn.lock file when it is found", async () => {
     const packageRoot = await setupFixture("basic");
+
     const parsedLockeFile = await parseLockFile(packageRoot);
 
     expect(parsedLockeFile).toHaveProperty("type", "success");
