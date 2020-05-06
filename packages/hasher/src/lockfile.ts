@@ -1,10 +1,10 @@
 import path from "path";
-import findUp from "find-up";
 import fs from "fs-extra";
 import { parse as parseYarnLock } from "@yarnpkg/lockfile";
 import { readWantedLockfile } from "@pnpm/lockfile-file";
 import { Dependencies } from "./resolveExternalDependencies";
 import { nameAtVersion } from "./helpers";
+import { fastFindUp } from "./workspaces/fastFindUp";
 
 type LockDependency = {
   version: string;
@@ -21,9 +21,9 @@ export type ParsedLock = {
 const memoization: { [path: string]: ParsedLock } = {};
 
 export async function parseLockFile(packageRoot: string): Promise<ParsedLock> {
-  const yarnLockPath = await findUp(
+  const yarnLockPath = await fastFindUp(
     ["yarn.lock", "common/config/rush/yarn.lock"],
-    { cwd: packageRoot }
+    packageRoot
   );
 
   // First, test out whether this works for yarn
@@ -41,9 +41,9 @@ export async function parseLockFile(packageRoot: string): Promise<ParsedLock> {
   }
 
   // Second, test out whether this works for pnpm
-  let pnpmLockPath = await findUp(
+  let pnpmLockPath = await fastFindUp(
     ["pnpm-lock.yaml", "common/config/rush/pnpm-lock.yaml"],
-    { cwd: packageRoot }
+    packageRoot
   );
 
   if (pnpmLockPath) {

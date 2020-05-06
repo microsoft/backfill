@@ -1,23 +1,38 @@
-import findUp from "find-up";
+import { fastFindUp } from "./fastFindUp";
 import { getPnpmWorkspaces } from "./pnpmWorkspaces";
 import { getYarnWorkspaces } from "./yarnWorkspaces";
 import { getRushWorkspaces } from "./rushWorkspaces";
 import { WorkspaceInfo } from "./WorkspaceInfo";
 
-export function getWorkspaces(cwd: string): WorkspaceInfo {
-  const yarnLockPath = findUp.sync("yarn.lock", { cwd });
+const workspaceCache = new Map<string, WorkspaceInfo>();
+
+/**
+ * Gets workspace packages, get cached based on the kind of workspace
+ * @param cwd
+ */
+export async function getWorkspaces(cwd: string): Promise<WorkspaceInfo> {
+  const yarnLockPath = await fastFindUp("yarn.lock", cwd);
   if (yarnLockPath) {
-    return getYarnWorkspaces(cwd);
+    if (!workspaceCache.has("yarn")) {
+      workspaceCache.set("yarn", getYarnWorkspaces(cwd));
+    }
+    return workspaceCache.get("yarn")!;
   }
 
-  const pnpmLockPath = findUp.sync("pnpm-workspace.yaml", { cwd });
+  const pnpmLockPath = await fastFindUp("pnpm-workspace.yaml", cwd);
   if (pnpmLockPath) {
-    return getPnpmWorkspaces(cwd);
+    if (!workspaceCache.has("pnpm")) {
+      workspaceCache.set("pnpm", getPnpmWorkspaces(cwd));
+    }
+    return workspaceCache.get("pnpm")!;
   }
 
-  const rushJsonPath = findUp.sync("rush.json", { cwd });
+  const rushJsonPath = await fastFindUp("rush.json", cwd);
   if (rushJsonPath) {
-    return getRushWorkspaces(cwd);
+    if (!workspaceCache.has("rush")) {
+      workspaceCache.set("rush", getRushWorkspaces(cwd));
+    }
+    return workspaceCache.get("rush")!;
   }
 
   return [];

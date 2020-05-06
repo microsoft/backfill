@@ -63,7 +63,7 @@ export class Hasher implements IHasher {
 
     const packageRoot = await getPackageRoot(this.packageRoot);
     const lockInfo = await parseLockFile(packageRoot);
-    const workspaces = getWorkspaces(packageRoot);
+    const workspaces = await getWorkspaces(packageRoot);
 
     const queue = [packageRoot];
     const done: PackageHashInfo[] = [];
