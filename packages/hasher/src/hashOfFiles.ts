@@ -1,12 +1,7 @@
-import crypto from "crypto";
-import path from "path";
 import fg from "fast-glob";
-import fs from "fs-extra";
+import { getPackageDeps } from "@rushstack/package-deps-hash";
 
 import { hashStrings } from "./helpers";
-
-const newline = /\r\n|\r|\n/g;
-const LF = "\n";
 
 export async function generateHashOfFiles(
   packageRoot: string,
@@ -20,20 +15,23 @@ export async function generateHashOfFiles(
 
   files.sort((a, b) => a.path.localeCompare(b.path));
 
-  const hashes = await Promise.all(
-    files.map(async file => {
-      const hasher = crypto.createHash("sha1");
-      hasher.update(file.path);
+  try {
+    const hashMap = getPackageDeps(packageRoot);
+    const hashes: string[] = [];
 
-      if (!file.dirent.isDirectory()) {
-        const fileBuffer = await fs.readFile(path.join(packageRoot, file.path));
-        const data = fileBuffer.toString().replace(newline, LF);
-        hasher.update(data);
+    for (const entry of files) {
+      if (!entry.dirent.isDirectory()) {
+        // if the entry is a file, use the "git hash-object" hash (which is a sha1 of path + size, but super fast, and potentially already cached)
+        hashes.push(hashMap.files[entry.path]);
+      } else {
+        // if the entry is a directory, just put the directory in the hashes
+        hashes.push(entry.path);
       }
+    }
 
-      return hasher.digest("hex");
-    })
-  );
-
-  return hashStrings(hashes);
+    return hashStrings(hashes);
+  } catch (e) {
+    console.log("errored at ", files[0].path);
+    throw new Error(e);
+  }
 }

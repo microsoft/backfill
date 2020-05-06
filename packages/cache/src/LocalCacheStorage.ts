@@ -3,7 +3,6 @@ import fs from "fs-extra";
 import fg from "fast-glob";
 
 import { Logger } from "backfill-logger";
-
 import { CacheStorage } from "./CacheStorage";
 
 export class LocalCacheStorage extends CacheStorage {
@@ -31,13 +30,25 @@ export class LocalCacheStorage extends CacheStorage {
     });
 
     await Promise.all(
-      files.map(async file => {
-        await fs.mkdirp(path.dirname(path.join(this.cwd, file)));
-        await fs.copy(
-          path.join(localCacheFolder, file),
-          path.join(this.cwd, file)
-        );
-      })
+      files
+        .filter(async file => {
+          const src = path.join(localCacheFolder, file);
+          const dest = path.join(this.cwd, file);
+
+          if (fs.existsSync(dest)) {
+            const stats = await Promise.all([fs.stat(src), fs.stat(dest)]);
+            return stats[0].mtime !== stats[1].mtime;
+          }
+
+          return true;
+        })
+        .map(async file => {
+          await fs.mkdirp(path.dirname(path.join(this.cwd, file)));
+          await fs.copyFile(
+            path.join(localCacheFolder, file),
+            path.join(this.cwd, file)
+          );
+        })
     );
 
     return true;

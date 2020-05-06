@@ -1421,7 +1421,7 @@
     timsort "~0.3.0"
     z-schema "~3.18.3"
 
-"@rushstack/package-deps-hash@2.4.10":
+"@rushstack/package-deps-hash@2.4.10", "@rushstack/package-deps-hash@^2.4.10":
   version "2.4.10"
   resolved "https://registry.yarnpkg.com/@rushstack/package-deps-hash/-/package-deps-hash-2.4.10.tgz#df8c7dbf256ce2f307292af3919ed5baf67955ab"
   integrity sha512-a1fJIXoG6XXLNLkDSZE8IUpr4TnhsGXuGpF/vycIEtoz4O1YbvQqI3EWYUJhvt7QM7r5rmjk3O5lmbUAJ1lp9g==
