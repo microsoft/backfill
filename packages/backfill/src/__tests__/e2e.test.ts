@@ -17,20 +17,26 @@ describe("End to end", () => {
 
   it("works", async () => {
     const packageRoot = await setupFixture("basic");
-    await execa("node", [pathToBackfill, "--", "npm run compile"]);
+
+    await execa("node", [pathToBackfill, "--", "npm run compile"], {
+      cwd: packageRoot
+    });
 
     // Verify it produces the correct hash
     const ownHash = fs.readdirSync(path.join(packageRoot, hashPath));
     expect(ownHash).toContain("57f26541cc848f71a80fd9039137f1d50e013b92");
 
     // ... and that `npm run compile` was run successfully
-    const libFolderExist = await fs.pathExists("lib");
+    const libFolderExist = await fs.pathExists(path.join(packageRoot, "lib"));
     expect(libFolderExist).toBe(true);
   });
 
   it("fails on error with error code 1", async done => {
-    await setupFixture("basic");
-    const execProcess = execa("node", [pathToBackfill, "--", "somecommand"]);
+    const packageRoot = await setupFixture("basic");
+
+    const execProcess = execa("node", [pathToBackfill, "--", "somecommand"], {
+      cwd: packageRoot
+    });
 
     execProcess.on("exit", code => {
       expect(code).toBe(1);

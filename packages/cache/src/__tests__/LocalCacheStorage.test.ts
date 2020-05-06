@@ -8,7 +8,7 @@ import { CacheStorageConfig } from "backfill-config";
 import { getCacheStorageProvider } from "../index";
 
 const setupCacheStorage = async (fixtureName: string) => {
-  await setupFixture(fixtureName);
+  const fixtureLocation = await setupFixture(fixtureName);
 
   const cacheStorageConfig: CacheStorageConfig = {
     provider: "local"
@@ -20,10 +20,10 @@ const setupCacheStorage = async (fixtureName: string) => {
     cacheStorageConfig,
     internalCacheFolder,
     logger,
-    process.cwd()
+    fixtureLocation
   );
 
-  return { cacheStorage, internalCacheFolder };
+  return { cacheStorage, internalCacheFolder, fixtureLocation };
 };
 
 function createFileInFolder(
@@ -56,20 +56,26 @@ async function fetchFromCache({
   hash,
   expectSuccess = true
 }: CacheHelper) {
-  const { cacheStorage, internalCacheFolder } = await setupCacheStorage(
-    fixtureName
-  );
+  const {
+    cacheStorage,
+    internalCacheFolder,
+    fixtureLocation
+  } = await setupCacheStorage(fixtureName);
 
   const secretFile = "qwerty";
 
   if (expectSuccess) {
-    createFileInFolder(path.join(internalCacheFolder, hash), secretFile, true);
+    createFileInFolder(
+      path.join(fixtureLocation, internalCacheFolder, hash),
+      secretFile,
+      true
+    );
   }
 
   const fetchResult = await cacheStorage.fetch(hash);
   expect(fetchResult).toBe(expectSuccess);
 
-  expectPathExists(secretFile, expectSuccess);
+  expectPathExists(path.join(fixtureLocation, secretFile), expectSuccess);
 }
 
 async function putInCache({
@@ -80,9 +86,11 @@ async function putInCache({
   expectSuccess = true,
   errorMessage
 }: CacheHelper) {
-  const { cacheStorage, internalCacheFolder } = await setupCacheStorage(
-    fixtureName
-  );
+  const {
+    cacheStorage,
+    internalCacheFolder,
+    fixtureLocation
+  } = await setupCacheStorage(fixtureName);
 
   if (!outputGlob) {
     throw new Error("outputGlob should be provided to the putInCache function");
@@ -95,7 +103,7 @@ async function putInCache({
   }
 
   if (expectSuccess) {
-    filesToCache.forEach(f => createFileInFolder(".", f, false));
+    filesToCache.forEach(f => createFileInFolder(fixtureLocation, f, false));
   }
 
   if (expectSuccess) {
@@ -111,7 +119,7 @@ async function putInCache({
       ? path.join(internalCacheFolder, hash, f)
       : internalCacheFolder;
 
-    expectPathExists(pathToCheck, expectSuccess);
+    expectPathExists(path.join(fixtureLocation, pathToCheck), expectSuccess);
   });
 }
 

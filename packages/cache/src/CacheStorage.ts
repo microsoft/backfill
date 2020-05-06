@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+import globby from "globby";
 
 import { Logger } from "backfill-logger";
 
@@ -23,7 +23,7 @@ export abstract class CacheStorage implements ICacheStorage {
   public async put(hash: string, outputGlob: string[]): Promise<void> {
     const tracer = this.logger.setTime("putTime");
 
-    const filesBeingCached = fg.sync(outputGlob, { cwd: this.cwd });
+    const filesBeingCached = globby.sync(outputGlob, { cwd: this.cwd });
     if (filesBeingCached.length === 0) {
       throw new Error(
         `Couldn't find any file on disk matching the output glob (${outputGlob.join(

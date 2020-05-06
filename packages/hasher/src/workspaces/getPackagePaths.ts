@@ -1,12 +1,12 @@
 import path from "path";
-import fg from "fast-glob";
+import globby from "globby";
 
 export function getPackagePaths(
   workspacesRoot: string,
   packages: string[]
 ): string[] {
   const packagePaths = packages.map(glob =>
-    fg.sync(glob, {
+    globby.sync(glob, {
       cwd: workspacesRoot,
       onlyDirectories: true,
       absolute: true

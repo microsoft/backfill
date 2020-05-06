@@ -1,17 +1,17 @@
-import fg from "fast-glob";
 import { getPackageDeps } from "@rushstack/package-deps-hash";
-
+import globby from "globby";
 import { hashStrings } from "./helpers";
 
+// We have to force the types because globby types are wrong
 export async function generateHashOfFiles(
   packageRoot: string,
   globs: string[]
 ): Promise<string> {
-  const files = await fg(globs, {
+  const files = ((await globby(globs, {
     cwd: packageRoot,
     onlyFiles: false,
     objectMode: true
-  });
+  })) as unknown) as { path: string; dirent: { isDirectory(): boolean } }[];
 
   files.sort((a, b) => a.path.localeCompare(b.path));
 

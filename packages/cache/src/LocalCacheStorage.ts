@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs-extra";
-import fg from "fast-glob";
+import globby from "globby";
 
 import { Logger } from "backfill-logger";
 import { CacheStorage } from "./CacheStorage";
@@ -25,7 +25,7 @@ export class LocalCacheStorage extends CacheStorage {
       return false;
     }
 
-    const files = await fg(`**/*`, {
+    const files = await globby(`**/*`, {
       cwd: localCacheFolder
     });
 
@@ -57,7 +57,7 @@ export class LocalCacheStorage extends CacheStorage {
   protected async _put(hash: string, outputGlob: string[]): Promise<void> {
     const localCacheFolder = this.getLocalCacheFolder(hash);
 
-    const files = fg.sync(outputGlob, { cwd: this.cwd });
+    const files = globby.sync(outputGlob, { cwd: this.cwd });
 
     await Promise.all(
       files.map(async file => {
