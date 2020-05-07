@@ -1,62 +1,71 @@
 import path from "path";
-import findUp from "find-up";
+import fs from "fs-extra";
 
-interface CacheInfo {
-  basename: string;
-  basedir: string;
-  targetPath: string;
+interface FoundRecord {
+  cwd: string;
+  target: string;
 }
 
-let findUpCache = new Map<string, CacheInfo | undefined>();
+let findUpCache = new Map<string, FoundRecord | undefined>();
+let root: string;
 
-async function findUpCachedByString(target: string, cwd: string) {
-  let foundTarget: CacheInfo | undefined = undefined;
-
-  if (!findUpCache.has(target)) {
-    const found = await findUp(target, { cwd });
-
+function checkFoundRecords(targets: string[], cwd: string) {
+  for (const found of findUpCache.values()) {
     if (found) {
-      foundTarget = {
-        targetPath: found,
-        basedir: path.relative(target, found),
-        basename: path.basename(found)
-      };
-
-      foundTarget = cwd.startsWith(foundTarget.basedir)
-        ? undefined
-        : foundTarget;
-
-      // In a test situation, we do not cache since the cache would not be accurate for different fixtures
-      if ((global as any).__TEST__) {
-        return foundTarget;
+      for (const target of targets) {
+        if (cwd.startsWith(found.cwd) && found.target === target) {
+          return path.join(found.cwd, found.target);
+        }
       }
     }
-
-    findUpCache.set(target, foundTarget);
   }
-
-  return findUpCache.get(target);
 }
 
-/**
- * This is a super fast alternative to finding up, it calls the "find-up" function exactly ONCE for each
- * target. Targets are something like "yarn.lock", "pnpm-lock.yaml" - subject fo the search. Then it relies
- * on a simple substring match to see if the incoming cwd is included in the cached found results
- *
- * @param targets
- * @param cwd
- */
 export async function fastFindUp(targets: string[] | string, cwd: string) {
-  let foundTarget: CacheInfo | undefined;
-
-  if (Array.isArray(targets)) {
-    for (const targetsString of targets) {
-      foundTarget = await findUpCachedByString(targetsString, cwd);
-      break;
-    }
-  } else {
-    foundTarget = await findUpCachedByString(targets, cwd);
+  if (!root) {
+    root = path.parse(cwd).root;
   }
 
-  return foundTarget ? foundTarget!.targetPath : undefined;
+  targets = Array.isArray(targets) ? targets : [targets];
+
+  // check to see if this cwd is inside one of the found records
+  const fastFound = checkFoundRecords(targets, cwd);
+  if (fastFound) {
+    return fastFound;
+  }
+
+  const traversed: string[] = [];
+  let found: FoundRecord | undefined;
+  let needle: string;
+
+  done: {
+    while (cwd !== root) {
+      for (const target of targets) {
+        needle = path.join(cwd, target);
+
+        if (findUpCache.has(needle)) {
+          found = findUpCache.get(needle);
+          break done;
+        } else if (fs.existsSync(needle)) {
+          traversed.push(needle);
+          found = { cwd, target };
+          break done;
+        } else {
+          traversed.push(needle);
+        }
+      }
+
+      cwd = path.dirname(cwd);
+    }
+  }
+
+  for (const key of traversed) {
+    findUpCache.set(key, found);
+  }
+
+  if (found) {
+    return path.join(found.cwd, found.target);
+  } else {
+    return null;
+  }
 }

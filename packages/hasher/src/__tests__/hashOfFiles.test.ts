@@ -3,7 +3,7 @@ import fs from "fs-extra";
 
 import { setupFixture } from "backfill-utils-test";
 
-import { generateHashOfFiles } from "../hashOfFiles";
+import { generateHashOfFiles, _resetPackageDepsCache } from "../hashOfFiles";
 
 describe("generateHashOfFiles()", () => {
   it("excludes files provided by backfill config", async () => {
@@ -28,6 +28,7 @@ describe("generateHashOfFiles()", () => {
     ]);
 
     fs.writeFileSync(path.join(packageRoot, "foo.txt"), "bar");
+    _resetPackageDepsCache();
     const hashOfPackageWithFoo = await generateHashOfFiles(packageRoot, [
       "**",
       "!**/node_modules/**"
@@ -35,6 +36,7 @@ describe("generateHashOfFiles()", () => {
     expect(hashOfPackage).not.toEqual(hashOfPackageWithFoo);
 
     fs.writeFileSync(path.join(packageRoot, "foo.txt"), "foo");
+    _resetPackageDepsCache();
     const hashOfPackageWithFoo2 = await generateHashOfFiles(packageRoot, [
       "**",
       "!**/node_modules/**"
@@ -42,7 +44,7 @@ describe("generateHashOfFiles()", () => {
     expect(hashOfPackageWithFoo).not.toEqual(hashOfPackageWithFoo2);
 
     fs.unlinkSync(path.join(packageRoot, "foo.txt"));
-
+    _resetPackageDepsCache();
     const hashOfPackageWithoutFoo = await generateHashOfFiles(packageRoot, [
       "**",
       "!**/node_modules/**"
