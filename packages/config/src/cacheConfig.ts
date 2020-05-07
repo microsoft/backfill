@@ -25,6 +25,9 @@ export type CacheStorageConfig =
   | {
       provider: "local";
     }
+  | {
+      provider: "local-skip";
+    }
   | NpmCacheStorageConfig
   | AzureBlobCacheStorageConfig;
 
