@@ -33,6 +33,8 @@ export async function setupFixture(fixtureName: string) {
   fs.copySync(fixturePath, cwd);
 
   execa.sync("git", ["init"], { cwd });
+  execa.sync("git", ["config", "user.email", "test@testme.com"], { cwd });
+  execa.sync("git", ["config", "user.name", "test fixture"], { cwd });
   execa.sync("git", ["add", "."], { cwd });
   execa.sync("git", ["commit", "-m", "test"], { cwd });
 
