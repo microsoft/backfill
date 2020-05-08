@@ -206,20 +206,20 @@ BACKFILL_CACHE_PROVIDER_OPTIONS='{"npmPackageName":"...","registryUrl":"..."}'
 
 Sometimes in a local build environment, it is useful to compare hashes to
 determine whether to execute the task without having to explicitly use a
-separate directory for the cache. While running an incremental task, he
+separate directory for the cache. While running an incremental task, the
 generated build artifacts are the caches themselves.
 
-One caveat, this is using build outputs that the task produced and someone could
-possibly modify the **output** on a local development environment. For that
-reason, this cache mode is an opt-in rather than the default.
+One caveat, this is using output that the task produced and one could possibly
+modify the output on a local development environment. For this reason, this is
+an opt-in behavior rather than the default.
 
-The main benefit of using this strategy is speed. Backfill can skip file copying
-of the cached outputs if it can rely on the built artifacts. Hashing is
-CPU-bound while caching is I/O-bound. Using this strategy can result in
-signficant speed gains, but at the cost of needing to trust the outputs have not
-be altered by the user. From observation, this is usually true - but it is
-prudent to also provide a command in your repository to **clean** the output
-along with the saved hashes.
+The main benefit of using this strategy is a **significant** speed boost.
+Backfill can skip file copying of the cached outputs if it can rely on the built
+artifacts. Hashing is CPU-bound while caching is I/O-bound. Using this strategy
+results in speed gains but at the cost of needing to trust the outputs have not
+be altered by the user. While this usually is true, it is prudent to also
+provide a command in your repository to clean the output along with the saved
+hashes.
 
 You can configure this from the `backfill.config.js` file this way:
 
