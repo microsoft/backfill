@@ -202,6 +202,42 @@ BACKFILL_CACHE_PROVIDER="npm"
 BACKFILL_CACHE_PROVIDER_OPTIONS='{"npmPackageName":"...","registryUrl":"..."}'
 ```
 
+### Skipping cache locally
+
+Sometimes in a local build environment, it is useful to compare hashes to
+determine whether to execute the task without having to explicitly use a
+separate directory for the cache. While running an incremental task, he
+generated build artifacts are the caches themselves.
+
+One caveat, this is using build outputs that the task produced and someone could
+possibly modify the **output** on a local development environment. For that
+reason, this cache mode is an opt-in rather than the default.
+
+The main benefit of using this strategy is speed. Backfill can skip file copying
+of the cached outputs if it can rely on the built artifacts. Hashing is
+CPU-bound while caching is I/O-bound. Using this strategy can result in
+signficant speed gains, but at the cost of needing to trust the outputs have not
+be altered by the user. From observation, this is usually true - but it is
+prudent to also provide a command in your repository to **clean** the output
+along with the saved hashes.
+
+You can configure this from the `backfill.config.js` file this way:
+
+```js
+module.exports = {
+  cacheStorageConfig: {
+    provider: "local-skip"
+  }
+};
+```
+
+Like other cases, you can also use the environment variable to choose this
+storage strategy:
+
+```
+BACKFILL_CACHE_PROVIDER="local-skip"
+```
+
 ## API
 
 Backfill provides an API, this allows for more complex scenarios, and
