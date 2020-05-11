@@ -22,18 +22,21 @@ export class LocalSkipCacheStorage extends CacheStorage {
   }
 
   protected async _fetch(hash: string): Promise<boolean> {
-    const localCacheFolder = this.getLocalCacheFolder(hash);
+    const localCacheFolder = this.getLocalCacheFolder("skip-cache");
+    const hashFile = path.join(localCacheFolder, "hash");
 
-    if (!fs.pathExistsSync(localCacheFolder)) {
+    if (!fs.pathExistsSync(localCacheFolder) || !fs.existsSync(hashFile)) {
       return false;
     }
 
-    return true;
+    return hash === (await fs.readFile(hashFile, "utf-8"));
   }
 
   protected async _put(hash: string, _outputGlob: string[]): Promise<void> {
-    const localCacheFolder = this.getLocalCacheFolder(hash);
+    const localCacheFolder = this.getLocalCacheFolder("skip-cache");
+    const hashFile = path.join(localCacheFolder, "hash");
 
     await fs.mkdirp(localCacheFolder);
+    await fs.writeFile(hashFile, hash);
   }
 }
