@@ -206,8 +206,7 @@ BACKFILL_CACHE_PROVIDER_OPTIONS='{"npmPackageName":"...","registryUrl":"..."}'
 
 Sometimes in a local build environment, it is useful to compare hashes to
 determine whether to execute the task without having to explicitly use a
-separate directory for the cache. While running an incremental task, the
-generated build artifacts are the caches themselves.
+separate directory for the cache.
 
 One caveat, this is using output that the task produced and one could possibly
 modify the output on a local development environment. For this reason, this is
