@@ -5,6 +5,7 @@ import { ICacheStorage } from "./CacheStorage";
 import { AzureBlobCacheStorage } from "./AzureBlobCacheStorage";
 import { LocalCacheStorage } from "./LocalCacheStorage";
 import { NpmCacheStorage } from "./NpmCacheStorage";
+import { LocalSkipCacheStorage } from "./LocalSkipCacheStorage";
 export { ICacheStorage } from "./CacheStorage";
 
 export function getCacheStorageProvider(
@@ -28,6 +29,8 @@ export function getCacheStorageProvider(
       logger,
       cwd
     );
+  } else if (cacheStorageConfig.provider === "local-skip") {
+    cacheStorage = new LocalSkipCacheStorage(internalCacheFolder, logger, cwd);
   } else {
     cacheStorage = new LocalCacheStorage(internalCacheFolder, logger, cwd);
   }
