@@ -247,8 +247,8 @@ const backfill = require("backfill/lib/api");
 
 const packagePath = getPath(packageName);
 
-const logger = await backfill.makeLogger("verbose", process.stdout, process.stderr);
-const packagehash = await backfill.computHash(packagePath, logger);
+const logger = backfill.makeLogger("verbose", process.stdout, process.stderr);
+const packagehash = await backfill.computeHash(packagePath, logger);
 
 const fetchSuccess = await backfill.fetch(packagePath, packageHash, logger);
 
