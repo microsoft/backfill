@@ -11,8 +11,6 @@ async function findFixturePath(cwd: string, fixtureName: string) {
   });
 }
 
-let tmpIndex = 0;
-
 export async function setupFixture(fixtureName: string) {
   const fixturePath = await findFixturePath(__dirname, fixtureName);
 
@@ -26,8 +24,7 @@ export async function setupFixture(fixtureName: string) {
   }
 
   const tempDir = tempy.directory();
-  const tmpIndexSegment = `${tmpIndex++}`;
-  const cwd = path.join(tempDir, tmpIndexSegment, fixtureName);
+  const cwd = path.join(tempDir, fixtureName);
 
   fs.mkdirpSync(cwd);
   fs.copySync(fixturePath, cwd);
