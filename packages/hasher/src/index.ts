@@ -103,6 +103,6 @@ export class Hasher implements IHasher {
   }
 
   public async hashOfOutput(): Promise<string> {
-    return generateHashOfFiles(this.packageRoot, this.outputGlob);
+    return generateHashOfFiles(this.packageRoot, this.outputGlob, this.logger);
   }
 }

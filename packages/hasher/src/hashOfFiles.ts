@@ -1,15 +1,30 @@
 import path from "path";
 import { getPackageDeps } from "@rushstack/package-deps-hash";
 import globby from "globby";
+import { Logger } from "backfill-logger/src";
 import { hashStrings } from "./helpers";
 import { fastFindUp } from "./workspaces/fastFindUp";
 
 const repoHashes = new Map<string, { [key: string]: string }>();
 
-// We have to force the types because globby types are wrong
+/**
+ * Generates a hash string based on files in a package
+ *
+ * This implementation relies on `git hash-object` to quickly calculate all files
+ * in the repo, caching this result so repeated calls to this function will be
+ * a simple lookup.
+ *
+ * Note: We have to force the types because globby types are wrong
+ *
+ * @param packageRoot The root of the package
+ * @param globs Globs inside a package root to consider as part of the hash
+ * @param _cacheRepoHash **TEST ONLY** to turn off the cache for repo file hashing
+ */
 export async function generateHashOfFiles(
   packageRoot: string,
-  globs: string[]
+  globs: string[],
+  logger: Logger,
+  _cacheRepoHash = true
 ): Promise<string> {
   let gitRoot = await fastFindUp(".git", packageRoot);
 
@@ -19,7 +34,8 @@ export async function generateHashOfFiles(
 
   gitRoot = path.dirname(gitRoot);
 
-  if (!repoHashes.has(gitRoot!)) {
+  // _cacheRepoHash being false will simply cause this function to always do the `getPackageDeps()` call
+  if (!repoHashes.has(gitRoot!) || !_cacheRepoHash) {
     repoHashes.set(gitRoot, getPackageDeps(gitRoot).files);
   }
 
@@ -48,10 +64,10 @@ export async function generateHashOfFiles(
       ).slice(1);
 
       if (!repoFileHashes[normalized]) {
-        process.stdout.write("cannot find file " + normalized + "\n");
+        logger.warn(`cannot find file "${normalized}"`);
+      } else {
+        hashes.push(repoFileHashes[normalized]);
       }
-
-      hashes.push(repoFileHashes[normalized]);
     } else {
       // if the entry is a directory, just put the directory in the hashes
       hashes.push(entry.path);
@@ -59,10 +75,4 @@ export async function generateHashOfFiles(
   }
 
   return hashStrings(hashes);
-}
-
-export function _resetPackageDepsCache() {
-  if ((global as any).__TEST__) {
-    repoHashes.clear();
-  }
 }
