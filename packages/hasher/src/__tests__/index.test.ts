@@ -19,7 +19,11 @@ describe("addToQueue", () => {
       {
         name: packageToAdd,
         path: packagePath,
-        packageJson: require(path.join(packagePath, "package.json"))
+        packageJson: {
+          name: "",
+          packageJsonPath: "",
+          version: ""
+        }
       }
     ];
     const internalDependencies = [packageToAdd];

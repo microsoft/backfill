@@ -1,6 +1,5 @@
 import { Logger } from "backfill-logger";
 import { findWorkspacePath, WorkspaceInfo } from "workspace-tools";
-
 import { generateHashOfFiles } from "./hashOfFiles";
 import {
   PackageHashInfo,
