@@ -1,6 +1,6 @@
 import path from "path";
 import globby from "globby";
-import { Logger } from "backfill-logger/src";
+import { Logger } from "backfill-logger";
 import { hashStrings } from "./helpers";
 import { RepoInfo } from "./repoInfo";
 
