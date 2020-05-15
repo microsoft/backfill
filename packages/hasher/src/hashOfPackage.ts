@@ -2,6 +2,7 @@ import crypto from "crypto";
 import path from "path";
 
 import { Logger } from "backfill-logger";
+import { WorkspaceInfo, ParsedLock } from "workspace-tools";
 
 import { resolveInternalDependencies } from "./resolveInternalDependencies";
 import {
@@ -11,8 +12,6 @@ import {
 import { generateHashOfFiles } from "./hashOfFiles";
 
 import { hashStrings } from "./helpers";
-import { ParsedLock } from "./lockfile";
-import { WorkspaceInfo } from "./workspaces";
 
 export type PackageHashInfo = {
   name: string;
