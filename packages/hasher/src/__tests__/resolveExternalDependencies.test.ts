@@ -1,14 +1,16 @@
 import { setupFixture } from "backfill-utils-test";
+import {
+  getPnpmWorkspaces,
+  getRushWorkspaces,
+  getYarnWorkspaces,
+  parseLockFile
+} from "workspace-tools";
 
-import { getYarnWorkspaces } from "../workspaces/yarnWorkspaces";
 import {
   filterExternalDependencies,
   resolveExternalDependencies,
   addToQueue
 } from "../resolveExternalDependencies";
-import { parseLockFile } from "../lockfile";
-import { getPnpmWorkspaces } from "../workspaces/pnpmWorkspaces";
-import { getRushWorkspaces } from "../workspaces/rushWorkspaces";
 import { filterDependenciesInYarnFixture } from "./resolveDependenciesHelper";
 
 describe("filterExternalDependencies()", () => {

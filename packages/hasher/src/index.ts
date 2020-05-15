@@ -1,4 +1,10 @@
 import { Logger } from "backfill-logger";
+import {
+  getWorkspaces,
+  findWorkspacePath,
+  WorkspaceInfo,
+  parseLockFile
+} from "workspace-tools";
 
 import { generateHashOfFiles } from "./hashOfFiles";
 import {
@@ -7,8 +13,6 @@ import {
   generateHashOfInternalPackages
 } from "./hashOfPackage";
 import { hashStrings, getPackageRoot } from "./helpers";
-import { parseLockFile } from "./lockfile";
-import { getWorkspaces, findWorkspacePath, WorkspaceInfo } from "./workspaces";
 
 export interface IHasher {
   createPackageHash: (salt: string) => Promise<string>;

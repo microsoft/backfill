@@ -1,8 +1,10 @@
 import { setupFixture } from "backfill-utils-test";
 
-import { getYarnWorkspaces } from "../workspaces/yarnWorkspaces";
-import { getPnpmWorkspaces } from "../workspaces/pnpmWorkspaces";
-import { getRushWorkspaces } from "../workspaces/rushWorkspaces";
+import {
+  getYarnWorkspaces,
+  getPnpmWorkspaces,
+  getRushWorkspaces
+} from "workspace-tools";
 
 export async function filterDependenciesInYarnFixture(
   fixture: string,
