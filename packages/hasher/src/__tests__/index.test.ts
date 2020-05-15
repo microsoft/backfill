@@ -18,7 +18,12 @@ describe("addToQueue", () => {
     const workspaces: WorkspaceInfo = [
       {
         name: packageToAdd,
-        path: packagePath
+        path: packagePath,
+        packageJson: {
+          name: "",
+          packageJsonPath: "",
+          version: ""
+        }
       }
     ];
     const internalDependencies = [packageToAdd];

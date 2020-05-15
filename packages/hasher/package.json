@@ -21,7 +21,7 @@
     "find-up": "^4.1.0",
     "fs-extra": "^8.1.0",
     "globby": "^11.0.0",
-    "workspace-tools": "^0.3.3"
+    "workspace-tools": "^0.4.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.0",
