@@ -1,4 +1,4 @@
-import { WorkspaceInfo, listOfWorkspacePackageNames } from "./workspaces";
+import { WorkspaceInfo, listOfWorkspacePackageNames } from "workspace-tools";
 
 export type Dependencies = { [key in string]: string };
 
