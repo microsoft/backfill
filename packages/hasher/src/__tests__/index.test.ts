@@ -18,7 +18,8 @@ describe("addToQueue", () => {
     const workspaces: WorkspaceInfo = [
       {
         name: packageToAdd,
-        path: packagePath
+        path: packagePath,
+        packageJson: require(path.join(packagePath, "package.json"))
       }
     ];
     const internalDependencies = [packageToAdd];

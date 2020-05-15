@@ -1,17 +1,14 @@
 import crypto from "crypto";
 import path from "path";
-
 import { Logger } from "backfill-logger";
-import { WorkspaceInfo, ParsedLock } from "workspace-tools";
-
 import { resolveInternalDependencies } from "./resolveInternalDependencies";
 import {
   resolveExternalDependencies,
   Dependencies
 } from "./resolveExternalDependencies";
 import { generateHashOfFiles } from "./hashOfFiles";
-
 import { hashStrings } from "./helpers";
+import { RepoInfo } from "./repoInfo";
 
 export type PackageHashInfo = {
   name: string;
@@ -39,11 +36,12 @@ const memoization: { [key: string]: PackageHashInfo } = {};
 
 export async function getPackageHash(
   packageRoot: string,
-  workspaces: WorkspaceInfo,
-  yarnLock: ParsedLock,
+  repoInfo: RepoInfo,
   logger: Logger,
   hashGlobs: string[]
 ): Promise<PackageHashInfo> {
+  const { workspaceInfo, parsedLock } = repoInfo;
+
   const memoizationKey = path.resolve(packageRoot);
 
   if (memoization[memoizationKey]) {
@@ -62,13 +60,13 @@ export async function getPackageHash(
 
   const internalDependencies = resolveInternalDependencies(
     allDependencies,
-    workspaces
+    workspaceInfo
   );
 
   const externalDeoendencies = resolveExternalDependencies(
     allDependencies,
-    workspaces,
-    yarnLock
+    workspaceInfo,
+    parsedLock
   );
 
   const resolvedDependencies = [
@@ -76,7 +74,12 @@ export async function getPackageHash(
     ...externalDeoendencies
   ];
 
-  const filesHash = await generateHashOfFiles(packageRoot, hashGlobs, logger);
+  const filesHash = await generateHashOfFiles(
+    packageRoot,
+    hashGlobs,
+    logger,
+    repoInfo
+  );
   const dependenciesHash = hashStrings(resolvedDependencies);
 
   logger.silly(name);

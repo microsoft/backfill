@@ -1,11 +1,8 @@
 import path from "path";
-import { getPackageDeps } from "@rushstack/package-deps-hash";
 import globby from "globby";
 import { Logger } from "backfill-logger/src";
 import { hashStrings } from "./helpers";
-import { fastFindUp } from "./workspaces/fastFindUp";
-
-const repoHashes = new Map<string, { [key: string]: string }>();
+import { RepoInfo } from "./repoInfo";
 
 /**
  * Generates a hash string based on files in a package
@@ -24,20 +21,9 @@ export async function generateHashOfFiles(
   packageRoot: string,
   globs: string[],
   logger: Logger,
-  _cacheRepoHash = true
+  repoInfo: RepoInfo
 ): Promise<string> {
-  let gitRoot = await fastFindUp(".git", packageRoot);
-
-  if (!gitRoot) {
-    throw new Error("backfill require this to be inside a git repo");
-  }
-
-  gitRoot = path.dirname(gitRoot);
-
-  // _cacheRepoHash being false will simply cause this function to always do the `getPackageDeps()` call
-  if (!repoHashes.has(gitRoot!) || !_cacheRepoHash) {
-    repoHashes.set(gitRoot, getPackageDeps(gitRoot).files);
-  }
+  const { repoHashes, root } = repoInfo;
 
   const files = ((await globby(globs, {
     cwd: packageRoot,
@@ -49,24 +35,22 @@ export async function generateHashOfFiles(
 
   const hashes: string[] = [];
 
-  const repoFileHashes = repoHashes.get(gitRoot)!;
-
   for (const entry of files) {
     if (!entry.dirent.isDirectory()) {
       // if the entry is a file, use the "git hash-object" hash (which is a sha1 of path + size, but super fast, and potentially already cached)
       const normalized = (
         path
           .normalize(packageRoot)
-          .replace(path.normalize(gitRoot), "")
+          .replace(path.normalize(root), "")
           .replace(/\\/g, "/") +
         "/" +
         entry.path
       ).slice(1);
 
-      if (!repoFileHashes[normalized]) {
+      if (!repoHashes[normalized]) {
         logger.warn(`cannot find file "${normalized}"`);
       } else {
-        hashes.push(repoFileHashes[normalized]);
+        hashes.push(repoHashes[normalized]);
       }
     } else {
       // if the entry is a directory, just put the directory in the hashes

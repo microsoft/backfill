@@ -5,25 +5,27 @@ import { setupFixture } from "backfill-utils-test";
 
 import { makeLogger } from "backfill-logger";
 import { generateHashOfFiles } from "../hashOfFiles";
+import { getRepoInfo } from "../repoInfo";
 
 describe("generateHashOfFiles()", () => {
   const logger = makeLogger("mute");
 
   it("excludes files provided by backfill config", async () => {
     const packageRoot = await setupFixture("monorepo");
+    const repoInfo = await getRepoInfo(packageRoot);
 
     const hashOfEverything = await generateHashOfFiles(
       packageRoot,
       ["**"],
       logger,
-      false /* _cacheRepoHash */
+      repoInfo
     );
 
     const hashExcludeNodeModules = await generateHashOfFiles(
       packageRoot,
       ["**", "!**/node_modules/**"],
       logger,
-      false /* _cacheRepoHash */
+      repoInfo
     );
 
     expect(hashOfEverything).not.toEqual(hashExcludeNodeModules);
@@ -31,12 +33,13 @@ describe("generateHashOfFiles()", () => {
 
   it("creates different hashes for different hashes", async () => {
     const packageRoot = await setupFixture("monorepo");
+    const repoInfo = await getRepoInfo(packageRoot);
 
     const hashOfPackage = await generateHashOfFiles(
       packageRoot,
       ["**", "!**/node_modules/**"],
       logger,
-      false /* _cacheRepoHash */
+      repoInfo
     );
 
     fs.writeFileSync(path.join(packageRoot, "foo.txt"), "bar");
@@ -44,7 +47,7 @@ describe("generateHashOfFiles()", () => {
       packageRoot,
       ["**", "!**/node_modules/**"],
       logger,
-      false /* _cacheRepoHash */
+      repoInfo
     );
     expect(hashOfPackage).not.toEqual(hashOfPackageWithFoo);
 
@@ -53,7 +56,7 @@ describe("generateHashOfFiles()", () => {
       packageRoot,
       ["**", "!**/node_modules/**"],
       logger,
-      false /* _cacheRepoHash */
+      repoInfo
     );
     expect(hashOfPackageWithFoo).not.toEqual(hashOfPackageWithFoo2);
 
@@ -62,7 +65,7 @@ describe("generateHashOfFiles()", () => {
       packageRoot,
       ["**", "!**/node_modules/**"],
       logger,
-      false /* _cacheRepoHash */
+      repoInfo
     );
     expect(hashOfPackage).toEqual(hashOfPackageWithoutFoo);
   });
