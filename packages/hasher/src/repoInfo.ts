@@ -29,6 +29,27 @@ function searchRepoInfoCache(packageRoot: string) {
   }
 }
 
+export async function _getRepoInfoNoCache(cwd: string) {
+  const root = findGitRoot(cwd);
+  if (!root) {
+    throw new Error("Cannot initialize Repo class without a .git root");
+  }
+
+  const repoHashes = getPackageDeps(root).files;
+  const workspaceInfo = await getWorkspaces(root);
+  const parsedLock = await parseLockFile(root);
+
+  const repoInfo = {
+    root,
+    workspaceInfo,
+    parsedLock,
+    repoHashes
+  };
+
+  repoInfoCache.push(repoInfo);
+  return repoInfo;
+}
+
 // A promise to guarantee the getRepoInfo is done one at a time
 let oneAtATime: Promise<any> = Promise.resolve();
 
@@ -46,25 +67,7 @@ export async function getRepoInfo(cwd: string): Promise<RepoInfo> {
     if (searchResult) {
       return searchResult;
     }
-
-    const root = findGitRoot(cwd);
-    if (!root) {
-      throw new Error("Cannot initialize Repo class without a .git root");
-    }
-
-    const repoHashes = getPackageDeps(root).files;
-    const workspaceInfo = await getWorkspaces(root);
-    const parsedLock = await parseLockFile(root);
-
-    const repoInfo = {
-      root,
-      workspaceInfo,
-      parsedLock,
-      repoHashes
-    };
-
-    repoInfoCache.push(repoInfo);
-    return repoInfo;
+    return _getRepoInfoNoCache(cwd);
   });
 
   return oneAtATime;
