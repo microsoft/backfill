@@ -35,9 +35,12 @@ export class LocalCacheStorage extends CacheStorage {
           const src = path.join(localCacheFolder, file);
           const dest = path.join(this.cwd, file);
 
-          if (fs.existsSync(dest)) {
+          try {
             const stats = await Promise.all([fs.stat(src), fs.stat(dest)]);
             return stats[0].mtime !== stats[1].mtime;
+          } catch {
+            // if an error is thrown, it means the stat was called on a non-existent file or directory
+            return false;
           }
 
           return true;

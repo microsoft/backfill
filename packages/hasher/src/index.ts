@@ -7,7 +7,7 @@ import {
   generateHashOfInternalPackages
 } from "./hashOfPackage";
 import { hashStrings, getPackageRoot } from "./helpers";
-import { RepoInfo, getRepoInfo } from "./repoInfo";
+import { RepoInfo, getRepoInfo, getRepoInfoNoCache } from "./repoInfo";
 
 export interface IHasher {
   createPackageHash: (salt: string) => Promise<string>;
@@ -103,17 +103,19 @@ export class Hasher implements IHasher {
     return combinedHash;
   }
 
+  /**
+   * Hash of output will hash the output files. This is meant to be used by validation and will not cache the repo hashes.
+   * The validateOutput option should be used sparingly for performance reasons. It is meant to help be a debugging tool
+   * to help investigate integrity of the cache.
+   */
   public async hashOfOutput(): Promise<string> {
-    // ensure this.repoInfo is generated
-    if (!this.repoInfo) {
-      throw new Error("make sure the createPackageHash is called first");
-    }
+    const repoInfo = await getRepoInfoNoCache(this.packageRoot);
 
     return generateHashOfFiles(
       this.packageRoot,
       this.outputGlob,
       this.logger,
-      this.repoInfo
+      repoInfo
     );
   }
 }

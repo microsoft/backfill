@@ -29,7 +29,7 @@ function searchRepoInfoCache(packageRoot: string) {
   }
 }
 
-export async function _getRepoInfoNoCache(cwd: string) {
+export async function getRepoInfoNoCache(cwd: string) {
   const root = findGitRoot(cwd);
   if (!root) {
     throw new Error("Cannot initialize Repo class without a .git root");
@@ -67,7 +67,7 @@ export async function getRepoInfo(cwd: string): Promise<RepoInfo> {
     if (searchResult) {
       return searchResult;
     }
-    return _getRepoInfoNoCache(cwd);
+    return getRepoInfoNoCache(cwd);
   });
 
   return oneAtATime;
