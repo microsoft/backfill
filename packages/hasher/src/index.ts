@@ -1,5 +1,5 @@
 import { Logger } from "backfill-logger";
-
+import { findWorkspacePath, WorkspaceInfo } from "workspace-tools";
 import { generateHashOfFiles } from "./hashOfFiles";
 import {
   PackageHashInfo,
@@ -7,8 +7,7 @@ import {
   generateHashOfInternalPackages
 } from "./hashOfPackage";
 import { hashStrings, getPackageRoot } from "./helpers";
-import { parseLockFile } from "./lockfile";
-import { getWorkspaces, findWorkspacePath, WorkspaceInfo } from "./workspaces";
+import { RepoInfo, getRepoInfo } from "./repoInfo";
 
 export interface IHasher {
   createPackageHash: (salt: string) => Promise<string>;
@@ -44,6 +43,7 @@ export class Hasher implements IHasher {
   private packageRoot: string;
   private outputGlob: string[];
   private hashGlobs: string[];
+  private repoInfo?: RepoInfo;
 
   constructor(
     private options: {
@@ -62,8 +62,10 @@ export class Hasher implements IHasher {
     const tracer = this.logger.setTime("hashTime");
 
     const packageRoot = await getPackageRoot(this.packageRoot);
-    const lockInfo = await parseLockFile(packageRoot);
-    const workspaces = getWorkspaces(packageRoot);
+
+    this.repoInfo = await getRepoInfo(packageRoot);
+
+    const { workspaceInfo } = this.repoInfo;
 
     const queue = [packageRoot];
     const done: PackageHashInfo[] = [];
@@ -77,13 +79,12 @@ export class Hasher implements IHasher {
 
       const packageHash = await getPackageHash(
         packageRoot,
-        workspaces,
-        lockInfo,
+        this.repoInfo,
         this.logger,
         this.hashGlobs
       );
 
-      addToQueue(packageHash.internalDependencies, queue, done, workspaces);
+      addToQueue(packageHash.internalDependencies, queue, done, workspaceInfo);
 
       done.push(packageHash);
     }
@@ -103,6 +104,18 @@ export class Hasher implements IHasher {
   }
 
   public async hashOfOutput(): Promise<string> {
-    return generateHashOfFiles(this.packageRoot, this.outputGlob);
+    // ensure this.repoInfo is generated
+    if (!this.repoInfo) {
+      throw new Error("make sure the createPackageHash is called first");
+    }
+
+    return generateHashOfFiles(
+      this.packageRoot,
+      this.outputGlob,
+      this.logger,
+      this.repoInfo
+    );
   }
 }
+
+export * from "./repoInfo";

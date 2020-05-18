@@ -3,9 +3,9 @@ import path from "path";
 import { setupFixture } from "backfill-utils-test";
 import { makeLogger } from "backfill-logger";
 
+import { WorkspaceInfo } from "workspace-tools";
 import { PackageHashInfo } from "../hashOfPackage";
 import { Hasher, addToQueue } from "../index";
-import { WorkspaceInfo } from "../workspaces";
 
 const logger = makeLogger("mute");
 
@@ -18,7 +18,12 @@ describe("addToQueue", () => {
     const workspaces: WorkspaceInfo = [
       {
         name: packageToAdd,
-        path: packagePath
+        path: packagePath,
+        packageJson: {
+          name: "",
+          packageJsonPath: "",
+          version: ""
+        }
       }
     ];
     const internalDependencies = [packageToAdd];

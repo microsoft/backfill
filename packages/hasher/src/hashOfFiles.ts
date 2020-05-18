@@ -1,18 +1,30 @@
-import crypto from "crypto";
 import path from "path";
 import globby from "globby";
-import fs from "fs-extra";
-
+import { Logger } from "backfill-logger";
 import { hashStrings } from "./helpers";
+import { RepoInfo } from "./repoInfo";
 
-const newline = /\r\n|\r|\n/g;
-const LF = "\n";
-
-// We have to force the types because globby types are wrong
+/**
+ * Generates a hash string based on files in a package
+ *
+ * This implementation relies on `git hash-object` to quickly calculate all files
+ * in the repo, caching this result so repeated calls to this function will be
+ * a simple lookup.
+ *
+ * Note: We have to force the types because globby types are wrong
+ *
+ * @param packageRoot The root of the package
+ * @param globs Globs inside a package root to consider as part of the hash
+ * @param _cacheRepoHash **TEST ONLY** to turn off the cache for repo file hashing
+ */
 export async function generateHashOfFiles(
   packageRoot: string,
-  globs: string[]
+  globs: string[],
+  logger: Logger,
+  repoInfo: RepoInfo
 ): Promise<string> {
+  const { repoHashes, root } = repoInfo;
+
   const files = ((await globby(globs, {
     cwd: packageRoot,
     onlyFiles: false,
@@ -21,20 +33,30 @@ export async function generateHashOfFiles(
 
   files.sort((a, b) => a.path.localeCompare(b.path));
 
-  const hashes = await Promise.all(
-    files.map(async file => {
-      const hasher = crypto.createHash("sha1");
-      hasher.update(file.path);
+  const hashes: string[] = [];
 
-      if (!file.dirent.isDirectory()) {
-        const fileBuffer = await fs.readFile(path.join(packageRoot, file.path));
-        const data = fileBuffer.toString().replace(newline, LF);
-        hasher.update(data);
+  for (const entry of files) {
+    if (!entry.dirent.isDirectory()) {
+      // if the entry is a file, use the "git hash-object" hash (which is a sha1 of path + size, but super fast, and potentially already cached)
+      const normalized = (
+        path
+          .normalize(packageRoot)
+          .replace(path.normalize(root), "")
+          .replace(/\\/g, "/") +
+        "/" +
+        entry.path
+      ).slice(1);
+
+      if (!repoHashes[normalized]) {
+        logger.warn(`cannot find file "${normalized}"`);
+      } else {
+        hashes.push(repoHashes[normalized]);
       }
-
-      return hasher.digest("hex");
-    })
-  );
+    } else {
+      // if the entry is a directory, just put the directory in the hashes
+      hashes.push(entry.path);
+    }
+  }
 
   return hashStrings(hashes);
 }
