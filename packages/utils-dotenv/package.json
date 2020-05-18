@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "4.1.2-alpha.0",
+  "version": "5.0.0-alpha.0",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
-    "backfill-utils-tsconfig": "^4.1.2-alpha.0",
+    "backfill-utils-tsconfig": "^5.0.0-alpha.0",
     "typescript": "3.7.4"
   }
 }
