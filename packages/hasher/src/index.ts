@@ -1,11 +1,5 @@
 import { Logger } from "backfill-logger";
-import {
-  getWorkspaces,
-  findWorkspacePath,
-  WorkspaceInfo,
-  parseLockFile
-} from "workspace-tools";
-
+import { findWorkspacePath, WorkspaceInfo } from "workspace-tools";
 import { generateHashOfFiles } from "./hashOfFiles";
 import {
   PackageHashInfo,
@@ -13,6 +7,7 @@ import {
   generateHashOfInternalPackages
 } from "./hashOfPackage";
 import { hashStrings, getPackageRoot } from "./helpers";
+import { RepoInfo, getRepoInfo, getRepoInfoNoCache } from "./repoInfo";
 
 export interface IHasher {
   createPackageHash: (salt: string) => Promise<string>;
@@ -48,6 +43,7 @@ export class Hasher implements IHasher {
   private packageRoot: string;
   private outputGlob: string[];
   private hashGlobs: string[];
+  private repoInfo?: RepoInfo;
 
   constructor(
     private options: {
@@ -66,8 +62,10 @@ export class Hasher implements IHasher {
     const tracer = this.logger.setTime("hashTime");
 
     const packageRoot = await getPackageRoot(this.packageRoot);
-    const lockInfo = await parseLockFile(packageRoot);
-    const workspaces = getWorkspaces(packageRoot);
+
+    this.repoInfo = await getRepoInfo(packageRoot);
+
+    const { workspaceInfo } = this.repoInfo;
 
     const queue = [packageRoot];
     const done: PackageHashInfo[] = [];
@@ -81,13 +79,12 @@ export class Hasher implements IHasher {
 
       const packageHash = await getPackageHash(
         packageRoot,
-        workspaces,
-        lockInfo,
+        this.repoInfo,
         this.logger,
         this.hashGlobs
       );
 
-      addToQueue(packageHash.internalDependencies, queue, done, workspaces);
+      addToQueue(packageHash.internalDependencies, queue, done, workspaceInfo);
 
       done.push(packageHash);
     }
@@ -106,7 +103,21 @@ export class Hasher implements IHasher {
     return combinedHash;
   }
 
+  /**
+   * Hash of output will hash the output files. This is meant to be used by validation and will not cache the repo hashes.
+   * The validateOutput option should be used sparingly for performance reasons. It is meant to help be a debugging tool
+   * to help investigate integrity of the cache.
+   */
   public async hashOfOutput(): Promise<string> {
-    return generateHashOfFiles(this.packageRoot, this.outputGlob);
+    const repoInfo = await getRepoInfoNoCache(this.packageRoot);
+
+    return generateHashOfFiles(
+      this.packageRoot,
+      this.outputGlob,
+      this.logger,
+      repoInfo
+    );
   }
 }
+
+export * from "./repoInfo";
