@@ -7,6 +7,6 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "4.1.2-alpha.0",
+  "version": "5.0.0",
   "main": "tsconfig.default.json"
 }
