@@ -15,7 +15,8 @@ import { RepoInfo } from "./repoInfo";
  *
  * @param packageRoot The root of the package
  * @param globs Globs inside a package root to consider as part of the hash
- * @param _cacheRepoHash **TEST ONLY** to turn off the cache for repo file hashing
+ * @param logger An instance of backfill logger
+ * @param repoInfo The repoInfo that carries information about repo-wide hashes
  */
 export async function generateHashOfFiles(
   packageRoot: string,
