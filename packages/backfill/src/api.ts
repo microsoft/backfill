@@ -1,7 +1,7 @@
 import { Writable } from "stream";
 import { EOL } from "os";
 
-import { createConfig } from "backfill-config";
+import { createConfig, Config } from "backfill-config";
 import {
   Logger,
   makeLogger as makeLoggerInternal,
@@ -36,9 +36,13 @@ export function makeLogger(
 export async function computeHash(
   cwd: string,
   logger: Logger,
-  hashSalt?: string
+  hashSalt?: string,
+  config?: Pick<Config, "outputGlob" | "packageRoot" | "hashGlobs">
 ): Promise<string> {
-  const { outputGlob, packageRoot, hashGlobs } = createConfig(logger, cwd);
+  if (!config) {
+    config = createConfig(logger, cwd);
+  }
+  const { outputGlob, packageRoot, hashGlobs } = config;
   const hasher = new Hasher({ packageRoot, outputGlob, hashGlobs }, logger);
 
   const hash = await hasher.createPackageHash(hashSalt || "");
@@ -47,9 +51,13 @@ export async function computeHash(
 
 export async function computeHashOfOutput(
   cwd: string,
-  logger: Logger
+  logger: Logger,
+  config?: Pick<Config, "outputGlob" | "packageRoot" | "hashGlobs">
 ): Promise<string> {
-  const { outputGlob, packageRoot, hashGlobs } = createConfig(logger, cwd);
+  if (!config) {
+    config = createConfig(logger, cwd);
+  }
+  const { outputGlob, packageRoot, hashGlobs } = config;
   const hasher = new Hasher({ packageRoot, outputGlob, hashGlobs }, logger);
   const hash = await hasher.hashOfOutput();
   return hash;
@@ -58,9 +66,13 @@ export async function computeHashOfOutput(
 export async function fetch(
   cwd: string,
   hash: string,
-  logger: Logger
+  logger: Logger,
+  config?: Pick<Config, "cacheStorageConfig" | "internalCacheFolder">
 ): Promise<boolean> {
-  const { cacheStorageConfig, internalCacheFolder } = createConfig(logger, cwd);
+  if (!config) {
+    config = createConfig(logger, cwd);
+  }
+  const { cacheStorageConfig, internalCacheFolder } = config;
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
     internalCacheFolder,
@@ -74,12 +86,16 @@ export async function fetch(
 export async function put(
   cwd: string,
   hash: string,
-  logger: Logger
+  logger: Logger,
+  config?: Pick<
+    Config,
+    "cacheStorageConfig" | "internalCacheFolder" | "outputGlob"
+  >
 ): Promise<void> {
-  const { cacheStorageConfig, internalCacheFolder, outputGlob } = createConfig(
-    logger,
-    cwd
-  );
+  if (!config) {
+    config = createConfig(logger, cwd);
+  }
+  const { cacheStorageConfig, internalCacheFolder, outputGlob } = config;
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
     internalCacheFolder,
