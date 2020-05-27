@@ -109,7 +109,6 @@ export class AzureBlobCacheStorage extends CacheStorage {
       }
 
       if (total > this.options.maxSize) {
-        console.log("too big to put! " + hash);
         return;
       }
     }
