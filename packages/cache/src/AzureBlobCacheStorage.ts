@@ -51,12 +51,13 @@ export class AzureBlobCacheStorage extends CacheStorage {
       if (this.options.maxSize) {
         const sizeResponse = await blobClient.getProperties();
 
-        console.log(hash + " size " + sizeResponse.contentLength);
-
         if (
           sizeResponse.contentLength &&
           sizeResponse.contentLength > this.options.maxSize
         ) {
+          this.logger.verbose(
+            `A blob is too large to be downloaded: ${hash}, size: ${sizeResponse.contentLength} bytes`
+          );
           return false;
         }
       }
@@ -109,6 +110,9 @@ export class AzureBlobCacheStorage extends CacheStorage {
       }
 
       if (total > this.options.maxSize) {
+        this.logger.verbose(
+          `The output is too large to be uploaded: ${hash}, size: ${total} bytes`
+        );
         return;
       }
     }
