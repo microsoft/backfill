@@ -161,10 +161,26 @@ module.exports = {
     options: {
       connectionString: "...",
       container: "..."
+      maxSize: 12345
     }
   }
 };
 ```
+
+#### Options
+
+<dl>
+  <dt>connectionString</dt>
+  <dd>retrieve this from the Azure Portal interface</dd>
+
+  <dt>container</dt>
+  <dd>the name of the blob storage container</dd>
+  
+  <dt>maxSize (<em>optional</em>)</dt>
+  <dd>
+    max size of a single package cache, in the number of bytes
+  </dd>
+</dl>
 
 You can also configure Microsoft Azure Blog Storage using environment variables.
 

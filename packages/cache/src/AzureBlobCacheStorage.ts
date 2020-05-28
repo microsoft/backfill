@@ -5,6 +5,7 @@ import globby from "globby";
 import { Logger } from "backfill-logger";
 import { AzureBlobCacheStorageOptions } from "backfill-config";
 
+import { stat } from "fs-extra";
 import { CacheStorage } from "./CacheStorage";
 
 const ONE_MEGABYTE = 1024 * 1024;
@@ -46,6 +47,21 @@ export class AzureBlobCacheStorage extends CacheStorage {
         hash
       );
 
+      // If a maxSize has been specified, make sure to check the properties for the size before transferring
+      if (this.options.maxSize) {
+        const sizeResponse = await blobClient.getProperties();
+
+        if (
+          sizeResponse.contentLength &&
+          sizeResponse.contentLength > this.options.maxSize
+        ) {
+          this.logger.verbose(
+            `A blob is too large to be downloaded: ${hash}, size: ${sizeResponse.contentLength} bytes`
+          );
+          return false;
+        }
+      }
+
       const response = await blobClient.download(0);
 
       const blobReadableStream = response.readableStreamBody;
@@ -85,6 +101,21 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
     const filesToCopy = await globby(outputGlob, { cwd: this.cwd });
     const tarStream = tar.create({ gzip: false, cwd: this.cwd }, filesToCopy);
+
+    // If there's a maxSize limit, first sum up the total size of bytes of all the outputGlobbed files
+    if (this.options.maxSize) {
+      let total = 0;
+      for (const file of filesToCopy) {
+        total = total + (await stat(file)).size;
+      }
+
+      if (total > this.options.maxSize) {
+        this.logger.verbose(
+          `The output is too large to be uploaded: ${hash}, size: ${total} bytes`
+        );
+        return;
+      }
+    }
 
     await blockBlobClient.uploadStream(
       tarStream,

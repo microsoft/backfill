@@ -3,6 +3,7 @@ import { Logger } from "backfill-logger";
 export type AzureBlobCacheStorageOptions = {
   connectionString: string;
   container: string;
+  maxSize?: number;
 };
 
 export type NpmCacheStorageOptions = {
@@ -64,7 +65,11 @@ export function getAzureBlobConfigFromSerializedOptions(
 
     if (
       typeof parsedOptions.connectionString !== "string" ||
-      typeof parsedOptions.container !== "string"
+      typeof parsedOptions.container !== "string" ||
+      !(
+        typeof parsedOptions.maxSize === "undefined" ||
+        typeof parsedOptions.maxSize === "number"
+      )
     ) {
       throw new Error("Incorrect blob storage configuration");
     }
