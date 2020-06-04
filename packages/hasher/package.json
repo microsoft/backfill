@@ -16,12 +16,13 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
+    "@rushstack/package-deps-hash": "^2.4.22",
     "backfill-config": "^5.0.0",
     "backfill-logger": "^5.0.0",
     "find-up": "^4.1.0",
     "fs-extra": "^8.1.0",
     "globby": "^11.0.0",
-    "workspace-tools": "^0.4.0"
+    "workspace-tools": "^0.7.6"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.0",
