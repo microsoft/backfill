@@ -32,6 +32,7 @@ export class LocalSkipCacheStorage extends CacheStorage {
     return hash === (await fs.readFile(hashFile, "utf-8"));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected async _put(hash: string, _outputGlob: string[]): Promise<void> {
     const localCacheFolder = this.getLocalCacheFolder("skip-cache");
     const hashFile = path.join(localCacheFolder, "hash");

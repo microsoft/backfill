@@ -1,3 +1,4 @@
+import * as path from "path";
 import { BlobServiceClient } from "@azure/storage-blob";
 import tar from "tar";
 import globby from "globby";
@@ -106,7 +107,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
     if (this.options.maxSize) {
       let total = 0;
       for (const file of filesToCopy) {
-        total = total + (await stat(file)).size;
+        total = total + (await stat(path.join(this.cwd, file))).size;
       }
 
       if (total > this.options.maxSize) {
