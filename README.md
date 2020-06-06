@@ -285,11 +285,20 @@ formatted as a JSON file. You can turn performance logging by setting
 
 ## Contributing
 
+### Ways to contribute
+
 This project welcomes contributions and suggestions.
 
 - [Submit bugs](https://github.com/microsoft/backfill/issues) and help us verify
   fixes as they are checked in.
 - Review the [source code changes](https://github.com/microsoft/backfill/pulls).
+
+### Describing your changes
+
+When submitting source code changes, be sure to accompany the changes with a
+change file. Change files can be generated with the `yarn change` command.
+
+### Contributor License Agreement (CLA)
 
 Most contributions require you to agree to a Contributor License Agreement (CLA)
 declaring that you have the right to, and actually do, grant us the rights to
