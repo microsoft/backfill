@@ -1,6 +1,6 @@
 import * as path from "path";
 import { BlobServiceClient } from "@azure/storage-blob";
-import tar from "tar";
+import tarFs from "tar-fs";
 import globby from "globby";
 
 import { Logger } from "backfill-logger";
@@ -70,7 +70,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
         throw new Error("Unable to fetch blob.");
       }
 
-      const tarWritableStream = tar.extract({ cwd: this.cwd });
+      const tarWritableStream = tarFs.extract(this.cwd);
 
       blobReadableStream.pipe(tarWritableStream);
 
@@ -101,7 +101,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
     const blockBlobClient = blobClient.getBlockBlobClient();
 
     const filesToCopy = await globby(outputGlob, { cwd: this.cwd });
-    const tarStream = tar.create({ gzip: false, cwd: this.cwd }, filesToCopy);
+    const tarStream = tarFs.pack(this.cwd, { entries: filesToCopy });
 
     // If there's a maxSize limit, first sum up the total size of bytes of all the outputGlobbed files
     if (this.options.maxSize) {
