@@ -1,0 +1,20 @@
+{
+  "name": "backfill-cache",
+  "entries": [
+    {
+      "date": "Sat, 06 Jun 2020 19:22:26 GMT",
+      "tag": "backfill-cache_v5.1.2",
+      "version": "5.1.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "replace tar with tar-fs for more resilience",
+            "author": "kchau@microsoft.com",
+            "commit": "1a69a70cd60122145f9b036d7ffccb58fb6af135",
+            "package": "backfill-cache"
+          }
+        ]
+      }
+    }
+  ]
+}
