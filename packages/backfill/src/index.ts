@@ -113,7 +113,6 @@ export async function main(): Promise<void> {
     const config = createConfig(logger, cwd);
     const {
       clearOutput,
-      hashGlobs,
       internalCacheFolder,
       logFolder,
       logLevel,
@@ -150,7 +149,6 @@ export async function main(): Promise<void> {
         internalCacheFolder,
         logFolder,
         outputGlob,
-        hashGlobs,
         logger
       );
     }

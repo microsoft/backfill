@@ -20,13 +20,12 @@ import { RepoInfo } from "./repoInfo";
  */
 export async function generateHashOfFiles(
   packageRoot: string,
-  globs: string[],
   logger: Logger,
   repoInfo: RepoInfo
 ): Promise<string> {
   const { repoHashes, root } = repoInfo;
 
-  const files = ((await globby(globs, {
+  const files = ((await globby("**", {
     cwd: packageRoot,
     onlyFiles: false,
     objectMode: true

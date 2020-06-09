@@ -10,35 +10,12 @@ import { getRepoInfoNoCache } from "../repoInfo";
 describe("generateHashOfFiles()", () => {
   const logger = makeLogger("mute");
 
-  it("excludes files provided by backfill config", async () => {
-    const packageRoot = await setupFixture("monorepo");
-    let repoInfo = await getRepoInfoNoCache(packageRoot);
-
-    const hashOfEverything = await generateHashOfFiles(
-      packageRoot,
-      ["**"],
-      logger,
-      repoInfo
-    );
-
-    repoInfo = await getRepoInfoNoCache(packageRoot);
-    const hashExcludeNodeModules = await generateHashOfFiles(
-      packageRoot,
-      ["**", "!**/node_modules/**"],
-      logger,
-      repoInfo
-    );
-
-    expect(hashOfEverything).not.toEqual(hashExcludeNodeModules);
-  });
-
   it("creates different hashes for different hashes", async () => {
     const packageRoot = await setupFixture("monorepo");
     let repoInfo = await getRepoInfoNoCache(packageRoot);
 
     const hashOfPackage = await generateHashOfFiles(
       packageRoot,
-      ["**", "!**/node_modules/**"],
       logger,
       repoInfo
     );
@@ -48,7 +25,6 @@ describe("generateHashOfFiles()", () => {
 
     const hashOfPackageWithFoo = await generateHashOfFiles(
       packageRoot,
-      ["**", "!**/node_modules/**"],
       logger,
       repoInfo
     );
@@ -58,7 +34,6 @@ describe("generateHashOfFiles()", () => {
     repoInfo = await getRepoInfoNoCache(packageRoot);
     const hashOfPackageWithFoo2 = await generateHashOfFiles(
       packageRoot,
-      ["**", "!**/node_modules/**"],
       logger,
       repoInfo
     );
@@ -68,7 +43,6 @@ describe("generateHashOfFiles()", () => {
     repoInfo = await getRepoInfoNoCache(packageRoot);
     const hashOfPackageWithoutFoo = await generateHashOfFiles(
       packageRoot,
-      ["**", "!**/node_modules/**"],
       logger,
       repoInfo
     );

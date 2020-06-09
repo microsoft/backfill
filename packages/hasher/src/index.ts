@@ -41,21 +41,15 @@ export function addToQueue(
 
 export class Hasher implements IHasher {
   private packageRoot: string;
-  private outputGlob: string[];
-  private hashGlobs: string[];
   private repoInfo?: RepoInfo;
 
   constructor(
     private options: {
       packageRoot: string;
-      outputGlob: string[];
-      hashGlobs: string[];
     },
     private logger: Logger
   ) {
     this.packageRoot = this.options.packageRoot;
-    this.outputGlob = this.options.outputGlob;
-    this.hashGlobs = this.options.hashGlobs;
   }
 
   public async createPackageHash(salt: string): Promise<string> {
@@ -80,8 +74,7 @@ export class Hasher implements IHasher {
       const packageHash = await getPackageHash(
         packageRoot,
         this.repoInfo,
-        this.logger,
-        this.hashGlobs
+        this.logger
       );
 
       addToQueue(packageHash.internalDependencies, queue, done, workspaceInfo);
@@ -111,12 +104,7 @@ export class Hasher implements IHasher {
   public async hashOfOutput(): Promise<string> {
     const repoInfo = await getRepoInfoNoCache(this.packageRoot);
 
-    return generateHashOfFiles(
-      this.packageRoot,
-      this.outputGlob,
-      this.logger,
-      repoInfo
-    );
+    return generateHashOfFiles(this.packageRoot, this.logger, repoInfo);
   }
 }
 

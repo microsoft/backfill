@@ -24,7 +24,6 @@ export type BackfillModes = keyof typeof modesObject;
 export type Config = {
   cacheStorageConfig: CacheStorageConfig;
   clearOutput: boolean;
-  hashGlobs: HashGlobs;
   internalCacheFolder: string;
   logFolder: string;
   logLevel: LogLevel;
@@ -81,12 +80,6 @@ export function createDefaultConfig(fromPath: string): Config {
       provider: "local"
     },
     clearOutput: false,
-    hashGlobs: [
-      "**/*",
-      "!**/node_modules/**",
-      `!lib/**`,
-      "!**/tsconfig.tsbuildinfo"
-    ],
     internalCacheFolder: defaultCacheFolder,
     logFolder: defaultCacheFolder,
     logLevel: "info",

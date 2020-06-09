@@ -37,8 +37,7 @@ const memoization: { [key: string]: PackageHashInfo } = {};
 export async function getPackageHash(
   packageRoot: string,
   repoInfo: RepoInfo,
-  logger: Logger,
-  hashGlobs: string[]
+  logger: Logger
 ): Promise<PackageHashInfo> {
   const { workspaceInfo, parsedLock } = repoInfo;
 
@@ -74,12 +73,7 @@ export async function getPackageHash(
     ...externalDeoendencies
   ];
 
-  const filesHash = await generateHashOfFiles(
-    packageRoot,
-    hashGlobs,
-    logger,
-    repoInfo
-  );
+  const filesHash = await generateHashOfFiles(packageRoot, logger, repoInfo);
   const dependenciesHash = hashStrings(resolvedDependencies);
 
   logger.silly(name);

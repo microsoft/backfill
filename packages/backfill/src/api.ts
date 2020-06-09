@@ -37,13 +37,13 @@ export async function computeHash(
   cwd: string,
   logger: Logger,
   hashSalt?: string,
-  config?: Pick<Config, "outputGlob" | "packageRoot" | "hashGlobs">
+  config?: Pick<Config, "packageRoot">
 ): Promise<string> {
   if (!config) {
     config = createConfig(logger, cwd);
   }
-  const { outputGlob, packageRoot, hashGlobs } = config;
-  const hasher = new Hasher({ packageRoot, outputGlob, hashGlobs }, logger);
+  const { packageRoot } = config;
+  const hasher = new Hasher({ packageRoot }, logger);
 
   const hash = await hasher.createPackageHash(hashSalt || "");
   return hash;
@@ -52,13 +52,13 @@ export async function computeHash(
 export async function computeHashOfOutput(
   cwd: string,
   logger: Logger,
-  config?: Pick<Config, "outputGlob" | "packageRoot" | "hashGlobs">
+  config?: Pick<Config, "packageRoot">
 ): Promise<string> {
   if (!config) {
     config = createConfig(logger, cwd);
   }
-  const { outputGlob, packageRoot, hashGlobs } = config;
-  const hasher = new Hasher({ packageRoot, outputGlob, hashGlobs }, logger);
+  const { packageRoot } = config;
+  const hasher = new Hasher({ packageRoot }, logger);
   const hash = await hasher.hashOfOutput();
   return hash;
 }

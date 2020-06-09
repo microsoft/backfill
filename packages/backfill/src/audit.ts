@@ -36,7 +36,6 @@ export function initializeWatcher(
   internalCacheFolder: string,
   logFolder: string,
   outputGlob: string[],
-  hashGlobs: string[],
   logger: Logger
 ) {
   // Trying to find the git root and using it as an approximation of code boundary
@@ -58,7 +57,7 @@ export function initializeWatcher(
     internalCacheFolder
   ]);
   watcher = chokidar
-    .watch(hashGlobs, {
+    .watch("**", {
       ignored: ignoreGlobs,
       cwd: repositoryRoot,
       persistent: true,
