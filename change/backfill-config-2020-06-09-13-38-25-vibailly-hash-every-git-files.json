@@ -1,6 +1,6 @@
 {
   "type": "major",
-  "comment": "no need to use globby for hash files",
+  "comment": "don't expose hashGlob anymore",
   "packageName": "backfill-config",
   "email": "vibailly@tuta.io",
   "dependentChangeType": "patch",

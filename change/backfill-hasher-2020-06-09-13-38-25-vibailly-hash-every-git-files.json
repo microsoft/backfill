@@ -1,6 +1,6 @@
 {
   "type": "major",
-  "comment": "no need to use globby for hash files",
+  "comment": "always use ** as hash glob",
   "packageName": "backfill-hasher",
   "email": "vibailly@tuta.io",
   "dependentChangeType": "patch",
