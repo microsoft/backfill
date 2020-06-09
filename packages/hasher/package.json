@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "5.1.1",
+  "version": "6.0.0-alpha.0",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@rushstack/package-deps-hash": "^2.4.22",
-    "backfill-config": "^5.1.1",
+    "backfill-config": "^6.0.0-alpha.0",
     "backfill-logger": "^5.0.0",
     "find-up": "^4.1.0",
     "fs-extra": "^8.1.0",
