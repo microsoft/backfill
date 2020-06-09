@@ -1,8 +1,0 @@
-{
-  "type": "major",
-  "comment": "don't expose hashGlob anymore",
-  "packageName": "backfill-config",
-  "email": "vibailly@tuta.io",
-  "dependentChangeType": "patch",
-  "date": "2020-06-09T11:38:20.665Z"
-}

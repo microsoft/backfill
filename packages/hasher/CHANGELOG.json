@@ -1,0 +1,20 @@
+{
+  "name": "backfill-hasher",
+  "entries": [
+    {
+      "date": "Tue, 09 Jun 2020 11:50:22 GMT",
+      "tag": "backfill-hasher_v6.0.0",
+      "version": "6.0.0",
+      "comments": {
+        "major": [
+          {
+            "comment": "always use ** as hash glob",
+            "author": "vibailly@tuta.io",
+            "commit": "f9f7b3eb46b3af71a4a712d7c94ec94726d9ebf1",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    }
+  ]
+}
