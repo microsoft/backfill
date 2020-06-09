@@ -104,7 +104,7 @@ export class Hasher implements IHasher {
   public async hashOfOutput(): Promise<string> {
     const repoInfo = await getRepoInfoNoCache(this.packageRoot);
 
-    return generateHashOfFiles(this.packageRoot, this.logger, repoInfo);
+    return generateHashOfFiles(this.packageRoot, repoInfo);
   }
 }
 

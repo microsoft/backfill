@@ -73,7 +73,7 @@ export async function getPackageHash(
     ...externalDeoendencies
   ];
 
-  const filesHash = await generateHashOfFiles(packageRoot, logger, repoInfo);
+  const filesHash = await generateHashOfFiles(packageRoot, repoInfo);
   const dependenciesHash = hashStrings(resolvedDependencies);
 
   logger.silly(name);
