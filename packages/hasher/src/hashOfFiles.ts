@@ -1,6 +1,5 @@
 import path from "path";
-import globby from "globby";
-import { Logger } from "backfill-logger";
+
 import { hashStrings } from "./helpers";
 import { RepoInfo } from "./repoInfo";
 
@@ -20,43 +19,20 @@ import { RepoInfo } from "./repoInfo";
  */
 export async function generateHashOfFiles(
   packageRoot: string,
-  globs: string[],
-  logger: Logger,
   repoInfo: RepoInfo
 ): Promise<string> {
   const { repoHashes, root } = repoInfo;
 
-  const files = ((await globby(globs, {
-    cwd: packageRoot,
-    onlyFiles: false,
-    objectMode: true
-  })) as unknown) as { path: string; dirent: { isDirectory(): boolean } }[];
+  const files: string[] = Object.keys(repoHashes).filter(f =>
+    path.join(root, f).includes(path.normalize(packageRoot))
+  );
 
-  files.sort((a, b) => a.path.localeCompare(b.path));
+  files.sort((a, b) => a.localeCompare(b));
 
   const hashes: string[] = [];
 
-  for (const entry of files) {
-    if (!entry.dirent.isDirectory()) {
-      // if the entry is a file, use the "git hash-object" hash (which is a sha1 of path + size, but super fast, and potentially already cached)
-      const normalized = (
-        path
-          .normalize(packageRoot)
-          .replace(path.normalize(root), "")
-          .replace(/\\/g, "/") +
-        "/" +
-        entry.path
-      ).slice(1);
-
-      if (!repoHashes[normalized]) {
-        logger.warn(`cannot find file "${normalized}"`);
-      } else {
-        hashes.push(repoHashes[normalized]);
-      }
-    } else {
-      // if the entry is a directory, just put the directory in the hashes
-      hashes.push(entry.path);
-    }
+  for (const file of files) {
+    hashes.push(repoHashes[file]);
   }
 
   return hashStrings(hashes);
