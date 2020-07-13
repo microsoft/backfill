@@ -2314,9 +2314,9 @@ bcrypt-pbkdf@^1.0.0:
     tweetnacl "^0.14.3"
 
 beachball@^1.31.3:
-  version "1.31.3"
-  resolved "https://registry.yarnpkg.com/beachball/-/beachball-1.31.3.tgz#63323cc6001f34adf9c0198f188b6c616b7a0f81"
-  integrity sha512-1znEEvma0Ozu5IFhH7WARNVTGuAXvadckKtVaG4YWqJ7J8ZMhJ2Aw9gJMcgQV8UEXw1t720h58zU23t6ZKET1g==
+  version "1.32.0"
+  resolved "https://registry.yarnpkg.com/beachball/-/beachball-1.32.0.tgz#61954f0ce15a78510c464e1b520032628b4efc01"
+  integrity sha512-pKm1I5boTxZC04uCEouLbYO20GPUEbcPjSla//7jnFfaERGl8QpiDiqNaPiuad8SwSg1evv1+UHj+ULSXAbwTA==
   dependencies:
     cosmiconfig "^6.0.0"
     fs-extra "^8.0.1"
@@ -6898,15 +6898,7 @@ promise-retry@^1.1.1:
     err-code "^1.0.0"
     retry "^0.10.0"
 
-prompts@^2.0.1:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/prompts/-/prompts-2.0.4.tgz#179f9d4db3128b9933aa35f93a800d8fce76a682"
-  integrity sha512-HTzM3UWp/99A0gk51gAegwo1QRYA7xjcZufMNe33rCclFszUYAuHe1fIN/3ZmiHeGPkUsNaRyQm1hHOfM0PKxA==
-  dependencies:
-    kleur "^3.0.2"
-    sisteransi "^1.0.0"
-
-prompts@~2.1.0:
+prompts@^2.0.1, prompts@~2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/prompts/-/prompts-2.1.0.tgz#bf90bc71f6065d255ea2bdc0fe6520485c1b45db"
   integrity sha512-+x5TozgqYdOwWsQFZizE/Tra3fKvAoy037kOyU6cgz84n8f6zxngLOV4O32kTwt9FcLCxAqw0P/c8rOr9y+Gfg==
