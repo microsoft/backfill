@@ -1,0 +1,8 @@
+{
+  "type": "patch",
+  "comment": "bumping workspace-tools to allow accepting a PREFFERRED_WORKSPACE_MANAGER when multiple lock files implementations exist in one repo",
+  "packageName": "backfill-hasher",
+  "email": "kchau@microsoft.com",
+  "dependentChangeType": "patch",
+  "date": "2020-07-17T19:17:25.423Z"
+}
