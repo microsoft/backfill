@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Fri, 17 Jul 2020 19:27:19 GMT",
+      "tag": "backfill-hasher_v6.0.1",
+      "version": "6.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "bumping workspace-tools to allow accepting a PREFFERRED_WORKSPACE_MANAGER when multiple lock files implementations exist in one repo",
+            "author": "kchau@microsoft.com",
+            "commit": "02adfd3147b173aa96bf8adf1b58997e681f3b08",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Jun 2020 11:50:22 GMT",
       "tag": "backfill-hasher_v6.0.0",
       "version": "6.0.0",
