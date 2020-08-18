@@ -62,7 +62,7 @@ describe("generateHashOfFiles()", () => {
     expect(hashOfPackageWithFoo).not.toEqual(hashOfPackageWithBar);
   });
 
-  // This test will be ron on Windows and on Linux on the CI
+  // This test will be run on Windows and on Linux on the CI
   it.only("file paths are consistent across platforms", async () => {
     const packageRoot = await setupFixture("empty");
 
