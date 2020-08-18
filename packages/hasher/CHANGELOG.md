@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Fri, 17 Jul 2020 19:27:19 GMT and should not be manually modified.
+This log was last generated on Tue, 18 Aug 2020 16:03:05 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.1.0
+
+Tue, 18 Aug 2020 16:03:05 GMT
+
+### Minor changes
+
+- Include file path in hash. Addresses a bug where file renames do not produce new hash. (bewegger@microsoft.com)
 
 ## 6.0.1
 

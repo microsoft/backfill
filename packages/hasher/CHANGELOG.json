@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Tue, 18 Aug 2020 16:03:05 GMT",
+      "tag": "backfill-hasher_v6.1.0",
+      "version": "6.1.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Include file path in hash. Addresses a bug where file renames do not produce new hash.",
+            "author": "bewegger@microsoft.com",
+            "commit": "257ab782980428a018e9dca3d8b13007ab5d0737",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 17 Jul 2020 19:27:19 GMT",
       "tag": "backfill-hasher_v6.0.1",
       "version": "6.0.1",

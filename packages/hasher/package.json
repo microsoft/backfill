@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "6.0.1",
+  "version": "6.1.0",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
