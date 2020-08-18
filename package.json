@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "lerna run --stream build",
-    "change": "beachball change",
+    "change": "beachball change --scope \"!packages/utils-test/__fixtures__/*\"",
     "checkchange": "beachball check",
     "postinstall": "yarn update-project-references",
     "lerna": "lerna",
