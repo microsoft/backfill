@@ -32,7 +32,7 @@ export async function generateHashOfFiles(
   const hashes: string[] = [];
 
   for (const file of files) {
-    hashes.push(repoHashes[file]);
+    hashes.push(file, repoHashes[file]);
   }
 
   return hashStrings(hashes);
