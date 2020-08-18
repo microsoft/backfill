@@ -38,4 +38,44 @@ describe("generateHashOfFiles()", () => {
     );
     expect(hashOfPackage).toEqual(hashOfPackageWithoutFoo);
   });
+
+  it("file paths are included in hash", async () => {
+    const packageRoot = await setupFixture("empty");
+
+    fs.writeFileSync(path.join(packageRoot, "foo.txt"), "bar");
+    let repoInfo = await getRepoInfoNoCache(packageRoot);
+
+    const hashOfPackageWithFoo = await generateHashOfFiles(
+      packageRoot,
+      repoInfo
+    );
+
+    fs.unlinkSync(path.join(packageRoot, "foo.txt"));
+    fs.writeFileSync(path.join(packageRoot, "bar.txt"), "bar");
+    repoInfo = await getRepoInfoNoCache(packageRoot);
+
+    const hashOfPackageWithBar = await generateHashOfFiles(
+      packageRoot,
+      repoInfo
+    );
+
+    expect(hashOfPackageWithFoo).not.toEqual(hashOfPackageWithBar);
+  });
+
+  // This test will be ron on Windows and on Linux on the CI
+  it.only("file paths are consistent across platforms", async () => {
+    const packageRoot = await setupFixture("empty");
+
+    // Create a folder to make sure we get to folder separators as part of the file name
+    const folder = path.join(packageRoot, "foo");
+
+    fs.mkdirpSync(folder);
+
+    fs.writeFileSync(path.join(folder, "foo.txt"), "bar");
+    let repoInfo = await getRepoInfoNoCache(packageRoot);
+
+    const hashOfPackage = await generateHashOfFiles(packageRoot, repoInfo);
+
+    expect(hashOfPackage).toEqual("75d811452b9f8561c7827df9a8f18ac8cb44df9a");
+  });
 });
