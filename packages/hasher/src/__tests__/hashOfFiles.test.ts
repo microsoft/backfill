@@ -66,7 +66,7 @@ describe("generateHashOfFiles()", () => {
   it.only("file paths are consistent across platforms", async () => {
     const packageRoot = await setupFixture("empty");
 
-    // Create a folder to make sure we get to folder separators as part of the file name
+    // Create a folder to make sure we get folder separators as part of the file name
     const folder = path.join(packageRoot, "foo");
 
     fs.mkdirpSync(folder);
