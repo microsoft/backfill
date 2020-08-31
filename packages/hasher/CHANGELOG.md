@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Tue, 18 Aug 2020 16:03:05 GMT and should not be manually modified.
+This log was last generated on Mon, 31 Aug 2020 15:41:56 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.1.1
+
+Mon, 31 Aug 2020 15:41:56 GMT
+
+### Patches
+
+- Update package-deps-hash (bewegger@microsoft.com)
 
 ## 6.1.0
 

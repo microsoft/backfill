@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Mon, 31 Aug 2020 15:41:56 GMT",
+      "tag": "backfill-hasher_v6.1.1",
+      "version": "6.1.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Update package-deps-hash",
+            "author": "bewegger@microsoft.com",
+            "commit": "a4eaeeb4c41895c1169b589ef4f4fe4535310f45",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 18 Aug 2020 16:03:05 GMT",
       "tag": "backfill-hasher_v6.1.0",
       "version": "6.1.0",
