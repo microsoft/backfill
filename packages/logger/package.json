@@ -22,6 +22,6 @@
   "devDependencies": {
     "@types/node": "^13.13.4",
     "backfill-utils-tsconfig": "^5.0.0",
-    "typescript": "3.7.4"
+    "typescript": "4.0.2"
   }
 }

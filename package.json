@@ -23,7 +23,7 @@
   "dependencies": {
     "lerna": "3.22.1",
     "prettier": "1.19.1",
-    "typescript": "3.7.4"
+    "typescript": "4.0.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.26.0",
