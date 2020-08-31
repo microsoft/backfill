@@ -16,7 +16,7 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "@rushstack/package-deps-hash": "^2.4.22",
+    "@rushstack/package-deps-hash": "^2.4.48",
     "backfill-config": "^6.0.0",
     "backfill-logger": "^5.0.0",
     "find-up": "^4.1.0",
