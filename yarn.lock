@@ -1592,9 +1592,9 @@
     z-schema "~3.18.3"
 
 "@rushstack/package-deps-hash@^2.4.48":
-  version "2.4.48"
-  resolved "https://registry.yarnpkg.com/@rushstack/package-deps-hash/-/package-deps-hash-2.4.48.tgz#14e4318535000e900345e7ee2a5e7f07326b7783"
-  integrity sha512-1myqAWqgOM9EdiJX5knauEhEhC+kaufIFDMEQyfduLaJKgSWIGEKnVcRvJX+v7MuhqbyBMlHFORxg3KPtLBBBg==
+  version "2.4.50"
+  resolved "https://registry.yarnpkg.com/@rushstack/package-deps-hash/-/package-deps-hash-2.4.50.tgz#cb3b08804d518bcd0da5d29421d760a7640774f8"
+  integrity sha512-jh4wwDjpYsc9g4wtit/bBuqAAT0mODakP+gueJ4DXiHXT/DbWmiM6rpGlC4K3RQC1BL0l96RhdR6BeXmZ7njJg==
   dependencies:
     "@rushstack/node-core-library" "3.30.0"
 
