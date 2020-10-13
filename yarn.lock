@@ -8812,10 +8812,10 @@ wordwrap@^1.0.0, wordwrap@~1.0.0:
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
   integrity sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=
 
-workspace-tools@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.9.0.tgz#5ce0680c9bf38544d1f6261d6b0e2834347e676e"
-  integrity sha512-ji9mOpdxyJ1LBnCzfFzAuLw7x0OuqQso/eJFpeyR/W0nXRK3Uhmn0dAaqrlDlrUEW5nOT5nSz0MpsaCmeSyiUA==
+workspace-tools@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.10.0.tgz#82b4a0ec17350cb27df51c3f8b0c2d1e394b3d26"
+  integrity sha512-6rwbc4H6bSn74RfSwzSButqx602rzTTtxA9m+9RSzMpuXrFmNHfJGppn0Pi5J+LgP56ZA5VwfP7/nHN1fS8frg==
   dependencies:
     "@pnpm/lockfile-file" "^3.0.7"
     "@pnpm/logger" "^3.2.2"

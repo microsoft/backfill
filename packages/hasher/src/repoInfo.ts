@@ -1,7 +1,7 @@
 import {
   WorkspaceInfo,
   ParsedLock,
-  findGitRoot,
+  getWorkspaceRoot,
   getWorkspaces,
   parseLockFile
 } from "workspace-tools";
@@ -30,13 +30,13 @@ function searchRepoInfoCache(packageRoot: string) {
 }
 
 export async function getRepoInfoNoCache(cwd: string) {
-  const root = findGitRoot(cwd);
+  const root = getWorkspaceRoot(cwd);
   if (!root) {
-    throw new Error("Cannot initialize Repo class without a .git root");
+    throw new Error("Cannot initialize Repo class without a workspace root");
   }
 
   const repoHashes = getPackageDeps(root).files;
-  const workspaceInfo = await getWorkspaces(root);
+  const workspaceInfo = getWorkspaces(root);
   const parsedLock = await parseLockFile(root);
 
   const repoInfo = {

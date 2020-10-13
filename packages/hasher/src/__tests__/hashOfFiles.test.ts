@@ -76,6 +76,6 @@ describe("generateHashOfFiles()", () => {
 
     const hashOfPackage = await generateHashOfFiles(packageRoot, repoInfo);
 
-    expect(hashOfPackage).toEqual("75d811452b9f8561c7827df9a8f18ac8cb44df9a");
+    expect(hashOfPackage).toEqual("4d4ca2ecc436e1198554f5d03236ea8f956ac0c4");
   });
 });
