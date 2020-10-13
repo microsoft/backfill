@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Tue, 13 Oct 2020 08:40:08 GMT",
+      "tag": "backfill-hasher_v6.1.2",
+      "version": "6.1.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Use workspace root instead of git root",
+            "author": "bewegger@microsoft.com",
+            "commit": "71a76990817fb154f13b4a486aec0d8b4b26a36a",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 31 Aug 2020 15:41:56 GMT",
       "tag": "backfill-hasher_v6.1.1",
       "version": "6.1.1",

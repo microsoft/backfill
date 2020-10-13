@@ -1,8 +1,16 @@
 # Change Log - backfill
 
-This log was last generated on Tue, 18 Aug 2020 16:03:05 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Oct 2020 08:40:08 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.0.4
+
+Tue, 13 Oct 2020 08:40:08 GMT
+
+### Patches
+
+- Use workspace root instead of git root (bewegger@microsoft.com)
 
 ## 6.0.2
 

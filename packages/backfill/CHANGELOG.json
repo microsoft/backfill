@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Tue, 13 Oct 2020 08:40:08 GMT",
+      "tag": "backfill_v6.0.4",
+      "version": "6.0.4",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Use workspace root instead of git root",
+            "author": "bewegger@microsoft.com",
+            "commit": "71a76990817fb154f13b4a486aec0d8b4b26a36a",
+            "package": "backfill"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 18 Aug 2020 16:03:05 GMT",
       "tag": "backfill_v6.0.2",
       "version": "6.0.2",
