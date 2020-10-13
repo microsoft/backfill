@@ -9,7 +9,7 @@
   "scripts": {
     "build": "lerna run --stream build",
     "change": "beachball change --scope \"!packages/utils-test/__fixtures__/*\"",
-    "checkchange": "beachball check",
+    "checkchange": "beachball check --scope \"!packages/utils-test/__fixtures__/*\"",
     "postinstall": "yarn update-project-references",
     "lerna": "lerna",
     "lint": "eslint --fix . --ext .ts",
