@@ -1576,10 +1576,10 @@
   resolved "https://registry.yarnpkg.com/@pnpm/types/-/types-5.0.0.tgz#522be0fc8cd3efed8df36e496f7e3edadad8d807"
   integrity sha512-atnG7xWrtf22WNXFHQCqK+/LJnCuUNsWxUTg2uhvSq6OlcdviPe67AveqDv/q9KGkpBrEcqg7ChlhJyRjNE9zg==
 
-"@rushstack/node-core-library@3.30.0":
-  version "3.30.0"
-  resolved "https://registry.yarnpkg.com/@rushstack/node-core-library/-/node-core-library-3.30.0.tgz#a2b814a611a040ac69d6c31ffc92bf9155c983fb"
-  integrity sha512-vZo1fi/ObL3CmRXlQUX/E1xL9KL9arBfCJ7pYf3O/vFrD8ffSfpQ6+6lhgAsKrCIM5Epddsgeb2REPxMwYZX1g==
+"@rushstack/node-core-library@3.34.1":
+  version "3.34.1"
+  resolved "https://registry.yarnpkg.com/@rushstack/node-core-library/-/node-core-library-3.34.1.tgz#36368179bb7a80afced4c3bb68387b7fc5381b3a"
+  integrity sha512-DX1xB9E2Xmi5auFxacftUXVuI2DUUyKrlGaecjesiS2YmV6pBnKzHHAaxWOQF2ajFNhXY2I1cGvDp45z3aJv5g==
   dependencies:
     "@types/node" "10.17.13"
     colors "~1.2.1"
@@ -1592,11 +1592,11 @@
     z-schema "~3.18.3"
 
 "@rushstack/package-deps-hash@^2.4.48":
-  version "2.4.48"
-  resolved "https://registry.yarnpkg.com/@rushstack/package-deps-hash/-/package-deps-hash-2.4.48.tgz#14e4318535000e900345e7ee2a5e7f07326b7783"
-  integrity sha512-1myqAWqgOM9EdiJX5knauEhEhC+kaufIFDMEQyfduLaJKgSWIGEKnVcRvJX+v7MuhqbyBMlHFORxg3KPtLBBBg==
+  version "2.4.70"
+  resolved "https://registry.yarnpkg.com/@rushstack/package-deps-hash/-/package-deps-hash-2.4.70.tgz#6148960c799873d04effdebedbb517f263d804f6"
+  integrity sha512-NeyjGQlrdiVym22GvF7B7+9BhzKCyaMUztq1CVXYeTCI41G8PQhxGnFyWQ96wdGSjItZ1eO2QuTR+S5v3MDlhw==
   dependencies:
-    "@rushstack/node-core-library" "3.30.0"
+    "@rushstack/node-core-library" "3.34.1"
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
