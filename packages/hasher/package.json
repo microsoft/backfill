@@ -24,7 +24,7 @@
     "workspace-tools": "^0.10.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^8.0.0",
+    "@types/fs-extra": "^9.0.3",
     "backfill-utils-test": "^5.0.0",
     "backfill-utils-tsconfig": "^5.0.0",
     "jest": "^25.5.4",
