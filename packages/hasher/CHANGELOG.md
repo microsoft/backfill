@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Tue, 13 Oct 2020 08:40:08 GMT and should not be manually modified.
+This log was last generated on Wed, 18 Nov 2020 10:47:24 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.1.3
+
+Wed, 18 Nov 2020 10:47:24 GMT
+
+### Patches
+
+- fix phantom dependencies (vincent.bailly@microsoft.com)
 
 ## 6.1.2
 

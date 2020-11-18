@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "fix phantom dependencies",
-  "packageName": "backfill-hasher",
-  "email": "vincent.bailly@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2020-11-18T09:43:43.162Z"
-}

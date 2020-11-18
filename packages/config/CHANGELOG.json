@@ -2,6 +2,21 @@
   "name": "backfill-config",
   "entries": [
     {
+      "date": "Wed, 18 Nov 2020 10:47:24 GMT",
+      "tag": "backfill-config_v6.0.1",
+      "version": "6.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix phantom dependencies",
+            "author": "vincent.bailly@microsoft.com",
+            "commit": "6222d2d1f8c25f6cc4a2c3c7a6d5a0b807ae07d2",
+            "package": "backfill-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Jun 2020 11:50:22 GMT",
       "tag": "backfill-config_v6.0.0",
       "version": "6.0.0",

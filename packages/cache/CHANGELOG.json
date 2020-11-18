@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Wed, 18 Nov 2020 10:47:24 GMT",
+      "tag": "backfill-cache_v5.1.4",
+      "version": "5.1.4",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix phantom dependencies",
+            "author": "vincent.bailly@microsoft.com",
+            "commit": "6222d2d1f8c25f6cc4a2c3c7a6d5a0b807ae07d2",
+            "package": "backfill-cache"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 06 Jun 2020 19:22:26 GMT",
       "tag": "backfill-cache_v5.1.2",
       "version": "5.1.2",

@@ -1,0 +1,20 @@
+{
+  "name": "backfill-logger",
+  "entries": [
+    {
+      "date": "Wed, 18 Nov 2020 10:47:24 GMT",
+      "tag": "backfill-logger_v5.0.1",
+      "version": "5.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fix phantom dependencies",
+            "author": "vincent.bailly@microsoft.com",
+            "commit": "6222d2d1f8c25f6cc4a2c3c7a6d5a0b807ae07d2",
+            "package": "backfill-logger"
+          }
+        ]
+      }
+    }
+  ]
+}
