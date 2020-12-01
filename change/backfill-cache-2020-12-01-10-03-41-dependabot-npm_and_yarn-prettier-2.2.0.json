@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Run Prettier 2.2.0",
-  "packageName": "backfill-cache",
-  "email": "bewegger@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2020-12-01T09:03:31.359Z"
-}

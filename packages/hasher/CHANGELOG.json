@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Tue, 01 Dec 2020 09:13:42 GMT",
+      "tag": "backfill-hasher_v6.1.5",
+      "version": "6.1.5",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Run Prettier 2.2.0",
+            "author": "bewegger@microsoft.com",
+            "commit": "facba7cd274f1d5b834d87d208f0293f7069ad53",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 01 Dec 2020 09:06:20 GMT",
       "tag": "backfill-hasher_v6.1.4",
       "version": "6.1.4",

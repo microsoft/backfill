@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Tue, 01 Dec 2020 09:13:42 GMT",
+      "tag": "backfill-cache_v5.1.6",
+      "version": "5.1.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Run Prettier 2.2.0",
+            "author": "bewegger@microsoft.com",
+            "commit": "facba7cd274f1d5b834d87d208f0293f7069ad53",
+            "package": "backfill-cache"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 18 Nov 2020 10:47:24 GMT",
       "tag": "backfill-cache_v5.1.4",
       "version": "5.1.4",

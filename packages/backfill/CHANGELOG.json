@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Tue, 01 Dec 2020 09:13:42 GMT",
+      "tag": "backfill_v6.0.8",
+      "version": "6.0.8",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Run Prettier 2.2.0",
+            "author": "bewegger@microsoft.com",
+            "commit": "facba7cd274f1d5b834d87d208f0293f7069ad53",
+            "package": "backfill"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 01 Dec 2020 09:06:20 GMT",
       "tag": "backfill_v6.0.7",
       "version": "6.0.7",

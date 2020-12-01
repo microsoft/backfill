@@ -2,6 +2,21 @@
   "name": "backfill-utils-test",
   "entries": [
     {
+      "date": "Tue, 01 Dec 2020 09:13:42 GMT",
+      "tag": "backfill-utils-test_v5.0.3",
+      "version": "5.0.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Run Prettier 2.2.0",
+            "author": "bewegger@microsoft.com",
+            "commit": "facba7cd274f1d5b834d87d208f0293f7069ad53",
+            "package": "backfill-utils-test"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 01 Dec 2020 09:06:20 GMT",
       "tag": "backfill-utils-test_v5.0.2",
       "version": "5.0.2",

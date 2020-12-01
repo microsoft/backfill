@@ -1,8 +1,16 @@
 # Change Log - backfill-config
 
-This log was last generated on Tue, 01 Dec 2020 09:06:20 GMT and should not be manually modified.
+This log was last generated on Tue, 01 Dec 2020 09:13:42 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.0.3
+
+Tue, 01 Dec 2020 09:13:42 GMT
+
+### Patches
+
+- Run Prettier 2.2.0 (bewegger@microsoft.com)
 
 ## 6.0.2
 
