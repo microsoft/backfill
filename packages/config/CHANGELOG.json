@@ -2,6 +2,21 @@
   "name": "backfill-config",
   "entries": [
     {
+      "date": "Tue, 01 Dec 2020 09:43:25 GMT",
+      "tag": "backfill-config_v6.1.0",
+      "version": "6.1.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Bump typescript from 3.7.4 to 4.1.2",
+            "author": "bewegger@microsoft.com",
+            "commit": "d6b3b5f327b5f803eeea7b5b8d2b18343892314c",
+            "package": "backfill-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 01 Dec 2020 09:13:42 GMT",
       "tag": "backfill-config_v6.0.3",
       "version": "6.0.3",

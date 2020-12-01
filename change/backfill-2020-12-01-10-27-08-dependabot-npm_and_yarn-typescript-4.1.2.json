@@ -1,8 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Bump typescript from 3.7.4 to 4.1.2",
-  "packageName": "backfill",
-  "email": "bewegger@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2020-12-01T09:26:56.578Z"
-}
