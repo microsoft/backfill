@@ -1,0 +1,8 @@
+{
+  "type": "patch",
+  "comment": "Bump find-up from 4.1.0 to 5.0.0",
+  "packageName": "backfill-config",
+  "email": "bewegger@microsoft.com",
+  "dependentChangeType": "patch",
+  "date": "2020-12-01T08:57:19.510Z"
+}
