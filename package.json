@@ -7,21 +7,19 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "lerna run --stream build",
+    "build": "lage build",
     "change": "beachball change --scope \"!packages/utils-test/__fixtures__/*\"",
     "checkchange": "beachball check --scope \"!packages/utils-test/__fixtures__/*\"",
     "postinstall": "yarn update-project-references",
-    "lerna": "lerna",
     "lint": "eslint --fix . --ext .ts",
-    "prepublishOnly": "eslint . --ext .ts && lerna run build && lerna run test",
+    "prepublishOnly": "eslint . --ext .ts && lage build test",
     "release": "beachball publish",
-    "test": "lerna run test",
+    "test": "lage test",
     "prettier": "prettier \"{.,**}/*.{tsx,ts,js,json,md,yaml}\" --write",
-    "update-project-references": "node tools/update-project-references.js",
-    "watch": "lerna run watch --parallel"
+    "update-project-references": "node tools/update-project-references.js"
   },
   "dependencies": {
-    "lerna": "3.22.1",
+    "lage": "^0.26.2",
     "prettier": "1.19.1",
     "typescript": "3.7.4"
   },
