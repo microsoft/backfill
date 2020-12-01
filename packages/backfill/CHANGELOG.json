@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Tue, 01 Dec 2020 09:45:24 GMT",
+      "tag": "backfill_v6.1.0",
+      "version": "6.1.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @types/node from 13.13.4 to 14.14.10",
+            "author": "bewegger@microsoft.com",
+            "commit": "14c6fa19134dd63317ba440ea47d94f357fc0921",
+            "package": "backfill"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 01 Dec 2020 09:43:25 GMT",
       "tag": "backfill_v6.1.0",
       "version": "6.1.0",
