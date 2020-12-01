@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Tue, 01 Dec 2020 09:06:20 GMT",
+      "tag": "backfill_v6.0.7",
+      "version": "6.0.7",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump find-up from 4.1.0 to 5.0.0",
+            "author": "bewegger@microsoft.com",
+            "commit": "e80d070bca453869e6fb9136ceb8687c4cf4fa2f",
+            "package": "backfill"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 01 Dec 2020 09:03:22 GMT",
       "tag": "backfill_v6.0.6",
       "version": "6.0.6",

@@ -1,8 +1,16 @@
 # Change Log - backfill
 
-This log was last generated on Tue, 01 Dec 2020 09:03:22 GMT and should not be manually modified.
+This log was last generated on Tue, 01 Dec 2020 09:06:20 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.0.7
+
+Tue, 01 Dec 2020 09:06:20 GMT
+
+### Patches
+
+- Bump find-up from 4.1.0 to 5.0.0 (bewegger@microsoft.com)
 
 ## 6.0.6
 

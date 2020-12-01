@@ -2,6 +2,21 @@
   "name": "backfill-utils-dotenv",
   "entries": [
     {
+      "date": "Tue, 01 Dec 2020 09:06:20 GMT",
+      "tag": "backfill-utils-dotenv_v5.0.2",
+      "version": "5.0.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump find-up from 4.1.0 to 5.0.0",
+            "author": "bewegger@microsoft.com",
+            "commit": "e80d070bca453869e6fb9136ceb8687c4cf4fa2f",
+            "package": "backfill-utils-dotenv"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 18 Nov 2020 10:47:24 GMT",
       "tag": "backfill-utils-dotenv_v5.0.1",
       "version": "5.0.1",

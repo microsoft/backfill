@@ -13,7 +13,7 @@
     "backfill-sample-dependency": "^5.1.1"
   },
   "devDependencies": {
-    "backfill": "^6.0.6",
+    "backfill": "^6.0.7",
     "backfill-utils-tsconfig": "^5.0.0",
     "typescript": "3.7.4"
   }
