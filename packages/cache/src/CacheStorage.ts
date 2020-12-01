@@ -36,10 +36,7 @@ export abstract class CacheStorage implements ICacheStorage {
     tracer.stop();
   }
 
-  protected abstract async _fetch(hash: string): Promise<boolean>;
+  protected abstract _fetch(hash: string): Promise<boolean>;
 
-  protected abstract async _put(
-    hash: string,
-    outputGlob: string[]
-  ): Promise<void>;
+  protected abstract _put(hash: string, outputGlob: string[]): Promise<void>;
 }

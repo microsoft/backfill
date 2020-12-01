@@ -74,7 +74,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
       blobReadableStream.pipe(tarWritableStream);
 
-      const blobPromise = new Promise((resolve, reject) => {
+      const blobPromise = new Promise<void>((resolve, reject) => {
         blobReadableStream.on("end", () => resolve());
         blobReadableStream.on("error", (error) => reject(error));
       });
