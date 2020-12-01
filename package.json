@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "lerna": "3.22.1",
-    "prettier": "1.19.1",
+    "prettier": "2.2.0",
     "typescript": "3.7.4"
   },
   "devDependencies": {

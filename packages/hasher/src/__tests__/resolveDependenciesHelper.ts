@@ -3,7 +3,7 @@ import { setupFixture } from "backfill-utils-test";
 import {
   getYarnWorkspaces,
   getPnpmWorkspaces,
-  getRushWorkspaces
+  getRushWorkspaces,
 } from "workspace-tools";
 
 export async function filterDependenciesInYarnFixture(

@@ -7,5 +7,5 @@ export type Console = {
 export const defaultConsole = {
   info: console.info,
   warn: console.warn,
-  error: console.error
+  error: console.error,
 };

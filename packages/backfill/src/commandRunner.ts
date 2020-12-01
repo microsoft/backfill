@@ -26,14 +26,16 @@ export function createBuildCommand(
 
     if (clearOutput) {
       const filesToClear = globby.sync(outputGlob);
-      await Promise.all(filesToClear.map(async file => await fs.remove(file)));
+      await Promise.all(
+        filesToClear.map(async (file) => await fs.remove(file))
+      );
     }
 
     try {
       // Set up runner
       const tracer = logger.setTime("buildTime");
       const runner = execa(parsedBuildCommand, {
-        shell: true
+        shell: true,
       });
 
       logger.pipeProcessOutput(runner.stdout, runner.stderr);

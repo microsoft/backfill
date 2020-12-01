@@ -11,7 +11,7 @@ const setupCacheStorage = async (fixtureName: string) => {
   const fixtureLocation = await setupFixture(fixtureName);
 
   const cacheStorageConfig: CacheStorageConfig = {
-    provider: "local"
+    provider: "local",
   };
   const internalCacheFolder = path.join("node_modules", ".cache", "backfill");
   const logger = makeLogger("mute");
@@ -54,12 +54,12 @@ type CacheHelper = {
 async function fetchFromCache({
   fixtureName,
   hash,
-  expectSuccess = true
+  expectSuccess = true,
 }: CacheHelper) {
   const {
     cacheStorage,
     internalCacheFolder,
-    fixtureLocation
+    fixtureLocation,
   } = await setupCacheStorage(fixtureName);
 
   const secretFile = "qwerty";
@@ -84,12 +84,12 @@ async function putInCache({
   outputGlob,
   filesToCache,
   expectSuccess = true,
-  errorMessage
+  errorMessage,
 }: CacheHelper) {
   const {
     cacheStorage,
     internalCacheFolder,
-    fixtureLocation
+    fixtureLocation,
   } = await setupCacheStorage(fixtureName);
 
   if (!outputGlob) {
@@ -103,7 +103,7 @@ async function putInCache({
   }
 
   if (expectSuccess) {
-    filesToCache.forEach(f => createFileInFolder(fixtureLocation, f, false));
+    filesToCache.forEach((f) => createFileInFolder(fixtureLocation, f, false));
   }
 
   if (expectSuccess) {
@@ -114,7 +114,7 @@ async function putInCache({
     );
   }
 
-  filesToCache.forEach(f => {
+  filesToCache.forEach((f) => {
     const pathToCheck = expectSuccess
       ? path.join(internalCacheFolder, hash, f)
       : internalCacheFolder;
@@ -128,21 +128,21 @@ describe("LocalCacheStorage", () => {
     it("will fetch on cache hit", async () => {
       await fetchFromCache({
         fixtureName: "with-cache",
-        hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194"
+        hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
       });
     });
 
     it("will fetch on cache hit (output folder: dist)", async () => {
       await fetchFromCache({
         fixtureName: "with-cache-dist",
-        hash: "46df1a257dfbde62b1e284f6382b20a49506f029"
+        hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
       });
     });
 
     it("will fetch on cache hit (multiple output folders: lib and dist)", async () => {
       await fetchFromCache({
         fixtureName: "multiple-output-folders-with-cache",
-        hash: "46df1a257dfbde62b1e284f6382b20a49506f029"
+        hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
       });
     });
 
@@ -150,7 +150,7 @@ describe("LocalCacheStorage", () => {
       await fetchFromCache({
         fixtureName: "with-cache",
         hash: "incorrect_hash",
-        expectSuccess: false
+        expectSuccess: false,
       });
     });
   });
@@ -161,7 +161,7 @@ describe("LocalCacheStorage", () => {
         fixtureName: "pre-built",
         hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
         outputGlob: ["lib/**"],
-        filesToCache: ["lib/qwerty"]
+        filesToCache: ["lib/qwerty"],
       });
     });
 
@@ -170,7 +170,7 @@ describe("LocalCacheStorage", () => {
         fixtureName: "pre-built-dist",
         hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
         outputGlob: ["dist/**"],
-        filesToCache: ["dist/qwerty"]
+        filesToCache: ["dist/qwerty"],
       });
     });
 
@@ -179,7 +179,7 @@ describe("LocalCacheStorage", () => {
         fixtureName: "multiple-output-folders",
         hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
         outputGlob: ["lib/**", "dist/**"],
-        filesToCache: ["lib/qwerty", "dist/azer/ty"]
+        filesToCache: ["lib/qwerty", "dist/azer/ty"],
       });
     });
 
@@ -191,7 +191,7 @@ describe("LocalCacheStorage", () => {
         outputGlob: ["lib/**", "dist/**"],
         filesToCache: [],
         errorMessage:
-          "Couldn't find any file on disk matching the output glob (lib/**, dist/**)"
+          "Couldn't find any file on disk matching the output glob (lib/**, dist/**)",
       });
     });
 
@@ -200,7 +200,7 @@ describe("LocalCacheStorage", () => {
         fixtureName: "basic",
         hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
         outputGlob: ["tsconfig.tsbuildinfo"],
-        filesToCache: ["tsconfig.tsbuildinfo"]
+        filesToCache: ["tsconfig.tsbuildinfo"],
       });
     });
 
@@ -212,7 +212,7 @@ describe("LocalCacheStorage", () => {
         outputGlob: ["lib/**", "!lib/qwerty"],
         filesToCache: ["lib/qwerty"],
         errorMessage:
-          "Couldn't find any file on disk matching the output glob (lib/**, !lib/qwerty)"
+          "Couldn't find any file on disk matching the output glob (lib/**, !lib/qwerty)",
       });
     });
 
@@ -221,7 +221,7 @@ describe("LocalCacheStorage", () => {
         fixtureName: "basic",
         hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
         outputGlob: ["lib/**", "!lib/qwerty"],
-        filesToCache: ["lib/azerty"]
+        filesToCache: ["lib/azerty"],
       });
     });
   });

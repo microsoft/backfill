@@ -48,7 +48,7 @@ export function getNpmConfigFromSerializedOptions(
 
     return {
       provider: "npm",
-      options: { ...parsedOptions }
+      options: { ...parsedOptions },
     };
   } catch (error) {
     logger.error(error);
@@ -76,7 +76,7 @@ export function getAzureBlobConfigFromSerializedOptions(
 
     return {
       provider: "azure-blob",
-      options: { ...parsedOptions }
+      options: { ...parsedOptions },
     };
   } catch (error) {
     logger.error(error);

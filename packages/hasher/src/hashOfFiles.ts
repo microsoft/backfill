@@ -23,7 +23,7 @@ export async function generateHashOfFiles(
 ): Promise<string> {
   const { repoHashes, root } = repoInfo;
 
-  const files: string[] = Object.keys(repoHashes).filter(f =>
+  const files: string[] = Object.keys(repoHashes).filter((f) =>
     path.join(root, f).includes(path.normalize(packageRoot))
   );
 

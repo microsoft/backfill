@@ -3,7 +3,7 @@ import {
   ParsedLock,
   getWorkspaceRoot,
   getWorkspaces,
-  parseLockFile
+  parseLockFile,
 } from "workspace-tools";
 
 import { getPackageDeps } from "@rushstack/package-deps-hash";
@@ -43,7 +43,7 @@ export async function getRepoInfoNoCache(cwd: string) {
     root,
     workspaceInfo,
     parsedLock,
-    repoHashes
+    repoHashes,
   };
 
   repoInfoCache.push(repoInfo);

@@ -51,7 +51,7 @@ export class NpmCacheStorage extends CacheStorage {
           "--no-package-lock",
           "--loglevel",
           "error",
-          ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
+          ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : []),
         ]);
 
         this.logger.pipeProcessOutput(runner.stdout, runner.stderr);
@@ -69,11 +69,11 @@ export class NpmCacheStorage extends CacheStorage {
     }
 
     const files = await globby(`**/*`, {
-      cwd: packageFolderInTemporaryFolder
+      cwd: packageFolderInTemporaryFolder,
     });
 
     await Promise.all(
-      files.map(async file => {
+      files.map(async (file) => {
         await fs.mkdirp(path.dirname(path.join(this.cwd, file)));
         await fs.copy(
           path.join(packageFolderInTemporaryFolder, file),
@@ -99,13 +99,13 @@ export class NpmCacheStorage extends CacheStorage {
     // Create package.json file
     fs.outputJSONSync(path.join(temporaryNpmOutputFolder, "package.json"), {
       name: npmPackageName,
-      version: `0.0.0-${hash}`
+      version: `0.0.0-${hash}`,
     });
 
     const files = await globby(outputGlob, { cwd: this.cwd });
 
     await Promise.all(
-      files.map(async file => {
+      files.map(async (file) => {
         const destinationFolder = path.join(
           temporaryNpmOutputFolder,
           path.dirname(file)
@@ -128,11 +128,11 @@ export class NpmCacheStorage extends CacheStorage {
           registryUrl,
           "--loglevel",
           "error",
-          ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : [])
+          ...(npmrcUserconfig ? ["--userconfig", npmrcUserconfig] : []),
         ],
         {
           cwd: temporaryNpmOutputFolder,
-          stdout: "inherit"
+          stdout: "inherit",
         }
       );
 

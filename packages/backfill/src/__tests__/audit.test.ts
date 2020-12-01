@@ -43,7 +43,7 @@ describe("Audit", () => {
       [
         pathToBackfill,
         "--audit",
-        "npm run compile --scripts-prepend-node-path && npm run side-effect --scripts-prepend-node-path"
+        "npm run compile --scripts-prepend-node-path && npm run side-effect --scripts-prepend-node-path",
       ],
       { all: true, cwd: packageAPath }
     );

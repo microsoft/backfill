@@ -2,7 +2,7 @@ import { isCorrectLogLevel, Logger } from "backfill-logger";
 
 import {
   getAzureBlobConfigFromSerializedOptions,
-  getNpmConfigFromSerializedOptions
+  getNpmConfigFromSerializedOptions,
 } from "./cacheConfig";
 import { isCorrectMode, Config } from "./index";
 

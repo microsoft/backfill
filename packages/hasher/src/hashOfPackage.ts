@@ -4,7 +4,7 @@ import { Logger } from "backfill-logger";
 import { resolveInternalDependencies } from "./resolveInternalDependencies";
 import {
   resolveExternalDependencies,
-  Dependencies
+  Dependencies,
 } from "./resolveExternalDependencies";
 import { generateHashOfFiles } from "./hashOfFiles";
 import { hashStrings } from "./helpers";
@@ -23,7 +23,7 @@ export function generateHashOfInternalPackages(
   internalPackages.sort((a, b) => a.name.localeCompare(b.name));
 
   const hasher = crypto.createHash("sha1");
-  internalPackages.forEach(pkg => {
+  internalPackages.forEach((pkg) => {
     hasher.update(pkg.name);
     hasher.update(pkg.filesHash);
     hasher.update(pkg.dependenciesHash);
@@ -54,7 +54,7 @@ export async function getPackageHash(
 
   const allDependencies: Dependencies = {
     ...dependencies,
-    ...devDependencies
+    ...devDependencies,
   };
 
   const internalDependencies = resolveInternalDependencies(
@@ -70,7 +70,7 @@ export async function getPackageHash(
 
   const resolvedDependencies = [
     ...internalDependencies,
-    ...externalDeoendencies
+    ...externalDeoendencies,
   ];
 
   const filesHash = await generateHashOfFiles(packageRoot, repoInfo);
@@ -84,7 +84,7 @@ export async function getPackageHash(
     name,
     filesHash,
     dependenciesHash,
-    internalDependencies
+    internalDependencies,
   };
 
   memoization[memoizationKey] = packageHash;

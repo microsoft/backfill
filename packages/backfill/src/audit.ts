@@ -13,7 +13,7 @@ let watcher: chokidar.FSWatcher;
 function getGitRepositoryRoot(packageRoot: string) {
   const nearestGitFolder = findUp.sync(".git", {
     cwd: packageRoot,
-    type: "directory"
+    type: "directory",
   });
 
   if (nearestGitFolder) {
@@ -25,8 +25,8 @@ function getGitRepositoryRoot(packageRoot: string) {
 }
 
 function addGlobstars(globPatterns: string[]): string[] {
-  const folders = globPatterns.map(p => path.posix.join("**", p, "**", "*"));
-  const files = globPatterns.map(p => path.posix.join("**", p));
+  const folders = globPatterns.map((p) => path.posix.join("**", p, "**", "*"));
+  const files = globPatterns.map((p) => path.posix.join("**", p));
 
   return [...folders, ...files];
 }
@@ -54,7 +54,7 @@ export function initializeWatcher(
     ".git",
     ".cache",
     logFolder,
-    internalCacheFolder
+    internalCacheFolder,
   ]);
   watcher = chokidar
     .watch("**", {
@@ -63,7 +63,7 @@ export function initializeWatcher(
       persistent: true,
       ignoreInitial: true,
       followSymlinks: false,
-      usePolling: true
+      usePolling: true,
     })
     .on("all", (event, filePath) => {
       const logLine = `${filePath} (${event})`;
@@ -71,7 +71,7 @@ export function initializeWatcher(
 
       if (
         !anymatch(
-          outputGlob.map(glob => path.posix.join("**", glob)),
+          outputGlob.map((glob) => path.posix.join("**", glob)),
           filePath
         )
       ) {
@@ -90,7 +90,7 @@ export const noSideEffectString =
   "[audit] All observed file changes were within the scope of the folder to be cached.";
 
 async function delay(time: number) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, time);
   });
 }
@@ -101,7 +101,7 @@ export async function closeWatcher(logger: Logger) {
 
   if (changedFilesOutsideScope.length > 0) {
     logger.warn(sideEffectWarningString);
-    changedFilesOutsideScope.forEach(file => logger.warn(`- ${file}`));
+    changedFilesOutsideScope.forEach((file) => logger.warn(`- ${file}`));
     logger.warn(sideEffectCallToActionString);
   } else {
     logger.info(noSideEffectString);

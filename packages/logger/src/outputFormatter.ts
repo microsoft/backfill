@@ -31,5 +31,5 @@ export const defaultFormatter = {
       default:
         return assertNever(logLevel);
     }
-  }
+  },
 };

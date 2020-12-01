@@ -30,15 +30,15 @@ describe("createBuildCommand", () => {
     const stdout: string[] = [];
     const mockConsole = {
       info(...args: string[]): void {
-        args.forEach(a => stdout.push(a));
+        args.forEach((a) => stdout.push(a));
       },
 
       warn(...args: string[]): void {
-        args.forEach(a => stderr.push(a));
+        args.forEach((a) => stderr.push(a));
       },
       error(...args: string[]): void {
-        args.forEach(a => stderr.push(a));
-      }
+        args.forEach((a) => stderr.push(a));
+      },
     };
 
     const logger = makeLogger("error", { console: mockConsole });
@@ -56,7 +56,7 @@ describe("createBuildCommand", () => {
     }
 
     expect(buildCommand).rejects.toThrow();
-    expect(stderr.filter(m => m.includes("somecommand")).length).not.toBe(0);
+    expect(stderr.filter((m) => m.includes("somecommand")).length).not.toBe(0);
   });
 
   it("clears the output folder", async () => {

@@ -7,7 +7,7 @@ import execa from "execa";
 async function findFixturePath(cwd: string, fixtureName: string) {
   return await findUp(path.join("__fixtures__", fixtureName), {
     cwd,
-    type: "directory"
+    type: "directory",
   });
 }
 
