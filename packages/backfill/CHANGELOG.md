@@ -1,8 +1,16 @@
 # Change Log - backfill
 
-This log was last generated on Tue, 13 Oct 2020 08:40:08 GMT and should not be manually modified.
+This log was last generated on Tue, 01 Dec 2020 09:03:22 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.0.6
+
+Tue, 01 Dec 2020 09:03:22 GMT
+
+### Patches
+
+- Bump yargs to 16.1.1 (bewegger@microsoft.com)
 
 ## 6.0.4
 

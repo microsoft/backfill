@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Tue, 01 Dec 2020 09:03:22 GMT",
+      "tag": "backfill_v6.0.6",
+      "version": "6.0.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump yargs to 16.1.1",
+            "author": "bewegger@microsoft.com",
+            "commit": "832a6e00a55d97027570e57742efb7fbb21e87b3",
+            "package": "backfill"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 13 Oct 2020 08:40:08 GMT",
       "tag": "backfill_v6.0.4",
       "version": "6.0.4",
