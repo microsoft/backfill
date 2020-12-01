@@ -62,6 +62,6 @@ export function makeConsoleLogger(
       if (logFilter.shouldLog("verbose")) {
         consoleOverride.error(...formatter.format("trace", ...args));
       }
-    }
+    },
   };
 }

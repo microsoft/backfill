@@ -8,7 +8,7 @@ export function filterInternalDependencies(
 ): string[] {
   const workspacePackageNames = listOfWorkspacePackageNames(workspaces);
   return Object.keys(dependencies).filter(
-    dependency => workspacePackageNames.indexOf(dependency) >= 0
+    (dependency) => workspacePackageNames.indexOf(dependency) >= 0
   );
 }
 

@@ -8,14 +8,14 @@ export { createDefaultConfig } from "backfill-config";
 import {
   getRawBuildCommand,
   createBuildCommand,
-  BuildCommand
+  BuildCommand,
 } from "./commandRunner";
 import { initializeWatcher, closeWatcher } from "./audit";
 import {
   put as put_api,
   fetch as fetch_api,
   computeHash,
-  computeHashOfOutput
+  computeHashOfOutput,
 } from "./api";
 
 // Load environment variables
@@ -34,7 +34,7 @@ export async function backfill(
     logFolder,
     packageRoot,
     producePerformanceLogs,
-    validateOutput
+    validateOutput,
   } = config;
 
   logger.setName(name);
@@ -117,7 +117,7 @@ export async function main(): Promise<void> {
       logFolder,
       logLevel,
       outputGlob,
-      packageRoot
+      packageRoot,
     } = config;
 
     if (logLevel) {
@@ -133,7 +133,7 @@ export async function main(): Promise<void> {
       .version(false)
       .option("audit", {
         description: "Compare files changed with those cached",
-        type: "boolean"
+        type: "boolean",
       }).argv;
 
     const buildCommand = createBuildCommand(

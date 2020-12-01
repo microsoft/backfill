@@ -14,6 +14,6 @@ export const defaultLogFilter: (logLevel: LogLevel) => LogFilter = (
       }
 
       return logLevelsObject[level] <= logLevelsObject[logLevel];
-    }
+    },
   };
 };

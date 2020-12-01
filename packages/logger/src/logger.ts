@@ -9,7 +9,7 @@ import { defaultTimer, Timer } from "./timer";
 import {
   ConsoleLogger,
   LoggerOverrides,
-  makeConsoleLogger
+  makeConsoleLogger,
 } from "./consoleLogger";
 export { isCorrectLogLevel, LogLevel } from "./logLevel";
 
@@ -54,17 +54,17 @@ export function makeLogger(
   const consoleLogger = makeConsoleLogger(logLevel, overrides);
   const timer: Timer = defaultTimer;
   const performanceReportData: PerformanceReportData = {
-    timestamp: Date.now()
+    timestamp: Date.now(),
   };
 
   return {
     pipeProcessOutput(stdout: Readable | null, stderr: Readable | null): void {
       stdout &&
-        stdout.on("data", chunk =>
+        stdout.on("data", (chunk) =>
           consoleLogger.consoleOverride.info(chunk.toString())
         );
       stderr &&
-        stderr.on("data", chunk =>
+        stderr.on("data", (chunk) =>
           consoleLogger.consoleOverride.error(chunk.toString())
         );
     },
@@ -105,7 +105,7 @@ export function makeLogger(
             )}`
           );
           performanceReportData[type] = time;
-        }
+        },
       };
     },
 
@@ -128,6 +128,6 @@ export function makeLogger(
       await fs.outputJson(filepath, performanceReportData, { spaces: 2 });
 
       consoleLogger.silly(`Performance log created at ${filepath}`);
-    }
+    },
   };
 }

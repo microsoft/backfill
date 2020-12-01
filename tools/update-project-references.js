@@ -52,17 +52,17 @@ function updateTSConfig(path, options) {
   const config = fs.existsSync(path)
     ? JSON.parse(fs.readFileSync(path).toString())
     : {};
-  prettier.resolveConfig(path).then(prettierOptions =>
+  prettier.resolveConfig(path).then((prettierOptions) =>
     fs.writeFileSync(
       path,
       prettier.format(
         JSON.stringify({
           ...config,
-          ...options
+          ...options,
         }),
         {
           ...prettierOptions,
-          parser: "json"
+          parser: "json",
         }
       )
     )
@@ -81,18 +81,18 @@ function pathCompare(a, b) {
 
 function updateTSReferences(workspaceInfo) {
   Object.keys(workspaceInfo)
-    .map(key => workspaceInfo[key])
+    .map((key) => workspaceInfo[key])
     .filter(({ location }) => isTSPackage(location))
     .forEach(({ location, workspaceDependencies }) => {
       updateTSConfig(getTSConfigPath(location), {
         references: workspaceDependencies
-          .map(dependency => workspaceInfo[dependency].location)
+          .map((dependency) => workspaceInfo[dependency].location)
           .filter(isTSPackage)
           .filter(isCompositeEnabled)
-          .map(workspaceLocation => ({
-            path: getRelativeLocation(location, workspaceLocation, true)
+          .map((workspaceLocation) => ({
+            path: getRelativeLocation(location, workspaceLocation, true),
           }))
-          .sort(pathCompare)
+          .sort(pathCompare),
       });
     });
 }

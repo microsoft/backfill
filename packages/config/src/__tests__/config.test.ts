@@ -8,7 +8,7 @@ import {
   getEnvConfig,
   getSearchPaths,
   createDefaultConfig,
-  createConfig
+  createConfig,
 } from "../index";
 
 describe("getName()", () => {
@@ -58,8 +58,8 @@ describe("getEnvConfig()", () => {
       provider: "npm",
       options: {
         npmPackageName: "package",
-        registryUrl: "https://registry.npmjs.org/"
-      }
+        registryUrl: "https://registry.npmjs.org/",
+      },
     };
 
     process.env["BACKFILL_CACHE_PROVIDER"] = cacheStorageConfig.provider;
@@ -91,10 +91,10 @@ describe("getSearchPaths()", () => {
 
     expect(searchPathsFromPackage1).toStrictEqual([
       path.join(packageRoot, "backfill.config.js"),
-      path.join(packageRoot, "packages", "package-1", "backfill.config.js")
+      path.join(packageRoot, "packages", "package-1", "backfill.config.js"),
     ]);
     expect(searchPathsFromPackage2).toStrictEqual([
-      path.join(packageRoot, "backfill.config.js")
+      path.join(packageRoot, "backfill.config.js"),
     ]);
   });
 

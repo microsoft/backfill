@@ -19,7 +19,7 @@ describe("End to end", () => {
     const packageRoot = await setupFixture("basic");
 
     await execa("node", [pathToBackfill, "--", "npm run compile"], {
-      cwd: packageRoot
+      cwd: packageRoot,
     });
 
     // Verify it produces the correct hash
@@ -31,14 +31,14 @@ describe("End to end", () => {
     expect(libFolderExist).toBe(true);
   });
 
-  it("fails on error with error code 1", async done => {
+  it("fails on error with error code 1", async (done) => {
     const packageRoot = await setupFixture("basic");
 
     const execProcess = execa("node", [pathToBackfill, "--", "somecommand"], {
-      cwd: packageRoot
+      cwd: packageRoot,
     });
 
-    execProcess.on("exit", code => {
+    execProcess.on("exit", (code) => {
       expect(code).toBe(1);
       done();
     });

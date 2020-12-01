@@ -22,9 +22,9 @@ describe("addToQueue", () => {
         packageJson: {
           name: "",
           packageJsonPath: "",
-          version: ""
-        }
-      }
+          version: "",
+        },
+      },
     ];
     const internalDependencies = [packageToAdd];
 
@@ -37,7 +37,7 @@ describe("addToQueue", () => {
       done,
       workspaces,
       packageToAdd,
-      packagePath
+      packagePath,
     };
   };
 
@@ -47,7 +47,7 @@ describe("addToQueue", () => {
       queue,
       done,
       workspaces,
-      packagePath
+      packagePath,
     } = await setupAddToQueue();
 
     addToQueue(internalDependencies, queue, done, workspaces);
@@ -62,7 +62,7 @@ describe("addToQueue", () => {
       queue,
       done,
       workspaces,
-      packageToAdd
+      packageToAdd,
     } = await setupAddToQueue();
 
     // Override
@@ -71,8 +71,8 @@ describe("addToQueue", () => {
         name: packageToAdd,
         filesHash: "",
         dependenciesHash: "",
-        internalDependencies: []
-      }
+        internalDependencies: [],
+      },
     ];
 
     addToQueue(internalDependencies, queue, done, workspaces);
@@ -86,7 +86,7 @@ describe("addToQueue", () => {
       queue,
       done,
       workspaces,
-      packagePath
+      packagePath,
     } = await setupAddToQueue();
 
     // Override

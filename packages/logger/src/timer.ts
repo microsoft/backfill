@@ -8,7 +8,7 @@ export const defaultTimer = {
         const delta = process.hrtime(start);
         const time = Math.round(delta[0] * 1000 + delta[1] / 1000000);
         return time;
-      }
+      },
     };
-  }
+  },
 };

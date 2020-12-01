@@ -26,12 +26,12 @@ export class LocalCacheStorage extends CacheStorage {
     }
 
     const files = await globby(`**/*`, {
-      cwd: localCacheFolder
+      cwd: localCacheFolder,
     });
 
     await Promise.all(
       files
-        .filter(async file => {
+        .filter(async (file) => {
           const src = path.join(localCacheFolder, file);
           const dest = path.join(this.cwd, file);
 
@@ -45,7 +45,7 @@ export class LocalCacheStorage extends CacheStorage {
 
           return true;
         })
-        .map(async file => {
+        .map(async (file) => {
           await fs.mkdirp(path.dirname(path.join(this.cwd, file)));
           await fs.copyFile(
             path.join(localCacheFolder, file),
@@ -63,7 +63,7 @@ export class LocalCacheStorage extends CacheStorage {
     const files = globby.sync(outputGlob, { cwd: this.cwd });
 
     await Promise.all(
-      files.map(async file => {
+      files.map(async (file) => {
         const destinationFolder = path.join(
           localCacheFolder,
           path.dirname(file)

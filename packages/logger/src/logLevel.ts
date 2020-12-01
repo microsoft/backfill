@@ -4,7 +4,7 @@ export const logLevelsObject = {
   info: 2,
   warn: 1,
   error: 0,
-  mute: -1
+  mute: -1,
 };
 
 export type LogLevel = keyof typeof logLevelsObject;

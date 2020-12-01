@@ -16,7 +16,7 @@ export const modesObject = {
   READ_ONLY: "",
   WRITE_ONLY: "",
   READ_WRITE: "",
-  PASS: ""
+  PASS: "",
 };
 
 export type BackfillModes = keyof typeof modesObject;
@@ -77,7 +77,7 @@ export function createDefaultConfig(fromPath: string): Config {
 
   return {
     cacheStorageConfig: {
-      provider: "local"
+      provider: "local",
     },
     clearOutput: false,
     internalCacheFolder: defaultCacheFolder,
@@ -88,7 +88,7 @@ export function createDefaultConfig(fromPath: string): Config {
     outputGlob,
     packageRoot,
     producePerformanceLogs: false,
-    validateOutput: false
+    validateOutput: false,
   };
 }
 
@@ -105,7 +105,7 @@ export function createConfig(logger: Logger, fromPath: string): Config {
 
     return {
       ...acc,
-      ...config
+      ...config,
     };
   }, {});
 
@@ -114,6 +114,6 @@ export function createConfig(logger: Logger, fromPath: string): Config {
   return {
     ...defaultConfig,
     ...fileBasedConfig,
-    ...envBasedConfig
+    ...envBasedConfig,
   };
 }

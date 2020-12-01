@@ -14,7 +14,7 @@ const FOUR_MEGABYTES = 4 * ONE_MEGABYTE;
 
 const uploadOptions = {
   bufferSize: FOUR_MEGABYTES,
-  maxBuffers: 5
+  maxBuffers: 5,
 };
 
 function createBlobClient(
@@ -76,7 +76,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
       const blobPromise = new Promise((resolve, reject) => {
         blobReadableStream.on("end", () => resolve());
-        blobReadableStream.on("error", error => reject(error));
+        blobReadableStream.on("error", (error) => reject(error));
       });
 
       await blobPromise;

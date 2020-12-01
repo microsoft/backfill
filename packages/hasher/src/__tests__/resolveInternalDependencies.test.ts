@@ -2,17 +2,17 @@ import { setupFixture } from "backfill-utils-test";
 import {
   getPnpmWorkspaces,
   getRushWorkspaces,
-  getYarnWorkspaces
+  getYarnWorkspaces,
 } from "workspace-tools";
 
 import {
   filterInternalDependencies,
-  resolveInternalDependencies
+  resolveInternalDependencies,
 } from "../resolveInternalDependencies";
 import {
   filterDependenciesInYarnFixture,
   filterDependenciesInPnpmFixture,
-  filterDependenciesInRushFixture
+  filterDependenciesInRushFixture,
 } from "./resolveDependenciesHelper";
 
 describe("filterInternalDependencies() for yarn", () => {

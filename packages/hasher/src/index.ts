@@ -4,7 +4,7 @@ import { generateHashOfFiles } from "./hashOfFiles";
 import {
   PackageHashInfo,
   getPackageHash,
-  generateHashOfInternalPackages
+  generateHashOfInternalPackages,
 } from "./hashOfPackage";
 import { hashStrings, getPackageRoot } from "./helpers";
 import { RepoInfo, getRepoInfo, getRepoInfoNoCache } from "./repoInfo";
@@ -28,7 +28,7 @@ export function addToQueue(
   done: PackageHashInfo[],
   workspaces: WorkspaceInfo
 ): void {
-  dependencyNames.forEach(name => {
+  dependencyNames.forEach((name) => {
     const dependencyPath = findWorkspacePath(workspaces, name);
 
     if (dependencyPath) {

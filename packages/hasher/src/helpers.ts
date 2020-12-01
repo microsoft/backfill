@@ -8,7 +8,7 @@ export function hashStrings(strings: string | string[]): string {
   const anArray = typeof strings === "string" ? [strings] : strings;
   const elements = [...anArray];
   elements.sort((a, b) => a.localeCompare(b));
-  elements.forEach(element => hasher.update(element));
+  elements.forEach((element) => hasher.update(element));
 
   return hasher.digest("hex");
 }

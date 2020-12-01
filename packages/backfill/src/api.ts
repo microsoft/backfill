@@ -6,7 +6,7 @@ import {
   Logger,
   makeLogger as makeLoggerInternal,
   Console,
-  LogLevel
+  LogLevel,
 } from "backfill-logger";
 import { Hasher } from "backfill-hasher";
 import { getCacheStorageProvider } from "backfill-cache";
@@ -21,7 +21,7 @@ function makeConsole(stdout: Writable, stderr: Writable): Console {
     },
     error(...args: string[]): void {
       stderr.write(args.join(" ") + EOL);
-    }
+    },
   };
 }
 

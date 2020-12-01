@@ -3,13 +3,13 @@ import {
   getPnpmWorkspaces,
   getRushWorkspaces,
   getYarnWorkspaces,
-  parseLockFile
+  parseLockFile,
 } from "workspace-tools";
 
 import {
   filterExternalDependencies,
   resolveExternalDependencies,
-  addToQueue
+  addToQueue,
 } from "../resolveExternalDependencies";
 import { filterDependenciesInYarnFixture } from "./resolveDependenciesHelper";
 
@@ -90,7 +90,7 @@ describe("resolveExternalDependencies() - pnpm", () => {
 
     const allDependencies = {
       "package-a": "1.0.0",
-      once: "1.4.0"
+      once: "1.4.0",
     };
     const parsedLockFile = await parseLockFile(packageRoot);
 
@@ -111,7 +111,7 @@ describe("resolveExternalDependencies() - rush+pnpm", () => {
 
     const allDependencies = {
       "package-a": "1.0.0",
-      once: "1.4.0"
+      once: "1.4.0",
     };
     const parsedLockFile = await parseLockFile(packageRoot);
 
@@ -132,7 +132,7 @@ describe("resolveExternalDependencies() - rush+yarn", () => {
 
     const allDependencies = {
       "package-a": "1.0.0",
-      once: "1.4.0"
+      once: "1.4.0",
     };
     const parsedLockFile = await parseLockFile(packageRoot);
 
