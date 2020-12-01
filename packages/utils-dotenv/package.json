@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "dotenv": "^8.1.0",
-    "find-up": "^4.0.0"
+    "find-up": "^5.0.0"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",

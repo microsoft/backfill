@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "execa": "^4.0.0",
-    "find-up": "^4.0.0",
+    "find-up": "^5.0.0",
     "fs-extra": "^8.1.0",
     "tempy": "^0.5.0"
   },

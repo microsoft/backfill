@@ -19,7 +19,7 @@
     "@rushstack/package-deps-hash": "^2.4.48",
     "backfill-config": "^6.0.1",
     "backfill-logger": "^5.0.1",
-    "find-up": "^4.1.0",
+    "find-up": "^5.0.0",
     "fs-extra": "^8.1.0",
     "workspace-tools": "^0.10.0"
   },
