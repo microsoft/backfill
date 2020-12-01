@@ -1,0 +1,8 @@
+{
+  "type": "none",
+  "comment": "Bump @types/node from 13.13.4 to 14.14.10",
+  "packageName": "backfill-cache",
+  "email": "bewegger@microsoft.com",
+  "dependentChangeType": "none",
+  "date": "2020-12-01T09:30:01.743Z"
+}
