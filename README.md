@@ -256,7 +256,7 @@ BACKFILL_CACHE_PROVIDER="local-skip"
 Backfill provides an API, this allows for more complex scenarios, and
 performance optimizations.
 
-```
+```js
 const backfill = require("backfill/lib/api");
 
 const packagePath = getPath(packageName);
