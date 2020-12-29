@@ -146,9 +146,9 @@ See `getEnvConfig()` in
 
 ## Set up remote cache
 
-### Microsoft Azure Blog Storage
+### Microsoft Azure Blob Storage
 
-To cache to a Microsoft Azure Blog Storage you need to provide a connection
+To cache to a Microsoft Azure Blob Storage you need to provide a connection
 string and the container name. If you are configuring via `backfill.config.js`,
 you can use the following syntax:
 
@@ -180,7 +180,7 @@ module.exports = {
   </dd>
 </dl>
 
-You can also configure Microsoft Azure Blog Storage using environment variables.
+You can also configure Microsoft Azure Blob Storage using environment variables.
 
 ```
 BACKFILL_CACHE_PROVIDER="azure-blob"
