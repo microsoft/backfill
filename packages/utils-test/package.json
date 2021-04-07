@@ -21,7 +21,7 @@
     "tempy": "^0.5.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^8.0.0",
+    "@types/fs-extra": "^9.0.10",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.4",
     "backfill-utils-tsconfig": "^5.0.0",
