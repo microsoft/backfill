@@ -3459,11 +3459,6 @@ escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
 
-escape-string-regexp@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz#14ba83a5d373e3d311e5afca29cf5bfad965bf34"
-  integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
-
 escodegen@^1.11.1:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/escodegen/-/escodegen-1.14.1.tgz#ba01d0c8278b5e95a9a45350142026659027a457"
@@ -5925,13 +5920,6 @@ map-visit@^1.0.0:
   integrity sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
   dependencies:
     object-visit "^1.0.0"
-
-matcher@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/matcher/-/matcher-3.0.0.tgz#bd9060f4c5b70aa8041ccc6f80368760994f30ca"
-  integrity sha512-OkeDaAZ/bQCxeFAozM55PKcKU0yJMPGifLwV4Qgjitu+5MoAfSQN4lsLJeXZ1b8w0x+/Emda6MZgXS1jvsapng==
-  dependencies:
-    escape-string-regexp "^4.0.0"
 
 meow@^3.3.0:
   version "3.7.0"
@@ -8867,10 +8855,10 @@ wordwrap@^1.0.0, wordwrap@~1.0.0:
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
   integrity sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=
 
-workspace-tools@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.10.0.tgz#82b4a0ec17350cb27df51c3f8b0c2d1e394b3d26"
-  integrity sha512-6rwbc4H6bSn74RfSwzSButqx602rzTTtxA9m+9RSzMpuXrFmNHfJGppn0Pi5J+LgP56ZA5VwfP7/nHN1fS8frg==
+workspace-tools@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.15.0.tgz#8710f6151b21ab4382a5230d752e8b822ea24d16"
+  integrity sha512-KYSEKdqRJC3moABdCho03nSK4H9oqb6KtvGusGi5giR5oV1LilCRqem7STLRsZlnTJVTATv4nHnnioB+wSleDA==
   dependencies:
     "@pnpm/lockfile-file" "^3.0.7"
     "@pnpm/logger" "^3.2.2"
@@ -8881,7 +8869,6 @@ workspace-tools@^0.10.0:
     git-url-parse "^11.1.2"
     globby "^11.0.0"
     jju "^1.4.0"
-    matcher "^3.0.0"
     multimatch "^4.0.0"
     read-yaml-file "^2.0.0"
 
