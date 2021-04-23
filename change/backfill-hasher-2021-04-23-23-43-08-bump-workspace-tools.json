@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "bumps workspace-tools to take advantage of the faster boot of the lib",
-  "packageName": "backfill-hasher",
-  "email": "34725+kenotron@users.noreply.github.com",
-  "dependentChangeType": "patch",
-  "date": "2021-04-23T23:43:08.611Z"
-}

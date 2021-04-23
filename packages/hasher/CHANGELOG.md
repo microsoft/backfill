@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Tue, 01 Dec 2020 09:43:25 GMT and should not be manually modified.
+This log was last generated on Fri, 23 Apr 2021 23:51:52 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.2.1
+
+Fri, 23 Apr 2021 23:51:52 GMT
+
+### Patches
+
+- bumps workspace-tools to take advantage of the faster boot of the lib (34725+kenotron@users.noreply.github.com)
 
 ## 6.2.0
 
