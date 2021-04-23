@@ -21,7 +21,7 @@
     "backfill-logger": "^5.1.0",
     "find-up": "^5.0.0",
     "fs-extra": "^8.1.0",
-    "workspace-tools": "^0.10.0"
+    "workspace-tools": "^0.15.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.0",
