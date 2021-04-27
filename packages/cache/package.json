@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "5.2.1",
+  "version": "5.2.2",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",
@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@azure/storage-blob": "12.1.2",
-    "backfill-config": "^6.1.1",
-    "backfill-logger": "^5.1.1",
+    "backfill-config": "^6.1.2",
+    "backfill-logger": "^5.1.2",
     "execa": "^4.0.0",
     "fs-extra": "^8.1.0",
     "globby": "^11.0.0",

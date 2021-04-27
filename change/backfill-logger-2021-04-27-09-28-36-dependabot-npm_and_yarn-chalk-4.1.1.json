@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Bump chalk from 3.0.0 to 4.1.1",
-  "packageName": "backfill-logger",
-  "email": "ronald.ndirangu@gmail.com",
-  "dependentChangeType": "patch",
-  "date": "2021-04-27T06:28:36.070Z"
-}

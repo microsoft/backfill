@@ -1,8 +1,16 @@
 # Change Log - backfill-logger
 
-This log was last generated on Tue, 27 Apr 2021 08:32:03 GMT and should not be manually modified.
+This log was last generated on Tue, 27 Apr 2021 08:36:41 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.1.2
+
+Tue, 27 Apr 2021 08:36:41 GMT
+
+### Patches
+
+- Bump chalk from 3.0.0 to 4.1.1 (ronald.ndirangu@gmail.com)
 
 ## 5.1.1
 
