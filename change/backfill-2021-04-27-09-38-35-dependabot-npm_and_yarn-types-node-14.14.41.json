@@ -1,0 +1,8 @@
+{
+  "type": "patch",
+  "comment": "Bump @types/node from 13.13.35 to 14.14.41",
+  "packageName": "backfill",
+  "email": "ronald.ndirangu@gmail.com",
+  "dependentChangeType": "patch",
+  "date": "2021-04-27T06:38:19.871Z"
+}
