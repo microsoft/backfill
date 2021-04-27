@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Fri, 23 Apr 2021 23:51:52 GMT and should not be manually modified.
+This log was last generated on Tue, 27 Apr 2021 08:32:03 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.2.2
+
+Tue, 27 Apr 2021 08:32:03 GMT
+
+### Patches
+
+- Bump @types/fs-extra from 8.0.1 to 9.0.11 (ronald.ndirangu@gmail.com)
 
 ## 6.2.1
 

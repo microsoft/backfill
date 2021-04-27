@@ -2,6 +2,21 @@
   "name": "backfill-config",
   "entries": [
     {
+      "date": "Tue, 27 Apr 2021 08:32:03 GMT",
+      "tag": "backfill-config_v6.1.1",
+      "version": "6.1.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @types/fs-extra from 8.0.1 to 9.0.11",
+            "author": "ronald.ndirangu@gmail.com",
+            "commit": "b1c0dd5f4da27ba00feee8a52f0145bdb868da5f",
+            "package": "backfill-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 01 Dec 2020 09:43:25 GMT",
       "tag": "backfill-config_v6.1.0",
       "version": "6.1.0",

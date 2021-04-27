@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Bump @types/fs-extra from 8.0.1 to 9.0.11",
-  "packageName": "backfill",
-  "email": "ronald.ndirangu@gmail.com",
-  "dependentChangeType": "patch",
-  "date": "2021-04-27T06:09:53.143Z"
-}

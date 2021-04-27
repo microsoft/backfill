@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Tue, 01 Dec 2020 09:43:25 GMT and should not be manually modified.
+This log was last generated on Tue, 27 Apr 2021 08:32:03 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.2.1
+
+Tue, 27 Apr 2021 08:32:03 GMT
+
+### Patches
+
+- Bump @types/fs-extra from 8.0.1 to 9.0.11 (ronald.ndirangu@gmail.com)
 
 ## 5.2.0
 

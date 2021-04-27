@@ -2,6 +2,21 @@
   "name": "backfill-utils-test",
   "entries": [
     {
+      "date": "Tue, 27 Apr 2021 08:32:03 GMT",
+      "tag": "backfill-utils-test_v5.1.1",
+      "version": "5.1.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @types/fs-extra from 8.0.1 to 9.0.11",
+            "author": "ronald.ndirangu@gmail.com",
+            "commit": "b1c0dd5f4da27ba00feee8a52f0145bdb868da5f",
+            "package": "backfill-utils-test"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 01 Dec 2020 09:45:24 GMT",
       "tag": "backfill-utils-test_v5.1.0",
       "version": "5.1.0",
