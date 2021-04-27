@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "6.1.4",
+  "version": "6.1.5",
   "main": "lib/index.js",
   "bin": {
     "backfill": "./bin/backfill.js"
@@ -20,11 +20,11 @@
   },
   "dependencies": {
     "anymatch": "^3.0.3",
-    "backfill-cache": "^5.2.2",
-    "backfill-config": "^6.1.2",
-    "backfill-hasher": "^6.2.3",
-    "backfill-logger": "^5.1.2",
-    "backfill-utils-dotenv": "^5.1.0",
+    "backfill-cache": "^5.2.3",
+    "backfill-config": "^6.1.3",
+    "backfill-hasher": "^6.2.4",
+    "backfill-logger": "^5.1.3",
+    "backfill-utils-dotenv": "^5.1.1",
     "chokidar": "^3.2.1",
     "execa": "^4.0.0",
     "fs-extra": "^8.1.0",
@@ -36,7 +36,7 @@
     "@types/jest": "^25.2.1",
     "@types/node": "^14.14.41",
     "@types/yargs": "^15.0.10",
-    "backfill-utils-test": "^5.1.1",
+    "backfill-utils-test": "^5.1.2",
     "backfill-utils-tsconfig": "^5.0.0",
     "find-up": "^5.0.0",
     "jest": "^25.5.4",

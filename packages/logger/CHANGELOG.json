@@ -2,6 +2,21 @@
   "name": "backfill-logger",
   "entries": [
     {
+      "date": "Tue, 27 Apr 2021 09:06:13 GMT",
+      "tag": "backfill-logger_v5.1.3",
+      "version": "5.1.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @types/node from 13.13.35 to 14.14.41",
+            "author": "ronald.ndirangu@gmail.com",
+            "commit": "0e5a9db6edf7bfaa421cf1bb4c02a893ddd2b9d4",
+            "package": "backfill-logger"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 27 Apr 2021 08:36:41 GMT",
       "tag": "backfill-logger_v5.1.2",
       "version": "5.1.2",

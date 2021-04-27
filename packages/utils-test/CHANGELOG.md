@@ -1,8 +1,16 @@
 # Change Log - backfill-utils-test
 
-This log was last generated on Tue, 27 Apr 2021 08:32:03 GMT and should not be manually modified.
+This log was last generated on Tue, 27 Apr 2021 09:06:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.1.2
+
+Tue, 27 Apr 2021 09:06:13 GMT
+
+### Patches
+
+- Bump @types/node from 13.13.35 to 14.14.41 (ronald.ndirangu@gmail.com)
 
 ## 5.1.1
 

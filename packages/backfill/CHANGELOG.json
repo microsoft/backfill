@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Tue, 27 Apr 2021 09:06:13 GMT",
+      "tag": "backfill_v6.1.5",
+      "version": "6.1.5",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @types/node from 13.13.35 to 14.14.41",
+            "author": "ronald.ndirangu@gmail.com",
+            "commit": "0e5a9db6edf7bfaa421cf1bb4c02a893ddd2b9d4",
+            "package": "backfill"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 27 Apr 2021 08:32:03 GMT",
       "tag": "backfill_v6.1.3",
       "version": "6.1.3",

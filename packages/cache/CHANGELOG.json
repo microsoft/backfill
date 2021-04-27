@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Tue, 27 Apr 2021 09:06:13 GMT",
+      "tag": "backfill-cache_v5.2.3",
+      "version": "5.2.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @types/node from 13.13.35 to 14.14.41",
+            "author": "ronald.ndirangu@gmail.com",
+            "commit": "0e5a9db6edf7bfaa421cf1bb4c02a893ddd2b9d4",
+            "package": "backfill-cache"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 27 Apr 2021 08:32:03 GMT",
       "tag": "backfill-cache_v5.2.1",
       "version": "5.2.1",
