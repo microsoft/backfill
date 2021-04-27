@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Bump find-up from 4.1.0 to 5.0.0",
-  "packageName": "backfill",
-  "email": "ronald.ndirangu@gmail.com",
-  "dependentChangeType": "patch",
-  "date": "2021-04-27T06:32:33.436Z"
-}

@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Tue, 27 Apr 2021 08:29:06 GMT",
+      "tag": "backfill_v6.1.2",
+      "version": "6.1.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump find-up from 4.1.0 to 5.0.0",
+            "author": "ronald.ndirangu@gmail.com",
+            "commit": "f33abef63e0d7e5b3dc287ae2312ef2111a203a1",
+            "package": "backfill"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 01 Dec 2020 09:45:24 GMT",
       "tag": "backfill_v6.1.0",
       "version": "6.1.0",

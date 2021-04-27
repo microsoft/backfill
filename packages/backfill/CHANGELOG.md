@@ -1,8 +1,16 @@
 # Change Log - backfill
 
-This log was last generated on Tue, 01 Dec 2020 09:43:25 GMT and should not be manually modified.
+This log was last generated on Tue, 27 Apr 2021 08:29:06 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.1.2
+
+Tue, 27 Apr 2021 08:29:06 GMT
+
+### Patches
+
+- Bump find-up from 4.1.0 to 5.0.0 (ronald.ndirangu@gmail.com)
 
 ## 6.1.0
 
