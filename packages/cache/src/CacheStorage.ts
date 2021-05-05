@@ -1,7 +1,7 @@
 import globby from "globby";
+import { getPackageDeps } from "@rushstack/package-deps-hash";
 
 import { Logger } from "backfill-logger";
-import { getPackageDeps } from "@rushstack/package-deps-hash";
 
 export interface ICacheStorage {
   fetch: (hash: string) => Promise<boolean>;
