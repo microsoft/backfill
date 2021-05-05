@@ -85,7 +85,11 @@ export class NpmCacheStorage extends CacheStorage {
     return true;
   }
 
-  protected async _put(hash: string, outputGlob: string[]) {
+  protected async _put(
+    hash: string,
+    outputGlob: string[],
+    unchangedFiles: string[]
+  ) {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
     const temporaryNpmOutputFolder = path.resolve(
@@ -102,7 +106,9 @@ export class NpmCacheStorage extends CacheStorage {
       version: `0.0.0-${hash}`,
     });
 
-    const files = await globby(outputGlob, { cwd: this.cwd });
+    const files = (await globby(outputGlob, { cwd: this.cwd })).filter(
+      (f) => !unchangedFiles.includes(f)
+    );
 
     await Promise.all(
       files.map(async (file) => {

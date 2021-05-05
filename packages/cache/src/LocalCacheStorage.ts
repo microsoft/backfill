@@ -57,10 +57,18 @@ export class LocalCacheStorage extends CacheStorage {
     return true;
   }
 
-  protected async _put(hash: string, outputGlob: string[]): Promise<void> {
+  protected async _put(
+    hash: string,
+    outputGlob: string[],
+    unchangedFiles: string[]
+  ): Promise<void> {
     const localCacheFolder = this.getLocalCacheFolder(hash);
 
-    const files = globby.sync(outputGlob, { cwd: this.cwd });
+    const files = globby
+      .sync(outputGlob, { cwd: this.cwd })
+      .filter((f) => !unchangedFiles.includes(f));
+
+    await fs.mkdirp(localCacheFolder);
 
     await Promise.all(
       files.map(async (file) => {

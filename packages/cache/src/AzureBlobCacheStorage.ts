@@ -91,7 +91,11 @@ export class AzureBlobCacheStorage extends CacheStorage {
     }
   }
 
-  protected async _put(hash: string, outputGlob: string[]): Promise<void> {
+  protected async _put(
+    hash: string,
+    outputGlob: string[],
+    unchangedFiles: string[]
+  ): Promise<void> {
     const blobClient = createBlobClient(
       this.options.connectionString,
       this.options.container,
@@ -100,7 +104,9 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
     const blockBlobClient = blobClient.getBlockBlobClient();
 
-    const filesToCopy = await globby(outputGlob, { cwd: this.cwd });
+    const filesToCopy = (await globby(outputGlob, { cwd: this.cwd })).filter(
+      (f) => !unchangedFiles.includes(f)
+    );
     const tarStream = tarFs.pack(this.cwd, { entries: filesToCopy });
 
     // If there's a maxSize limit, first sum up the total size of bytes of all the outputGlobbed files
