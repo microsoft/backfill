@@ -10,6 +10,54 @@ import { backfill } from "../index";
 const logger = makeLogger("mute");
 
 describe("backfill", () => {
+  it.only("with modified source files", async () => {
+    //  Set up
+    const fixtureLocation = await setupFixture("basic");
+
+    const config = createConfig(logger, fixtureLocation);
+    config.outputGlob = ["src/*"];
+
+    const salt = "fooBar";
+    let buildCalled = 0;
+
+    const initialContent = fs
+      .readFileSync(path.join(fixtureLocation, "src", "index.ts"))
+      .toString();
+
+    const outputContent = `console.log("foo bar");`;
+    const buildCommand = async (): Promise<void> => {
+      await fs.writeFile(
+        path.join(fixtureLocation, "src", "index.ts"),
+        outputContent
+      );
+      buildCalled += 1;
+    };
+
+    // Execute
+    await backfill(config, buildCommand, salt, logger);
+
+    // Assert
+    expect(buildCalled).toBe(1);
+    expect(
+      fs.readFileSync(path.join(fixtureLocation, "src", "index.ts")).toString()
+    ).toBe(outputContent);
+
+    // Reset
+    buildCalled = 0;
+    await fs.writeFile(
+      path.join(fixtureLocation, "src", "index.ts"),
+      initialContent
+    );
+
+    // Execute
+    await backfill(config, buildCommand, salt, logger);
+
+    // Assert
+    expect(buildCalled).toBe(0);
+    expect(
+      fs.readFileSync(path.join(fixtureLocation, "src", "index.ts")).toString()
+    ).toBe(outputContent);
+  });
   it("with cache miss and then cache hit", async () => {
     //  Set up
     const fixtureLocation = await setupFixture("basic");
