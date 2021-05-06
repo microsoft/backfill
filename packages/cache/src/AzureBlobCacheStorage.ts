@@ -1,7 +1,6 @@
 import * as path from "path";
 import { BlobServiceClient } from "@azure/storage-blob";
 import tarFs from "tar-fs";
-import globby from "globby";
 
 import { Logger } from "backfill-logger";
 import { AzureBlobCacheStorageOptions } from "backfill-config";
@@ -91,7 +90,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
     }
   }
 
-  protected async _put(hash: string, outputGlob: string[]): Promise<void> {
+  protected async _put(hash: string, filesToCache: string[]): Promise<void> {
     const blobClient = createBlobClient(
       this.options.connectionString,
       this.options.container,
@@ -100,13 +99,12 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
     const blockBlobClient = blobClient.getBlockBlobClient();
 
-    const filesToCopy = await globby(outputGlob, { cwd: this.cwd });
-    const tarStream = tarFs.pack(this.cwd, { entries: filesToCopy });
+    const tarStream = tarFs.pack(this.cwd, { entries: filesToCache });
 
     // If there's a maxSize limit, first sum up the total size of bytes of all the outputGlobbed files
     if (this.options.maxSize) {
       let total = 0;
-      for (const file of filesToCopy) {
+      for (const file of filesToCache) {
         total = total + (await stat(path.join(this.cwd, file))).size;
       }
 

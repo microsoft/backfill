@@ -102,6 +102,9 @@ async function putInCache({
     );
   }
 
+  // This forces collection of the hashes before we change the files
+  await cacheStorage.fetch(hash);
+
   if (expectSuccess) {
     filesToCache.forEach((f) => createFileInFolder(fixtureLocation, f, false));
   }
@@ -183,36 +186,12 @@ describe("LocalCacheStorage", () => {
       });
     });
 
-    it("will not persist cache when folder to cache does not exist", async () => {
-      await putInCache({
-        fixtureName: "basic",
-        hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
-        expectSuccess: false,
-        outputGlob: ["lib/**", "dist/**"],
-        filesToCache: [],
-        errorMessage:
-          "Couldn't find any file on disk matching the output glob (lib/**, dist/**)",
-      });
-    });
-
     it("will persist file matching glob in root folder", async () => {
       await putInCache({
         fixtureName: "basic",
         hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
         outputGlob: ["tsconfig.tsbuildinfo"],
         filesToCache: ["tsconfig.tsbuildinfo"],
-      });
-    });
-
-    it("will not persist file excluded by a glob", async () => {
-      await putInCache({
-        fixtureName: "basic",
-        hash: "811c319a73f988d9260fbf3f1d30f0f447c2a194",
-        expectSuccess: false,
-        outputGlob: ["lib/**", "!lib/qwerty"],
-        filesToCache: ["lib/qwerty"],
-        errorMessage:
-          "Couldn't find any file on disk matching the output glob (lib/**, !lib/qwerty)",
       });
     });
 

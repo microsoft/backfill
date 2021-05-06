@@ -1,0 +1,8 @@
+{
+  "type": "patch",
+  "comment": "opt-in to optimize cache size",
+  "packageName": "backfill",
+  "email": "vibailly@microsoft.com",
+  "dependentChangeType": "patch",
+  "date": "2021-05-06T13:10:11.232Z"
+}

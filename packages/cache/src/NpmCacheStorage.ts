@@ -85,7 +85,7 @@ export class NpmCacheStorage extends CacheStorage {
     return true;
   }
 
-  protected async _put(hash: string, outputGlob: string[]) {
+  protected async _put(hash: string, filesToCache: string[]) {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
     const temporaryNpmOutputFolder = path.resolve(
@@ -102,10 +102,10 @@ export class NpmCacheStorage extends CacheStorage {
       version: `0.0.0-${hash}`,
     });
 
-    const files = await globby(outputGlob, { cwd: this.cwd });
+    await fs.mkdirp(temporaryNpmOutputFolder);
 
     await Promise.all(
-      files.map(async (file) => {
+      filesToCache.map(async (file) => {
         const destinationFolder = path.join(
           temporaryNpmOutputFolder,
           path.dirname(file)

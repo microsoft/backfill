@@ -44,7 +44,7 @@ export async function backfill(
   const createPackageHash = async () =>
     await computeHash(packageRoot, logger, hashSalt);
   const fetch = async (hash: string) =>
-    await fetch_api(packageRoot, hash, logger);
+    await fetch_api(packageRoot, hash, logger, config);
   const run = async () => {
     try {
       await buildCommand();
@@ -54,7 +54,7 @@ export async function backfill(
   };
   const put = async (hash: string) => {
     try {
-      await put_api(packageRoot, hash, logger);
+      await put_api(packageRoot, hash, logger, config);
     } catch (err) {
       logger.error(
         `Failed to persist the cache with the following error:\n\n${err}`
