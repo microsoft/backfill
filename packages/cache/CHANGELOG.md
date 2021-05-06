@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Tue, 27 Apr 2021 09:06:13 GMT and should not be manually modified.
+This log was last generated on Thu, 06 May 2021 13:46:20 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.2.4
+
+Thu, 06 May 2021 13:46:20 GMT
+
+### Patches
+
+- opt-in to optimize cache size (vibailly@microsoft.com)
 
 ## 5.2.3
 

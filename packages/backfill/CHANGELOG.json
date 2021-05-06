@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Thu, 06 May 2021 13:46:20 GMT",
+      "tag": "backfill_v6.1.6",
+      "version": "6.1.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "opt-in to optimize cache size",
+            "author": "vibailly@microsoft.com",
+            "commit": "3df30b0220804713d8eb7193389ea577a516d4c7",
+            "package": "backfill"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 27 Apr 2021 09:06:13 GMT",
       "tag": "backfill_v6.1.5",
       "version": "6.1.5",
