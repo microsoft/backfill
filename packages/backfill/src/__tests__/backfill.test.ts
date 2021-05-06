@@ -10,7 +10,7 @@ import { backfill } from "../index";
 const logger = makeLogger("mute");
 
 describe("backfill", () => {
-  it.only("with modified source files", async () => {
+  it("with modified source files", async () => {
     //  Set up
     const fixtureLocation = await setupFixture("basic");
 
