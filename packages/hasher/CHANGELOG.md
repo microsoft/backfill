@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Tue, 27 Apr 2021 08:32:03 GMT and should not be manually modified.
+This log was last generated on Tue, 22 Jun 2021 14:38:58 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.2.5
+
+Tue, 22 Jun 2021 14:38:58 GMT
+
+### Patches
+
+- Fix: files from a different package are included in the hash. (vibailly@microsoft.com)
 
 ## 6.2.2
 

@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Tue, 22 Jun 2021 14:38:58 GMT",
+      "tag": "backfill-hasher_v6.2.5",
+      "version": "6.2.5",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix: files from a different package are included in the hash.",
+            "author": "vibailly@microsoft.com",
+            "commit": "bd716573b8ace89b5f091f0e52c9e9428cffb760",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 27 Apr 2021 08:32:03 GMT",
       "tag": "backfill-hasher_v6.2.2",
       "version": "6.2.2",

@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Fix: files from a different package are included in the hash.",
-  "packageName": "backfill-hasher",
-  "email": "vibailly@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2021-06-22T14:15:07.971Z"
-}
