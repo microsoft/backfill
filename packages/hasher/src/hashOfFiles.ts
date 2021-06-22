@@ -1,4 +1,4 @@
-import path from "path";
+import path, { sep } from "path";
 
 import { hashStrings } from "./helpers";
 import { RepoInfo } from "./repoInfo";
@@ -24,7 +24,7 @@ export async function generateHashOfFiles(
   const { repoHashes, root } = repoInfo;
 
   const files: string[] = Object.keys(repoHashes).filter((f) =>
-    path.join(root, f).includes(path.normalize(packageRoot))
+    path.join(root, f).includes(path.normalize(packageRoot) + sep)
   );
 
   files.sort((a, b) => a.localeCompare(b));

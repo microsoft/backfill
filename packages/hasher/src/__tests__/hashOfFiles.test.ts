@@ -39,6 +39,31 @@ describe("generateHashOfFiles()", () => {
     expect(hashOfPackage).toEqual(hashOfPackageWithoutFoo);
   });
 
+  it("is not confused by package names being substring of other packages", async () => {
+    const packageRoot = await setupFixture("monorepo");
+
+    let repoInfo = await getRepoInfoNoCache(packageRoot);
+
+    const hashOfPackageA = await generateHashOfFiles(
+      path.join(packageRoot, "packages", "package-a"),
+      repoInfo
+    );
+
+    await fs.mkdir(path.join(packageRoot, "packages", "package-abc"));
+    await fs.writeFile(
+      path.join(packageRoot, "packages", "package-abc", "foo"),
+      "bar"
+    );
+
+    repoInfo = await getRepoInfoNoCache(packageRoot);
+    const newHashOfPackageA = await generateHashOfFiles(
+      path.join(packageRoot, "packages", "package-a"),
+      repoInfo
+    );
+
+    expect(hashOfPackageA).toEqual(newHashOfPackageA);
+  });
+
   it("file paths are included in hash", async () => {
     const packageRoot = await setupFixture("empty");
 
@@ -63,7 +88,7 @@ describe("generateHashOfFiles()", () => {
   });
 
   // This test will be run on Windows and on Linux on the CI
-  it.only("file paths are consistent across platforms", async () => {
+  it("file paths are consistent across platforms", async () => {
     const packageRoot = await setupFixture("empty");
 
     // Create a folder to make sure we get folder separators as part of the file name
