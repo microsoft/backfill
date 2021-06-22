@@ -24,7 +24,7 @@ export async function generateHashOfFiles(
   const { repoHashes, root } = repoInfo;
 
   const files: string[] = Object.keys(repoHashes).filter((f) =>
-    path.join(root, f).includes(path.normalize(packageRoot))
+    path.join(root, f).includes(path.normalize(packageRoot) + "/")
   );
 
   files.sort((a, b) => a.localeCompare(b));
