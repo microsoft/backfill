@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Sat, 31 Jul 2021 21:38:03 GMT",
+      "tag": "backfill-cache_v5.2.5",
+      "version": "5.2.5",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Speeds up put memoized hash calculation as well as fixing a bug in the path normalization",
+            "author": "ken@gizzar.com",
+            "commit": "25de1b2c65db8ac33b615b548f241ad41ad96cee",
+            "package": "backfill-cache"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 06 May 2021 13:46:20 GMT",
       "tag": "backfill-cache_v5.2.4",
       "version": "5.2.4",

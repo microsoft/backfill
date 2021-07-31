@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Thu, 06 May 2021 13:46:20 GMT and should not be manually modified.
+This log was last generated on Sat, 31 Jul 2021 21:38:03 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.2.5
+
+Sat, 31 Jul 2021 21:38:03 GMT
+
+### Patches
+
+- Speeds up put memoized hash calculation as well as fixing a bug in the path normalization (ken@gizzar.com)
 
 ## 5.2.4
 
