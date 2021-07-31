@@ -40,16 +40,13 @@ function getMemoizedHashesFor(cwd: string): { [file: string]: string } {
     (o) => !relative(pathRelativeToRepo, o).startsWith("..")
   );
 
-  return filesInCwd.reduce(
-    (acc, next) => ({
-      ...acc,
-      [relative(pathRelativeToRepo, next).replace(
-        /\\/,
-        "/"
-      )]: savedHashOfThisRepo[next],
-    }),
-    {}
-  );
+  const results: { [key: string]: string } = {};
+  for (const file in filesInCwd) {
+    results[relative(pathRelativeToRepo, file).replace(/\\/g, "/")] =
+      savedHashOfThisRepo[file];
+  }
+
+  return results;
 }
 
 export interface ICacheStorage {

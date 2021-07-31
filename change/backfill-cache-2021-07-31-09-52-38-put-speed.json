@@ -1,0 +1,8 @@
+{
+  "type": "patch",
+  "comment": "Speeds up put memoized hash calculation as well as fixing a bug in the path normalization",
+  "packageName": "backfill-cache",
+  "email": "ken@gizzar.com",
+  "dependentChangeType": "patch",
+  "date": "2021-07-31T16:52:38.076Z"
+}
