@@ -8,14 +8,17 @@ import { Logger } from "backfill-logger";
 const savedHashOfRepos: { [gitRoot: string]: { [file: string]: string } } = {};
 
 function getRepoRoot(cwd: string): string {
-  const gitFolder = findUp.sync(".git", { cwd, type: "directory" });
-  if (!gitFolder) {
+  // .git is typically a folder but will be a file in a worktree
+  const nearestGitInfo =
+    findUp.sync(".git", { cwd, type: "directory" }) ||
+    findUp.sync(".git", { cwd, type: "file" });
+  if (!nearestGitInfo) {
     throw new Error(
       "The location that backfill is being run against is not in a git repo"
     );
   }
 
-  return dirname(gitFolder);
+  return dirname(nearestGitInfo);
 }
 
 function fetchHashesFor(cwd: string) {
