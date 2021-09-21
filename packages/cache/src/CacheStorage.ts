@@ -8,7 +8,8 @@ import { Logger } from "backfill-logger";
 const savedHashOfRepos: { [gitRoot: string]: { [file: string]: string } } = {};
 
 function getRepoRoot(cwd: string): string {
-  const gitFolder = findUp.sync(".git", { cwd, type: "directory" });
+  // .git is typically a folder but will be a file in a worktree
+  const gitFolder = findUp.sync(".git", { cwd });
   if (!gitFolder) {
     throw new Error(
       "The location that backfill is being run against is not in a git repo"

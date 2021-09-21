@@ -11,10 +11,8 @@ let changedFilesInsideScope: string[] = [];
 let watcher: chokidar.FSWatcher;
 
 function getGitRepositoryRoot(packageRoot: string) {
-  const nearestGitFolder = findUp.sync(".git", {
-    cwd: packageRoot,
-    type: "directory",
-  });
+  // .git is typically a folder but will be a file in a worktree
+  const nearestGitFolder = findUp.sync(".git", { cwd: packageRoot });
 
   if (nearestGitFolder) {
     // Return the parent folder of some/path/.git
