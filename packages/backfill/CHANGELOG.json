@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Tue, 21 Sep 2021 22:29:42 GMT",
+      "tag": "backfill_v6.1.9",
+      "version": "6.1.9",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix git root detection in worktrees",
+            "author": "elcraig@microsoft.com",
+            "commit": "c21ba92bfd37769ee06a2f3269694b6d8dfa14e9",
+            "package": "backfill"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 06 May 2021 13:46:20 GMT",
       "tag": "backfill_v6.1.6",
       "version": "6.1.6",

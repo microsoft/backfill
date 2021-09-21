@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Sat, 31 Jul 2021 21:38:03 GMT and should not be manually modified.
+This log was last generated on Tue, 21 Sep 2021 22:29:42 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.2.6
+
+Tue, 21 Sep 2021 22:29:42 GMT
+
+### Patches
+
+- Fix git root detection in worktrees (elcraig@microsoft.com)
 
 ## 5.2.5
 

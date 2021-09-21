@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Fix git root detection in worktrees",
-  "packageName": "backfill-cache",
-  "email": "elcraig@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2021-09-21T05:47:29.059Z"
-}

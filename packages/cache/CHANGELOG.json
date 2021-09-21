@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Tue, 21 Sep 2021 22:29:42 GMT",
+      "tag": "backfill-cache_v5.2.6",
+      "version": "5.2.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix git root detection in worktrees",
+            "author": "elcraig@microsoft.com",
+            "commit": "c21ba92bfd37769ee06a2f3269694b6d8dfa14e9",
+            "package": "backfill-cache"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 31 Jul 2021 21:38:03 GMT",
       "tag": "backfill-cache_v5.2.5",
       "version": "5.2.5",
