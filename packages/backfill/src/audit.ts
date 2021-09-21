@@ -12,11 +12,13 @@ let watcher: chokidar.FSWatcher;
 
 function getGitRepositoryRoot(packageRoot: string) {
   // .git is typically a folder but will be a file in a worktree
-  const nearestGitFolder = findUp.sync(".git", { cwd: packageRoot });
+  const nearestGitRoot =
+    findUp.sync(".git", { cwd: packageRoot, type: "directory" }) ||
+    findUp.sync(".git", { cwd: packageRoot, type: "file" });
 
-  if (nearestGitFolder) {
+  if (nearestGitRoot) {
     // Return the parent folder of some/path/.git
-    return path.join(nearestGitFolder, "..");
+    return path.join(nearestGitRoot, "..");
   }
 
   return packageRoot;
