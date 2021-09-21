@@ -9,16 +9,16 @@ const savedHashOfRepos: { [gitRoot: string]: { [file: string]: string } } = {};
 
 function getRepoRoot(cwd: string): string {
   // .git is typically a folder but will be a file in a worktree
-  const gitRoot =
+  const nearestGitInfo =
     findUp.sync(".git", { cwd, type: "directory" }) ||
     findUp.sync(".git", { cwd, type: "file" });
-  if (!gitRoot) {
+  if (!nearestGitInfo) {
     throw new Error(
       "The location that backfill is being run against is not in a git repo"
     );
   }
 
-  return dirname(gitRoot);
+  return dirname(nearestGitInfo);
 }
 
 function fetchHashesFor(cwd: string) {
