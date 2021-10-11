@@ -39,7 +39,11 @@ export async function backfill(
 
   logger.setName(name);
   logger.setMode(mode, mode === "READ_WRITE" ? "info" : "verbose");
-  logger.setCacheProvider(cacheStorageConfig.provider);
+  logger.setCacheProvider(
+    typeof cacheStorageConfig.provider === "function"
+      ? cacheStorageConfig.provider.name
+      : cacheStorageConfig.provider
+  );
 
   const createPackageHash = async () =>
     await computeHash(packageRoot, logger, hashSalt);

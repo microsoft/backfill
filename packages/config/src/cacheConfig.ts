@@ -33,12 +33,12 @@ export type CacheStorageConfig =
   | AzureBlobCacheStorageConfig
   | {
       provider: {
-        new <T>(
+        new (
           providerOptions: any,
           internalCacheFolder: string,
           logger: Logger,
           cwd: string
-        ): T;
+        ): any;
       };
       options: any;
     };

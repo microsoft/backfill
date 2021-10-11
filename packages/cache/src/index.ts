@@ -26,7 +26,7 @@ export function getCacheStorageProvider(
     const CacheStorageClass = cacheStorageConfig.provider;
 
     try {
-      cacheStorage = new CacheStorageClass<ICacheStorage>(
+      cacheStorage = new CacheStorageClass(
         "options" in cacheStorageConfig ? cacheStorageConfig.options : {},
         internalCacheFolder,
         logger,
