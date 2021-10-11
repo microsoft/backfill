@@ -30,7 +30,18 @@ export type CacheStorageConfig =
       provider: "local-skip";
     }
   | NpmCacheStorageConfig
-  | AzureBlobCacheStorageConfig;
+  | AzureBlobCacheStorageConfig
+  | {
+      provider: {
+        new <T>(
+          providerOptions: any,
+          internalCacheFolder: string,
+          logger: Logger,
+          cwd: string
+        ): T;
+      };
+      options: any;
+    };
 
 export function getNpmConfigFromSerializedOptions(
   options: string,
@@ -51,7 +62,7 @@ export function getNpmConfigFromSerializedOptions(
       options: { ...parsedOptions },
     };
   } catch (error) {
-    logger.error(error);
+    logger.error(error as any);
     throw new Error("Invalid npm storage options");
   }
 }
@@ -79,7 +90,7 @@ export function getAzureBlobConfigFromSerializedOptions(
       options: { ...parsedOptions },
     };
   } catch (error) {
-    logger.error(error);
+    logger.error(error as any);
     throw new Error("Invalid blob storage options");
   }
 }
