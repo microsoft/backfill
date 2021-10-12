@@ -72,7 +72,6 @@ export async function backfill(
       const hash = await createPackageHash();
       if (!(await fetch(hash))) {
         await run();
-
         await put(hash);
       }
 
