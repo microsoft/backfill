@@ -54,6 +54,7 @@ describe("getCacheStorageProvider", () => {
     const provider = getCacheStorageProvider(
       {
         provider: (logger, cwd) => new TestProvider(logger, cwd),
+        name: "test-provider",
       },
       "test",
       makeLogger("silly"),

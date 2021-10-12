@@ -5,6 +5,7 @@ import { Logger, makeLogger } from "backfill-logger";
 import { createConfig, Config } from "backfill-config";
 export { createDefaultConfig } from "backfill-config";
 
+import { isCustomProvider } from "backfill-cache";
 import {
   getRawBuildCommand,
   createBuildCommand,
@@ -40,8 +41,8 @@ export async function backfill(
   logger.setName(name);
   logger.setMode(mode, mode === "READ_WRITE" ? "info" : "verbose");
   logger.setCacheProvider(
-    typeof cacheStorageConfig.provider === "function"
-      ? cacheStorageConfig.provider.name
+    isCustomProvider(cacheStorageConfig)
+      ? cacheStorageConfig.name || "custom-storage-provider"
       : cacheStorageConfig.provider
   );
 
@@ -163,7 +164,7 @@ export async function main(): Promise<void> {
       await closeWatcher(logger);
     }
   } catch (err) {
-    logger.error(err);
+    logger.error(err as any);
     process.exit(1);
   }
 }

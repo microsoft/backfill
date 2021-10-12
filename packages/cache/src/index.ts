@@ -8,11 +8,13 @@ import { NpmCacheStorage } from "./NpmCacheStorage";
 import { LocalSkipCacheStorage } from "./LocalSkipCacheStorage";
 export { ICacheStorage, CacheStorage } from "./CacheStorage";
 
-function isCustomProvider(
-  provider: string | CustomStorageConfig["provider"]
-): provider is CustomStorageConfig["provider"] {
+export function isCustomProvider(
+  config: CacheStorageConfig
+): config is CustomStorageConfig {
   return (
-    typeof provider === "function" && "fetch" in provider && "put" in provider
+    typeof config.provider === "function" &&
+    "fetch" in config.provider &&
+    "put" in config.provider
   );
 }
 
@@ -24,7 +26,7 @@ export function getCacheStorageProvider(
 ): ICacheStorage {
   let cacheStorage: ICacheStorage;
 
-  if (isCustomProvider(cacheStorageConfig.provider)) {
+  if (isCustomProvider(cacheStorageConfig)) {
     const createCacheStorage = cacheStorageConfig.provider;
 
     try {

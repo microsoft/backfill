@@ -29,6 +29,7 @@ export type NpmCacheStorageConfig = {
 
 export type CustomStorageConfig = {
   provider: (logger: Logger, cwd: string) => ICacheStorage;
+  name?: string;
 };
 
 export type CacheStorageConfig =
