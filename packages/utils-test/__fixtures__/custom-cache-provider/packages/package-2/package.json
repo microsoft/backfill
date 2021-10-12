@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "package-2",
   "license": "MIT",
   "version": "0.1.0"
