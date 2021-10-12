@@ -1,5 +1,10 @@
 import { Logger } from "backfill-logger";
 
+export interface ICacheStorage {
+  fetch: (hash: string) => Promise<boolean>;
+  put: (hash: string, filesToCache: string[]) => Promise<void>;
+}
+
 export type AzureBlobCacheStorageOptions = {
   connectionString: string;
   container: string;
@@ -22,6 +27,11 @@ export type NpmCacheStorageConfig = {
   options: NpmCacheStorageOptions;
 };
 
+export type CustomStorageConfig = {
+  provider: (logger: Logger, cwd: string) => ICacheStorage;
+  name?: string;
+};
+
 export type CacheStorageConfig =
   | {
       provider: "local";
@@ -30,7 +40,8 @@ export type CacheStorageConfig =
       provider: "local-skip";
     }
   | NpmCacheStorageConfig
-  | AzureBlobCacheStorageConfig;
+  | AzureBlobCacheStorageConfig
+  | CustomStorageConfig;
 
 export function getNpmConfigFromSerializedOptions(
   options: string,
@@ -51,7 +62,7 @@ export function getNpmConfigFromSerializedOptions(
       options: { ...parsedOptions },
     };
   } catch (error) {
-    logger.error(error);
+    logger.error(error as any);
     throw new Error("Invalid npm storage options");
   }
 }
@@ -79,7 +90,7 @@ export function getAzureBlobConfigFromSerializedOptions(
       options: { ...parsedOptions },
     };
   } catch (error) {
-    logger.error(error);
+    logger.error(error as any);
     throw new Error("Invalid blob storage options");
   }
 }

@@ -199,9 +199,9 @@ module.exports = {
     provider: "npm",
     options: {
       npmPackageName: "...",
-      registryUrl: "..."
-    }
-  }
+      registryUrl: "...",
+    },
+  },
 };
 ```
 
@@ -239,8 +239,8 @@ You can configure this from the `backfill.config.js` file this way:
 ```js
 module.exports = {
   cacheStorageConfig: {
-    provider: "local-skip"
-  }
+    provider: "local-skip",
+  },
 };
 ```
 
@@ -249,6 +249,49 @@ storage strategy:
 
 ```
 BACKFILL_CACHE_PROVIDER="local-skip"
+```
+
+## Custom storage providers
+
+It is also possible to give backfill a custom storage provider altogether. This
+will give the ultimate flexibility in how to handle cache fetching and putting.
+
+Configure the custom cache provider this way:
+
+```js
+// CustomStorageProvider.ts
+class CustomStorageProvider implements ICacheStorage {
+  constructor(providerOptions: any, logger: Logger, cwd: string) {
+    // do what is needed in regards to the options
+  }
+
+  async fetch(hash: string) {
+    // some fetch logic
+  }
+
+  async put(hash: string, filesToCache: string[]) {
+    // some putting logic
+  }
+}
+
+module.exports.CustomStorageProvider = CustomStorageProvider;
+
+// backfill configuration
+const CustomStorageProvider = require("./custom-storage-provider");
+
+module.exports = {
+  cacheStorageConfig: {
+    provider: (logger, cwd) =>
+      new CustomStorageProvider(
+        {
+          key1: "value1",
+          key2: "value2",
+        },
+        logger,
+        cwd
+      ),
+  },
+};
 ```
 
 ## API
@@ -270,8 +313,6 @@ if (!fetchSuccess) {
   await runBuildCommand();
   await backfill.put(packagePath, packageHash, logger);
 }
-
-
 ```
 
 ## Performance Logs

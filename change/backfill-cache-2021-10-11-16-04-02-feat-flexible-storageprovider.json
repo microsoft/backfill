@@ -1,0 +1,8 @@
+{
+  "type": "minor",
+  "comment": "feat: adds a way to set up custom cache storage provider classes",
+  "packageName": "backfill-cache",
+  "email": "kchau@microsoft.com",
+  "dependentChangeType": "patch",
+  "date": "2021-10-11T23:03:58.641Z"
+}

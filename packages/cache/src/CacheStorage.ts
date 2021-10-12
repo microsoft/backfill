@@ -4,6 +4,7 @@ import findUp from "find-up";
 import { getPackageDeps } from "@rushstack/package-deps-hash";
 
 import { Logger } from "backfill-logger";
+import { ICacheStorage } from "backfill-config";
 
 const savedHashOfRepos: { [gitRoot: string]: { [file: string]: string } } = {};
 
@@ -52,10 +53,7 @@ function getMemoizedHashesFor(cwd: string): { [file: string]: string } {
   return results;
 }
 
-export interface ICacheStorage {
-  fetch: (hash: string) => Promise<boolean>;
-  put: (hash: string, filesToCache: string[]) => Promise<void>;
-}
+export { ICacheStorage };
 
 export abstract class CacheStorage implements ICacheStorage {
   public constructor(protected logger: Logger, protected cwd: string) {}
