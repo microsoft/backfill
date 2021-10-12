@@ -34,40 +34,33 @@ describe("getCacheStorageProvider", () => {
     expect(provider instanceof AzureBlobCacheStorage).toBeTruthy();
   });
 
-  test("can get a custom storage provider", () => {
-    expect.assertions(2);
-
+  test("can get a custom storage provider as a class", () => {
     const TestProvider = class implements ICacheStorage {
-      constructor(
-        _options: any,
-        _cacheFolder: string,
-        _logger: Logger,
-        _cwd: string
-      ) {
-        expect(_options.genericOption).toBeTruthy();
-      }
+      constructor(private logger: Logger, private cwd: string) {}
 
-      fetch(_hash: string) {
+      fetch(hash: string) {
+        this.logger.silly(`fetching ${this.cwd} ${hash}`);
         return Promise.resolve(true);
       }
 
-      put(_hash: string, _filesToCache: string[]) {
+      put(hash: string, filesToCache: string[]) {
+        this.logger.silly(
+          `putting ${this.cwd} ${hash} ${filesToCache.length} files`
+        );
         return Promise.resolve();
       }
     };
 
     const provider = getCacheStorageProvider(
       {
-        provider: TestProvider,
-        options: {
-          genericOption: true,
-        },
+        provider: (logger, cwd) => new TestProvider(logger, cwd),
       },
       "test",
       makeLogger("silly"),
       "cwd"
     );
 
-    expect(provider instanceof TestProvider).toBeTruthy();
+    expect(provider.fetch).toBeTruthy();
+    expect(provider.put).toBeTruthy();
   });
 });

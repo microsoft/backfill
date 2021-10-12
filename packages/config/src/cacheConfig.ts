@@ -1,5 +1,10 @@
 import { Logger } from "backfill-logger";
 
+export interface ICacheStorage {
+  fetch: (hash: string) => Promise<boolean>;
+  put: (hash: string, filesToCache: string[]) => Promise<void>;
+}
+
 export type AzureBlobCacheStorageOptions = {
   connectionString: string;
   container: string;
@@ -22,6 +27,10 @@ export type NpmCacheStorageConfig = {
   options: NpmCacheStorageOptions;
 };
 
+export type CustomStorageConfig = {
+  provider: (logger: Logger, cwd: string) => ICacheStorage;
+};
+
 export type CacheStorageConfig =
   | {
       provider: "local";
@@ -31,17 +40,7 @@ export type CacheStorageConfig =
     }
   | NpmCacheStorageConfig
   | AzureBlobCacheStorageConfig
-  | {
-      provider: {
-        new (
-          providerOptions: any,
-          internalCacheFolder: string,
-          logger: Logger,
-          cwd: string
-        ): any;
-      };
-      options: any;
-    };
+  | CustomStorageConfig;
 
 export function getNpmConfigFromSerializedOptions(
   options: string,

@@ -261,7 +261,7 @@ Configure the custom cache provider this way:
 ```js
 // CustomStorageProvider.ts
 class CustomStorageProvider implements ICacheStorage {
-  constructor(options: any, cacheFolder: string, logger: Logger, cwd: string) {
+  constructor(providerOptions: any, logger: Logger, cwd: string) {
     // do what is needed in regards to the options
   }
 
@@ -281,10 +281,15 @@ const CustomStorageProvider = require("./custom-storage-provider");
 
 module.exports = {
   cacheStorageConfig: {
-    provider: CustomStorageProvider,
-    options: {
-      // a bit of provider options that gets sent to the constructor
-    },
+    provider: (logger, cwd) =>
+      new CustomStorageProvider(
+        {
+          key1: "value1",
+          key2: "value2",
+        },
+        logger,
+        cwd
+      ),
   },
 };
 ```

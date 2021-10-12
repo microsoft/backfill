@@ -1,4 +1,4 @@
-import { CacheStorageConfig } from "backfill-config";
+import { CacheStorageConfig, CustomStorageConfig } from "backfill-config";
 import { Logger } from "backfill-logger";
 
 import { ICacheStorage } from "./CacheStorage";
@@ -8,9 +8,11 @@ import { NpmCacheStorage } from "./NpmCacheStorage";
 import { LocalSkipCacheStorage } from "./LocalSkipCacheStorage";
 export { ICacheStorage, CacheStorage } from "./CacheStorage";
 
-function isCustomProvider(provider: string | Function): provider is Function {
+function isCustomProvider(
+  provider: string | CustomStorageConfig["provider"]
+): provider is CustomStorageConfig["provider"] {
   return (
-    typeof provider === "function" && typeof provider.constructor === "function"
+    typeof provider === "function" && "fetch" in provider && "put" in provider
   );
 }
 
@@ -23,17 +25,12 @@ export function getCacheStorageProvider(
   let cacheStorage: ICacheStorage;
 
   if (isCustomProvider(cacheStorageConfig.provider)) {
-    const CacheStorageClass = cacheStorageConfig.provider;
+    const createCacheStorage = cacheStorageConfig.provider;
 
     try {
-      cacheStorage = new CacheStorageClass(
-        "options" in cacheStorageConfig ? cacheStorageConfig.options : {},
-        internalCacheFolder,
-        logger,
-        cwd
-      );
+      cacheStorage = createCacheStorage(logger, cwd);
     } catch {
-      throw new Error("cacheStorageConfig.provider cannot be constructed");
+      throw new Error("cacheStorageConfig.provider cannot be creaated");
     }
   } else {
     if (cacheStorageConfig.provider === "npm") {
