@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "get correct name of the storage provider",
-  "packageName": "backfill",
-  "email": "kchau@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2021-10-11T23:51:23.326Z"
-}

@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Tue, 21 Sep 2021 22:29:42 GMT and should not be manually modified.
+This log was last generated on Tue, 12 Oct 2021 19:45:45 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.3.0
+
+Tue, 12 Oct 2021 19:45:45 GMT
+
+### Minor changes
+
+- feat: adds a way to set up custom cache storage provider classes (kchau@microsoft.com)
 
 ## 5.2.6
 
