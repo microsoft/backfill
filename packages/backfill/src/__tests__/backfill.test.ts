@@ -101,4 +101,27 @@ describe("backfill", () => {
       fs.readFileSync(path.join(fixtureLocation, "lib", "output.js")).toString()
     ).toBe(outputContent);
   });
+
+  it("should set the proper custom cache provider name", async () => {
+    //  Set up
+    const fixtureLocation = await setupFixture("custom-cache-provider");
+
+    const spyLogger = jest.spyOn(logger, "setCacheProvider");
+
+    const config = createConfig(logger, fixtureLocation);
+
+    config.outputGlob = ["src/*"];
+
+    const salt = "fooBar";
+
+    const buildCommand = () => Promise.resolve();
+
+    // Execute
+    await backfill(config, buildCommand, salt, logger);
+
+    // Assert
+
+    // See `packages/utils-test/__fixtures__/custom-cache-provider/backfill.config.js`'s provider.name
+    expect(spyLogger).toBeCalledWith("custom-provider");
+  });
 });

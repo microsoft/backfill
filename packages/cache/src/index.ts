@@ -11,11 +11,7 @@ export { ICacheStorage, CacheStorage } from "./CacheStorage";
 export function isCustomProvider(
   config: CacheStorageConfig
 ): config is CustomStorageConfig {
-  return (
-    typeof config.provider === "function" &&
-    "fetch" in config.provider &&
-    "put" in config.provider
-  );
+  return typeof config.provider === "function";
 }
 
 export function getCacheStorageProvider(
