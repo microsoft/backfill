@@ -1,0 +1,8 @@
+{
+  "type": "patch",
+  "comment": "chore(hasher): Upgrades workspace-tools to ^0.17.0",
+  "packageName": "backfill-hasher",
+  "email": "riacarmin@microsoft.com",
+  "dependentChangeType": "patch",
+  "date": "2021-12-09T21:38:08.504Z"
+}
