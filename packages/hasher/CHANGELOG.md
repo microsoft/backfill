@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Fri, 07 Jan 2022 16:43:20 GMT and should not be manually modified.
+This log was last generated on Fri, 07 Jan 2022 21:26:53 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.2.8
+
+Fri, 07 Jan 2022 21:26:53 GMT
+
+### Patches
+
+- bumps the workspace-tools (kchau@microsoft.com)
 
 ## 6.2.7
 

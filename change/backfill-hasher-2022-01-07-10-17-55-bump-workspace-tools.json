@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "bumps the workspace-tools",
-  "packageName": "backfill-hasher",
-  "email": "kchau@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2022-01-07T18:17:55.933Z"
-}
