@@ -23,8 +23,12 @@ export async function generateHashOfFiles(
 ): Promise<string> {
   const { repoHashes, root } = repoInfo;
 
+  const normalized = path.normalize(packageRoot) + sep;
+
   const files: string[] = Object.keys(repoHashes).filter((f) =>
-    path.join(root, f).includes(path.normalize(packageRoot) + sep)
+    // purposefully using string concat here to speed up the checks since root and f
+    // are well formatted from "getWorkspaceRoot" and "repoHashes"
+    (root + sep + f).includes(normalized)
   );
 
   files.sort((a, b) => a.localeCompare(b));
