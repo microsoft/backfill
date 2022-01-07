@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "speeding up the hasher by reducing wasted calculations",
-  "packageName": "backfill-hasher",
-  "email": "kchau@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2022-01-06T22:58:42.192Z"
-}

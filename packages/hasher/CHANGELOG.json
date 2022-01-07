@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Fri, 07 Jan 2022 16:43:20 GMT",
+      "tag": "backfill-hasher_v6.2.7",
+      "version": "6.2.7",
+      "comments": {
+        "patch": [
+          {
+            "comment": "speeding up the hasher by reducing wasted calculations",
+            "author": "kchau@microsoft.com",
+            "commit": "52711efb5689eae90179bfee37f4da5b32723e72",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 22 Jun 2021 14:38:58 GMT",
       "tag": "backfill-hasher_v6.2.5",
       "version": "6.2.5",

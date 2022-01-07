@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "6.1.10",
+  "version": "6.1.11",
   "main": "lib/index.js",
   "bin": {
     "backfill": "./bin/backfill.js"
@@ -22,7 +22,7 @@
     "anymatch": "^3.0.3",
     "backfill-cache": "^5.3.0",
     "backfill-config": "^6.2.0",
-    "backfill-hasher": "^6.2.6",
+    "backfill-hasher": "^6.2.7",
     "backfill-logger": "^5.1.3",
     "backfill-utils-dotenv": "^5.1.1",
     "chokidar": "^3.2.1",

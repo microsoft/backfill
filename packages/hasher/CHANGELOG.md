@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Tue, 22 Jun 2021 14:38:58 GMT and should not be manually modified.
+This log was last generated on Fri, 07 Jan 2022 16:43:20 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.2.7
+
+Fri, 07 Jan 2022 16:43:20 GMT
+
+### Patches
+
+- speeding up the hasher by reducing wasted calculations (kchau@microsoft.com)
 
 ## 6.2.5
 
