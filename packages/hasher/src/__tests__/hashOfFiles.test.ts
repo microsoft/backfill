@@ -105,7 +105,7 @@ describe("generateHashOfFiles()", () => {
   });
 
   // This test will be run on Windows and on Linux on the CI
-  it.only("file paths in a monorepo are consistent across platforms", async () => {
+  it("file paths in a monorepo are consistent across platforms", async () => {
     const workspaceRoot = await setupFixture("empty");
 
     // Create a folder to make sure we get folder separators as part of the file name
