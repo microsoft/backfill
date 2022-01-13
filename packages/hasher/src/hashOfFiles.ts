@@ -26,9 +26,7 @@ export async function generateHashOfFiles(
   const normalized = path.normalize(packageRoot) + sep;
 
   const files: string[] = Object.keys(repoHashes).filter((f) =>
-    // purposefully using string concat here to speed up the checks since root and f
-    // are well formatted from "getWorkspaceRoot" and "repoHashes"
-    (root + sep + f).includes(normalized)
+    path.join(root, f).includes(normalized)
   );
 
   files.sort((a, b) => a.localeCompare(b));
