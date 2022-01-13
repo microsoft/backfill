@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Thu, 13 Jan 2022 19:46:10 GMT",
+      "tag": "backfill-hasher_v6.2.9",
+      "version": "6.2.9",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fixing platform differences in a monorepo, added tests",
+            "author": "kchau@microsoft.com",
+            "commit": "633a5d11821e41f4f9fda6e9a6f14868c6ab66cf",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 07 Jan 2022 21:26:53 GMT",
       "tag": "backfill-hasher_v6.2.8",
       "version": "6.2.8",

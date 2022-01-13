@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Fri, 07 Jan 2022 21:26:53 GMT and should not be manually modified.
+This log was last generated on Thu, 13 Jan 2022 19:46:10 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.2.9
+
+Thu, 13 Jan 2022 19:46:10 GMT
+
+### Patches
+
+- fixing platform differences in a monorepo, added tests (kchau@microsoft.com)
 
 ## 6.2.8
 

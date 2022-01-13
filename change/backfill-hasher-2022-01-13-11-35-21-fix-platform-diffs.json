@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "fixing platform differences in a monorepo, added tests",
-  "packageName": "backfill-hasher",
-  "email": "kchau@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2022-01-13T19:35:21.939Z"
-}
