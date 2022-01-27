@@ -8,6 +8,9 @@ import { ICacheStorage } from "backfill-config";
 
 const savedHashOfRepos: { [gitRoot: string]: { [file: string]: string } } = {};
 
+// Make this feature opt-in as it has not get been tested at scale
+const excludeUnchanged = process.env["BACKFILL_EXCLUDE_UNCHANGED"] === "1";
+
 function getRepoRoot(cwd: string): string {
   // .git is typically a folder but will be a file in a worktree
   const nearestGitInfo =
@@ -45,7 +48,7 @@ function getMemoizedHashesFor(cwd: string): { [file: string]: string } {
   );
 
   const results: { [key: string]: string } = {};
-  for (const file in filesInCwd) {
+  for (const file of filesInCwd) {
     results[relative(pathRelativeToRepo, file).replace(/\\/g, "/")] =
       savedHashOfThisRepo[file];
   }
@@ -66,8 +69,10 @@ export abstract class CacheStorage implements ICacheStorage {
 
     this.logger.setHit(result);
 
-    // Save hash of files if not already memoized
-    fetchHashesFor(this.cwd);
+    if (excludeUnchanged) {
+      // Save hash of files if not already memoized
+      fetchHashesFor(this.cwd);
+    }
 
     return result;
   }
@@ -77,18 +82,18 @@ export abstract class CacheStorage implements ICacheStorage {
 
     const filesMatchingOutputGlob = await globby(outputGlob, { cwd: this.cwd });
 
-    // Get the list of files that have not changed so we don't need to cache them.
-    const hashesNow = getPackageDeps(this.cwd).files;
-    const hashesThen = getMemoizedHashesFor(this.cwd);
-    const unchangedFiles = Object.keys(hashesThen).filter(
-      (s) => hashesThen[s] === hashesNow[s]
-    );
-
-    // Make this feature opt-in as it has not get been tested at scale
-    const excludeUnchanged = process.env["BACKFILL_EXCLUDE_UNCHANGED"] === "1";
-    const filesToCache = excludeUnchanged
-      ? filesMatchingOutputGlob.filter((f) => !unchangedFiles.includes(f))
-      : filesMatchingOutputGlob;
+    let filesToCache = filesMatchingOutputGlob;
+    if (excludeUnchanged) {
+      // Get the list of files that have not changed so we don't need to cache them.
+      const hashesNow = getPackageDeps(this.cwd).files;
+      const hashesThen = getMemoizedHashesFor(this.cwd);
+      const unchangedFiles = Object.keys(hashesThen).filter(
+        (s) => hashesThen[s] === hashesNow[s]
+      );
+      filesToCache = filesMatchingOutputGlob.filter(
+        (f) => !unchangedFiles.includes(f)
+      );
+    }
 
     await this._put(hash, filesToCache);
     tracer.stop();
