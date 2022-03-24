@@ -45,7 +45,7 @@ function getMemoizedHashesFor(cwd: string): { [file: string]: string } {
   );
 
   const results: { [key: string]: string } = {};
-  for (const file in filesInCwd) {
+  for (const file of filesInCwd) {
     results[relative(pathRelativeToRepo, file).replace(/\\/g, "/")] =
       savedHashOfThisRepo[file];
   }
