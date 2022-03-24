@@ -1,0 +1,8 @@
+{
+  "type": "patch",
+  "comment": "Fix filesInCwd loop",
+  "packageName": "backfill-cache",
+  "email": "rnjuguna@microsoft.com",
+  "dependentChangeType": "patch",
+  "date": "2022-03-24T14:11:07.264Z"
+}
