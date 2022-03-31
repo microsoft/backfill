@@ -26,7 +26,7 @@ function fetchHashesFor(cwd: string) {
   const gitRoot = getRepoRoot(cwd);
 
   savedHashOfRepos[gitRoot] ||
-    (savedHashOfRepos[gitRoot] = getPackageDeps(gitRoot).files);
+    (savedHashOfRepos[gitRoot] = Object.fromEntries(getPackageDeps(gitRoot)));
 }
 
 function getMemoizedHashesFor(cwd: string): { [file: string]: string } {
@@ -78,7 +78,7 @@ export abstract class CacheStorage implements ICacheStorage {
     const filesMatchingOutputGlob = await globby(outputGlob, { cwd: this.cwd });
 
     // Get the list of files that have not changed so we don't need to cache them.
-    const hashesNow = getPackageDeps(this.cwd).files;
+    const hashesNow = Object.fromEntries(getPackageDeps(this.cwd));
     const hashesThen = getMemoizedHashesFor(this.cwd);
     const unchangedFiles = Object.keys(hashesThen).filter(
       (s) => hashesThen[s] === hashesNow[s]

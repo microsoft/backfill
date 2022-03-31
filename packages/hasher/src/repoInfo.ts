@@ -35,7 +35,7 @@ export async function getRepoInfoNoCache(cwd: string) {
     throw new Error("Cannot initialize Repo class without a workspace root");
   }
 
-  const repoHashes = getPackageDeps(root).files;
+  const repoHashes = Object.fromEntries(getPackageDeps(root));
   const workspaceInfo = getWorkspaces(root);
   const parsedLock = await parseLockFile(root);
 
