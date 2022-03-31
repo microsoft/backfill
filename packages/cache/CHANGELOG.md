@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Tue, 12 Oct 2021 19:45:45 GMT and should not be manually modified.
+This log was last generated on Thu, 31 Mar 2022 05:28:57 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.4.0
+
+Thu, 31 Mar 2022 05:28:57 GMT
+
+### Minor changes
+
+- Upgrading package-deps-hash version. (dzearing@microsoft.com)
 
 ## 5.3.0
 

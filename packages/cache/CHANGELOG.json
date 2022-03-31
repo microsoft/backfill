@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Thu, 31 Mar 2022 05:28:57 GMT",
+      "tag": "backfill-cache_v5.4.0",
+      "version": "5.4.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Upgrading package-deps-hash version.",
+            "author": "dzearing@microsoft.com",
+            "commit": "8662e9d4ecd0eaaa01beeca7be1139444d5e31c4",
+            "package": "backfill-cache"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 12 Oct 2021 19:45:45 GMT",
       "tag": "backfill-cache_v5.3.0",
       "version": "5.3.0",

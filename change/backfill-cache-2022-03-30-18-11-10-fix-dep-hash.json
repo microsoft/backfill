@@ -1,8 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Upgrading package-deps-hash version.",
-  "packageName": "backfill-cache",
-  "email": "dzearing@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2022-03-31T01:11:07.432Z"
-}

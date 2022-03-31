@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Thu, 13 Jan 2022 19:46:10 GMT and should not be manually modified.
+This log was last generated on Thu, 31 Mar 2022 05:28:57 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.3.0
+
+Thu, 31 Mar 2022 05:28:57 GMT
+
+### Minor changes
+
+- Upgrading package-deps-hash version. (dzearing@microsoft.com)
 
 ## 6.2.9
 
