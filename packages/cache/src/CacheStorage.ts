@@ -1,4 +1,7 @@
-import { dirname, relative } from "path";
+import { dirname, sep } from "path";
+import * as path from "path";
+import * as crypto from "crypto";
+import * as fs from "fs/promises";
 import globby from "globby";
 import findUp from "find-up";
 import { getPackageDeps } from "@rushstack/package-deps-hash";
@@ -6,54 +9,67 @@ import { getPackageDeps } from "@rushstack/package-deps-hash";
 import { Logger } from "backfill-logger";
 import { ICacheStorage } from "backfill-config";
 
-const savedHashOfRepos: { [gitRoot: string]: { [file: string]: string } } = {};
+const savedHashes: Map<string, Map<string, string>> = new Map();
 
 // Make this feature opt-in as it has not get been tested at scale
 const excludeUnchanged = process.env["BACKFILL_EXCLUDE_UNCHANGED"] === "1";
 
-function getRepoRoot(cwd: string): string {
+// Input and output path are absolute (with platform specific separators)
+// For simplicity's sake we assume that we don't have nested git repos
+const foundRoots: Set<string> = new Set();
+async function getRepoRoot(cwd: string): Promise<string> {
+  for (const root of foundRoots.values()) {
+    if (cwd.startsWith(root)) {
+      return root;
+    }
+  }
+
   // .git is typically a folder but will be a file in a worktree
   const nearestGitInfo =
-    findUp.sync(".git", { cwd, type: "directory" }) ||
-    findUp.sync(".git", { cwd, type: "file" });
+    (await findUp(".git", { cwd, type: "directory" })) ||
+    (await findUp(".git", { cwd, type: "file" }));
   if (!nearestGitInfo) {
     throw new Error(
       "The location that backfill is being run against is not in a git repo"
     );
   }
 
-  return dirname(nearestGitInfo);
+  const result = dirname(nearestGitInfo).split(sep).join("/");
+  foundRoots.add(result);
+  return result;
 }
 
-function fetchHashesFor(cwd: string) {
-  const gitRoot = getRepoRoot(cwd);
+// contract: cwd should be absolute
+// The return keys are relative path with posix file separators
+async function getGitHashesFor(cwd: string): Promise<Map<string, string>> {
+  const result = new Map<string, string>();
+  // gitRoot is an absolute path (with platform specific separators)
+  const gitRoot = await getRepoRoot(cwd);
+  const files = getPackageDeps(gitRoot).files;
+  Object.keys(files).forEach((f) => {
+    // f is a relative path with posix separator
+    const abs = path.join(gitRoot, f);
+    if (abs.startsWith(cwd)) {
+      result.set(path.relative(cwd, abs).split(sep).join("/"), files[f]);
+    }
+  });
 
-  savedHashOfRepos[gitRoot] ||
-    (savedHashOfRepos[gitRoot] = getPackageDeps(gitRoot).files);
-}
-
-function getMemoizedHashesFor(cwd: string): { [file: string]: string } {
-  fetchHashesFor(cwd);
-
-  const gitRoot = getRepoRoot(cwd);
-
-  const savedHashOfThisRepo = savedHashOfRepos[gitRoot] as {
-    [file: string]: string;
-  };
-
-  const pathRelativeToRepo = relative(gitRoot, cwd);
-
-  const filesInCwd = Object.keys(savedHashOfThisRepo).filter(
-    (o) => !relative(pathRelativeToRepo, o).startsWith("..")
+  const allFiles = await globby(["**/*", "!node_modules"], { cwd });
+  //globby returns relative path with posix file separator
+  await Promise.all(
+    allFiles.map(async (f) => {
+      if (result.has(f)) {
+        return;
+      }
+      const fileBuffer = await fs.readFile(path.join(cwd, f));
+      const hashSum = crypto.createHash("sha256");
+      hashSum.update(fileBuffer);
+      const hash = hashSum.digest("hex");
+      result.set(f, hash);
+    })
   );
 
-  const results: { [key: string]: string } = {};
-  for (const file of filesInCwd) {
-    results[relative(pathRelativeToRepo, file).replace(/\\/g, "/")] =
-      savedHashOfThisRepo[file];
-  }
-
-  return results;
+  return result;
 }
 
 export { ICacheStorage };
@@ -71,7 +87,7 @@ export abstract class CacheStorage implements ICacheStorage {
 
     if (excludeUnchanged) {
       // Save hash of files if not already memoized
-      fetchHashesFor(this.cwd);
+      savedHashes.set(hash, await getGitHashesFor(this.cwd));
     }
 
     return result;
@@ -85,10 +101,11 @@ export abstract class CacheStorage implements ICacheStorage {
     let filesToCache = filesMatchingOutputGlob;
     if (excludeUnchanged) {
       // Get the list of files that have not changed so we don't need to cache them.
-      const hashesNow = getPackageDeps(this.cwd).files;
-      const hashesThen = getMemoizedHashesFor(this.cwd);
-      const unchangedFiles = Object.keys(hashesThen).filter(
-        (s) => hashesThen[s] === hashesNow[s]
+      const hashesNow = await getGitHashesFor(this.cwd);
+      const hashesThen =
+        (await savedHashes.get(hash)) || new Map<string, string>();
+      const unchangedFiles = [...hashesThen.keys()].filter(
+        (s) => hashesThen.get(s) === hashesNow.get(s)
       );
       filesToCache = filesMatchingOutputGlob.filter(
         (f) => !unchangedFiles.includes(f)
