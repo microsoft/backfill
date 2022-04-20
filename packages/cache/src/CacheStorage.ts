@@ -1,56 +1,37 @@
-import { dirname, relative } from "path";
+import * as path from "path";
+import * as crypto from "crypto";
+import { promises as fs } from "fs";
 import globby from "globby";
-import findUp from "find-up";
-import { getPackageDeps } from "@rushstack/package-deps-hash";
 
 import { Logger } from "backfill-logger";
 import { ICacheStorage } from "backfill-config";
 
-const savedHashOfRepos: { [gitRoot: string]: { [file: string]: string } } = {};
+const savedHashes: Map<string, Map<string, string>> = new Map();
 
-function getRepoRoot(cwd: string): string {
-  // .git is typically a folder but will be a file in a worktree
-  const nearestGitInfo =
-    findUp.sync(".git", { cwd, type: "directory" }) ||
-    findUp.sync(".git", { cwd, type: "file" });
-  if (!nearestGitInfo) {
-    throw new Error(
-      "The location that backfill is being run against is not in a git repo"
-    );
-  }
+// Make this feature opt-in as it has not get been tested at scale
+const excludeUnchanged = process.env["BACKFILL_EXCLUDE_UNCHANGED"] === "1";
 
-  return dirname(nearestGitInfo);
-}
+// contract: cwd should be absolute
+// The return keys are relative path with posix file separators
+async function getHashesFor(cwd: string): Promise<Map<string, string>> {
+  const result = new Map<string, string>();
 
-function fetchHashesFor(cwd: string) {
-  const gitRoot = getRepoRoot(cwd);
-
-  savedHashOfRepos[gitRoot] ||
-    (savedHashOfRepos[gitRoot] = Object.fromEntries(getPackageDeps(gitRoot)));
-}
-
-function getMemoizedHashesFor(cwd: string): { [file: string]: string } {
-  fetchHashesFor(cwd);
-
-  const gitRoot = getRepoRoot(cwd);
-
-  const savedHashOfThisRepo = savedHashOfRepos[gitRoot] as {
-    [file: string]: string;
-  };
-
-  const pathRelativeToRepo = relative(gitRoot, cwd);
-
-  const filesInCwd = Object.keys(savedHashOfThisRepo).filter(
-    (o) => !relative(pathRelativeToRepo, o).startsWith("..")
+  const allFiles = await globby(["**/*", "!node_modules"], { cwd });
+  //globby returns relative path with posix file separator
+  await Promise.all(
+    allFiles.map(async (f) => {
+      if (result.has(f)) {
+        return;
+      }
+      const fileBuffer = await fs.readFile(path.join(cwd, f));
+      const hashSum = crypto.createHash("sha256");
+      hashSum.update(fileBuffer);
+      const hash = hashSum.digest("hex");
+      result.set(f, hash);
+    })
   );
 
-  const results: { [key: string]: string } = {};
-  for (const file in filesInCwd) {
-    results[relative(pathRelativeToRepo, file).replace(/\\/g, "/")] =
-      savedHashOfThisRepo[file];
-  }
-
-  return results;
+  return result;
 }
 
 export { ICacheStorage };
@@ -66,8 +47,10 @@ export abstract class CacheStorage implements ICacheStorage {
 
     this.logger.setHit(result);
 
-    // Save hash of files if not already memoized
-    fetchHashesFor(this.cwd);
+    if (!result && excludeUnchanged) {
+      // Save hash of files if not already memoized
+      savedHashes.set(hash, await getHashesFor(this.cwd));
+    }
 
     return result;
   }
@@ -77,18 +60,19 @@ export abstract class CacheStorage implements ICacheStorage {
 
     const filesMatchingOutputGlob = await globby(outputGlob, { cwd: this.cwd });
 
-    // Get the list of files that have not changed so we don't need to cache them.
-    const hashesNow = Object.fromEntries(getPackageDeps(this.cwd));
-    const hashesThen = getMemoizedHashesFor(this.cwd);
-    const unchangedFiles = Object.keys(hashesThen).filter(
-      (s) => hashesThen[s] === hashesNow[s]
-    );
-
-    // Make this feature opt-in as it has not get been tested at scale
-    const excludeUnchanged = process.env["BACKFILL_EXCLUDE_UNCHANGED"] === "1";
-    const filesToCache = excludeUnchanged
-      ? filesMatchingOutputGlob.filter((f) => !unchangedFiles.includes(f))
-      : filesMatchingOutputGlob;
+    let filesToCache = filesMatchingOutputGlob;
+    if (excludeUnchanged) {
+      // Get the list of files that have not changed so we don't need to cache them.
+      const hashesNow = await getHashesFor(this.cwd);
+      const hashesThen =
+        (await savedHashes.get(hash)) || new Map<string, string>();
+      const unchangedFiles = [...hashesThen.keys()].filter(
+        (s) => hashesThen.get(s) === hashesNow.get(s)
+      );
+      filesToCache = filesMatchingOutputGlob.filter(
+        (f) => !unchangedFiles.includes(f)
+      );
+    }
 
     await this._put(hash, filesToCache);
     tracer.stop();

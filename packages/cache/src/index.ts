@@ -14,6 +14,7 @@ export function isCustomProvider(
   return typeof config.provider === "function";
 }
 
+const memo = new Map<string, ICacheStorage>();
 export function getCacheStorageProvider(
   cacheStorageConfig: CacheStorageConfig,
   internalCacheFolder: string,
@@ -31,6 +32,10 @@ export function getCacheStorageProvider(
       throw new Error("cacheStorageConfig.provider cannot be creaated");
     }
   } else {
+    const key = `${cacheStorageConfig.provider}${internalCacheFolder}${cwd}`;
+    if (memo.has(key)) {
+      return memo.get(key)!;
+    }
     if (cacheStorageConfig.provider === "npm") {
       cacheStorage = new NpmCacheStorage(
         cacheStorageConfig.options,
@@ -53,6 +58,7 @@ export function getCacheStorageProvider(
     } else {
       cacheStorage = new LocalCacheStorage(internalCacheFolder, logger, cwd);
     }
+    memo.set(key, cacheStorage);
   }
 
   return cacheStorage;
