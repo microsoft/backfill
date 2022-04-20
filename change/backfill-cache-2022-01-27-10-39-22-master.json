@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "filter unchanged files did not work",
-  "packageName": "backfill-cache",
-  "email": "vincent.bailly@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2022-01-27T09:39:22.076Z"
-}

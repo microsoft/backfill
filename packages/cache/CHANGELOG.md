@@ -1,9 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Thu, 31 Mar 2022 05:28:57 GMT and should not be
-manually modified.
+This log was last generated on Wed, 20 Apr 2022 12:32:29 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.4.1
+
+Wed, 20 Apr 2022 12:32:29 GMT
+
+### Patches
+
+- filter unchanged files did not work (vincent.bailly@microsoft.com)
 
 ## 5.4.0
 
