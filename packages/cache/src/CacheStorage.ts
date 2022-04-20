@@ -34,7 +34,7 @@ async function getRepoRoot(cwd: string): Promise<string> {
     );
   }
 
-  const result = dirname(nearestGitInfo).split(sep).join("/");
+  const result = dirname(nearestGitInfo);
   foundRoots.add(result);
   return result;
 }
