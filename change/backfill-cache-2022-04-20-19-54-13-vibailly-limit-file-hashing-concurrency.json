@@ -1,0 +1,8 @@
+{
+  "type": "patch",
+  "comment": "limit file read concurrency",
+  "packageName": "backfill-cache",
+  "email": "vincent.bailly@microsoft.com",
+  "dependentChangeType": "patch",
+  "date": "2022-04-20T17:54:13.650Z"
+}

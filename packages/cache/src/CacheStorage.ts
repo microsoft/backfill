@@ -5,6 +5,7 @@ import globby from "globby";
 
 import { Logger } from "backfill-logger";
 import { ICacheStorage } from "backfill-config";
+import { diskLimit } from "./DiskLimiter";
 
 const savedHashes: Map<string, Map<string, string>> = new Map();
 
@@ -19,16 +20,18 @@ async function getHashesFor(cwd: string): Promise<Map<string, string>> {
   const allFiles = await globby(["**/*", "!node_modules"], { cwd });
   //globby returns relative path with posix file separator
   await Promise.all(
-    allFiles.map(async (f) => {
-      if (result.has(f)) {
-        return;
-      }
-      const fileBuffer = await fs.readFile(path.join(cwd, f));
-      const hashSum = crypto.createHash("sha256");
-      hashSum.update(fileBuffer);
-      const hash = hashSum.digest("hex");
-      result.set(f, hash);
-    })
+    allFiles.map((f) =>
+      diskLimit(async () => {
+        if (result.has(f)) {
+          return;
+        }
+        const fileBuffer = await fs.readFile(path.join(cwd, f));
+        const hashSum = crypto.createHash("sha256");
+        hashSum.update(fileBuffer);
+        const hash = hashSum.digest("hex");
+        result.set(f, hash);
+      })
+    )
   );
 
   return result;
