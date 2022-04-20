@@ -1,8 +1,17 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Thu, 13 Jan 2022 19:46:10 GMT and should not be manually modified.
+This log was last generated on Thu, 31 Mar 2022 05:28:57 GMT and should not be
+manually modified.
 
 <!-- Start content -->
+
+## 6.3.0
+
+Thu, 31 Mar 2022 05:28:57 GMT
+
+### Minor changes
+
+- Upgrading package-deps-hash version. (dzearing@microsoft.com)
 
 ## 6.2.9
 
@@ -34,7 +43,8 @@ Tue, 22 Jun 2021 14:38:58 GMT
 
 ### Patches
 
-- Fix: files from a different package are included in the hash. (vibailly@microsoft.com)
+- Fix: files from a different package are included in the hash.
+  (vibailly@microsoft.com)
 
 ## 6.2.2
 
@@ -50,7 +60,8 @@ Fri, 23 Apr 2021 23:51:52 GMT
 
 ### Patches
 
-- bumps workspace-tools to take advantage of the faster boot of the lib (34725+kenotron@users.noreply.github.com)
+- bumps workspace-tools to take advantage of the faster boot of the lib
+  (34725+kenotron@users.noreply.github.com)
 
 ## 6.2.0
 
@@ -106,7 +117,8 @@ Tue, 18 Aug 2020 16:03:05 GMT
 
 ### Minor changes
 
-- Include file path in hash. Addresses a bug where file renames do not produce new hash. (bewegger@microsoft.com)
+- Include file path in hash. Addresses a bug where file renames do not produce
+  new hash. (bewegger@microsoft.com)
 
 ## 6.0.1
 
@@ -114,7 +126,8 @@ Fri, 17 Jul 2020 19:27:19 GMT
 
 ### Patches
 
-- bumping workspace-tools to allow accepting a PREFFERRED_WORKSPACE_MANAGER when multiple lock files implementations exist in one repo (kchau@microsoft.com)
+- bumping workspace-tools to allow accepting a PREFFERRED_WORKSPACE_MANAGER when
+  multiple lock files implementations exist in one repo (kchau@microsoft.com)
 
 ## 6.0.0
 
@@ -122,4 +135,4 @@ Tue, 09 Jun 2020 11:50:22 GMT
 
 ### Major changes
 
-- always use ** as hash glob (vibailly@tuta.io)
+- always use \*\* as hash glob (vibailly@tuta.io)

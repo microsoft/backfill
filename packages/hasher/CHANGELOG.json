@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Thu, 31 Mar 2022 05:28:57 GMT",
+      "tag": "backfill-hasher_v6.3.0",
+      "version": "6.3.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Upgrading package-deps-hash version.",
+            "author": "dzearing@microsoft.com",
+            "commit": "8662e9d4ecd0eaaa01beeca7be1139444d5e31c4",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 13 Jan 2022 19:46:10 GMT",
       "tag": "backfill-hasher_v6.2.9",
       "version": "6.2.9",
