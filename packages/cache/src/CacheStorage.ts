@@ -5,22 +5,22 @@ import globby from "globby";
 import { Logger } from "backfill-logger";
 import { ICacheStorage } from "backfill-config";
 
-const savedMtimes: Map<string, Map<string, Date>> = new Map();
+const savedMtimes: Map<string, Map<string, number>> = new Map();
 
 // Make this feature opt-in as it has not get been tested at scale
 const excludeUnchanged = process.env["BACKFILL_EXCLUDE_UNCHANGED"] === "1";
 
 // contract: cwd should be absolute
 // The return keys are relative path with posix file separators
-async function getMtimesFor(cwd: string): Promise<Map<string, Date>> {
-  const result = new Map<string, Date>();
+async function getMtimesFor(cwd: string): Promise<Map<string, number>> {
+  const result = new Map<string, number>();
 
   const allFiles = await globby(["**/*", "!node_modules"], { cwd });
   //globby returns relative path with posix file separator
   await Promise.all(
     allFiles.map(async (f) => {
       const stat = await fs.stat(path.join(cwd, f));
-      result.set(f, stat.mtime);
+      result.set(f, stat.mtime.getTime());
     })
   );
 
