@@ -8,7 +8,7 @@ import { ICacheStorage } from "backfill-config";
 const savedMtimes: Map<string, Map<string, number>> = new Map();
 
 // Make this feature opt-in as it has not get been tested at scale
-const excludeUnchanged = process.env["BACKFILL_EXCLUDE_UNCHANGED"] === "1";
+const excludeUnchangedEnv = process.env["BACKFILL_EXCLUDE_UNCHANGED"] === "1";
 
 // contract: cwd should be absolute
 // The return keys are relative path with posix file separators
@@ -30,7 +30,11 @@ async function getMtimesFor(cwd: string): Promise<Map<string, number>> {
 export { ICacheStorage };
 
 export abstract class CacheStorage implements ICacheStorage {
-  public constructor(protected logger: Logger, protected cwd: string) {}
+  public constructor(
+    protected logger: Logger,
+    protected cwd: string,
+    protected excludeUnchanged: boolean = excludeUnchangedEnv
+  ) {}
   public async fetch(hash: string): Promise<boolean> {
     const tracer = this.logger.setTime("fetchTime");
 
@@ -40,7 +44,7 @@ export abstract class CacheStorage implements ICacheStorage {
 
     this.logger.setHit(result);
 
-    if (!result && excludeUnchanged) {
+    if (!result && this.excludeUnchanged) {
       // Save hash of files if not already memoized
       savedMtimes.set(hash, await getMtimesFor(this.cwd));
     }
@@ -54,7 +58,7 @@ export abstract class CacheStorage implements ICacheStorage {
     const filesMatchingOutputGlob = await globby(outputGlob, { cwd: this.cwd });
 
     let filesToCache = filesMatchingOutputGlob;
-    if (excludeUnchanged) {
+    if (this.excludeUnchanged) {
       // Get the list of files that have not changed so we don't need to cache them.
       const mtimesNow = await getMtimesFor(this.cwd);
       const mtimesThen =
