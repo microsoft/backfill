@@ -1,15 +1,11 @@
-import * as path from "path";
-import * as crypto from "crypto";
-import { promises as fs } from "fs";
 import globby from "globby";
 
 import { Logger } from "backfill-logger";
 import { ICacheStorage } from "backfill-config";
+import { getFileHash } from "./hashFile";
 
+// First key is the hash, second key is the file relative path
 const savedHashes: Map<string, Map<string, string>> = new Map();
-
-// Make this feature opt-in as it has not get been tested at scale
-const excludeUnchanged = process.env["BACKFILL_EXCLUDE_UNCHANGED"] === "1";
 
 // contract: cwd should be absolute
 // The return keys are relative path with posix file separators
@@ -20,13 +16,7 @@ async function getHashesFor(cwd: string): Promise<Map<string, string>> {
   //globby returns relative path with posix file separator
   await Promise.all(
     allFiles.map(async (f) => {
-      if (result.has(f)) {
-        return;
-      }
-      const fileBuffer = await fs.readFile(path.join(cwd, f));
-      const hashSum = crypto.createHash("sha256");
-      hashSum.update(fileBuffer);
-      const hash = hashSum.digest("hex");
+      const hash = await getFileHash(cwd, f);
       result.set(f, hash);
     })
   );
@@ -47,8 +37,7 @@ export abstract class CacheStorage implements ICacheStorage {
 
     this.logger.setHit(result);
 
-    if (!result && excludeUnchanged) {
-      // Save hash of files if not already memoized
+    if (!result) {
       savedHashes.set(hash, await getHashesFor(this.cwd));
     }
 
@@ -60,19 +49,16 @@ export abstract class CacheStorage implements ICacheStorage {
 
     const filesMatchingOutputGlob = await globby(outputGlob, { cwd: this.cwd });
 
-    let filesToCache = filesMatchingOutputGlob;
-    if (excludeUnchanged) {
-      // Get the list of files that have not changed so we don't need to cache them.
-      const hashesNow = await getHashesFor(this.cwd);
-      const hashesThen =
-        (await savedHashes.get(hash)) || new Map<string, string>();
-      const unchangedFiles = [...hashesThen.keys()].filter(
-        (s) => hashesThen.get(s) === hashesNow.get(s)
-      );
-      filesToCache = filesMatchingOutputGlob.filter(
-        (f) => !unchangedFiles.includes(f)
-      );
-    }
+    // Get the list of files that have not changed so we don't need to cache them.
+    const hashesNow = await getHashesFor(this.cwd);
+    const hashesThen =
+      (await savedHashes.get(hash)) || new Map<string, string>();
+    const unchangedFiles = [...hashesThen.keys()].filter(
+      (s) => hashesThen.get(s) === hashesNow.get(s)
+    );
+    const filesToCache = filesMatchingOutputGlob.filter(
+      (f) => !unchangedFiles.includes(f)
+    );
 
     await this._put(hash, filesToCache);
     tracer.stop();
