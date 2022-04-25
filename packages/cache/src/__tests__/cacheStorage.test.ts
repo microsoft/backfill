@@ -21,7 +21,9 @@ export class LocalCacheStorage extends CacheStorage {
 describe("getCacheStorage", () => {
   test("only cache files that have changed", async () => {
     const logger = makeLogger("silly");
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "test-backfill-cache-"));
+    const dir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "test-backfill-cache-1-")
+    );
     const storage = new LocalCacheStorage(logger, dir);
 
     // makes sure there is no cache interference between tests
@@ -41,7 +43,9 @@ describe("getCacheStorage", () => {
 
   test("caches new files", async () => {
     const logger = makeLogger("silly");
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "test-backfill-cache-"));
+    const dir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "test-backfill-cache-2-")
+    );
     const storage = new LocalCacheStorage(logger, dir);
 
     // makes sure there is no cache interference between tests
@@ -60,7 +64,9 @@ describe("getCacheStorage", () => {
 
   test("does not caches file re-written", async () => {
     const logger = makeLogger("silly");
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "test-backfill-cache-"));
+    const dir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "test-backfill-cache-3-")
+    );
     const storage = new LocalCacheStorage(logger, dir);
 
     // makes sure there is no cache interference between tests
