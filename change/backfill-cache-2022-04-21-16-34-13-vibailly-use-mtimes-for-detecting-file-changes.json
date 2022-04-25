@@ -1,8 +1,0 @@
-{
-  "type": "minor",
-  "comment": "use mtime instead of hash",
-  "packageName": "backfill-cache",
-  "email": "vibailly@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2022-04-21T14:34:13.227Z"
-}

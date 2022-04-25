@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Mon, 25 Apr 2022 13:30:56 GMT",
+      "tag": "backfill-cache_v5.5.0",
+      "version": "5.5.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "use mtime instead of hash",
+            "author": "vibailly@microsoft.com",
+            "commit": "0d5fbc2c0bb184119810d468c33fde96092b6c88",
+            "package": "backfill-cache"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 20 Apr 2022 12:32:29 GMT",
       "tag": "backfill-cache_v5.4.1",
       "version": "5.4.1",

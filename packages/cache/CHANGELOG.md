@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Wed, 20 Apr 2022 12:32:29 GMT and should not be manually modified.
+This log was last generated on Mon, 25 Apr 2022 13:30:56 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.5.0
+
+Mon, 25 Apr 2022 13:30:56 GMT
+
+### Minor changes
+
+- use mtime instead of hash (vibailly@microsoft.com)
 
 ## 5.4.1
 
