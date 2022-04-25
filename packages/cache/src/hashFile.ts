@@ -40,11 +40,11 @@ export async function getFileHash(
 ): Promise<string> {
   const fileAbsPath = path.join(cwd, filePath);
   const stat = await fs.stat(fileAbsPath);
-  if (memo.get(fileAbsPath) && memo.get(fileAbsPath)!.get(stat.mtimeMs)) {
+  if (memo.has(fileAbsPath) && memo.get(fileAbsPath)!.has(stat.mtimeMs)) {
     return memo.get(fileAbsPath)!.get(stat.mtimeMs)!;
   }
   const hash = await computeHash(fileAbsPath);
-  if (!memo.get(fileAbsPath)) {
+  if (!memo.has(fileAbsPath)) {
     memo.set(fileAbsPath, new Map<number, string>());
   }
   memo.get(fileAbsPath)!.set(stat.mtimeMs, hash);
