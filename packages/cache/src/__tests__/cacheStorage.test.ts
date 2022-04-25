@@ -24,14 +24,17 @@ describe("getCacheStorage", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "test-backfill-cache-"));
     const storage = new LocalCacheStorage(logger, dir);
 
+    // makes sure there is no cache interference between tests
+    const hash = `${dir}-hash`;
+
     fs.writeFileSync(path.join(dir, "notChanging"), "not changing content");
     fs.writeFileSync(path.join(dir, "Changing"), "changing content");
 
-    await storage.fetch("aaa");
+    await storage.fetch(hash);
 
     fs.writeFileSync(path.join(dir, "Changing"), "changing content now");
 
-    await storage.put("aaa", ["**/*"]);
+    await storage.put(hash, ["**/*"]);
 
     expect(storage.filesToCache).toEqual(["Changing"]);
   });
@@ -41,14 +44,36 @@ describe("getCacheStorage", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "test-backfill-cache-"));
     const storage = new LocalCacheStorage(logger, dir);
 
+    // makes sure there is no cache interference between tests
+    const hash = `${dir}-hash`;
+
     fs.writeFileSync(path.join(dir, "notChanging"), "not changing content");
 
-    await storage.fetch("aaa");
+    await storage.fetch(hash);
 
     fs.writeFileSync(path.join(dir, "new"), "new content");
 
-    await storage.put("aaa", ["**/*"]);
+    await storage.put(hash, ["**/*"]);
 
     expect(storage.filesToCache).toEqual(["new"]);
+  });
+
+  test("does not caches file re-written", async () => {
+    const logger = makeLogger("silly");
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "test-backfill-cache-"));
+    const storage = new LocalCacheStorage(logger, dir);
+
+    // makes sure there is no cache interference between tests
+    const hash = `${dir}-hash`;
+
+    fs.writeFileSync(path.join(dir, "notChanging"), "not changing content");
+
+    await storage.fetch(hash);
+
+    fs.writeFileSync(path.join(dir, "notChanging"), "not changing content");
+
+    await storage.put(hash, ["**/*"]);
+
+    expect(storage.filesToCache).toEqual([]);
   });
 });

@@ -1,23 +1,23 @@
-import * as path from "path";
-import { promises as fs } from "fs";
 import globby from "globby";
 
 import { Logger } from "backfill-logger";
 import { ICacheStorage } from "backfill-config";
+import { getFileHash } from "./hashFile";
 
-const savedMtimes: Map<string, Map<string, number>> = new Map();
+// First key is the hash, second key is the file relative path
+const savedHashes: Map<string, Map<string, string>> = new Map();
 
 // contract: cwd should be absolute
 // The return keys are relative path with posix file separators
-async function getMtimesFor(cwd: string): Promise<Map<string, number>> {
-  const result = new Map<string, number>();
+async function getHashesFor(cwd: string): Promise<Map<string, string>> {
+  const result = new Map<string, string>();
 
   const allFiles = await globby(["**/*", "!node_modules"], { cwd });
   //globby returns relative path with posix file separator
   await Promise.all(
     allFiles.map(async (f) => {
-      const stat = await fs.stat(path.join(cwd, f));
-      result.set(f, stat.mtime.getTime());
+      const hash = await getFileHash(cwd, f);
+      result.set(f, hash);
     })
   );
 
@@ -38,8 +38,7 @@ export abstract class CacheStorage implements ICacheStorage {
     this.logger.setHit(result);
 
     if (!result) {
-      // Save hash of files if not already memoized
-      savedMtimes.set(hash, await getMtimesFor(this.cwd));
+      savedHashes.set(hash, await getHashesFor(this.cwd));
     }
 
     return result;
@@ -51,11 +50,11 @@ export abstract class CacheStorage implements ICacheStorage {
     const filesMatchingOutputGlob = await globby(outputGlob, { cwd: this.cwd });
 
     // Get the list of files that have not changed so we don't need to cache them.
-    const mtimesNow = await getMtimesFor(this.cwd);
-    const mtimesThen =
-      (await savedMtimes.get(hash)) || new Map<string, string>();
-    const unchangedFiles = [...mtimesThen.keys()].filter(
-      (s) => mtimesThen.get(s) === mtimesNow.get(s)
+    const hashesNow = await getHashesFor(this.cwd);
+    const hashesThen =
+      (await savedHashes.get(hash)) || new Map<string, string>();
+    const unchangedFiles = [...hashesThen.keys()].filter(
+      (s) => hashesThen.get(s) === hashesNow.get(s)
     );
     const filesToCache = filesMatchingOutputGlob.filter(
       (f) => !unchangedFiles.includes(f)
