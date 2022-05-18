@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Mon, 25 Apr 2022 13:30:56 GMT and should not be manually modified.
+This log was last generated on Wed, 18 May 2022 12:15:03 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.6.0
+
+Wed, 18 May 2022 12:15:03 GMT
+
+### Minor changes
+
+- Make incremental cache an opt-in option (vibailly@microsoft.com)
 
 ## 5.5.0
 

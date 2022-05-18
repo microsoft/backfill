@@ -2,6 +2,21 @@
   "name": "backfill-config",
   "entries": [
     {
+      "date": "Wed, 18 May 2022 12:15:03 GMT",
+      "tag": "backfill-config_v6.3.0",
+      "version": "6.3.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Make incremental cache an opt-in option",
+            "author": "vibailly@microsoft.com",
+            "commit": "a2c7c0f6f41926087610eb567460dec4269ef348",
+            "package": "backfill-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 12 Oct 2021 19:45:45 GMT",
       "tag": "backfill-config_v6.2.0",
       "version": "6.2.0",

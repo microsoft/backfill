@@ -1,8 +1,16 @@
 # Change Log - backfill-config
 
-This log was last generated on Tue, 12 Oct 2021 19:45:45 GMT and should not be manually modified.
+This log was last generated on Wed, 18 May 2022 12:15:03 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.3.0
+
+Wed, 18 May 2022 12:15:03 GMT
+
+### Minor changes
+
+- Make incremental cache an opt-in option (vibailly@microsoft.com)
 
 ## 6.2.0
 
