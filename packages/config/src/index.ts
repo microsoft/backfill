@@ -34,6 +34,7 @@ export type Config = {
   performanceReportName?: string;
   producePerformanceLogs: boolean;
   validateOutput: boolean;
+  incrementalCaching: boolean;
 };
 
 export function isCorrectMode(mode: string): mode is BackfillModes {
@@ -89,6 +90,7 @@ export function createDefaultConfig(fromPath: string): Config {
     packageRoot,
     producePerformanceLogs: false,
     validateOutput: false,
+    incrementalCaching: false,
   };
 }
 

@@ -13,9 +13,10 @@ export class NpmCacheStorage extends CacheStorage {
     private options: NpmCacheStorageOptions,
     private internalCacheFolder: string,
     logger: Logger,
-    cwd: string
+    cwd: string,
+    incrementalCaching = false
   ) {
-    super(logger, cwd);
+    super(logger, cwd, incrementalCaching);
   }
 
   protected async _fetch(hash: string): Promise<boolean> {

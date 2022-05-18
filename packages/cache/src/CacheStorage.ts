@@ -27,7 +27,11 @@ async function getHashesFor(cwd: string): Promise<Map<string, string>> {
 export { ICacheStorage };
 
 export abstract class CacheStorage implements ICacheStorage {
-  public constructor(protected logger: Logger, protected cwd: string) {}
+  public constructor(
+    protected logger: Logger,
+    protected cwd: string,
+    private incrementalCaching = false
+  ) {}
   public async fetch(hash: string): Promise<boolean> {
     const tracer = this.logger.setTime("fetchTime");
 
@@ -37,7 +41,7 @@ export abstract class CacheStorage implements ICacheStorage {
 
     this.logger.setHit(result);
 
-    if (!result) {
+    if (!result && this.incrementalCaching) {
       savedHashes.set(hash, await getHashesFor(this.cwd));
     }
 
@@ -49,16 +53,19 @@ export abstract class CacheStorage implements ICacheStorage {
 
     const filesMatchingOutputGlob = await globby(outputGlob, { cwd: this.cwd });
 
-    // Get the list of files that have not changed so we don't need to cache them.
-    const hashesNow = await getHashesFor(this.cwd);
-    const hashesThen =
-      (await savedHashes.get(hash)) || new Map<string, string>();
-    const unchangedFiles = [...hashesThen.keys()].filter(
-      (s) => hashesThen.get(s) === hashesNow.get(s)
-    );
-    const filesToCache = filesMatchingOutputGlob.filter(
-      (f) => !unchangedFiles.includes(f)
-    );
+    let filesToCache = filesMatchingOutputGlob;
+    if (this.incrementalCaching) {
+      // Get the list of files that have not changed so we don't need to cache them.
+      const hashesNow = await getHashesFor(this.cwd);
+      const hashesThen =
+        (await savedHashes.get(hash)) || new Map<string, string>();
+      const unchangedFiles = [...hashesThen.keys()].filter(
+        (s) => hashesThen.get(s) === hashesNow.get(s)
+      );
+      filesToCache = filesMatchingOutputGlob.filter(
+        (f) => !unchangedFiles.includes(f)
+      );
+    }
 
     await this._put(hash, filesToCache);
     tracer.stop();

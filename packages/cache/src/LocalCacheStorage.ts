@@ -9,9 +9,10 @@ export class LocalCacheStorage extends CacheStorage {
   constructor(
     private internalCacheFolder: string,
     logger: Logger,
-    cwd: string
+    cwd: string,
+    incrementalCaching = false
   ) {
-    super(logger, cwd);
+    super(logger, cwd, incrementalCaching);
   }
 
   protected getLocalCacheFolder(hash: string): string {

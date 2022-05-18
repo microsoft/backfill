@@ -19,7 +19,8 @@ export function getCacheStorageProvider(
   cacheStorageConfig: CacheStorageConfig,
   internalCacheFolder: string,
   logger: Logger,
-  cwd: string
+  cwd: string,
+  incrementalCaching = false
 ): ICacheStorage {
   let cacheStorage: ICacheStorage;
 
@@ -41,22 +42,30 @@ export function getCacheStorageProvider(
         cacheStorageConfig.options,
         internalCacheFolder,
         logger,
-        cwd
+        cwd,
+        incrementalCaching
       );
     } else if (cacheStorageConfig.provider === "azure-blob") {
       cacheStorage = new AzureBlobCacheStorage(
         cacheStorageConfig.options,
         logger,
-        cwd
+        cwd,
+        incrementalCaching
       );
     } else if (cacheStorageConfig.provider === "local-skip") {
       cacheStorage = new LocalSkipCacheStorage(
         internalCacheFolder,
         logger,
-        cwd
+        cwd,
+        incrementalCaching
       );
     } else {
-      cacheStorage = new LocalCacheStorage(internalCacheFolder, logger, cwd);
+      cacheStorage = new LocalCacheStorage(
+        internalCacheFolder,
+        logger,
+        cwd,
+        incrementalCaching
+      );
     }
     memo.set(key, cacheStorage);
   }
