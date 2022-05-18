@@ -1,0 +1,8 @@
+{
+  "type": "minor",
+  "comment": "Make incremental cache an opt-in option",
+  "packageName": "backfill-config",
+  "email": "vibailly@microsoft.com",
+  "dependentChangeType": "patch",
+  "date": "2022-05-18T11:14:29.510Z"
+}
