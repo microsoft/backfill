@@ -7,7 +7,7 @@ import { CacheStorage } from "../CacheStorage";
 export class LocalCacheStorage extends CacheStorage {
   filesToCache: string[] | undefined;
   constructor(logger: Logger, cwd: string) {
-    super(logger, cwd);
+    super(logger, cwd, true);
   }
 
   protected async _fetch(_hash: string): Promise<boolean> {

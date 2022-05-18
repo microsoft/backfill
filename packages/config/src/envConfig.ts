@@ -73,5 +73,10 @@ export function getEnvConfig(logger: Logger) {
     config["validateOutput"] = Boolean(validateOutput === "true");
   }
 
+  const incrementalCaching = process.env["BACKFILL_INCREMENTAL_CACHING"];
+  if (incrementalCaching) {
+    config["incrementalCaching"] = Boolean(incrementalCaching === "true");
+  }
+
   return config;
 }

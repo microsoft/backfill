@@ -34,9 +34,10 @@ export class AzureBlobCacheStorage extends CacheStorage {
   constructor(
     private options: AzureBlobCacheStorageOptions,
     logger: Logger,
-    cwd: string
+    cwd: string,
+    incrementalCaching = false
   ) {
-    super(logger, cwd);
+    super(logger, cwd, incrementalCaching);
   }
 
   protected async _fetch(hash: string): Promise<boolean> {

@@ -67,17 +67,25 @@ export async function fetch(
   cwd: string,
   hash: string,
   logger: Logger,
-  config?: Pick<Config, "cacheStorageConfig" | "internalCacheFolder">
+  config?: Pick<
+    Config,
+    "cacheStorageConfig" | "internalCacheFolder" | "incrementalCaching"
+  >
 ): Promise<boolean> {
   if (!config) {
     config = createConfig(logger, cwd);
   }
-  const { cacheStorageConfig, internalCacheFolder } = config;
+  const {
+    cacheStorageConfig,
+    internalCacheFolder,
+    incrementalCaching,
+  } = config;
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
     internalCacheFolder,
     logger,
-    cwd
+    cwd,
+    incrementalCaching
   );
   const fetch = await cacheStorage.fetch(hash);
   return fetch;
@@ -89,18 +97,27 @@ export async function put(
   logger: Logger,
   config?: Pick<
     Config,
-    "cacheStorageConfig" | "internalCacheFolder" | "outputGlob"
+    | "cacheStorageConfig"
+    | "internalCacheFolder"
+    | "outputGlob"
+    | "incrementalCaching"
   >
 ): Promise<void> {
   if (!config) {
     config = createConfig(logger, cwd);
   }
-  const { cacheStorageConfig, internalCacheFolder, outputGlob } = config;
+  const {
+    cacheStorageConfig,
+    internalCacheFolder,
+    outputGlob,
+    incrementalCaching,
+  } = config;
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
     internalCacheFolder,
     logger,
-    cwd
+    cwd,
+    incrementalCaching
   );
   await cacheStorage.put(hash, outputGlob);
 }
