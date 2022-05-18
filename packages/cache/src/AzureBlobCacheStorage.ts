@@ -75,8 +75,23 @@ export class AzureBlobCacheStorage extends CacheStorage {
       blobReadableStream.pipe(tarWritableStream);
 
       const blobPromise = new Promise<void>((resolve, reject) => {
-        blobReadableStream.on("end", () => resolve());
-        blobReadableStream.on("error", (error) => reject(error));
+        // This is a workaround until we understand why in some cases
+        // the blobReadableStream stays open forever.
+        const timeout = setTimeout(() => {
+          blobReadableStream.unpipe(tarWritableStream);
+          tarWritableStream.destroy();
+          this.logger.error(`The fetch request to ${hash} seems to be hanging`);
+          reject(new Error(`The fetch request to ${hash} seems to be hanging`));
+        }, 10 * 60 * 1000); // 10min timeout.
+
+        blobReadableStream.on("end", () => {
+          clearTimeout(timeout);
+          resolve();
+        });
+        blobReadableStream.on("error", (error) => {
+          clearTimeout(timeout);
+          reject(error);
+        });
       });
 
       await blobPromise;
