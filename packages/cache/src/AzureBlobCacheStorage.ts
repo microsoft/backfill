@@ -14,7 +14,7 @@ const FOUR_MEGABYTES = 4 * ONE_MEGABYTE;
 
 /*
  * Timeout stream, will emit an error event if the
- * input is not done providing data after a given time after
+ * input has not started providing data after a given time after
  * its creation.
  */
 class TimeoutStream extends Transform {
