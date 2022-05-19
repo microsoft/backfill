@@ -1,4 +1,5 @@
 import * as path from "path";
+import { Transform, TransformCallback, pipeline } from "stream";
 import { BlobServiceClient } from "@azure/storage-blob";
 import tarFs from "tar-fs";
 
@@ -10,6 +11,58 @@ import { CacheStorage } from "./CacheStorage";
 
 const ONE_MEGABYTE = 1024 * 1024;
 const FOUR_MEGABYTES = 4 * ONE_MEGABYTE;
+
+/*
+ * Timeout stream, will emit an error event if the
+ * input is not done providing data after a given time after
+ * its creation.
+ */
+class TimeoutStream extends Transform {
+  private timeout: NodeJS.Timeout;
+  constructor(timeout: number, message: string) {
+    super();
+    this.timeout = setTimeout(() => {
+      this.destroy(new Error(message));
+    }, timeout);
+  }
+  _transform(
+    chunk: any,
+    _encoding: BufferEncoding,
+    callback: TransformCallback
+  ): void {
+    clearTimeout(this.timeout);
+    this.push(chunk);
+    callback();
+  }
+}
+
+/*
+ * Sponge stream, it will accumulate all the data it receives
+ * and emit it only if and when the input stream sends the "end" event.
+ */
+class SpongeStream extends Transform {
+  constructor() {
+    super({
+      // This stream should never receive more data than its readableHighWaterMark
+      // otherwise the stream will get into a deadlock
+      // 1 TB should give enough room :)
+      readableHighWaterMark: 1024 * 1024 * 1024 * 1024,
+    });
+  }
+  _transform(
+    chunk: any,
+    _encoding: BufferEncoding,
+    callback: TransformCallback
+  ): void {
+    this.pause();
+    this.push(chunk);
+    callback();
+  }
+  _flush(callback: TransformCallback): void {
+    this.resume();
+    callback();
+  }
+}
 
 const uploadOptions = {
   bufferSize: FOUR_MEGABYTES,
@@ -72,36 +125,37 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
       const tarWritableStream = tarFs.extract(this.cwd);
 
-      blobReadableStream.pipe(tarWritableStream);
+      const spongeStream = new SpongeStream();
 
-      const blobPromise = new Promise<void>((resolve, reject) => {
-        // This is a workaround until we understand why in some cases
-        // the blobReadableStream stays open forever.
-        const timeout = setTimeout(() => {
-          blobReadableStream.unpipe(tarWritableStream);
-          tarWritableStream.destroy();
-          this.logger.error(`The fetch request to ${hash} seems to be hanging`);
-          reject(new Error(`The fetch request to ${hash} seems to be hanging`));
-        }, 10 * 60 * 1000); // 10min timeout.
+      const timeoutStream = new TimeoutStream(
+        10 * 60 * 1000,
+        `The fetch request to ${hash} seems to be hanging`
+      );
 
-        blobReadableStream.on("end", () => {
-          clearTimeout(timeout);
-          resolve();
-        });
-        blobReadableStream.on("error", (error) => {
-          clearTimeout(timeout);
-          reject(error);
-        });
-      });
+      const extractionPipeline = new Promise<void>((resolve, reject) =>
+        pipeline(
+          blobReadableStream,
+          spongeStream,
+          timeoutStream,
+          tarWritableStream,
+          (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          }
+        )
+      );
 
-      await blobPromise;
+      await extractionPipeline;
 
       return true;
     } catch (error) {
       if (error && error.statusCode === 404) {
         return false;
       } else {
-        throw new Error(error);
+        throw error;
       }
     }
   }
