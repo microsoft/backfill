@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Thu, 19 May 2022 12:02:01 GMT",
+      "tag": "backfill-cache_v5.6.1",
+      "version": "5.6.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Azure blob storage timeout",
+            "author": "vibailly@microsoft.com",
+            "commit": "fbd340d76b52e285776e400be9cfc3b1b87d7e69",
+            "package": "backfill-cache"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 18 May 2022 12:15:03 GMT",
       "tag": "backfill-cache_v5.6.0",
       "version": "5.6.0",

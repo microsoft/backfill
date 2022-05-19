@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Wed, 18 May 2022 12:15:03 GMT and should not be manually modified.
+This log was last generated on Thu, 19 May 2022 12:02:01 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.6.1
+
+Thu, 19 May 2022 12:02:01 GMT
+
+### Patches
+
+- Azure blob storage timeout (vibailly@microsoft.com)
 
 ## 5.6.0
 
