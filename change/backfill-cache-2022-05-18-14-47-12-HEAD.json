@@ -1,0 +1,8 @@
+{
+  "type": "patch",
+  "comment": "Azure blob storage timeout",
+  "packageName": "backfill-cache",
+  "email": "vibailly@microsoft.com",
+  "dependentChangeType": "patch",
+  "date": "2022-05-18T12:47:12.257Z"
+}
