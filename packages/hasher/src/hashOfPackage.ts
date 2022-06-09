@@ -97,9 +97,10 @@ export function getPackageHash(
     ...internalDependencies,
     ...externalDependencies,
   ];
+  console.log("before")
   const filesHash = generateHashOfFiles(files, repoInfo);
   const dependenciesHash = hashStrings(resolvedDependencies);
-
+console.log("hi'")
   logger.silly(name);
   logger.silly(`  ${filesHash} (fileHash)`);
   logger.silly(`  ${dependenciesHash} (dependenciesHash)`);

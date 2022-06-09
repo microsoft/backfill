@@ -1,6 +1,7 @@
 import { Logger } from "backfill-logger";
 import { findWorkspacePath, WorkspaceInfo } from "workspace-tools";
 import { generateHashOfFiles } from "./hashOfFiles";
+import path from "path";
 import {
   PackageHashInfo,
   getPackageHash,
@@ -75,8 +76,6 @@ export class Hasher implements IHasher {
     while (queue.length > 0) {
       const packageRoot = queue.shift();
 
-      console.log(packageRoot);
-
       if (!packageRoot || visited.has(packageRoot)) {
         continue;
       }
@@ -97,9 +96,10 @@ export class Hasher implements IHasher {
     const packageFileMap: Map<string, string[]> = new Map();
     Object.keys(this.repoInfo.repoHashes).forEach((relativeFilePath) => {
       // search for a package that has this file
-      const packageRoot = packageRootsToHash.find((packageRoot) =>
-        relativeFilePath.includes(packageRoot)
-      );
+      const packageRoot = packageRootsToHash.find((packageRoot) => {
+        const relativePackageRoot = path.relative(this.repoInfo!.root, packageRoot);
+        return relativeFilePath.includes(relativePackageRoot);
+      });
       if (packageRoot) {
         if (!packageFileMap.has(packageRoot)) {
           packageFileMap.set(packageRoot, []);
@@ -125,11 +125,13 @@ export class Hasher implements IHasher {
       );
     }
 
+    const internalPackagesHash = generateHashOfInternalPackages(done);
     console.timeEnd("hash-packages");
 
-    const internalPackagesHash = generateHashOfInternalPackages(done);
     const buildCommandHash = hashStrings(salt);
     const combinedHash = hashStrings([internalPackagesHash, buildCommandHash]);
+
+    console.log(combinedHash);
 
     this.logger.verbose(`Hash of internal packages: ${internalPackagesHash}`);
     this.logger.verbose(`Hash of build command: ${buildCommandHash}`);
