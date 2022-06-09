@@ -17,6 +17,13 @@ export type PackageHashInfo = {
   internalDependencies: string[];
 };
 
+export type PackageDepsInfo = {
+  name: string;
+  packageRoot: string;
+  externalDependencies: string[];
+  internalDependencies: string[];
+};
+
 export function generateHashOfInternalPackages(
   internalPackages: PackageHashInfo[]
 ): string {
@@ -34,19 +41,11 @@ export function generateHashOfInternalPackages(
 
 const memoization: { [key: string]: PackageHashInfo } = {};
 
-export async function getPackageHash(
+export function getPackageDepsInfo(
   packageRoot: string,
-  repoInfo: RepoInfo,
-  logger: Logger
-): Promise<PackageHashInfo> {
+  repoInfo: RepoInfo
+): PackageDepsInfo {
   const { workspaceInfo, parsedLock } = repoInfo;
-
-  const memoizationKey = path.resolve(packageRoot);
-
-  if (memoization[memoizationKey]) {
-    return memoization[memoizationKey];
-  }
-
   const { name, dependencies, devDependencies } = require(path.join(
     packageRoot,
     "package.json"
@@ -62,18 +61,43 @@ export async function getPackageHash(
     workspaceInfo
   );
 
-  const externalDeoendencies = resolveExternalDependencies(
+  const externalDependencies = resolveExternalDependencies(
     allDependencies,
     workspaceInfo,
     parsedLock
   );
 
+  return {
+    name,
+    packageRoot,
+    internalDependencies,
+    externalDependencies,
+  };
+}
+
+export function getPackageHash(
+  depInfo: PackageDepsInfo,
+  files: string[],
+  repoInfo: RepoInfo,
+  logger: Logger
+): PackageHashInfo {
+  const {
+    name,
+    packageRoot,
+    internalDependencies,
+    externalDependencies,
+  } = depInfo;
+  const memoizationKey = path.resolve(packageRoot);
+
+  if (memoization[memoizationKey]) {
+    return memoization[memoizationKey];
+  }
+
   const resolvedDependencies = [
     ...internalDependencies,
-    ...externalDeoendencies,
+    ...externalDependencies,
   ];
-
-  const filesHash = await generateHashOfFiles(packageRoot, repoInfo);
+  const filesHash = generateHashOfFiles(files, repoInfo);
   const dependenciesHash = hashStrings(resolvedDependencies);
 
   logger.silly(name);

@@ -5,6 +5,8 @@ import {
   PackageHashInfo,
   getPackageHash,
   generateHashOfInternalPackages,
+  getPackageDepsInfo,
+  PackageDepsInfo,
 } from "./hashOfPackage";
 import { hashStrings, getPackageRoot } from "./helpers";
 import { RepoInfo, getRepoInfo, getRepoInfoNoCache } from "./repoInfo";
@@ -58,29 +60,72 @@ export class Hasher implements IHasher {
     const packageRoot = await getPackageRoot(this.packageRoot);
 
     this.repoInfo = await getRepoInfo(packageRoot);
+    const depInfoMap: Map<string, PackageDepsInfo> = new Map();
 
     const { workspaceInfo } = this.repoInfo;
 
     const queue = [packageRoot];
+    const packageRootsToHash: string[] = [];
+    const visited = new Set<string>();
+
     const done: PackageHashInfo[] = [];
 
+    console.time("traverse");
+    // gather a list of packags that to be hashed
     while (queue.length > 0) {
       const packageRoot = queue.shift();
 
-      if (!packageRoot) {
+      console.log(packageRoot);
+
+      if (!packageRoot || visited.has(packageRoot)) {
         continue;
       }
 
-      const packageHash = await getPackageHash(
-        packageRoot,
-        this.repoInfo,
-        this.logger
-      );
+      visited.add(packageRoot);
+      packageRootsToHash.push(packageRoot);
 
-      addToQueue(packageHash.internalDependencies, queue, done, workspaceInfo);
-
-      done.push(packageHash);
+      const depsInfo = getPackageDepsInfo(packageRoot, this.repoInfo);
+      depInfoMap.set(packageRoot, depsInfo);
+      addToQueue(depsInfo.internalDependencies, queue, done, workspaceInfo);
     }
+
+    console.timeEnd("traverse");
+
+    console.time("hashes");
+
+    // Now generate the hashes for each package
+    const packageFileMap: Map<string, string[]> = new Map();
+    Object.keys(this.repoInfo.repoHashes).forEach((relativeFilePath) => {
+      // search for a package that has this file
+      const packageRoot = packageRootsToHash.find((packageRoot) =>
+        relativeFilePath.includes(packageRoot)
+      );
+      if (packageRoot) {
+        if (!packageFileMap.has(packageRoot)) {
+          packageFileMap.set(packageRoot, []);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        packageFileMap.get(packageRoot)!.push(relativeFilePath);
+      }
+    });
+
+    console.timeEnd("hashes");
+
+    console.time("hash-packages");
+
+    for (const packageRoot of packageRootsToHash) {
+      done.push(
+        getPackageHash(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          depInfoMap.get(packageRoot)!,
+          packageFileMap.get(packageRoot)!,
+          this.repoInfo,
+          this.logger
+        )
+      );
+    }
+
+    console.timeEnd("hash-packages");
 
     const internalPackagesHash = generateHashOfInternalPackages(done);
     const buildCommandHash = hashStrings(salt);
@@ -104,7 +149,7 @@ export class Hasher implements IHasher {
   public async hashOfOutput(): Promise<string> {
     const repoInfo = await getRepoInfoNoCache(this.packageRoot);
 
-    return generateHashOfFiles(this.packageRoot, repoInfo);
+    return generateHashOfFiles([], repoInfo);
   }
 }
 

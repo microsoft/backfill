@@ -1,5 +1,3 @@
-import path, { sep } from "path";
-
 import { hashStrings } from "./helpers";
 import { RepoInfo } from "./repoInfo";
 
@@ -17,17 +15,11 @@ import { RepoInfo } from "./repoInfo";
  * @param logger An instance of backfill logger
  * @param repoInfo The repoInfo that carries information about repo-wide hashes
  */
-export async function generateHashOfFiles(
-  packageRoot: string,
+export function generateHashOfFiles(
+  files: string[],
   repoInfo: RepoInfo
-): Promise<string> {
-  const { repoHashes, root } = repoInfo;
-
-  const normalized = path.normalize(packageRoot) + sep;
-
-  const files: string[] = Object.keys(repoHashes).filter((f) =>
-    path.join(root, f).includes(normalized)
-  );
+): string {
+  const { repoHashes } = repoInfo;
 
   files.sort((a, b) => a.localeCompare(b));
 
