@@ -1,3 +1,4 @@
+import path from "path";
 import {
   WorkspaceInfo,
   ParsedLock,
@@ -37,6 +38,54 @@ export async function getRepoInfoNoCache(cwd: string) {
 
   const repoHashes = Object.fromEntries(getPackageDeps(root));
   const workspaceInfo = getWorkspaces(root);
+
+  /**
+   * {
+   *  "packages": {
+   *    "experiences": {
+   *       "react-web-client": ["hash1", "hash2", "hash3"]
+   *     }
+   *   }
+   * }
+   */
+  interface PathNode {
+    [key: string]: PathNode | string[];
+  }
+
+  const pathTree: PathNode = {};
+
+  // Generate path tree of all packages in workspace (scale: ~2000 * ~3)
+  for (const workspace of workspaceInfo) {
+    const pathParts = path.normalize(workspace.path).split("/");
+    let currentNode = pathTree;
+
+    for (const part of pathParts) {
+      if (!currentNode[part]) {
+        currentNode[part] = {};
+      }
+
+      currentNode = currentNode[part] as {};
+    }
+  }
+
+  // key: path/to/package (packageRoot), value: array of hashes
+  const packageHashes: Record<string, string[]> = {};
+
+  for (const [entry, value] of Object.entries(repoHashes)) {
+    const pathParts = path.normalize(entry[0]).split("/");
+    let node = pathTree;
+
+    for (const part of pathParts) {
+      node = node[part] as PathNode;
+    }
+
+    if (!node.values) {
+      node.values = [];
+    }
+
+    node.values.push(value);
+  }
+
   const parsedLock = await parseLockFile(root);
 
   const repoInfo = {
