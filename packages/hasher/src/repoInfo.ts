@@ -31,26 +31,11 @@ function searchRepoInfoCache(packageRoot: string) {
   }
 }
 
-export async function getRepoInfoNoCache(cwd: string) {
-  console.time("getRepoInfoNoCache");
-
-  const root = getWorkspaceRoot(cwd);
-
-  if (!root) {
-    throw new Error("Cannot initialize Repo class without a workspace root");
-  }
-
-  const unorderedRepoHashes = Object.fromEntries(getPackageDeps(root));
-
-  const repoHashes = Object.keys(unorderedRepoHashes)
-    .sort()
-    .reduce((obj, key) => {
-      obj[key] = unorderedRepoHashes[key];
-      return obj;
-    }, {} as Record<string, string>);
-
-  const workspaceInfo = getWorkspaces(root);
-
+function createPackageHashes(
+  root: string,
+  workspaceInfo: WorkspaceInfo,
+  repoHashes: { [key: string]: string }
+) {
   /**
    * This is a trie that looks like this:
    * {
@@ -97,12 +82,35 @@ export async function getRepoInfoNoCache(cwd: string) {
       }
     }
 
-    const packageRoot = packagePathParts.join(path.sep);
+    const packageRoot = packagePathParts.join("/");
     packageHashes[packageRoot] = packageHashes[packageRoot] || [];
     packageHashes[packageRoot].push([entry, value]);
   }
 
+  return packageHashes;
+}
+
+export async function getRepoInfoNoCache(cwd: string) {
+  console.time("getRepoInfoNoCache");
+
+  const root = getWorkspaceRoot(cwd);
+
+  if (!root) {
+    throw new Error("Cannot initialize Repo class without a workspace root");
+  }
+
+  // Assuming the package-deps-hash package returns a map of files to hashes that are unordered
+  const unorderedRepoHashes = Object.fromEntries(getPackageDeps(root));
+  const repoHashes = Object.keys(unorderedRepoHashes)
+    .sort()
+    .reduce((obj, key) => {
+      obj[key] = unorderedRepoHashes[key];
+      return obj;
+    }, {} as Record<string, string>);
+
+  const workspaceInfo = getWorkspaces(root);
   const parsedLock = await parseLockFile(root);
+  const packageHashes = createPackageHashes(root, workspaceInfo, repoHashes);
 
   const repoInfo = {
     root,

@@ -24,13 +24,13 @@ export async function generateHashOfFiles(
   const packageRelativeRoot = path.relative(root, packageRoot);
 
   if (packageHashes[packageRelativeRoot]) {
-    // Fast path
+    // Fast path: if files are clearly inside a package as per the packageHashes cache
     for (const hash of packageHashes[packageRelativeRoot]) {
       hashes.push(hash[0], hash[1]);
     }
     return hashStrings(hashes);
   } else {
-    // Slow old path
+    // Slow old path: if files are not clearly inside a package (mostly the case for malformed monorepos, like tests)
     const normalized = path.normalize(packageRoot) + sep;
 
     const files: string[] = Object.keys(repoHashes).filter((f) =>

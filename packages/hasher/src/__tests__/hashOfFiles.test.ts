@@ -105,7 +105,7 @@ describe("generateHashOfFiles()", () => {
   });
 
   // This test will be run on Windows and on Linux on the CI
-  it("file paths in a monorepo are consistent across platforms", async () => {
+  it("file paths in a package not defined in a workspace (malformed monorepo) are consistent across platforms (uses slow path)", async () => {
     const workspaceRoot = await setupFixture("empty");
 
     // Create a folder to make sure we get folder separators as part of the file name
@@ -119,5 +119,18 @@ describe("generateHashOfFiles()", () => {
     const hashOfPackage = await generateHashOfFiles(folder, repoInfo);
 
     expect(hashOfPackage).toEqual("438b5f734e6de1ef0eb9114a28ef230a9ff83f54");
+  });
+
+  it("file paths in a monorepo are consistent across platforms (uses fast path)", async () => {
+    const workspaceRoot = await setupFixture("monorepo");
+
+    const folder = path.join(workspaceRoot, "packages", "package-a");
+    fs.writeFileSync(path.join(folder, "foo.txt"), "bar");
+
+    let repoInfo = await getRepoInfoNoCache(workspaceRoot);
+
+    const hashOfPackage = await generateHashOfFiles(folder, repoInfo);
+
+    expect(hashOfPackage).toEqual("b91634233c6a3768136391c804967bf0e0a6578d");
   });
 });
