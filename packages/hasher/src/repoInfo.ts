@@ -14,6 +14,7 @@ export interface RepoInfo {
   workspaceInfo: WorkspaceInfo;
   parsedLock: ParsedLock;
   repoHashes: { [key: string]: string };
+  packageHashes: Record<string, string[]>;
 }
 
 const repoInfoCache: RepoInfo[] = [];
@@ -31,7 +32,10 @@ function searchRepoInfoCache(packageRoot: string) {
 }
 
 export async function getRepoInfoNoCache(cwd: string) {
+  console.time("getRepoInfoNoCache");
+
   const root = getWorkspaceRoot(cwd);
+
   if (!root) {
     throw new Error("Cannot initialize Repo class without a workspace root");
   }
@@ -49,22 +53,20 @@ export async function getRepoInfoNoCache(cwd: string) {
    * }
    */
   interface PathNode {
-    [key: string]: PathNode | string[];
+    [key: string]: PathNode;
   }
 
   const pathTree: PathNode = {};
 
   // Generate path tree of all packages in workspace (scale: ~2000 * ~3)
   for (const workspace of workspaceInfo) {
-    const pathParts = path.normalize(workspace.path).split("/");
+    const pathParts = path.relative(root, workspace.path).split("/");
+
     let currentNode = pathTree;
 
     for (const part of pathParts) {
-      if (!currentNode[part]) {
-        currentNode[part] = {};
-      }
-
-      currentNode = currentNode[part] as {};
+      currentNode[part] ??= {};
+      currentNode = currentNode[part];
     }
   }
 
@@ -72,18 +74,23 @@ export async function getRepoInfoNoCache(cwd: string) {
   const packageHashes: Record<string, string[]> = {};
 
   for (const [entry, value] of Object.entries(repoHashes)) {
-    const pathParts = path.normalize(entry[0]).split("/");
+    const pathParts = entry.split("/");
+
     let node = pathTree;
+    let packagePathParts = [];
 
     for (const part of pathParts) {
-      node = node[part] as PathNode;
+      if (node[part]) {
+        node = node[part] as PathNode;
+        packagePathParts.push(part);
+      } else {
+        break;
+      }
     }
 
-    if (!node.values) {
-      node.values = [];
-    }
-
-    node.values.push(value);
+    const packageRoot = packagePathParts.join("/");
+    packageHashes[packageRoot] ??= [];
+    packageHashes[packageRoot].push(value);
   }
 
   const parsedLock = await parseLockFile(root);
@@ -93,9 +100,11 @@ export async function getRepoInfoNoCache(cwd: string) {
     workspaceInfo,
     parsedLock,
     repoHashes,
+    packageHashes,
   };
 
   repoInfoCache.push(repoInfo);
+
   return repoInfo;
 }
 
