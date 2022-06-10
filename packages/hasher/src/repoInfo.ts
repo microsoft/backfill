@@ -69,7 +69,7 @@ export async function getRepoInfoNoCache(cwd: string) {
 
   // Generate path tree of all packages in workspace (scale: ~2000 * ~3)
   for (const workspace of workspaceInfo) {
-    const pathParts = path.relative(root, workspace.path).split("/");
+    const pathParts = path.relative(root, workspace.path).split(/[\\/]/);
 
     let currentNode = pathTree;
 
@@ -83,7 +83,7 @@ export async function getRepoInfoNoCache(cwd: string) {
   const packageHashes: Record<string, [string, string][]> = {};
 
   for (const [entry, value] of Object.entries(repoHashes)) {
-    const pathParts = entry.split("/");
+    const pathParts = entry.split(/[\\/]/);
 
     let node = pathTree;
     let packagePathParts = [];
@@ -97,7 +97,7 @@ export async function getRepoInfoNoCache(cwd: string) {
       }
     }
 
-    const packageRoot = packagePathParts.join("/");
+    const packageRoot = packagePathParts.join(path.sep);
     packageHashes[packageRoot] = packageHashes[packageRoot] || [];
     packageHashes[packageRoot].push([entry, value]);
   }

@@ -1,4 +1,4 @@
-import path from "path";
+import path, { sep } from "path";
 import { hashStrings } from "./helpers";
 import { RepoInfo } from "./repoInfo";
 
@@ -18,14 +18,33 @@ export async function generateHashOfFiles(
   packageRoot: string,
   repoInfo: RepoInfo
 ): Promise<string> {
-  const { packageHashes } = repoInfo;
+  const { repoHashes, root, packageHashes } = repoInfo;
 
   const hashes: string[] = [];
-  const packageRelativeRoot = path.relative(repoInfo.root, packageRoot);
+  const packageRelativeRoot = path.relative(root, packageRoot);
 
-  for (const hash of packageHashes[packageRelativeRoot]) {
-    hashes.push(hash[0], hash[1]);
+  if (packageHashes[packageRelativeRoot]) {
+    // Fast path
+    for (const hash of packageHashes[packageRelativeRoot]) {
+      hashes.push(hash[0], hash[1]);
+    }
+    return hashStrings(hashes);
+  } else {
+    // Slow old path
+    const normalized = path.normalize(packageRoot) + sep;
+
+    const files: string[] = Object.keys(repoHashes).filter((f) =>
+      path.join(root, f).includes(normalized)
+    );
+
+    files.sort((a, b) => a.localeCompare(b));
+
+    const hashes: string[] = [];
+
+    for (const file of files) {
+      hashes.push(file, repoHashes[file]);
+    }
+
+    return hashStrings(hashes);
   }
-
-  return hashStrings(hashes);
 }
