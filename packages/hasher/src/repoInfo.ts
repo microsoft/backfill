@@ -1,4 +1,3 @@
-import path from "path";
 import {
   WorkspaceInfo,
   ParsedLock,
@@ -8,6 +7,7 @@ import {
 } from "workspace-tools";
 
 import { getPackageDeps } from "@rushstack/package-deps-hash";
+import { createPackageHashes } from "./createPackageHashes";
 
 export interface RepoInfo {
   root: string;
@@ -31,68 +31,7 @@ function searchRepoInfoCache(packageRoot: string) {
   }
 }
 
-function createPackageHashes(
-  root: string,
-  workspaceInfo: WorkspaceInfo,
-  repoHashes: { [key: string]: string }
-) {
-  /**
-   * This is a trie that looks like this:
-   * {
-   *  "packages": {
-   *    "experiences": {
-   *       "react-web-client": {}
-   *     }
-   *   }
-   * }
-   */
-  interface PathNode {
-    [key: string]: PathNode;
-  }
-
-  const pathTree: PathNode = {};
-
-  // Generate path tree of all packages in workspace (scale: ~2000 * ~3)
-  for (const workspace of workspaceInfo) {
-    const pathParts = path.relative(root, workspace.path).split(/[\\/]/);
-
-    let currentNode = pathTree;
-
-    for (const part of pathParts) {
-      currentNode[part] = currentNode[part] || {};
-      currentNode = currentNode[part];
-    }
-  }
-
-  // key: path/to/package (packageRoot), value: array of a tuple of [file, hash]
-  const packageHashes: Record<string, [string, string][]> = {};
-
-  for (const [entry, value] of Object.entries(repoHashes)) {
-    const pathParts = entry.split(/[\\/]/);
-
-    let node = pathTree;
-    let packagePathParts = [];
-
-    for (const part of pathParts) {
-      if (node[part]) {
-        node = node[part] as PathNode;
-        packagePathParts.push(part);
-      } else {
-        break;
-      }
-    }
-
-    const packageRoot = packagePathParts.join("/");
-    packageHashes[packageRoot] = packageHashes[packageRoot] || [];
-    packageHashes[packageRoot].push([entry, value]);
-  }
-
-  return packageHashes;
-}
-
 export async function getRepoInfoNoCache(cwd: string) {
-  console.time("getRepoInfoNoCache");
-
   const root = getWorkspaceRoot(cwd);
 
   if (!root) {
@@ -101,8 +40,10 @@ export async function getRepoInfoNoCache(cwd: string) {
 
   // Assuming the package-deps-hash package returns a map of files to hashes that are unordered
   const unorderedRepoHashes = Object.fromEntries(getPackageDeps(root));
+
+  // Sorting repoHash by key because we want to consistent hashing based on the order of the files
   const repoHashes = Object.keys(unorderedRepoHashes)
-    .sort()
+    .sort((a, b) => a.localeCompare(b))
     .reduce((obj, key) => {
       obj[key] = unorderedRepoHashes[key];
       return obj;
