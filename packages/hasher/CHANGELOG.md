@@ -1,8 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Fri, 10 Jun 2022 18:21:21 GMT and should not be manually modified.
+This log was last generated on Fri, 10 Jun 2022 19:16:49 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.4.1
+
+Fri, 10 Jun 2022 19:16:49 GMT
+
+### Patches
+
+- fixes windows to use the fast path as well (kchau@microsoft.com)
 
 ## 6.4.0
 

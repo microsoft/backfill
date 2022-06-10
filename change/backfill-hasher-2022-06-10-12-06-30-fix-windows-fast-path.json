@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "fixes windows to use the fast path as well",
-  "packageName": "backfill-hasher",
-  "email": "kchau@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2022-06-10T19:06:30.606Z"
-}

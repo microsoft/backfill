@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Fri, 10 Jun 2022 19:16:49 GMT",
+      "tag": "backfill-hasher_v6.4.1",
+      "version": "6.4.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "fixes windows to use the fast path as well",
+            "author": "kchau@microsoft.com",
+            "commit": "97c27bf470a22ba39f251a240c828117af36fb10",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 10 Jun 2022 18:21:21 GMT",
       "tag": "backfill-hasher_v6.4.0",
       "version": "6.4.0",
