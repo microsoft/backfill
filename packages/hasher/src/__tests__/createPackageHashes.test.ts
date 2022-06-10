@@ -27,9 +27,9 @@ describe("createPackageHashes", () => {
       {
         "packages/package-a/foo.ts": "hash-a-foo.ts",
         "packages/package-a/package.json": "hash-a-package.json",
-        "packages/package-b/1.ts": "hash-b-1-foo.ts",
-        "packages/package-b/2.ts": "hash-b-2-foo.ts",
-        "packages/package-b/3.ts": "hash-b-3-foo.ts",
+        "packages/package-b/1.ts": "hash-b-1.ts",
+        "packages/package-b/2.ts": "hash-b-2.ts",
+        "packages/package-b/3.ts": "hash-b-3.ts",
       }
     );
     expect(packageHashes["packages/package-a"].length).toEqual(2);
@@ -40,7 +40,7 @@ describe("createPackageHashes", () => {
       "hash-a-package.json"
     );
 
-    expect(packageHashes["packages/package-b"].length).toEqual(2);
+    expect(packageHashes["packages/package-b"].length).toEqual(3);
 
     // packageHashes["packageName"] is an array of tuples of the form [filePath, hash]
     expect(packageHashes["packages/package-b"][0][1]).toEqual("hash-b-1.ts");
