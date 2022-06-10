@@ -14,7 +14,7 @@ export interface RepoInfo {
   workspaceInfo: WorkspaceInfo;
   parsedLock: ParsedLock;
   repoHashes: { [key: string]: string };
-  packageHashes: Record<string, string[]>;
+  packageHashes: Record<string, [string, string][]>;
 }
 
 const repoInfoCache: RepoInfo[] = [];
@@ -40,14 +40,22 @@ export async function getRepoInfoNoCache(cwd: string) {
     throw new Error("Cannot initialize Repo class without a workspace root");
   }
 
-  const repoHashes = Object.fromEntries(getPackageDeps(root));
+  const unorderedRepoHashes = Object.fromEntries(getPackageDeps(root));
+
+  const repoHashes = Object.keys(unorderedRepoHashes)
+    .sort()
+    .reduce((obj, key) => {
+      obj[key] = unorderedRepoHashes[key];
+      return obj;
+    }, {} as Record<string, string>);
+
   const workspaceInfo = getWorkspaces(root);
 
   /**
    * {
    *  "packages": {
    *    "experiences": {
-   *       "react-web-client": ["hash1", "hash2", "hash3"]
+   *       "react-web-client": {}
    *     }
    *   }
    * }
@@ -70,8 +78,8 @@ export async function getRepoInfoNoCache(cwd: string) {
     }
   }
 
-  // key: path/to/package (packageRoot), value: array of hashes
-  const packageHashes: Record<string, string[]> = {};
+  // key: path/to/package (packageRoot), value: array of a tuple of [file, hash]
+  const packageHashes: Record<string, [string, string][]> = {};
 
   for (const [entry, value] of Object.entries(repoHashes)) {
     const pathParts = entry.split("/");
@@ -90,7 +98,7 @@ export async function getRepoInfoNoCache(cwd: string) {
 
     const packageRoot = packagePathParts.join("/");
     packageHashes[packageRoot] ??= [];
-    packageHashes[packageRoot].push(value);
+    packageHashes[packageRoot].push([entry, value]);
   }
 
   const parsedLock = await parseLockFile(root);

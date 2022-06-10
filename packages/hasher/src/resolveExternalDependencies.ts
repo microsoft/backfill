@@ -1,7 +1,6 @@
+import type { ParsedLock, WorkspaceInfo } from "workspace-tools";
 import {
-  ParsedLock,
   queryLockFile,
-  WorkspaceInfo,
   listOfWorkspacePackageNames,
 } from "workspace-tools";
 import { nameAtVersion } from "./helpers";

@@ -1,7 +1,6 @@
-import path, { sep } from "path";
-
 import { hashStrings } from "./helpers";
 import { RepoInfo } from "./repoInfo";
+import path from "path";
 
 /**
  * Generates a hash string based on files in a package
@@ -13,28 +12,19 @@ import { RepoInfo } from "./repoInfo";
  * Note: We have to force the types because globby types are wrong
  *
  * @param packageRoot The root of the package
- * @param globs Globs inside a package root to consider as part of the hash
- * @param logger An instance of backfill logger
  * @param repoInfo The repoInfo that carries information about repo-wide hashes
  */
 export async function generateHashOfFiles(
   packageRoot: string,
   repoInfo: RepoInfo
 ): Promise<string> {
-  const { repoHashes, root } = repoInfo;
-
-  const normalized = path.normalize(packageRoot) + sep;
-
-  const files: string[] = Object.keys(repoHashes).filter((f) =>
-    path.join(root, f).includes(normalized)
-  );
-
-  files.sort((a, b) => a.localeCompare(b));
+  const { packageHashes } = repoInfo;
 
   const hashes: string[] = [];
+  const packageRelativeRoot = path.relative(repoInfo.root, packageRoot);
 
-  for (const file of files) {
-    hashes.push(file, repoHashes[file]);
+  for (const hash of packageHashes[packageRelativeRoot]) {
+    hashes.push(hash[0], hash[1]);
   }
 
   return hashStrings(hashes);
