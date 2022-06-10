@@ -9,12 +9,11 @@ module.exports = {
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
-    "prettier/@typescript-eslint", // this disables the linting error which conflict with prettier
-    "plugin:prettier/recommended" // [Has to be last] this does prettier as part of the linting
+    "plugin:prettier/recommended", // [Has to be last] this does prettier as part of the linting
   ],
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: "module"
+    sourceType: "module",
   },
   rules: {
     "@typescript-eslint/no-var-requires": "off",
@@ -28,6 +27,6 @@ module.exports = {
     "import/namespace": "off",
     "import/order": "warn",
     "import/no-unresolved": "off",
-    "import/default": "off"
-  }
+    "import/default": "off",
+  },
 };

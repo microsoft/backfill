@@ -7,12 +7,14 @@ import {
 } from "workspace-tools";
 
 import { getPackageDeps } from "@rushstack/package-deps-hash";
+import { createPackageHashes } from "./createPackageHashes";
 
 export interface RepoInfo {
   root: string;
   workspaceInfo: WorkspaceInfo;
   parsedLock: ParsedLock;
   repoHashes: { [key: string]: string };
+  packageHashes: Record<string, [string, string][]>;
 }
 
 const repoInfoCache: RepoInfo[] = [];
@@ -31,22 +33,36 @@ function searchRepoInfoCache(packageRoot: string) {
 
 export async function getRepoInfoNoCache(cwd: string) {
   const root = getWorkspaceRoot(cwd);
+
   if (!root) {
     throw new Error("Cannot initialize Repo class without a workspace root");
   }
 
-  const repoHashes = Object.fromEntries(getPackageDeps(root));
+  // Assuming the package-deps-hash package returns a map of files to hashes that are unordered
+  const unorderedRepoHashes = Object.fromEntries(getPackageDeps(root));
+
+  // Sorting repoHash by key because we want to consistent hashing based on the order of the files
+  const repoHashes = Object.keys(unorderedRepoHashes)
+    .sort((a, b) => a.localeCompare(b))
+    .reduce((obj, key) => {
+      obj[key] = unorderedRepoHashes[key];
+      return obj;
+    }, {} as Record<string, string>);
+
   const workspaceInfo = getWorkspaces(root);
   const parsedLock = await parseLockFile(root);
+  const packageHashes = createPackageHashes(root, workspaceInfo, repoHashes);
 
   const repoInfo = {
     root,
     workspaceInfo,
     parsedLock,
     repoHashes,
+    packageHashes,
   };
 
   repoInfoCache.push(repoInfo);
+
   return repoInfo;
 }
 

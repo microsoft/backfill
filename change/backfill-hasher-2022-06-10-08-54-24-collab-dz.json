@@ -1,0 +1,8 @@
+{
+  "type": "minor",
+  "comment": "Adds a \"fast path\" for hashing files in a package by using a look up tree",
+  "packageName": "backfill-hasher",
+  "email": "kchau@microsoft.com",
+  "dependentChangeType": "patch",
+  "date": "2022-06-10T15:54:24.170Z"
+}
