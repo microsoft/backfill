@@ -1,9 +1,16 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Thu, 31 Mar 2022 05:28:57 GMT and should not be
-manually modified.
+This log was last generated on Fri, 10 Jun 2022 18:21:21 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.4.0
+
+Fri, 10 Jun 2022 18:21:21 GMT
+
+### Minor changes
+
+- Adds a "fast path" for hashing files in a package by using a look up tree (kchau@microsoft.com)
 
 ## 6.3.0
 
