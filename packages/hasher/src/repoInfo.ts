@@ -52,6 +52,7 @@ export async function getRepoInfoNoCache(cwd: string) {
   const workspaceInfo = getWorkspaces(root);
 
   /**
+   * This is a trie that looks like this:
    * {
    *  "packages": {
    *    "experiences": {
@@ -73,7 +74,7 @@ export async function getRepoInfoNoCache(cwd: string) {
     let currentNode = pathTree;
 
     for (const part of pathParts) {
-      currentNode[part] ??= {};
+      currentNode[part] = currentNode[part] || {};
       currentNode = currentNode[part];
     }
   }
@@ -97,7 +98,7 @@ export async function getRepoInfoNoCache(cwd: string) {
     }
 
     const packageRoot = packagePathParts.join("/");
-    packageHashes[packageRoot] ??= [];
+    packageHashes[packageRoot] = packageHashes[packageRoot] || [];
     packageHashes[packageRoot].push([entry, value]);
   }
 

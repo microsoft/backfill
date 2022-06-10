@@ -1,6 +1,6 @@
+import path from "path";
 import { hashStrings } from "./helpers";
 import { RepoInfo } from "./repoInfo";
-import path from "path";
 
 /**
  * Generates a hash string based on files in a package
