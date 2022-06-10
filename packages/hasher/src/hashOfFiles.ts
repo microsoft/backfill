@@ -21,7 +21,9 @@ export async function generateHashOfFiles(
   const { repoHashes, root, packageHashes } = repoInfo;
 
   const hashes: string[] = [];
-  const packageRelativeRoot = path.relative(root, packageRoot);
+  const packageRelativeRoot = path
+    .relative(root, packageRoot)
+    .replace(/\\/g, "/");
 
   if (packageHashes[packageRelativeRoot]) {
     // Fast path: if files are clearly inside a package as per the packageHashes cache
