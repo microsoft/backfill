@@ -1,8 +1,0 @@
-{
-  "type": "patch",
-  "comment": "upgrade workspace-tools to ^0.26.3",
-  "packageName": "backfill-hasher",
-  "email": "mahuangh@microsoft.com",
-  "dependentChangeType": "patch",
-  "date": "2022-08-24T14:47:50.259Z"
-}
