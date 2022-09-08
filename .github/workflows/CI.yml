@@ -28,6 +28,9 @@ jobs:
       - name: verify change files
         run: yarn checkchange
 
+      - name: check package versions
+        run: yarn syncpack:check
+
       - run: yarn build
 
       - run: yarn lint

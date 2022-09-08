@@ -21,6 +21,8 @@
     "prepare": "husky install",
     "prepublishOnly": "eslint . --ext .ts && lerna run build && lerna run test",
     "release": "beachball publish",
+    "syncpack:check": "syncpack list-mismatches",
+    "syncpack:fix": "syncpack fix-mismatches",
     "test": "lerna run test",
     "update-project-references": "node tools/update-project-references.js",
     "watch": "lerna run watch --parallel"
@@ -43,7 +45,8 @@
     "lint-staged": "12.5.0",
     "lodash.merge": "^4.6.2",
     "prettier-package-json": "^2.1.0",
-    "resolve-from": "^5.0.0"
+    "resolve-from": "^5.0.0",
+    "syncpack": "8.2.4"
   },
   "beachball": {
     "scope": [
@@ -64,5 +67,9 @@
   },
   "resolutions": {
     "**/cache-base/union-value/set-value": "^2.0.0"
+  },
+  "syncpack": {
+    "peer": false,
+    "workspace": false
   }
 }
