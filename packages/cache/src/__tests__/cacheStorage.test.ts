@@ -10,7 +10,7 @@ class MockLocalCacheStorage extends CacheStorage {
     super(logger, cwd, true);
   }
 
-  protected async _fetch(_hash: string): Promise<boolean> {
+  protected async _fetch(): Promise<boolean> {
     return false;
   }
   protected async _put(_hash: string, filesToCache: string[]): Promise<void> {
