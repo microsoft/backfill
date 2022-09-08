@@ -1,8 +1,0 @@
-{
-  "type": "none",
-  "comment": "Fix issue with hashes in test",
-  "packageName": "backfill-cache",
-  "email": "elcraig@microsoft.com",
-  "dependentChangeType": "none",
-  "date": "2022-09-07T00:44:57.608Z"
-}
