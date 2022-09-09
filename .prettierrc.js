@@ -9,7 +9,7 @@ module.exports = {
     {
       files: "*.json5",
       options: {
-        parser: "jsonc",
+        parser: "json",
       },
     },
   ],
