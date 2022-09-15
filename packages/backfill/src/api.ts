@@ -75,11 +75,8 @@ export async function fetch(
   if (!config) {
     config = createConfig(logger, cwd);
   }
-  const {
-    cacheStorageConfig,
-    internalCacheFolder,
-    incrementalCaching,
-  } = config;
+  const { cacheStorageConfig, internalCacheFolder, incrementalCaching } =
+    config;
   const cacheStorage = getCacheStorageProvider(
     cacheStorageConfig,
     internalCacheFolder,

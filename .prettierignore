@@ -1,0 +1,16 @@
+# generated or imported files
+CHANGELOG.*
+CODE_OF_CONDUCT.md
+SECURITY.md
+yarn.lock
+*.log
+
+# generated folders
+node_modules
+lib
+change
+__snapshots__
+
+# config files that don't need formatting
+.husky
+.prettierignore

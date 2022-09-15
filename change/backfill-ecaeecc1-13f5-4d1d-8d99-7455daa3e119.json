@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Update formatting with latest prettier version",
+  "packageName": "backfill",
+  "email": "elcraig@microsoft.com",
+  "dependentChangeType": "none"
+}

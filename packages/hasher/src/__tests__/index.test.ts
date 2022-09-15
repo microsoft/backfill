@@ -42,13 +42,8 @@ describe("addToQueue", () => {
   };
 
   it("adds internal dependencies to the queue", async () => {
-    const {
-      internalDependencies,
-      queue,
-      done,
-      workspaces,
-      packagePath,
-    } = await setupAddToQueue();
+    const { internalDependencies, queue, done, workspaces, packagePath } =
+      await setupAddToQueue();
 
     addToQueue(internalDependencies, queue, done, workspaces);
 
@@ -57,13 +52,8 @@ describe("addToQueue", () => {
   });
 
   it("doesn't add to the queue if the package has been evaluated", async () => {
-    let {
-      internalDependencies,
-      queue,
-      done,
-      workspaces,
-      packageToAdd,
-    } = await setupAddToQueue();
+    let { internalDependencies, queue, done, workspaces, packageToAdd } =
+      await setupAddToQueue();
 
     // Override
     done = [
@@ -81,13 +71,8 @@ describe("addToQueue", () => {
   });
 
   it("doesn't add to the queue if the package is already in the queue", async () => {
-    let {
-      internalDependencies,
-      queue,
-      done,
-      workspaces,
-      packagePath,
-    } = await setupAddToQueue();
+    let { internalDependencies, queue, done, workspaces, packagePath } =
+      await setupAddToQueue();
 
     // Override
     queue = [packagePath];
