@@ -14,6 +14,7 @@
     "build": "lerna run --stream build",
     "change": "beachball change",
     "checkchange": "beachball check",
+    "format": "prettier --write .",
     "postinstall": "yarn update-project-references",
     "lerna": "lerna",
     "lint": "eslint --fix . --ext .ts",
@@ -21,7 +22,6 @@
     "prepublishOnly": "eslint . --ext .ts && lerna run build && lerna run test",
     "release": "beachball publish",
     "test": "lerna run test",
-    "prettier": "prettier \"{.,**}/*.{tsx,ts,js,json,md,yaml}\" --write",
     "update-project-references": "node tools/update-project-references.js",
     "watch": "lerna run watch --parallel"
   },

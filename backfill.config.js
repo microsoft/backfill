@@ -2,8 +2,8 @@ const path = require("path");
 
 module.exports = {
   cacheStorageConfig: {
-    provider: "local"
+    provider: "local",
   },
   logFolder: path.join(__dirname, ".backfill-logs"),
-  logLevel: "silly"
+  logLevel: "silly",
 };
