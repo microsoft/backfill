@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Update formatting with latest prettier version",
-  "packageName": "backfill-config",
-  "email": "elcraig@microsoft.com",
-  "dependentChangeType": "none"
-}

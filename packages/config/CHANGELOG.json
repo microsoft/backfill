@@ -2,6 +2,21 @@
   "name": "backfill-config",
   "entries": [
     {
+      "date": "Thu, 15 Sep 2022 23:59:49 GMT",
+      "tag": "backfill-config_v6.3.0",
+      "version": "6.3.0",
+      "comments": {
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-config",
+            "commit": "7cf25389e822f0bcc568b2be95b4069551c1a866",
+            "comment": "Update formatting with latest prettier version"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 18 May 2022 12:15:03 GMT",
       "tag": "backfill-config_v6.3.0",
       "version": "6.3.0",
