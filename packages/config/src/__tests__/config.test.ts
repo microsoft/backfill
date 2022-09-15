@@ -122,8 +122,8 @@ describe("createConfig()", () => {
     const fixtureLocation = await setupFixture("basic");
     const config = createConfig(logger, fixtureLocation);
 
-    const defaultLocalCacheFolder = createDefaultConfig(fixtureLocation)
-      .internalCacheFolder;
+    const defaultLocalCacheFolder =
+      createDefaultConfig(fixtureLocation).internalCacheFolder;
     expect(config.internalCacheFolder).toStrictEqual(defaultLocalCacheFolder);
   });
 

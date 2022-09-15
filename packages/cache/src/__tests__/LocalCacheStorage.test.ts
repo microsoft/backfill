@@ -56,11 +56,8 @@ async function fetchFromCache({
   hash,
   expectSuccess = true,
 }: CacheHelper) {
-  const {
-    cacheStorage,
-    internalCacheFolder,
-    fixtureLocation,
-  } = await setupCacheStorage(fixtureName);
+  const { cacheStorage, internalCacheFolder, fixtureLocation } =
+    await setupCacheStorage(fixtureName);
 
   const secretFile = "qwerty";
 
@@ -86,11 +83,8 @@ async function putInCache({
   expectSuccess = true,
   errorMessage,
 }: CacheHelper) {
-  const {
-    cacheStorage,
-    internalCacheFolder,
-    fixtureLocation,
-  } = await setupCacheStorage(fixtureName);
+  const { cacheStorage, internalCacheFolder, fixtureLocation } =
+    await setupCacheStorage(fixtureName);
 
   if (!outputGlob) {
     throw new Error("outputGlob should be provided to the putInCache function");
