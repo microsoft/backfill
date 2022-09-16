@@ -15,6 +15,7 @@ export function isCustomProvider(
 }
 
 const memo = new Map<string, ICacheStorage>();
+
 export function getCacheStorageProvider(
   cacheStorageConfig: CacheStorageConfig,
   internalCacheFolder: string,
@@ -22,53 +23,53 @@ export function getCacheStorageProvider(
   cwd: string,
   incrementalCaching = false
 ): ICacheStorage {
-  let cacheStorage: ICacheStorage;
+  let cacheStorage: ICacheStorage | undefined;
 
   if (isCustomProvider(cacheStorageConfig)) {
-    const createCacheStorage = cacheStorageConfig.provider;
-
     try {
-      cacheStorage = createCacheStorage(logger, cwd);
+      return cacheStorageConfig.provider(logger, cwd);
     } catch {
       throw new Error("cacheStorageConfig.provider cannot be creaated");
     }
-  } else {
-    const key = `${cacheStorageConfig.provider}${internalCacheFolder}${cwd}`;
-    if (memo.has(key)) {
-      return memo.get(key)!;
-    }
-    if (cacheStorageConfig.provider === "npm") {
-      cacheStorage = new NpmCacheStorage(
-        cacheStorageConfig.options,
-        internalCacheFolder,
-        logger,
-        cwd,
-        incrementalCaching
-      );
-    } else if (cacheStorageConfig.provider === "azure-blob") {
-      cacheStorage = new AzureBlobCacheStorage(
-        cacheStorageConfig.options,
-        logger,
-        cwd,
-        incrementalCaching
-      );
-    } else if (cacheStorageConfig.provider === "local-skip") {
-      cacheStorage = new LocalSkipCacheStorage(
-        internalCacheFolder,
-        logger,
-        cwd,
-        incrementalCaching
-      );
-    } else {
-      cacheStorage = new LocalCacheStorage(
-        internalCacheFolder,
-        logger,
-        cwd,
-        incrementalCaching
-      );
-    }
-    memo.set(key, cacheStorage);
   }
+
+  const key = `${cacheStorageConfig.provider}${internalCacheFolder}${cwd}`;
+  cacheStorage = memo.get(key);
+  if (cacheStorage) {
+    return cacheStorage;
+  }
+
+  if (cacheStorageConfig.provider === "npm") {
+    cacheStorage = new NpmCacheStorage(
+      cacheStorageConfig.options,
+      internalCacheFolder,
+      logger,
+      cwd,
+      incrementalCaching
+    );
+  } else if (cacheStorageConfig.provider === "azure-blob") {
+    cacheStorage = new AzureBlobCacheStorage(
+      cacheStorageConfig.options,
+      logger,
+      cwd,
+      incrementalCaching
+    );
+  } else if (cacheStorageConfig.provider === "local-skip") {
+    cacheStorage = new LocalSkipCacheStorage(
+      internalCacheFolder,
+      logger,
+      cwd,
+      incrementalCaching
+    );
+  } else {
+    cacheStorage = new LocalCacheStorage(
+      internalCacheFolder,
+      logger,
+      cwd,
+      incrementalCaching
+    );
+  }
+  memo.set(key, cacheStorage);
 
   return cacheStorage;
 }

@@ -2,6 +2,36 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Thu, 15 Sep 2022 23:59:49 GMT",
+      "tag": "backfill-hasher_v6.4.2",
+      "version": "6.4.2",
+      "comments": {
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-hasher",
+            "commit": "7cf25389e822f0bcc568b2be95b4069551c1a866",
+            "comment": "Update formatting with latest prettier version"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 24 Aug 2022 15:40:20 GMT",
+      "tag": "backfill-hasher_v6.4.2",
+      "version": "6.4.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "upgrade workspace-tools to ^0.26.3",
+            "author": "mahuangh@microsoft.com",
+            "commit": "f60ae7afcec12bf423298f65a89fe3736391d2b9",
+            "package": "backfill-hasher"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 10 Jun 2022 19:16:49 GMT",
       "tag": "backfill-hasher_v6.4.1",
       "version": "6.4.1",

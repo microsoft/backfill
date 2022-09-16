@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Simplify some logic to remove lint issues",
+  "packageName": "backfill-cache",
+  "email": "elcraig@microsoft.com",
+  "dependentChangeType": "patch"
+}

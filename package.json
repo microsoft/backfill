@@ -2,62 +2,64 @@
   "private": true,
   "name": "backfill-repo",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/backfill"
+  },
   "version": "2.0.0",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "build": "lerna run --stream build",
-    "change": "beachball change --scope \"!packages/utils-test/__fixtures__/*\"",
-    "checkchange": "beachball check --scope \"!packages/utils-test/__fixtures__/*\"",
+    "change": "beachball change",
+    "checkchange": "beachball check",
+    "format": "prettier --write .",
     "postinstall": "yarn update-project-references",
     "lerna": "lerna",
     "lint": "eslint --fix . --ext .ts",
+    "prepare": "husky install",
     "prepublishOnly": "eslint . --ext .ts && lerna run build && lerna run test",
     "release": "beachball publish",
     "test": "lerna run test",
-    "prettier": "prettier \"{.,**}/*.{tsx,ts,js,json,md,yaml}\" --write",
     "update-project-references": "node tools/update-project-references.js",
     "watch": "lerna run watch --parallel"
   },
   "dependencies": {
     "lerna": "3.22.1",
-    "prettier": "2.2.0",
+    "prettier": "2.7.1",
     "typescript": "4.1.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
-    "beachball": "^1.31.3",
+    "beachball": "2.30.1",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
     "execa": "^4.0.0",
-    "husky": "^4.2.0",
-    "lint-staged": "^10.2.7",
+    "husky": "7.0.4",
+    "lint-staged": "12.5.0",
     "lodash.merge": "^4.6.2",
     "prettier-package-json": "^2.1.0",
     "resolve-from": "^5.0.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn update-project-references && lint-staged"
-    }
+  "beachball": {
+    "scope": [
+      "!packages/utils-test/__fixtures__/*"
+    ]
   },
   "lint-staged": {
-    "package.json": [
+    "**/package.json": [
       "prettier-package-json --write",
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "**/*.{js,json,md,yaml}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
-    "**/*.{ts}": [
-      "eslint --fix",
-      "git add"
+    "**/*.ts": [
+      "eslint --fix"
     ]
   },
   "resolutions": {

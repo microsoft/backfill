@@ -74,9 +74,8 @@ function createBlobClient(
   containerName: string,
   blobName: string
 ) {
-  const blobServiceClient = BlobServiceClient.fromConnectionString(
-    connectionString
-  );
+  const blobServiceClient =
+    BlobServiceClient.fromConnectionString(connectionString);
   const containerClient = blobServiceClient.getContainerClient(containerName);
   const blobClient = containerClient.getBlobClient(blobName);
 

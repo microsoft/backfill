@@ -2,6 +2,36 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Thu, 15 Sep 2022 23:59:49 GMT",
+      "tag": "backfill-cache_v5.6.1",
+      "version": "5.6.1",
+      "comments": {
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-cache",
+            "commit": "7cf25389e822f0bcc568b2be95b4069551c1a866",
+            "comment": "Update formatting with latest prettier version"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 08 Sep 2022 02:19:58 GMT",
+      "tag": "backfill-cache_v5.6.1",
+      "version": "5.6.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix issue with hashes in test",
+            "author": "elcraig@microsoft.com",
+            "commit": "57e2eaef6d489adced533eedf3e0ba8e6a93b0c8",
+            "package": "backfill-cache"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 19 May 2022 12:02:01 GMT",
       "tag": "backfill-cache_v5.6.1",
       "version": "5.6.1",
