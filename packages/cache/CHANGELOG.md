@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Thu, 19 May 2022 12:02:01 GMT and should not be manually modified.
+This log was last generated on Fri, 16 Sep 2022 00:21:39 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.6.2
+
+Fri, 16 Sep 2022 00:21:39 GMT
+
+### Patches
+
+- Simplify some logic to remove lint issues (elcraig@microsoft.com)
 
 ## 5.6.1
 
