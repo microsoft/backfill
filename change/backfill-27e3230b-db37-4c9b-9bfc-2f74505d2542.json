@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Fix mismatched @types/fs-extra dev dep",
-  "packageName": "backfill",
-  "email": "elcraig@microsoft.com",
-  "dependentChangeType": "none"
-}

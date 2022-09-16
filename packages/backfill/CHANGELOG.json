@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Fri, 16 Sep 2022 00:38:30 GMT",
+      "tag": "backfill_v6.1.22",
+      "version": "6.1.22",
+      "comments": {
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill",
+            "commit": "42aa67201aa9092be9339e9d3ed16a7479c44ce0",
+            "comment": "Fix mismatched @types/fs-extra dev dep"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 16 Sep 2022 00:21:39 GMT",
       "tag": "backfill_v6.1.22",
       "version": "6.1.22",
