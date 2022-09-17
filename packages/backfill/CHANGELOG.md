@@ -1,8 +1,16 @@
 # Change Log - backfill
 
-This log was last generated on Fri, 16 Sep 2022 00:21:39 GMT and should not be manually modified.
+This log was last generated on Sat, 17 Sep 2022 00:00:24 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.1.23
+
+Sat, 17 Sep 2022 00:00:24 GMT
+
+### Patches
+
+- Bump backfill-hasher to v6.4.3
 
 ## 6.1.22
 
