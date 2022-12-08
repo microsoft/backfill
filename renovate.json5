@@ -10,7 +10,7 @@
   ],
 
   "labels": ["renovate"],
-  
+
   "packageRules": [
     {
       // try to pick up 0.x workspace-tools upgrades right away
