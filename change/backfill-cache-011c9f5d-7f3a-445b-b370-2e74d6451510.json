@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Update dependency @azure/storage-blob to v12.12.0",
+  "packageName": "backfill-cache",
+  "email": "renovate@whitesourcesoftware.com",
+  "dependentChangeType": "patch"
+}
