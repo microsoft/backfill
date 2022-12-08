@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Update package.json ordering with prettier-package-json",
+  "packageName": "backfill-hasher",
+  "email": "elcraig@microsoft.com",
+  "dependentChangeType": "none"
+}

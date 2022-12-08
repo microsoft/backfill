@@ -1,8 +1,8 @@
 {
   "private": true,
   "name": "backfill-sample",
-  "license": "MIT",
   "version": "5.1.1",
+  "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
     "build": "backfill -- yarn compile",

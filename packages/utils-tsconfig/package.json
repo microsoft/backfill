@@ -1,5 +1,6 @@
 {
   "name": "backfill-utils-tsconfig",
+  "version": "5.0.0",
   "description": "Shared tsconfig.json for Backfill",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
@@ -7,6 +8,5 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "5.0.0",
   "main": "tsconfig.default.json"
 }
