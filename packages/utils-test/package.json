@@ -1,5 +1,6 @@
 {
   "name": "backfill-utils-test",
+  "version": "5.1.2",
   "description": "Shared testing infrastructure code for Backfill",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
@@ -7,7 +8,6 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "5.1.2",
   "main": "lib/index.js",
   "scripts": {
     "build": "yarn compile",

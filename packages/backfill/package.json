@@ -1,5 +1,6 @@
 {
   "name": "backfill",
+  "version": "6.1.25",
   "description": "Backfill CLI",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
@@ -7,7 +8,6 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "version": "6.1.25",
   "main": "lib/index.js",
   "bin": {
     "backfill": "./bin/backfill.js"
