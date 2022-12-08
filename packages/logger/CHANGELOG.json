@@ -2,6 +2,21 @@
   "name": "backfill-logger",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 02:38:15 GMT",
+      "tag": "backfill-logger_v5.1.3",
+      "version": "5.1.3",
+      "comments": {
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-logger",
+            "commit": "8933334a222411ce6811ebd1460c84c5f9b97cbf",
+            "comment": "Update package.json ordering with prettier-package-json"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Dec 2022 02:23:52 GMT",
       "tag": "backfill-logger_v5.1.3",
       "version": "5.1.3",

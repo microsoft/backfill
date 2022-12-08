@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 02:38:15 GMT",
+      "tag": "backfill-hasher_v6.4.4",
+      "version": "6.4.4",
+      "comments": {
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-hasher",
+            "commit": "8933334a222411ce6811ebd1460c84c5f9b97cbf",
+            "comment": "Update package.json ordering with prettier-package-json"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Dec 2022 02:33:59 GMT",
       "tag": "backfill-hasher_v6.4.4",
       "version": "6.4.4",
