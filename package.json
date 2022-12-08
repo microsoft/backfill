@@ -31,8 +31,8 @@
     "**/cache-base/union-value/set-value": "^2.0.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "5.45.1",
-    "@typescript-eslint/parser": "5.45.1",
+    "@typescript-eslint/eslint-plugin": "5.46.0",
+    "@typescript-eslint/parser": "5.46.0",
     "beachball": "2.31.5",
     "eslint": "8.29.0",
     "eslint-config-prettier": "8.5.0",
