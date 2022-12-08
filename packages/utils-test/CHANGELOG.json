@@ -2,6 +2,21 @@
   "name": "backfill-utils-test",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 02:23:52 GMT",
+      "tag": "backfill-utils-test_v5.1.2",
+      "version": "5.1.2",
+      "comments": {
+        "none": [
+          {
+            "author": "renovate@whitesourcesoftware.com",
+            "package": "backfill-utils-test",
+            "commit": "not available",
+            "comment": "Update @types devDependencies"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Dec 2022 02:23:21 GMT",
       "tag": "backfill-utils-test_v5.1.2",
       "version": "5.1.2",

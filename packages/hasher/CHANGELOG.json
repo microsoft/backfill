@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 02:23:52 GMT",
+      "tag": "backfill-hasher_v6.4.4",
+      "version": "6.4.4",
+      "comments": {
+        "none": [
+          {
+            "author": "renovate@whitesourcesoftware.com",
+            "package": "backfill-hasher",
+            "commit": "not available",
+            "comment": "Update @types devDependencies"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Dec 2022 02:23:21 GMT",
       "tag": "backfill-hasher_v6.4.4",
       "version": "6.4.4",
