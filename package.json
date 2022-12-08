@@ -27,11 +27,6 @@
     "update-project-references": "node tools/update-project-references.js",
     "watch": "lerna run watch --parallel"
   },
-  "dependencies": {
-    "lerna": "3.22.1",
-    "prettier": "2.8.1",
-    "typescript": "4.1.2"
-  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "5.27.1",
     "@typescript-eslint/parser": "5.27.1",
@@ -42,11 +37,14 @@
     "eslint-plugin-prettier": "4.0.0",
     "execa": "4.0.2",
     "husky": "7.0.4",
+    "lerna": "3.22.1",
     "lint-staged": "12.5.0",
     "lodash.merge": "4.6.2",
+    "prettier": "2.8.1",
     "prettier-package-json": "2.1.3",
     "resolve-from": "5.0.0",
-    "syncpack": "8.2.4"
+    "syncpack": "8.2.4",
+    "typescript": "4.1.2"
   },
   "beachball": {
     "scope": [
