@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 01:16:15 GMT",
+      "tag": "backfill-hasher_v6.4.3",
+      "version": "6.4.3",
+      "comments": {
+        "none": [
+          {
+            "author": "renovate@whitesourcesoftware.com",
+            "package": "backfill-hasher",
+            "commit": "31c81223403c163d5078d7a9764ffa69c943ac41",
+            "comment": "Update devDependency @types/jest to v25.2.3"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Dec 2022 00:58:32 GMT",
       "tag": "backfill-hasher_v6.4.3",
       "version": "6.4.3",
