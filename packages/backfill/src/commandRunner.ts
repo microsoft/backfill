@@ -12,7 +12,7 @@ export function getRawBuildCommand(): string {
 }
 
 export function createBuildCommand(
-  buildCommand: string[],
+  buildCommand: (string | number)[],
   clearOutput: boolean,
   outputGlob: string[],
   logger: Logger
