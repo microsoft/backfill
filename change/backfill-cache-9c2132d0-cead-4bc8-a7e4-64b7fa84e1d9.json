@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Update dependency execa to v5",
-  "packageName": "backfill-cache",
-  "email": "renovate@whitesourcesoftware.com",
-  "dependentChangeType": "patch"
-}

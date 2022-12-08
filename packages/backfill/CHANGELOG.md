@@ -1,8 +1,20 @@
 # Change Log - backfill
 
-This log was last generated on Thu, 08 Dec 2022 02:12:15 GMT and should not be manually modified.
+This log was last generated on Thu, 08 Dec 2022 02:52:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.1.26
+
+Thu, 08 Dec 2022 02:52:13 GMT
+
+### Patches
+
+- Update dependency execa to v5 (renovate@whitesourcesoftware.com)
+- Bump backfill-cache to v5.6.3
+- Bump backfill-config to v6.3.1
+- Bump backfill-hasher to v6.4.5
+- Bump backfill-utils-test to v5.1.3
 
 ## 6.1.25
 

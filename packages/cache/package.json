@@ -1,6 +1,6 @@
 {
   "name": "backfill-cache",
-  "version": "5.6.2",
+  "version": "5.6.3",
   "description": "Backfill Cache Providers",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@azure/storage-blob": "12.1.2",
     "@rushstack/package-deps-hash": "^3.2.4",
-    "backfill-config": "^6.3.0",
+    "backfill-config": "^6.3.1",
     "backfill-logger": "^5.1.3",
     "execa": "^5.0.0",
     "find-up": "^5.0.0",
@@ -32,7 +32,7 @@
     "@types/jest": "25.2.3",
     "@types/node": "14.18.34",
     "@types/tar-fs": "2.0.1",
-    "backfill-utils-test": "^5.1.2",
+    "backfill-utils-test": "^5.1.3",
     "backfill-utils-tsconfig": "^5.0.0",
     "jest": "25.5.4",
     "ts-jest": "25.5.1",

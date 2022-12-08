@@ -1,8 +1,16 @@
 # Change Log - backfill-config
 
-This log was last generated on Wed, 18 May 2022 12:15:03 GMT and should not be manually modified.
+This log was last generated on Thu, 08 Dec 2022 02:52:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.3.1
+
+Thu, 08 Dec 2022 02:52:13 GMT
+
+### Patches
+
+- Bump backfill-utils-test to v5.1.3
 
 ## 6.3.0
 

@@ -1,6 +1,6 @@
 {
   "name": "backfill-utils-test",
-  "version": "5.1.2",
+  "version": "5.1.3",
   "description": "Shared testing infrastructure code for Backfill",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
