@@ -9,6 +9,8 @@
     "github>microsoft/m365-renovate-config:restrictNode(14)"
   ],
 
+  "ignorePaths": ["**/node_modules/**", "**/__fixtures__/**"],
+
   "labels": ["renovate"],
 
   "packageRules": [
