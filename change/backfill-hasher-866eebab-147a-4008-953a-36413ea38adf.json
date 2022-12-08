@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Update devDependency @types/jest to v25.2.3",
+  "packageName": "backfill-hasher",
+  "email": "renovate@whitesourcesoftware.com",
+  "dependentChangeType": "none"
+}
