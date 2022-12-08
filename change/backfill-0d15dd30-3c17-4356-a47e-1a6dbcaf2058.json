@@ -1,7 +1,7 @@
 {
-  "type": "none",
-  "comment": "Pin devDependencies",
+  "type": "patch",
+  "comment": "Add missing dependency on `find-up`",
   "packageName": "backfill",
-  "email": "email not defined",
-  "dependentChangeType": "none"
+  "email": "elcraig@microsoft.com",
+  "dependentChangeType": "patch"
 }

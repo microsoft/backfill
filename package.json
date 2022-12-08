@@ -70,6 +70,16 @@
   },
   "syncpack": {
     "peer": false,
-    "workspace": false
+    "workspace": false,
+    "versionGroups": [
+      {
+        "dependencies": [
+          "execa"
+        ],
+        "packages": [
+          "backfill-repo"
+        ]
+      }
+    ]
   }
 }
