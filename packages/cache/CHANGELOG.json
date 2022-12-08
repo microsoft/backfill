@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 02:33:32 GMT",
+      "tag": "backfill-cache_v5.6.2",
+      "version": "5.6.2",
+      "comments": {
+        "none": [
+          {
+            "author": "renovate@whitesourcesoftware.com",
+            "package": "backfill-cache",
+            "commit": "318fec061aace7596510984c6fd21f1c897ff900",
+            "comment": "Update devDependency ts-jest to v25.5.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Dec 2022 02:23:52 GMT",
       "tag": "backfill-cache_v5.6.2",
       "version": "5.6.2",

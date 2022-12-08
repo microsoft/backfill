@@ -2,6 +2,21 @@
   "name": "backfill-config",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 02:33:32 GMT",
+      "tag": "backfill-config_v6.3.0",
+      "version": "6.3.0",
+      "comments": {
+        "none": [
+          {
+            "author": "renovate@whitesourcesoftware.com",
+            "package": "backfill-config",
+            "commit": "318fec061aace7596510984c6fd21f1c897ff900",
+            "comment": "Update devDependency ts-jest to v25.5.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Dec 2022 02:23:52 GMT",
       "tag": "backfill-config_v6.3.0",
       "version": "6.3.0",

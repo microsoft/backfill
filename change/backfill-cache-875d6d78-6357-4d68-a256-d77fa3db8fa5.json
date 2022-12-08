@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Update devDependency ts-jest to v25.5.1",
-  "packageName": "backfill-cache",
-  "email": "renovate@whitesourcesoftware.com",
-  "dependentChangeType": "none"
-}
