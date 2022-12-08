@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Update dependency workspace-tools to ^0.29.0",
+  "packageName": "backfill-hasher",
+  "email": "renovate@whitesourcesoftware.com",
+  "dependentChangeType": "patch"
+}
