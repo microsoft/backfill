@@ -2,6 +2,21 @@
   "name": "backfill-config",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 00:58:32 GMT",
+      "tag": "backfill-config_v6.3.0",
+      "version": "6.3.0",
+      "comments": {
+        "none": [
+          {
+            "author": "email not defined",
+            "package": "backfill-config",
+            "commit": "080fb1aa0570751e1e4d0429c1eb40e449621d4d",
+            "comment": "Pin devDependencies"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 15 Sep 2022 23:59:49 GMT",
       "tag": "backfill-config_v6.3.0",
       "version": "6.3.0",

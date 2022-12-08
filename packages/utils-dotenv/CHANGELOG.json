@@ -2,6 +2,21 @@
   "name": "backfill-utils-dotenv",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 00:58:32 GMT",
+      "tag": "backfill-utils-dotenv_v5.1.1",
+      "version": "5.1.1",
+      "comments": {
+        "none": [
+          {
+            "author": "email not defined",
+            "package": "backfill-utils-dotenv",
+            "commit": "080fb1aa0570751e1e4d0429c1eb40e449621d4d",
+            "comment": "Pin devDependencies"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 27 Apr 2021 09:06:13 GMT",
       "tag": "backfill-utils-dotenv_v5.1.1",
       "version": "5.1.1",

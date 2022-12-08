@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 00:58:32 GMT",
+      "tag": "backfill_v6.1.24",
+      "version": "6.1.24",
+      "comments": {
+        "patch": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill",
+            "commit": "080fb1aa0570751e1e4d0429c1eb40e449621d4d",
+            "comment": "Add missing dependency on `find-up`"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 17 Sep 2022 00:00:24 GMT",
       "tag": "backfill_v6.1.23",
       "version": "6.1.23",

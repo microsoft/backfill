@@ -1,8 +1,16 @@
 # Change Log - backfill
 
-This log was last generated on Sat, 17 Sep 2022 00:00:24 GMT and should not be manually modified.
+This log was last generated on Thu, 08 Dec 2022 00:58:32 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.1.24
+
+Thu, 08 Dec 2022 00:58:32 GMT
+
+### Patches
+
+- Add missing dependency on `find-up` (elcraig@microsoft.com)
 
 ## 6.1.23
 
