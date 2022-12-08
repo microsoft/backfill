@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 02:23:21 GMT",
+      "tag": "backfill_v6.1.25",
+      "version": "6.1.25",
+      "comments": {
+        "none": [
+          {
+            "author": "renovate@whitesourcesoftware.com",
+            "package": "backfill",
+            "commit": "3c69db3d2f49ab2adc0c9191e69355b6569f08b2",
+            "comment": "Update @types devDependencies"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Dec 2022 02:12:15 GMT",
       "tag": "backfill_v6.1.25",
       "version": "6.1.25",

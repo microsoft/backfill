@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Update @types devDependencies",
-  "packageName": "backfill-config",
-  "email": "renovate@whitesourcesoftware.com",
-  "dependentChangeType": "none"
-}
