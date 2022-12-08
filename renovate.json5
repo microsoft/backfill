@@ -9,5 +9,14 @@
     "github>microsoft/m365-renovate-config:restrictNode(14)"
   ],
 
-  "labels": ["renovate"]
+  "labels": ["renovate"],
+  
+  "packageRules": [
+    {
+      // try to pick up 0.x workspace-tools upgrades right away
+      "matchPackageNames": ["workspace-tools"],
+      "matchUpdateTypes": ["minor"],
+      "dependencyDashboardApproval": false
+    }
+  ]
 }
