@@ -2,6 +2,21 @@
   "name": "backfill-utils-dotenv",
   "entries": [
     {
+      "date": "Thu, 08 Dec 2022 02:23:52 GMT",
+      "tag": "backfill-utils-dotenv_v5.1.1",
+      "version": "5.1.1",
+      "comments": {
+        "none": [
+          {
+            "author": "renovate@whitesourcesoftware.com",
+            "package": "backfill-utils-dotenv",
+            "commit": "not available",
+            "comment": "Update @types devDependencies"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Dec 2022 02:23:21 GMT",
       "tag": "backfill-utils-dotenv_v5.1.1",
       "version": "5.1.1",
