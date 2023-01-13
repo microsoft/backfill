@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "backfill-repo",
+  "name": "@microsoft/backfill-repo",
   "version": "2.0.0",
   "license": "MIT",
   "repository": {
@@ -75,7 +75,7 @@
           "execa"
         ],
         "packages": [
-          "backfill-repo"
+          "@microsoft/backfill-repo"
         ]
       }
     ]
