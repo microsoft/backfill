@@ -46,7 +46,7 @@
     "prettier": "2.8.2",
     "prettier-package-json": "2.8.0",
     "resolve-from": "5.0.0",
-    "syncpack": "8.4.11",
+    "syncpack": "8.5.14",
     "typescript": "4.1.2"
   },
   "beachball": {
