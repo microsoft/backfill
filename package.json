@@ -33,7 +33,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "5.48.1",
     "@typescript-eslint/parser": "5.48.1",
-    "beachball": "2.31.6",
+    "beachball": "2.31.8",
     "eslint": "8.31.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-import": "2.27.4",
