@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Delay load azure blob storage",
-  "packageName": "backfill-cache",
-  "email": "elcraig@microsoft.com",
-  "dependentChangeType": "patch"
-}

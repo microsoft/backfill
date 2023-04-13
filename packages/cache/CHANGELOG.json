@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Thu, 13 Apr 2023 20:28:21 GMT",
+      "tag": "backfill-cache_v5.6.4",
+      "version": "5.6.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-cache",
+            "commit": "78f5bf22ecbbd90a0a654fb2a55405883fdb433e",
+            "comment": "Delay load azure blob storage"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 30 Dec 2022 05:14:35 GMT",
       "tag": "backfill-cache_v5.6.3",
       "version": "5.6.3",

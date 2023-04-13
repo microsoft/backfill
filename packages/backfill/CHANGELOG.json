@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Thu, 13 Apr 2023 20:28:21 GMT",
+      "tag": "backfill_v6.1.27",
+      "version": "6.1.27",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "backfill",
+            "comment": "Bump backfill-cache to v5.6.4",
+            "commit": "78f5bf22ecbbd90a0a654fb2a55405883fdb433e"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 12 Jan 2023 22:25:00 GMT",
       "tag": "backfill_v6.1.26",
       "version": "6.1.26",
