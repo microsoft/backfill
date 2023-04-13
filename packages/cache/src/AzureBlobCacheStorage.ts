@@ -1,8 +1,6 @@
 import * as path from "path";
 import { Transform, TransformCallback, pipeline } from "stream";
 import tarFs from "tar-fs";
-// This is delay loaded because it's very slow to parse
-import type AzureBlobStorage from "@azure/storage-blob";
 
 import { Logger } from "backfill-logger";
 import { AzureBlobCacheStorageOptions } from "backfill-config";
@@ -70,14 +68,13 @@ const uploadOptions = {
   maxBuffers: 5,
 };
 
-function createBlobClient(
+async function createBlobClient(
   connectionString: string,
   containerName: string,
   blobName: string
 ) {
   // This is delay loaded because it's very slow to parse
-  const { BlobServiceClient } =
-    require("@azure/storage-blob") as typeof AzureBlobStorage;
+  const { BlobServiceClient } = await import("@azure/storage-blob");
   const blobServiceClient =
     BlobServiceClient.fromConnectionString(connectionString);
   const containerClient = blobServiceClient.getContainerClient(containerName);
@@ -98,7 +95,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
   protected async _fetch(hash: string): Promise<boolean> {
     try {
-      const blobClient = createBlobClient(
+      const blobClient = await createBlobClient(
         this.options.connectionString,
         this.options.container,
         hash
@@ -164,7 +161,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
   }
 
   protected async _put(hash: string, filesToCache: string[]): Promise<void> {
-    const blobClient = createBlobClient(
+    const blobClient = await createBlobClient(
       this.options.connectionString,
       this.options.container,
       hash
