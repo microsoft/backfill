@@ -1,7 +1,8 @@
 import * as path from "path";
 import { Transform, TransformCallback, pipeline } from "stream";
-import { BlobServiceClient } from "@azure/storage-blob";
 import tarFs from "tar-fs";
+// This is delay loaded because it's very slow to parse
+import type AzureBlobStorage from "@azure/storage-blob";
 
 import { Logger } from "backfill-logger";
 import { AzureBlobCacheStorageOptions } from "backfill-config";
@@ -74,6 +75,9 @@ function createBlobClient(
   containerName: string,
   blobName: string
 ) {
+  // This is delay loaded because it's very slow to parse
+  const { BlobServiceClient } =
+    require("@azure/storage-blob") as typeof AzureBlobStorage;
   const blobServiceClient =
     BlobServiceClient.fromConnectionString(connectionString);
   const containerClient = blobServiceClient.getContainerClient(containerName);
@@ -151,7 +155,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
       return true;
     } catch (error) {
-      if (error && error.statusCode === 404) {
+      if (error && (error as any).statusCode === 404) {
         return false;
       } else {
         throw error;
