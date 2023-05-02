@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Update dependency anymatch to ^3.1.3",
+  "packageName": "backfill",
+  "email": "renovate@whitesourcesoftware.com",
+  "dependentChangeType": "patch"
+}
