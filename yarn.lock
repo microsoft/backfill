@@ -1464,10 +1464,10 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/context-base/-/context-base-0.6.1.tgz#b260e454ee4f9635ea024fc83be225e397f15363"
   integrity sha512-5bHhlTBBq82ti3qPT15TRxkYTFPPQWbnkkQkmHPtqiS1XcTB69cEKd3Jm7Cfi/vkPoyxapmePE9tyA7EzLt8SQ==
 
-"@rushstack/node-core-library@3.45.1":
-  version "3.45.1"
-  resolved "https://registry.yarnpkg.com/@rushstack/node-core-library/-/node-core-library-3.45.1.tgz#787361b61a48d616eb4b059641721a3dc138f001"
-  integrity sha512-BwdssTNe007DNjDBxJgInHg8ePytIPyT0La7ZZSQZF9+rSkT42AygXPGvbGsyFfEntjr4X37zZSJI7yGzL16cQ==
+"@rushstack/node-core-library@3.53.3":
+  version "3.53.3"
+  resolved "https://registry.yarnpkg.com/@rushstack/node-core-library/-/node-core-library-3.53.3.tgz#e78e0dc1545f6cd7d80b0408cf534aefc62fbbe2"
+  integrity sha512-H0+T5koi5MFhJUd5ND3dI3bwLhvlABetARl78L3lWftJVQEPyzcgTStvTTRiIM5mCltyTM8VYm6BuCtNUuxD0Q==
   dependencies:
     "@types/node" "12.20.24"
     colors "~1.2.1"
@@ -1476,15 +1476,14 @@
     jju "~1.4.0"
     resolve "~1.17.0"
     semver "~7.3.0"
-    timsort "~0.3.0"
     z-schema "~5.0.2"
 
 "@rushstack/package-deps-hash@^3.2.4":
-  version "3.2.4"
-  resolved "https://registry.yarnpkg.com/@rushstack/package-deps-hash/-/package-deps-hash-3.2.4.tgz#f62a15d499e4e29b80f8f71642e7a4ad6d5e7748"
-  integrity sha512-XtJug6VClsWAjwMgAE9nzC9mYStYCOkLb8KOUDEt6fhgV+MJcuKHsdIe7jXCoew+LJUyQoofoFDRG4ideo9X+g==
+  version "3.2.67"
+  resolved "https://registry.yarnpkg.com/@rushstack/package-deps-hash/-/package-deps-hash-3.2.67.tgz#00e361cd1020ef36ed6e9a0863adff25bea6575d"
+  integrity sha512-PLp/cCmTl+HN8wLAhuElE8W+7YA0HJ7Bhx1FtKS1GBMXU01a9AVfJTKnHFylsV2rJs18QORyDaftl0XNS2adgw==
   dependencies:
-    "@rushstack/node-core-library" "3.45.1"
+    "@rushstack/node-core-library" "3.53.3"
 
 "@sinonjs/commons@^1.7.0":
   version "1.7.2"
@@ -7731,11 +7730,6 @@ through@2, "through@>=2.2.7 <3", through@^2.3.4, through@^2.3.6, through@^2.3.8:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
-
-timsort@~0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
-  integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
 tmp@^0.0.33:
   version "0.0.33"
