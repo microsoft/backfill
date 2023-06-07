@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "bumping @azure/storage-blob",
+  "packageName": "backfill-cache",
+  "email": "matrixhasyou2k4@gmail.com",
+  "dependentChangeType": "patch"
+}
