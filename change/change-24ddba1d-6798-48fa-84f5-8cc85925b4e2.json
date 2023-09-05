@@ -1,0 +1,46 @@
+{
+  "changes": [
+    {
+      "type": "patch",
+      "comment": "Update typescript to 4.3",
+      "packageName": "backfill",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "patch",
+      "comment": "Update typescript to 4.3",
+      "packageName": "backfill-cache",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "patch",
+      "comment": "Update typescript to 4.3",
+      "packageName": "backfill-config",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "patch",
+      "comment": "Update typescript to 4.3",
+      "packageName": "backfill-hasher",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "patch",
+      "comment": "Update typescript to 4.3",
+      "packageName": "backfill-logger",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "patch",
+      "comment": "Update typescript to 4.3",
+      "packageName": "backfill-utils-dotenv",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    }
+  ]
+}
