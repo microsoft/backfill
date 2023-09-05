@@ -19,9 +19,8 @@
     "@rushstack/package-deps-hash": "^3.2.4",
     "backfill-config": "^6.4.0",
     "backfill-logger": "^5.2.0",
-    "find-up": "^5.0.0",
     "fs-extra": "^8.1.0",
-    "workspace-tools": "^0.35.0"
+    "workspace-tools": "^0.35.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
