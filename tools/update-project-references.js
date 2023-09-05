@@ -83,7 +83,7 @@ async function updateTSConfig({ filePath, content }, mergeConfig) {
 
   fs.writeFileSync(
     filePath,
-    prettier.format(newContent, {
+    await prettier.format(newContent, {
       ...prettierOptions,
       parser: "json",
     })

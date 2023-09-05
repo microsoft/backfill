@@ -47,10 +47,9 @@ export async function getPackageHash(
     return memoization[memoizationKey];
   }
 
-  const { name, dependencies, devDependencies } = require(path.join(
-    packageRoot,
-    "package.json"
-  ));
+  const { name, dependencies, devDependencies } = require(
+    path.join(packageRoot, "package.json")
+  );
 
   const allDependencies: Dependencies = {
     ...dependencies,

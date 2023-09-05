@@ -83,7 +83,10 @@ describe("getCacheStorageProvider", () => {
 
   test("can get a custom storage provider as a class", () => {
     const TestProvider = class implements ICacheStorage {
-      constructor(private logger: Logger, private cwd: string) {}
+      constructor(
+        private logger: Logger,
+        private cwd: string
+      ) {}
 
       fetch(hash: string) {
         this.logger.silly(`fetching ${this.cwd} ${hash}`);
