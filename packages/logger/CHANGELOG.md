@@ -1,8 +1,16 @@
 # Change Log - backfill-logger
 
-This log was last generated on Tue, 27 Apr 2021 09:06:13 GMT and should not be manually modified.
+This log was last generated on Tue, 05 Sep 2023 19:56:47 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.2.0
+
+Tue, 05 Sep 2023 19:56:47 GMT
+
+### Minor changes
+
+- Require Node 14; add downlevel syntax compilation to ES2020 for Node 14 (elcraig@microsoft.com)
 
 ## 5.1.3
 

@@ -2,6 +2,33 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Tue, 05 Sep 2023 19:56:47 GMT",
+      "tag": "backfill-hasher_v6.5.0",
+      "version": "6.5.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-hasher",
+            "commit": "855bedee100eaa54032d85e7cd92f9205e914712",
+            "comment": "Require Node 14; add downlevel syntax compilation to ES2020 for Node 14"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-hasher",
+            "comment": "Bump backfill-config to v6.4.0",
+            "commit": "855bedee100eaa54032d85e7cd92f9205e914712"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-hasher",
+            "comment": "Bump backfill-logger to v5.2.0",
+            "commit": "855bedee100eaa54032d85e7cd92f9205e914712"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 05 Sep 2023 19:33:16 GMT",
       "tag": "backfill-hasher_v6.4.5",
       "version": "6.4.5",

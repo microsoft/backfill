@@ -1,8 +1,17 @@
 # Change Log - backfill-config
 
-This log was last generated on Thu, 08 Dec 2022 02:52:13 GMT and should not be manually modified.
+This log was last generated on Tue, 05 Sep 2023 19:56:47 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.4.0
+
+Tue, 05 Sep 2023 19:56:47 GMT
+
+### Minor changes
+
+- Require Node 14; add downlevel syntax compilation to ES2020 for Node 14 (elcraig@microsoft.com)
+- Bump backfill-logger to v5.2.0
 
 ## 6.3.1
 

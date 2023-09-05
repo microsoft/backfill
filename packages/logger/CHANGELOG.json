@@ -2,6 +2,21 @@
   "name": "backfill-logger",
   "entries": [
     {
+      "date": "Tue, 05 Sep 2023 19:56:47 GMT",
+      "tag": "backfill-logger_v5.2.0",
+      "version": "5.2.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-logger",
+            "commit": "855bedee100eaa54032d85e7cd92f9205e914712",
+            "comment": "Require Node 14; add downlevel syntax compilation to ES2020 for Node 14"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 05 Sep 2023 19:33:16 GMT",
       "tag": "backfill-logger_v5.1.3",
       "version": "5.1.3",
