@@ -31,16 +31,21 @@ describe("End to end", () => {
     expect(libFolderExist).toBe(true);
   });
 
-  it("fails on error with error code 1", async (done) => {
+  it("fails on error with error code 1", async () => {
     const packageRoot = await setupFixture("basic");
 
     const execProcess = execa("node", [pathToBackfill, "--", "somecommand"], {
       cwd: packageRoot,
     });
 
+    let done: () => void;
+    const donePromise = new Promise<void>((resolve) => {
+      done = resolve;
+    });
     execProcess.on("exit", (code) => {
       expect(code).toBe(1);
       done();
     });
+    await donePromise;
   });
 });
