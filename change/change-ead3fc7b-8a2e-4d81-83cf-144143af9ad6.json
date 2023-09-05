@@ -9,6 +9,13 @@
     },
     {
       "type": "patch",
+      "comment": "Remove unused dependency on fs-extra",
+      "packageName": "backfill-config",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "patch",
       "comment": "Remove unnecessary dependency on find-up",
       "packageName": "backfill-hasher",
       "email": "elcraig@microsoft.com",
