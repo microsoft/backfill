@@ -1,0 +1,46 @@
+{
+  "changes": [
+    {
+      "type": "minor",
+      "comment": "Require Node 14; add downlevel syntax compilation to ES2020 for Node 14",
+      "packageName": "backfill",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "minor",
+      "comment": "Require Node 14; add downlevel syntax compilation to ES2020 for Node 14",
+      "packageName": "backfill-cache",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "minor",
+      "comment": "Require Node 14; add downlevel syntax compilation to ES2020 for Node 14",
+      "packageName": "backfill-config",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "minor",
+      "comment": "Require Node 14; add downlevel syntax compilation to ES2020 for Node 14",
+      "packageName": "backfill-hasher",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "minor",
+      "comment": "Require Node 14; add downlevel syntax compilation to ES2020 for Node 14",
+      "packageName": "backfill-logger",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "minor",
+      "comment": "Require Node 14; add downlevel syntax compilation to ES2020 for Node 14",
+      "packageName": "backfill-utils-dotenv",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    }
+  ]
+}

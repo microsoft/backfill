@@ -11,22 +11,19 @@ jobs:
     # This environment contains secrets needed for publishing
     environment: release
 
-    strategy:
-      matrix:
-        node-version: [14.x]
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v3
         with:
           # Fetch all history (required for publishing which looks at history)
           fetch-depth: 0
           # Don't save creds in the git config (so it's easier to override later)
           persist-credentials: false
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .nvmrc
 
       - run: yarn
 

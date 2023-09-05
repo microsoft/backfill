@@ -1,21 +1,22 @@
-module.exports = {
-  root: true,
-  parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
-  extends: [
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
-    "plugin:prettier/recommended", // [Has to be last] this does prettier as part of the linting
+    "prettier" // disable rules that are redundant with prettier
   ],
-  parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: "module",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
   },
-  rules: {
+  "ignorePatterns": ["**/node_modules/**", "**/lib/**", "**/*.js"],
+  "rules": {
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/no-explicit-any": "off",
@@ -27,6 +28,6 @@ module.exports = {
     "import/namespace": "off",
     "import/order": "warn",
     "import/no-unresolved": "off",
-    "import/default": "off",
-  },
-};
+    "import/default": "off"
+  }
+}

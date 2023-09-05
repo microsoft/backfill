@@ -23,5 +23,8 @@
     "@types/node": "^14.18.36",
     "backfill-utils-tsconfig": "*",
     "typescript": "~4.1.2"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }

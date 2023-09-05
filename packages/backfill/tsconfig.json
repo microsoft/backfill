@@ -1,7 +1,10 @@
 {
   "extends": "backfill-utils-tsconfig/tsconfig.default.json",
-  "include": ["src/**/*", "typings/*"],
-  "compilerOptions": { "rootDir": "src", "outDir": "lib" },
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "include": ["src"],
   "references": [
     { "path": "../cache" },
     { "path": "../config" },

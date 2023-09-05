@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "backfill-utils-tsconfig",
   "version": "5.0.0",
   "description": "Shared tsconfig.json for Backfill",
