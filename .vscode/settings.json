@@ -7,5 +7,12 @@
     // Note that Prettier must also be configured to format *.json5 as jsonc
     // (since json5 allows things like unquoted keys that jsonc doesn't).
     "*.json5": "jsonc"
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/*.code-search": true,
+    "**/*.tsbuildinfo": true,
+    "**/dist": true,
+    "**/lib": true
   }
 }

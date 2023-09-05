@@ -31,25 +31,26 @@
     "**/cache-base/union-value/set-value": "^2.0.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "5.52.0",
-    "@typescript-eslint/parser": "5.52.0",
-    "beachball": "2.31.8",
-    "eslint": "8.34.0",
-    "eslint-config-prettier": "8.6.0",
-    "eslint-plugin-import": "2.27.5",
-    "eslint-plugin-prettier": "4.2.1",
-    "execa": "5.1.1",
-    "husky": "7.0.4",
-    "lerna": "4.0.0",
-    "lint-staged": "12.5.0",
-    "lodash.merge": "4.6.2",
-    "prettier": "2.8.4",
-    "prettier-package-json": "2.8.0",
-    "resolve-from": "5.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
+    "beachball": "^2.31.8",
+    "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "execa": "^5.0.0",
+    "husky": "^7.0.4",
+    "lerna": "^4.0.0",
+    "lint-staged": "^12.5.0",
+    "lodash.merge": "^4.6.2",
+    "prettier": "~2.8.4",
+    "prettier-package-json": "^2.8.0",
+    "resolve-from": "^5.0.0",
     "syncpack": "8.4.11",
-    "typescript": "4.1.2"
+    "typescript": "~4.1.2"
   },
   "beachball": {
+    "groupChanges": true,
     "scope": [
       "!packages/utils-test/__fixtures__/*"
     ]
@@ -68,16 +69,6 @@
   },
   "syncpack": {
     "peer": false,
-    "workspace": false,
-    "versionGroups": [
-      {
-        "dependencies": [
-          "execa"
-        ],
-        "packages": [
-          "@microsoft/backfill-repo"
-        ]
-      }
-    ]
+    "workspace": false
   }
 }
