@@ -1,8 +1,12 @@
 name: Release
 
 on:
-  push:
-    branches: [master]
+  # release daily at 8am UTC (midnight or 1am pacific)
+  # https://crontab-generator.org/
+  schedule:
+    - cron: "0 8 * * *"
+  # or manual trigger
+  workflow_dispatch:
 
 jobs:
   release:
