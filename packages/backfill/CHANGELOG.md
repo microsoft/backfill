@@ -1,8 +1,21 @@
 # Change Log - backfill
 
-This log was last generated on Tue, 05 Sep 2023 19:56:47 GMT and should not be manually modified.
+This log was last generated on Tue, 05 Sep 2023 21:29:30 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.2.1
+
+Tue, 05 Sep 2023 21:29:30 GMT
+
+### Patches
+
+- Update typescript to 4.3 (elcraig@microsoft.com)
+- Bump backfill-cache to v5.7.1
+- Bump backfill-config to v6.4.1
+- Bump backfill-hasher to v6.5.1
+- Bump backfill-logger to v5.2.1
+- Bump backfill-utils-dotenv to v5.2.1
 
 ## 6.2.0
 

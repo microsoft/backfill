@@ -2,6 +2,53 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Tue, 05 Sep 2023 21:29:30 GMT",
+      "version": "6.5.1",
+      "tag": "backfill-hasher_v6.5.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-hasher",
+            "commit": "9f7772ed806aac8015f252b602cbc58433d2aa45",
+            "comment": "Update typescript to 4.3"
+          },
+          {
+            "author": "renovate@whitesourcesoftware.com",
+            "package": "backfill-hasher",
+            "commit": "791e46b58889dfe76859fd3952b528569bb7efb5",
+            "comment": "Update dependency workspace-tools to ^0.35.0"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-hasher",
+            "commit": "aa8636e125486c3c17a43458f0b47d0e9605d1fc",
+            "comment": "Remove unnecessary dependency on find-up"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-hasher",
+            "comment": "Bump backfill-config to v6.4.1",
+            "commit": "not available"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-hasher",
+            "comment": "Bump backfill-logger to v5.2.1",
+            "commit": "not available"
+          }
+        ],
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-hasher",
+            "commit": "42a59ed8eb3a665b77afb7db9cb204c0cecf0257",
+            "comment": "Update formatting"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 05 Sep 2023 19:56:47 GMT",
       "tag": "backfill-hasher_v6.5.0",
       "version": "6.5.0",

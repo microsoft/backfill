@@ -1,8 +1,20 @@
 # Change Log - backfill-cache
 
-This log was last generated on Tue, 05 Sep 2023 19:56:47 GMT and should not be manually modified.
+This log was last generated on Tue, 05 Sep 2023 21:29:30 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.7.1
+
+Tue, 05 Sep 2023 21:29:30 GMT
+
+### Patches
+
+- Bump @azure/storage-blob to ^12.15.0 (elcraig@microsoft.com)
+- Update typescript to 4.3 (elcraig@microsoft.com)
+- Remove unused dependencies (elcraig@microsoft.com)
+- Bump backfill-config to v6.4.1
+- Bump backfill-logger to v5.2.1
 
 ## 5.7.0
 

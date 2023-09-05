@@ -2,6 +2,21 @@
   "name": "backfill-logger",
   "entries": [
     {
+      "date": "Tue, 05 Sep 2023 21:29:30 GMT",
+      "version": "5.2.1",
+      "tag": "backfill-logger_v5.2.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-logger",
+            "commit": "9f7772ed806aac8015f252b602cbc58433d2aa45",
+            "comment": "Update typescript to 4.3"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 05 Sep 2023 19:56:47 GMT",
       "tag": "backfill-logger_v5.2.0",
       "version": "5.2.0",

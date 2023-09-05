@@ -2,6 +2,33 @@
   "name": "backfill-config",
   "entries": [
     {
+      "date": "Tue, 05 Sep 2023 21:29:30 GMT",
+      "version": "6.4.1",
+      "tag": "backfill-config_v6.4.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-config",
+            "commit": "9f7772ed806aac8015f252b602cbc58433d2aa45",
+            "comment": "Update typescript to 4.3"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-config",
+            "commit": "aa8636e125486c3c17a43458f0b47d0e9605d1fc",
+            "comment": "Remove unused dependency on fs-extra"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-config",
+            "comment": "Bump backfill-logger to v5.2.1",
+            "commit": "not available"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 05 Sep 2023 19:56:47 GMT",
       "tag": "backfill-config_v6.4.0",
       "version": "6.4.0",

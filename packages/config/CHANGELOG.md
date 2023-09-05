@@ -1,8 +1,18 @@
 # Change Log - backfill-config
 
-This log was last generated on Tue, 05 Sep 2023 19:56:47 GMT and should not be manually modified.
+This log was last generated on Tue, 05 Sep 2023 21:29:30 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.4.1
+
+Tue, 05 Sep 2023 21:29:30 GMT
+
+### Patches
+
+- Update typescript to 4.3 (elcraig@microsoft.com)
+- Remove unused dependency on fs-extra (elcraig@microsoft.com)
+- Bump backfill-logger to v5.2.1
 
 ## 6.4.0
 

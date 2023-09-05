@@ -2,6 +2,45 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Tue, 05 Sep 2023 21:29:30 GMT",
+      "version": "5.7.1",
+      "tag": "backfill-cache_v5.7.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-cache",
+            "commit": "ff2db2d33f331b7335b20b8142ca5afd950f7900",
+            "comment": "Bump @azure/storage-blob to ^12.15.0"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-cache",
+            "commit": "9f7772ed806aac8015f252b602cbc58433d2aa45",
+            "comment": "Update typescript to 4.3"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-cache",
+            "commit": "aa8636e125486c3c17a43458f0b47d0e9605d1fc",
+            "comment": "Remove unused dependencies"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-cache",
+            "comment": "Bump backfill-config to v6.4.1",
+            "commit": "not available"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-cache",
+            "comment": "Bump backfill-logger to v5.2.1",
+            "commit": "not available"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 05 Sep 2023 19:56:47 GMT",
       "tag": "backfill-cache_v5.7.0",
       "version": "5.7.0",

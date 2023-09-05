@@ -1,8 +1,20 @@
 # Change Log - backfill-hasher
 
-This log was last generated on Tue, 05 Sep 2023 19:56:47 GMT and should not be manually modified.
+This log was last generated on Tue, 05 Sep 2023 21:29:30 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.5.1
+
+Tue, 05 Sep 2023 21:29:30 GMT
+
+### Patches
+
+- Update typescript to 4.3 (elcraig@microsoft.com)
+- Update dependency workspace-tools to ^0.35.0 (renovate@whitesourcesoftware.com)
+- Remove unnecessary dependency on find-up (elcraig@microsoft.com)
+- Bump backfill-config to v6.4.1
+- Bump backfill-logger to v5.2.1
 
 ## 6.5.0
 
