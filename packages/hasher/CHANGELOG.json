@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Tue, 05 Sep 2023 19:33:16 GMT",
+      "tag": "backfill-hasher_v6.4.5",
+      "version": "6.4.5",
+      "comments": {
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-hasher",
+            "commit": "7d9dc77bc01070d0e805cd74b15bef16281f28a1",
+            "comment": "Unpin devDependencies"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Dec 2022 02:52:13 GMT",
       "tag": "backfill-hasher_v6.4.5",
       "version": "6.4.5",

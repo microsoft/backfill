@@ -2,6 +2,21 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Tue, 05 Sep 2023 19:33:16 GMT",
+      "tag": "backfill_v6.1.27",
+      "version": "6.1.27",
+      "comments": {
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill",
+            "commit": "7d9dc77bc01070d0e805cd74b15bef16281f28a1",
+            "comment": "Unpin devDependencies"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 13 Apr 2023 20:28:21 GMT",
       "tag": "backfill_v6.1.27",
       "version": "6.1.27",

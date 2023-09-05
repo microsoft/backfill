@@ -2,6 +2,21 @@
   "name": "backfill-utils-dotenv",
   "entries": [
     {
+      "date": "Tue, 05 Sep 2023 19:33:16 GMT",
+      "tag": "backfill-utils-dotenv_v5.1.1",
+      "version": "5.1.1",
+      "comments": {
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-utils-dotenv",
+            "commit": "7d9dc77bc01070d0e805cd74b15bef16281f28a1",
+            "comment": "Unpin devDependencies"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 30 Dec 2022 05:14:35 GMT",
       "tag": "backfill-utils-dotenv_v5.1.1",
       "version": "5.1.1",
