@@ -1,6 +1,5 @@
-import path from "path";
 import crypto from "crypto";
-import findUp from "find-up";
+import { findPackageRoot } from "workspace-tools";
 
 export function hashStrings(strings: string | string[]): string {
   const hasher = crypto.createHash("sha1");
@@ -14,13 +13,13 @@ export function hashStrings(strings: string | string[]): string {
 }
 
 export async function getPackageRoot(cwd: string): Promise<string> {
-  const packageRoot = await findUp("package.json", { cwd });
+  const packageRoot = findPackageRoot(cwd);
 
   if (!packageRoot) {
     throw new Error(`Could not find package.json inside ${cwd}.`);
   }
 
-  return path.dirname(packageRoot);
+  return packageRoot;
 }
 
 export function nameAtVersion(name: string, version: string): string {

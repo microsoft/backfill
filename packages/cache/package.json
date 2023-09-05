@@ -17,11 +17,9 @@
   },
   "dependencies": {
     "@azure/storage-blob": "^12.15.0",
-    "@rushstack/package-deps-hash": "^3.2.4",
     "backfill-config": "^6.4.0",
     "backfill-logger": "^5.2.0",
     "execa": "^5.0.0",
-    "find-up": "^5.0.0",
     "fs-extra": "^8.1.0",
     "globby": "^11.0.0",
     "p-limit": "^3.0.0",
