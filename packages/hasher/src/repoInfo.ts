@@ -44,10 +44,13 @@ export async function getRepoInfoNoCache(cwd: string) {
   // Sorting repoHash by key because we want to consistent hashing based on the order of the files
   const repoHashes = Object.keys(unorderedRepoHashes)
     .sort((a, b) => a.localeCompare(b))
-    .reduce((obj, key) => {
-      obj[key] = unorderedRepoHashes[key];
-      return obj;
-    }, {} as Record<string, string>);
+    .reduce(
+      (obj, key) => {
+        obj[key] = unorderedRepoHashes[key];
+        return obj;
+      },
+      {} as Record<string, string>
+    );
 
   const workspaceInfo = getWorkspaces(root);
   const parsedLock = await parseLockFile(root);

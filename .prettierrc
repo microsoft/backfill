@@ -1,5 +1,6 @@
 {
   "endOfLine": "auto",
+  "trailingComma": "es5",
   "overrides": [
     {
       "files": "*.md",
