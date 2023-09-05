@@ -16,7 +16,7 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "@azure/storage-blob": "12.1.2",
+    "@azure/storage-blob": "^12.15.0",
     "@rushstack/package-deps-hash": "^3.2.4",
     "backfill-config": "^6.4.0",
     "backfill-logger": "^5.2.0",
