@@ -40,12 +40,12 @@ describe("getCacheStorage", () => {
 
     await storage.fetch(hash);
 
-    // Wait 1ms to make sure the file modification time changes.
+    // Wait 2ms to make sure the file modification time changes.
     // WHY: hashFile uses the file modification time to determine if the hash
     // needs to be recomputed. The filesystems typically used by Mac and Linux
     // record these times at 1ns resolution, but NTFS uses 100ns resolution.
     // So sometimes the test would fail on Windows if it ran too quickly.
-    await new Promise((resolve) => setTimeout(resolve, 1));
+    await new Promise((resolve) => setTimeout(resolve, 2));
     fs.writeFileSync(path.join(dir, "Changing"), "changing content now");
 
     await storage.put(hash, ["**/*"]);

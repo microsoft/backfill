@@ -1,44 +1,63 @@
+// @ts-check
 const execa = require("execa");
 const path = require("path");
 const fs = require("fs");
 const prettier = require("prettier");
 const merge = require("lodash.merge");
 const resolveFrom = require("resolve-from");
+const jju = require("jju");
 
-function getTSConfigPath(location) {
-  return path.join(process.cwd(), location, "tsconfig.json");
+/**
+ * @typedef {{ path: string }} Reference
+ * @typedef {{
+ *   extends?: string;
+ *   compilerOptions?: Record<string, any>;
+ *   references?: Reference[];
+ * }} TSConfig Parsed tsconfig.json contents
+ * @typedef {{
+ *   filePath: string;
+ *   content: string;
+ *   config: TSConfig;
+ * }} TSConfigInfo tsconfig.json with file path, original content, and parsed content
+ */
+
+/** Repo root */
+const root = path.resolve(__dirname, "..");
+/** @type {Record<string, TSConfig>} Cache of tsconfig "extends" values */
+const extendsCache = {};
+
+function getTSConfigPath(packageLocation) {
+  return path.join(root, packageLocation, "tsconfig.json");
 }
 
-function isTSPackage(location) {
-  return fs.existsSync(getTSConfigPath(location));
+function isTSPackage(packageLocation) {
+  return fs.existsSync(getTSConfigPath(packageLocation));
 }
 
+/**
+ * Read a tsconfig.json file, resolving and merging the "extends" config.
+ * @param {string} filePath Path to tsconfig.json
+ * @returns {TSConfigInfo}
+ */
 function getTSConfig(filePath) {
-  const config = fs.existsSync(filePath)
-    ? JSON.parse(fs.readFileSync(filePath).toString())
-    : {};
+  const content = fs.existsSync(filePath)
+    ? fs.readFileSync(filePath, "utf8")
+    : "";
+  // Parse with jju to allow comments
+  /** @type {TSConfig} */
+  let config = content ? jju.parse(content) : {};
   if (config.extends) {
-    return merge(
-      getTSConfig(resolveFrom(path.dirname(filePath), config.extends)),
-      config
-    );
-  } else {
-    return config;
+    if (!extendsCache[config.extends]) {
+      const extendsPath = resolveFrom(path.dirname(filePath), config.extends);
+      extendsCache[config.extends] = getTSConfig(extendsPath).config;
+    }
+    config = merge(extendsCache[config.extends], config);
   }
-}
-
-function isCompositeEnabled(location) {
-  const configPath = getTSConfigPath(location);
-  const config = getTSConfig(configPath);
-  return Boolean(config.compilerOptions && config.compilerOptions.composite);
+  return { filePath, config, content };
 }
 
 function getAbsoluteLocation(location, posix = false) {
-  if (posix) {
-    return path.posix.join(process.cwd(), location);
-  } else {
-    return path.join(process.cwd(), location);
-  }
+  return posix ? path.posix.join(root, location) : path.join(root, location);
 }
 
 function getRelativeLocation(fromLocation, toLocation, posix = false) {
@@ -48,55 +67,65 @@ function getRelativeLocation(fromLocation, toLocation, posix = false) {
   );
 }
 
-function updateTSConfig(path, options) {
-  const config = fs.existsSync(path)
-    ? JSON.parse(fs.readFileSync(path).toString())
-    : {};
-  prettier.resolveConfig(path).then((prettierOptions) =>
-    fs.writeFileSync(
-      path,
-      prettier.format(
-        JSON.stringify({
-          ...config,
-          ...options,
-        }),
-        {
-          ...prettierOptions,
-          parser: "json",
-        }
-      )
-    )
+/**
+ * @param {TSConfigInfo} param0
+ * @param {TSConfig} mergeConfig
+ */
+async function updateTSConfig({ filePath, content }, mergeConfig) {
+  // Use the original config (without expanded extends) for updating
+  const newConfig = { ...jju.parse(content), ...mergeConfig };
+  // Preserve formatting when updating
+  const newContent = jju.update(content, newConfig, {
+    mode: "cjson",
+    quote_keys: true,
+  });
+  const prettierOptions = await prettier.resolveConfig(filePath);
+
+  fs.writeFileSync(
+    filePath,
+    prettier.format(newContent, {
+      ...prettierOptions,
+      parser: "json",
+    })
   );
 }
 
-function pathCompare(a, b) {
-  if (a.path < b.path) {
-    return -1;
-  } else if (a.path > b.path) {
-    return 1;
-  } else {
-    return 0;
+/**
+ * @param {YarnWorkspaceInfo} workspaceInfo
+ */
+async function updateTSReferences(workspaceInfo) {
+  // Read the tsconfigs for each package
+  const packageTSConfigs = /** @type {Record<String, TSConfigInfo>} */ ({});
+  for (const [name, { location }] of Object.entries(workspaceInfo)) {
+    if (isTSPackage(location)) {
+      packageTSConfigs[name] = getTSConfig(getTSConfigPath(location));
+    }
+  }
+
+  // Update the tsconfigs with references
+  for (const [name, info] of Object.entries(workspaceInfo)) {
+    if (!packageTSConfigs[name]) {
+      continue;
+    }
+
+    const { location, workspaceDependencies } = info;
+    const references = workspaceDependencies
+      .filter((dep) => packageTSConfigs[dep]?.config.compilerOptions?.composite)
+      .map((dep) => ({
+        path: getRelativeLocation(location, workspaceInfo[dep].location, true),
+      }))
+      .sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
+    await updateTSConfig(packageTSConfigs[name], { references });
   }
 }
 
-function updateTSReferences(workspaceInfo) {
-  Object.keys(workspaceInfo)
-    .map((key) => workspaceInfo[key])
-    .filter(({ location }) => isTSPackage(location))
-    .forEach(({ location, workspaceDependencies }) => {
-      updateTSConfig(getTSConfigPath(location), {
-        references: workspaceDependencies
-          .map((dependency) => workspaceInfo[dependency].location)
-          .filter(isTSPackage)
-          .filter(isCompositeEnabled)
-          .map((workspaceLocation) => ({
-            path: getRelativeLocation(location, workspaceLocation, true),
-          }))
-          .sort(pathCompare),
-      });
-    });
-}
-
+/**
+ * @typedef {Record<string, {
+ *   location: string;
+ *   workspaceDependencies: string[];
+ * }>} YarnWorkspaceInfo
+ * @type {YarnWorkspaceInfo}
+ */
 const workspaceInfo = JSON.parse(
   execa
     .sync("yarn", ["--silent", "workspaces", "info"])
@@ -104,4 +133,7 @@ const workspaceInfo = JSON.parse(
     .trim()
 );
 
-updateTSReferences(workspaceInfo);
+updateTSReferences(workspaceInfo).catch((err) => {
+  console.error(err.stack || err);
+  process.exit(1);
+});

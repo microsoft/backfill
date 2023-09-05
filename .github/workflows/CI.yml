@@ -8,19 +8,20 @@ on:
 
 jobs:
   build:
-    name: Run on node ${{ matrix.node-version }} and ${{ matrix.os }}
+    name: Run on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [12, 14]
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .nvmrc
 
       - name: yarn
         run: yarn --frozen-lockfile
@@ -34,5 +35,6 @@ jobs:
       - run: yarn build
 
       - run: yarn lint
+      - run: yarn format:check
 
       - run: yarn test
