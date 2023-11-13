@@ -5684,10 +5684,10 @@ prettier-package-json@^2.8.0:
     sort-object-keys "^1.1.3"
     sort-order "^1.0.1"
 
-prettier@~3.0.0:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.0.3.tgz#432a51f7ba422d1469096c0fdc28e235db8f9643"
-  integrity sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==
+prettier@~3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.1.0.tgz#c6d16474a5f764ea1a4a373c593b779697744d5e"
+  integrity sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==
 
 pretty-format@^29.0.0, pretty-format@^29.6.3:
   version "29.6.3"
@@ -6970,20 +6970,7 @@ wordwrap@^1.0.0:
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
   integrity sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==
 
-workspace-tools@^0.35.0:
-  version "0.35.1"
-  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.35.1.tgz#7ff3e71ca8e710d2c1d79e7f2be925cb90ec6026"
-  integrity sha512-IMnKTbCo4Ej9KjsZf9ijOE3ZpdT7L4aER9krSWEitrHXr/oErLe3CIHupsg1tAJAjPJ/+CDwpu2yFKHdmRCJdA==
-  dependencies:
-    "@yarnpkg/lockfile" "^1.1.0"
-    fast-glob "^3.3.1"
-    git-url-parse "^13.0.0"
-    globby "^11.0.0"
-    jju "^1.4.0"
-    js-yaml "^4.1.0"
-    micromatch "^4.0.0"
-
-workspace-tools@^0.35.2:
+workspace-tools@^0.35.0, workspace-tools@^0.35.2:
   version "0.35.2"
   resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.35.2.tgz#a89206d76a5fd2d1197b6c463ab2f507d39215ff"
   integrity sha512-x637etwRdY3kbiSAJzAUbja4gzL/kMbDy8WX8yGK+ZvRlMY3o+G3UzvdEjwipVZ7C+RIUVdk/QV/hoRzbUcKiQ==
