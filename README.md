@@ -194,7 +194,7 @@ module.exports = {
 
   <dt>container</dt>
   <dd>the name of the blob storage container</dd>
-
+  
   <dt>maxSize (<em>optional</em>)</dt>
   <dd>
     max size of a single package cache, in the number of bytes
