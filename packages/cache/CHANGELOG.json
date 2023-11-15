@@ -2,6 +2,27 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Wed, 15 Nov 2023 23:08:02 GMT",
+      "version": "5.8.0",
+      "tag": "backfill-cache_v5.8.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "altinokd@microsoft.com",
+            "package": "backfill-cache",
+            "commit": "d5a8181f75ee5d1a7c689cc36ccd7a41bde16939",
+            "comment": "Add credential option for Azure Blob Storage"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-cache",
+            "comment": "Bump backfill-config to v6.4.2",
+            "commit": "not available"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 05 Sep 2023 21:29:30 GMT",
       "version": "5.7.1",
       "tag": "backfill-cache_v5.7.1",

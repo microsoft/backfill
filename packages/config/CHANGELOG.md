@@ -1,8 +1,16 @@
 # Change Log - backfill-config
 
-This log was last generated on Tue, 05 Sep 2023 21:29:30 GMT and should not be manually modified.
+This log was last generated on Wed, 15 Nov 2023 23:08:02 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.4.2
+
+Wed, 15 Nov 2023 23:08:02 GMT
+
+### Patches
+
+- Add credential option for Azure Blob Storage (altinokd@microsoft.com)
 
 ## 6.4.1
 

@@ -1,8 +1,17 @@
 # Change Log - backfill-cache
 
-This log was last generated on Tue, 05 Sep 2023 21:29:30 GMT and should not be manually modified.
+This log was last generated on Wed, 15 Nov 2023 23:08:02 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.8.0
+
+Wed, 15 Nov 2023 23:08:02 GMT
+
+### Minor changes
+
+- Add credential option for Azure Blob Storage (altinokd@microsoft.com)
+- Bump backfill-config to v6.4.2
 
 ## 5.7.1
 
