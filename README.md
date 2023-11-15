@@ -165,7 +165,7 @@ module.exports = {
 };
 ```
 
-Optionally, you can pass a `credentials` along with a `connectionString` which
+Optionally, you can pass a `credential` along with a `connectionString` which
 does not have a SAS token. This is useful if you want to use a managed identity
 or interactive browser login. For example:
 
