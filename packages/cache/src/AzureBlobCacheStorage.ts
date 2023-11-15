@@ -73,7 +73,7 @@ async function createBlobClient(
   connectionString: string,
   containerName: string,
   blobName: string,
-  credential?: TokenCredential
+  credential: TokenCredential | undefined
 ) {
   // This is delay loaded because it's very slow to parse
   const { BlobServiceClient } = await import("@azure/storage-blob");
@@ -102,7 +102,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
       const blobClient = await createBlobClient(
         this.options.connectionString,
         this.options.container,
-        hash
+        hash,
+        this.options.credential
       );
 
       // If a maxSize has been specified, make sure to check the properties for the size before transferring
@@ -168,7 +169,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
     const blobClient = await createBlobClient(
       this.options.connectionString,
       this.options.container,
-      hash
+      hash,
+      this.options.credential
     );
 
     const blockBlobClient = blobClient.getBlockBlobClient();

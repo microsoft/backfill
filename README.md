@@ -165,6 +165,27 @@ module.exports = {
 };
 ```
 
+Optionally, you can pass a `credentials` along with a `connectionString` which
+does not have a SAS token. This is useful if you want to use a managed identity
+or interactive browser login. For example:
+
+```js
+import { InteractiveBrowserCredential } from '@azure/identity'
+
+module.exports = {
+  cacheStorageConfig: {
+    provider: "azure-blob",
+    options: {
+      connectionString: "https://<your-storage-account-name>.blob.core.windows.net",
+      credential: new InteractiveBrowserCredential()
+      container: "..."
+      maxSize: 12345
+    }
+  }
+};
+
+```
+
 #### Options
 
 <dl>
@@ -173,7 +194,6 @@ module.exports = {
 
   <dt>container</dt>
   <dd>the name of the blob storage container</dd>
-  
   <dt>maxSize (<em>optional</em>)</dt>
   <dd>
     max size of a single package cache, in the number of bytes
@@ -183,8 +203,10 @@ module.exports = {
 You can also configure Microsoft Azure Blob Storage using environment variables.
 
 ```
+
 BACKFILL_CACHE_PROVIDER="azure-blob"
 BACKFILL_CACHE_PROVIDER_OPTIONS='{"connectionString":"...","container":"..."}'
+
 ```
 
 ### Npm package
