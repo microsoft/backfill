@@ -1,3 +1,4 @@
+import { TokenCredential } from "@azure/core-http";
 import { Logger } from "backfill-logger";
 
 export interface ICacheStorage {
@@ -9,6 +10,7 @@ export type AzureBlobCacheStorageOptions = {
   connectionString: string;
   container: string;
   maxSize?: number;
+  credential?: TokenCredential;
 };
 
 export type NpmCacheStorageOptions = {
