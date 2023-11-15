@@ -6,6 +6,7 @@ import { Logger } from "backfill-logger";
 import { AzureBlobCacheStorageOptions } from "backfill-config";
 
 import { stat } from "fs-extra";
+import { TokenCredential } from "@azure/core-http";
 import { CacheStorage } from "./CacheStorage";
 
 const ONE_MEGABYTE = 1024 * 1024;
@@ -71,12 +72,15 @@ const uploadOptions = {
 async function createBlobClient(
   connectionString: string,
   containerName: string,
-  blobName: string
+  blobName: string,
+  credential: TokenCredential | undefined
 ) {
   // This is delay loaded because it's very slow to parse
   const { BlobServiceClient } = await import("@azure/storage-blob");
-  const blobServiceClient =
-    BlobServiceClient.fromConnectionString(connectionString);
+  const blobServiceClient = credential
+    ? new BlobServiceClient(connectionString, credential)
+    : BlobServiceClient.fromConnectionString(connectionString);
+
   const containerClient = blobServiceClient.getContainerClient(containerName);
   const blobClient = containerClient.getBlobClient(blobName);
 
@@ -98,7 +102,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
       const blobClient = await createBlobClient(
         this.options.connectionString,
         this.options.container,
-        hash
+        hash,
+        this.options.credential
       );
 
       // If a maxSize has been specified, make sure to check the properties for the size before transferring
@@ -164,7 +169,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
     const blobClient = await createBlobClient(
       this.options.connectionString,
       this.options.container,
-      hash
+      hash,
+      this.options.credential
     );
 
     const blockBlobClient = blobClient.getBlockBlobClient();
