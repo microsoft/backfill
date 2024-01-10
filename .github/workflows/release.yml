@@ -33,6 +33,8 @@ jobs:
 
       - run: yarn build
 
+      - run: yarn lint
+
       - run: yarn test
 
       - name: Update git config

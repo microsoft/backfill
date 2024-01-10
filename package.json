@@ -8,22 +8,21 @@
     "url": "https://github.com/microsoft/backfill"
   },
   "scripts": {
-    "build": "lerna run --stream build",
+    "build": "yarn lage build",
     "change": "beachball change",
     "checkchange": "beachball check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "postinstall": "yarn update-project-references",
-    "lerna": "lerna",
+    "lage": "cross-env NODE_OPTIONS=\"--experimental-abortcontroller\" lage",
     "lint": "eslint --fix . --ext .ts",
     "prepare": "husky install",
-    "prepublishOnly": "eslint . --ext .ts && lerna run build && lerna run test",
     "release": "beachball publish",
     "syncpack:check": "syncpack list-mismatches",
     "syncpack:fix": "syncpack fix-mismatches",
-    "test": "lerna run test",
+    "test": "yarn lage test",
     "update-project-references": "node tools/update-project-references.js",
-    "watch": "lerna run watch --parallel"
+    "watch": "yarn lage --verbose watch"
   },
   "workspaces": [
     "packages/*"
@@ -35,12 +34,13 @@
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
     "beachball": "^2.31.8",
+    "cross-env": "^7.0.3",
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.27.5",
     "execa": "^5.0.0",
     "husky": "^7.0.4",
-    "lerna": "^7.0.0",
+    "lage": "^2.0.0",
     "lint-staged": "^12.5.0",
     "lodash.merge": "^4.6.2",
     "prettier": "~3.1.0",
