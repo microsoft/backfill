@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "type": "patch",
+      "comment": "Update dependency @azure/storage-blob to ^12.17.0",
+      "packageName": "backfill-cache",
+      "email": "renovate@whitesourcesoftware.com",
+      "dependentChangeType": "patch"
+    }
+  ]
+}

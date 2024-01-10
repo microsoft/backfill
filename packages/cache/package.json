@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@azure/core-http": "^3.0.0",
-    "@azure/storage-blob": "^12.15.0",
+    "@azure/storage-blob": "^12.17.0",
     "backfill-config": "^6.4.2",
     "backfill-logger": "^5.2.1",
     "execa": "^5.0.0",
