@@ -2,6 +2,21 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Wed, 15 Nov 2023 23:08:02 GMT",
+      "version": "6.5.2",
+      "tag": "backfill-hasher_v6.5.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "backfill-hasher",
+            "comment": "Bump backfill-config to v6.4.2",
+            "commit": "not available"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 05 Sep 2023 21:29:30 GMT",
       "version": "6.5.1",
       "tag": "backfill-hasher_v6.5.1",
