@@ -20,7 +20,7 @@
     "backfill-config": "^6.4.2",
     "backfill-logger": "^5.2.1",
     "fs-extra": "^8.1.0",
-    "workspace-tools": "^0.35.2"
+    "workspace-tools": "^0.36.4"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
