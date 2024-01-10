@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "useWorkspaces": true,
   "packages": ["packages/*"],
-  "version": "5.1.1",
+  "version": "independent",
   "npmClient": "yarn"
 }
