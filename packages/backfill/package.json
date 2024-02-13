@@ -25,7 +25,7 @@
     "backfill-hasher": "^6.5.2",
     "backfill-logger": "^5.2.1",
     "backfill-utils-dotenv": "^5.2.1",
-    "chokidar": "^3.2.1",
+    "chokidar": "^3.6.0",
     "execa": "^5.0.0",
     "find-up": "^5.0.0",
     "fs-extra": "^8.1.0",
