@@ -40,7 +40,7 @@
     "eslint-plugin-import": "^2.27.5",
     "execa": "^5.0.0",
     "husky": "^7.0.4",
-    "lage": "^2.0.0",
+    "lage": "^2.7.16",
     "lint-staged": "^12.5.0",
     "lodash.merge": "^4.6.2",
     "prettier": "~3.1.0",

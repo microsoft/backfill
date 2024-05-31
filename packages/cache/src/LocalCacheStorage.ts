@@ -38,7 +38,7 @@ export class LocalCacheStorage extends CacheStorage {
 
           try {
             const stats = await Promise.all([fs.stat(src), fs.stat(dest)]);
-            return stats[0].mtime !== stats[1].mtime;
+            return stats[0].mtime.getTime() !== stats[1].mtime.getTime();
           } catch {
             // if an error is thrown, it means the stat was called on a non-existent file or directory
             return false;
