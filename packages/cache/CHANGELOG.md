@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-This log was last generated on Wed, 15 Nov 2023 23:08:02 GMT and should not be manually modified.
+This log was last generated on Sat, 01 Jun 2024 08:03:35 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.8.1
+
+Sat, 01 Jun 2024 08:03:35 GMT
+
+### Patches
+
+- fix the mtime comparison to actually compare integers rather than references (kchau@microsoft.com)
 
 ## 5.8.0
 

@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Sat, 01 Jun 2024 08:03:35 GMT",
+      "version": "5.8.1",
+      "tag": "backfill-cache_v5.8.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "kchau@microsoft.com",
+            "package": "backfill-cache",
+            "commit": "beb49445d5057dbdbf037b497fc66118955b3b62",
+            "comment": "fix the mtime comparison to actually compare integers rather than references"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 15 Nov 2023 23:08:02 GMT",
       "version": "5.8.0",
       "tag": "backfill-cache_v5.8.0",

@@ -1,6 +1,6 @@
 {
   "name": "backfill",
-  "version": "6.2.2",
+  "version": "6.2.3",
   "description": "Backfill CLI",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "anymatch": "^3.0.3",
-    "backfill-cache": "^5.8.0",
+    "backfill-cache": "^5.8.1",
     "backfill-config": "^6.4.2",
     "backfill-hasher": "^6.5.2",
     "backfill-logger": "^5.2.1",

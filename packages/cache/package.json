@@ -1,6 +1,6 @@
 {
   "name": "backfill-cache",
-  "version": "5.8.0",
+  "version": "5.8.1",
   "description": "Backfill Cache Providers",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",

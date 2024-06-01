@@ -1,8 +1,16 @@
 # Change Log - backfill
 
-This log was last generated on Wed, 15 Nov 2023 23:08:02 GMT and should not be manually modified.
+This log was last generated on Sat, 01 Jun 2024 08:03:35 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 6.2.3
+
+Sat, 01 Jun 2024 08:03:35 GMT
+
+### Patches
+
+- Bump backfill-cache to v5.8.1
 
 ## 6.2.2
 
