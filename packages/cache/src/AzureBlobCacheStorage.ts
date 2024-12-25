@@ -6,7 +6,7 @@ import { Logger } from "backfill-logger";
 import { AzureBlobCacheStorageOptions } from "backfill-config";
 
 import { stat } from "fs-extra";
-import { TokenCredential } from "@azure/core-http";
+import { ContainerClient } from "@azure/storage-blob";
 import { CacheStorage } from "./CacheStorage";
 
 const ONE_MEGABYTE = 1024 * 1024;
@@ -69,25 +69,9 @@ const uploadOptions = {
   maxBuffers: 5,
 };
 
-async function createBlobClient(
-  connectionString: string,
-  containerName: string,
-  blobName: string,
-  credential: TokenCredential | undefined
-) {
-  // This is delay loaded because it's very slow to parse
-  const { BlobServiceClient } = await import("@azure/storage-blob");
-  const blobServiceClient = credential
-    ? new BlobServiceClient(connectionString, credential)
-    : BlobServiceClient.fromConnectionString(connectionString);
-
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  const blobClient = containerClient.getBlobClient(blobName);
-
-  return blobClient;
-}
-
 export class AzureBlobCacheStorage extends CacheStorage {
+  private readonly conatinerClient: Promise<ContainerClient>;
+
   constructor(
     private options: AzureBlobCacheStorageOptions,
     logger: Logger,
@@ -95,16 +79,29 @@ export class AzureBlobCacheStorage extends CacheStorage {
     incrementalCaching = false
   ) {
     super(logger, cwd, incrementalCaching);
+
+    if ("containerClient" in options) {
+      this.conatinerClient = Promise.resolve(options.containerClient);
+    } else {
+      // This is delay loaded because it's very slow to parse
+      this.conatinerClient = import("@azure/storage-blob").then(
+        ({ BlobServiceClient }) => {
+          const { connectionString, container, credential } = options;
+          const blobServiceClient = credential
+            ? new BlobServiceClient(connectionString, credential)
+            : BlobServiceClient.fromConnectionString(connectionString);
+
+          const containerClient =
+            blobServiceClient.getContainerClient(container);
+          return containerClient;
+        }
+      );
+    }
   }
 
   protected async _fetch(hash: string): Promise<boolean> {
     try {
-      const blobClient = await createBlobClient(
-        this.options.connectionString,
-        this.options.container,
-        hash,
-        this.options.credential
-      );
+      const blobClient = (await this.conatinerClient).getBlobClient(hash);
 
       // If a maxSize has been specified, make sure to check the properties for the size before transferring
       if (this.options.maxSize) {
@@ -166,12 +163,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
   }
 
   protected async _put(hash: string, filesToCache: string[]): Promise<void> {
-    const blobClient = await createBlobClient(
-      this.options.connectionString,
-      this.options.container,
-      hash,
-      this.options.credential
-    );
+    const blobClient = (await this.conatinerClient).getBlobClient(hash);
 
     const blockBlobClient = blobClient.getBlockBlobClient();
 

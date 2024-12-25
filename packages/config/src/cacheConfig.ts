@@ -1,4 +1,5 @@
 import { TokenCredential } from "@azure/core-http";
+import { ContainerClient } from "@azure/storage-blob";
 import { Logger } from "backfill-logger";
 
 export interface ICacheStorage {
@@ -6,12 +7,17 @@ export interface ICacheStorage {
   put: (hash: string, filesToCache: string[]) => Promise<void>;
 }
 
-export type AzureBlobCacheStorageOptions = {
-  connectionString: string;
-  container: string;
-  maxSize?: number;
-  credential?: TokenCredential;
-};
+export type AzureBlobCacheStorageOptions =
+  | {
+      connectionString: string;
+      container: string;
+      maxSize?: number;
+      credential?: TokenCredential;
+    }
+  | {
+      containerClient: ContainerClient;
+      maxSize?: number;
+    };
 
 export type NpmCacheStorageOptions = {
   npmPackageName: string;
