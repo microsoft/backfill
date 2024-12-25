@@ -70,7 +70,7 @@ const uploadOptions = {
 };
 
 export class AzureBlobCacheStorage extends CacheStorage {
-  private readonly getConatinerClient: () => Promise<ContainerClient>;
+  private readonly getContainerClient: () => Promise<ContainerClient>;
 
   constructor(
     private options: AzureBlobCacheStorageOptions,
@@ -81,11 +81,11 @@ export class AzureBlobCacheStorage extends CacheStorage {
     super(logger, cwd, incrementalCaching);
 
     if ("containerClient" in options) {
-      this.getConatinerClient = () => Promise.resolve(options.containerClient);
+      this.getContainerClient = () => Promise.resolve(options.containerClient);
     } else {
       const { connectionString, container, credential } = options;
       // This is delay loaded because it's very slow to parse
-      this.getConatinerClient = () =>
+      this.getContainerClient = () =>
         import("@azure/storage-blob").then(({ BlobServiceClient }) => {
           const blobServiceClient = credential
             ? new BlobServiceClient(connectionString, credential)
@@ -100,7 +100,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
 
   protected async _fetch(hash: string): Promise<boolean> {
     try {
-      const blobClient = (await this.getConatinerClient()).getBlobClient(hash);
+      const blobClient = (await this.getContainerClient()).getBlobClient(hash);
 
       // If a maxSize has been specified, make sure to check the properties for the size before transferring
       if (this.options.maxSize) {
@@ -162,7 +162,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
   }
 
   protected async _put(hash: string, filesToCache: string[]): Promise<void> {
-    const blobClient = (await this.getConatinerClient()).getBlobClient(hash);
+    const blobClient = (await this.getContainerClient()).getBlobClient(hash);
 
     const blockBlobClient = blobClient.getBlockBlobClient();
 
