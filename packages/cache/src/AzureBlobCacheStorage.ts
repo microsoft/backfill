@@ -70,7 +70,7 @@ const uploadOptions = {
 };
 
 export class AzureBlobCacheStorage extends CacheStorage {
-  private readonly conatinerClient: Promise<ContainerClient>;
+  private readonly getConatinerClient: () => Promise<ContainerClient>;
 
   constructor(
     private options: AzureBlobCacheStorageOptions,
@@ -81,12 +81,12 @@ export class AzureBlobCacheStorage extends CacheStorage {
     super(logger, cwd, incrementalCaching);
 
     if ("containerClient" in options) {
-      this.conatinerClient = Promise.resolve(options.containerClient);
+      this.getConatinerClient = () => Promise.resolve(options.containerClient);
     } else {
+      const { connectionString, container, credential } = options;
       // This is delay loaded because it's very slow to parse
-      this.conatinerClient = import("@azure/storage-blob").then(
-        ({ BlobServiceClient }) => {
-          const { connectionString, container, credential } = options;
+      this.getConatinerClient = () =>
+        import("@azure/storage-blob").then(({ BlobServiceClient }) => {
           const blobServiceClient = credential
             ? new BlobServiceClient(connectionString, credential)
             : BlobServiceClient.fromConnectionString(connectionString);
@@ -94,14 +94,13 @@ export class AzureBlobCacheStorage extends CacheStorage {
           const containerClient =
             blobServiceClient.getContainerClient(container);
           return containerClient;
-        }
-      );
+        });
     }
   }
 
   protected async _fetch(hash: string): Promise<boolean> {
     try {
-      const blobClient = (await this.conatinerClient).getBlobClient(hash);
+      const blobClient = (await this.getConatinerClient()).getBlobClient(hash);
 
       // If a maxSize has been specified, make sure to check the properties for the size before transferring
       if (this.options.maxSize) {
@@ -163,7 +162,7 @@ export class AzureBlobCacheStorage extends CacheStorage {
   }
 
   protected async _put(hash: string, filesToCache: string[]): Promise<void> {
-    const blobClient = (await this.conatinerClient).getBlobClient(hash);
+    const blobClient = (await this.getConatinerClient()).getBlobClient(hash);
 
     const blockBlobClient = blobClient.getBlockBlobClient();
 
