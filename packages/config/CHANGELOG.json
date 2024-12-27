@@ -2,6 +2,21 @@
   "name": "backfill-config",
   "entries": [
     {
+      "date": "Fri, 27 Dec 2024 21:00:44 GMT",
+      "version": "6.5.0",
+      "tag": "backfill-config_v6.5.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "altinokd@microsoft.com",
+            "package": "backfill-config",
+            "commit": "d82360660f2ec64060f3cce4a079979ac3555914",
+            "comment": "Adding an option to pass ContainerClient instead of connection string, container and credentials to AzureBlobCacheStorage"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 15 Nov 2023 23:08:02 GMT",
       "version": "6.4.2",
       "tag": "backfill-config_v6.4.2",
