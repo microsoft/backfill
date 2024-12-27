@@ -1,0 +1,18 @@
+{
+  "changes": [
+    {
+      "type": "minor",
+      "comment": "Adding an option to pass ContainerClient instead of connection string, container and credentials to AzureBlobCacheStorage",
+      "packageName": "backfill-cache",
+      "email": "altinokd@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "minor",
+      "comment": "Adding an option to pass ContainerClient instead of connection string, container and credentials to AzureBlobCacheStorage",
+      "packageName": "backfill-config",
+      "email": "altinokd@microsoft.com",
+      "dependentChangeType": "patch"
+    }
+  ]
+}
