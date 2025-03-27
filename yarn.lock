@@ -1244,21 +1244,21 @@ base64-js@^1.3.1:
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
 
 beachball@^2.31.8:
-  version "2.39.0"
-  resolved "https://registry.yarnpkg.com/beachball/-/beachball-2.39.0.tgz#f18a8b7d1387eaadbb15a9ec8d4d804da5334aff"
-  integrity sha512-YyhL16twP3sa0Pd+auXDzG2xqIPBLF+9GIsMEXMRpSjk9eYpzqSY/BOKbwzy+VqsUlQxWfVIFxijbUEQZYIwUQ==
+  version "2.51.1"
+  resolved "https://registry.yarnpkg.com/beachball/-/beachball-2.51.1.tgz#b77d3196ca045ad42b62631dd41b3db20dc899eb"
+  integrity sha512-+wO512xP/YNxoEXPN5Ujob/uxKLPGPeqUHjwKu91UDcmgXi/mp2fEJETeMGlg/OtCTexT9Jo0i8RsL+bfYWacA==
   dependencies:
     cosmiconfig "^8.3.6"
     execa "^5.0.0"
     fs-extra "^11.1.1"
     lodash "^4.17.15"
     minimatch "^3.0.4"
+    p-graph "^1.1.2"
     p-limit "^3.0.2"
     prompts "^2.4.2"
     semver "^7.0.0"
     toposort "^2.0.2"
-    uuid "^9.0.0"
-    workspace-tools "^0.36.3"
+    workspace-tools "^0.38.2"
     yargs-parser "^21.0.0"
 
 binary-extensions@^2.0.0:
@@ -3212,9 +3212,9 @@ kleur@^3.0.3:
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
 lage@^2.7.16:
-  version "2.7.16"
-  resolved "https://registry.yarnpkg.com/lage/-/lage-2.7.16.tgz#0d380cce4e75722282b1a638e11550a21dd8c281"
-  integrity sha512-yi9LZm6XEWiLNA6LcrcVSbsjAZw30bbQW6cppZKDYOrdbR0f2mYjpFNOdElRhJctkx8YFbP2xYg1Hsf61bc+Cg==
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/lage/-/lage-2.13.0.tgz#26130a71885293687bd753d733720b64ca135e00"
+  integrity sha512-qWaBxHoEzo/SHeHBu28MTdAYyX8QwqGIe8U/yuPRVFIrCm8hunSawaiLRSqfj2wmvkSz2NVgJHiuI7N8wVUHGA==
   dependencies:
     glob-hasher "^1.4.2"
   optionalDependencies:
@@ -3542,6 +3542,11 @@ optionator@^0.9.3:
     levn "^0.4.1"
     prelude-ls "^1.2.1"
     type-check "^0.4.0"
+
+p-graph@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/p-graph/-/p-graph-1.1.2.tgz#594010591e258ebc013f275f414ef6c5bfc25d51"
+  integrity sha512-GnEEHrOMozk0hCjXBm011oYb3zpaOolxHgqL2s7Od2niGAJKyk/4FZ2VRUAgjqqqoQnZQtwkF6fjGDJkIQTjDQ==
 
 p-limit@^2.2.0:
   version "2.3.0"
@@ -4456,11 +4461,6 @@ uuid@^8.3.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
-uuid@^9.0.0:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.1.tgz#e188d4c8853cc722220392c424cd637f32293f30"
-  integrity sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==
-
 v8-to-istanbul@^9.0.1:
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/v8-to-istanbul/-/v8-to-istanbul-9.2.0.tgz#2ed7644a245cddd83d4e087b9b33b3e62dfd10ad"
@@ -4524,23 +4524,10 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
-workspace-tools@^0.36.3:
-  version "0.36.4"
-  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.36.4.tgz#57504c687569785148c5b7ef1470dadc9be970c5"
-  integrity sha512-v0UFVvw9BjHtRu2Dau5PEJKkuG8u4jPlpXZQWjSz9XgbSutpPURqtO2P0hp3cVmQVATh8lkMFCewFgJuDnyC/w==
-  dependencies:
-    "@yarnpkg/lockfile" "^1.1.0"
-    fast-glob "^3.3.1"
-    git-url-parse "^13.0.0"
-    globby "^11.0.0"
-    jju "^1.4.0"
-    js-yaml "^4.1.0"
-    micromatch "^4.0.0"
-
-workspace-tools@^0.38.0:
-  version "0.38.0"
-  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.38.0.tgz#5d7677f9c9f0a7df592537b17b378d1c33eddb86"
-  integrity sha512-BpvydL36Q+AVBU6Rj/a7nfxfEhxvX4ZkLVCsUx5LJ5UpzIcvLDgxvnolBSY+2MUU8VYhvf+PGtF7eWS8xBC1Iw==
+workspace-tools@^0.38.0, workspace-tools@^0.38.2:
+  version "0.38.2"
+  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.38.2.tgz#6c744262911eab25c42ddeb99bfba8eebd9690ca"
+  integrity sha512-9AhSCYY+daWxmj7HaLlsqKRpEOG0CEhaHqAqLT8ZRC0PdeiRtKAG2nAOdmizwP3OBhWHL9EZdxjGtPP0Xb7nfA==
   dependencies:
     "@yarnpkg/lockfile" "^1.1.0"
     fast-glob "^3.3.1"
