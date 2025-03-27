@@ -4,4 +4,5 @@
 
 ## Usage
 
-This package shouldn't be used directly. It's an internal package to backfill.
+This package shouldn't be used directly. It's an internal package to
+[`backfill`](https://www.npmjs.com/package/backfill).

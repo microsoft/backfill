@@ -61,10 +61,10 @@ export class NpmCacheStorage extends CacheStorage {
       } catch (error) {
         fs.removeSync(temporaryNpmOutputFolder);
 
-        if (error.stderr.toString().indexOf("ETARGET") > -1) {
+        if ((error as any).stderr?.toString().includes("ETARGET")) {
           return false;
         } else {
-          throw new Error(error);
+          throw new Error(String(error));
         }
       }
     }
@@ -141,8 +141,8 @@ export class NpmCacheStorage extends CacheStorage {
 
       await runner;
     } catch (error) {
-      if (error.stderr.toString().indexOf("403") === -1) {
-        throw new Error(error);
+      if (!(error as any).stderr?.toString().includes("403")) {
+        throw new Error(String(error));
       }
     }
   }
