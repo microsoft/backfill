@@ -1,8 +1,17 @@
 # Change Log - backfill-cache
 
-This log was last generated on Sat, 01 Jun 2024 08:03:35 GMT and should not be manually modified.
+This log was last generated on Fri, 27 Dec 2024 21:00:44 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 5.9.0
+
+Fri, 27 Dec 2024 21:00:44 GMT
+
+### Minor changes
+
+- Adding an option to pass ContainerClient instead of connection string, container and credentials to AzureBlobCacheStorage (altinokd@microsoft.com)
+- Bump backfill-config to v6.5.0
 
 ## 5.8.1
 

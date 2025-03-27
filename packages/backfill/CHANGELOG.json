@@ -2,6 +2,33 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Fri, 27 Dec 2024 21:00:44 GMT",
+      "version": "6.2.4",
+      "tag": "backfill_v6.2.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "backfill",
+            "comment": "Bump backfill-cache to v5.9.0",
+            "commit": "not available"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill",
+            "comment": "Bump backfill-config to v6.5.0",
+            "commit": "not available"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill",
+            "comment": "Bump backfill-hasher to v6.5.3",
+            "commit": "not available"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 01 Jun 2024 08:03:35 GMT",
       "version": "6.2.3",
       "tag": "backfill_v6.2.3",
