@@ -34,14 +34,20 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: verify change files
+        # Only run OS-agnostic checks on ubuntu (this also makes the windows build less slow)
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: yarn checkchange
 
       - name: check package versions
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: yarn syncpack:check
 
       - run: yarn build
 
       - run: yarn lint
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+
       - run: yarn format:check
+        if: ${{ matrix.os == 'ubuntu-latest' }}
 
       - run: yarn test
