@@ -13,6 +13,13 @@ on:
   schedule:
     - cron: "15 21 * * 6"
 
+concurrency:
+  # For PRs, use the ref (branch) in the concurrency group so that new pushes cancel any old runs.
+  # For pushes to main, ideally we wouldn't set a concurrency group, but github actions doesn't
+  # support conditional blocks of settings, so we use the SHA so the "group" is unique.
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
@@ -34,9 +41,12 @@ jobs:
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners or machines with greater resources for possible analysis time improvements.
     runs-on: ubuntu-latest
+
     permissions:
       # required to update alerts
       security-events: write
+      # required to fetch internal or private CodeQL packs
+      packages: read
 
     steps:
       - name: Check out code
