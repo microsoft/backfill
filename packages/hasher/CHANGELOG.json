@@ -2,6 +2,41 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Sat, 29 Mar 2025 08:07:16 GMT",
+      "version": "6.6.0",
+      "tag": "backfill-hasher_v6.6.0",
+      "comments": {
+        "patch": [
+          {
+            "author": "email not defined",
+            "package": "backfill-hasher",
+            "commit": "ca1aca1cba874a22ed83f4d1569c2030a48552f5",
+            "comment": "Update dependency workspace-tools to ^0.38.0"
+          }
+        ],
+        "minor": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-hasher",
+            "commit": "9befbf37c95d34bcfbea99c993a30fcd3bf8a7c0",
+            "comment": "Update to typescript 4.5 internally"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-hasher",
+            "comment": "Bump backfill-config to v6.6.0",
+            "commit": "not available"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-hasher",
+            "comment": "Bump backfill-logger to v5.3.0",
+            "commit": "not available"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 27 Dec 2024 21:00:44 GMT",
       "version": "6.5.3",
       "tag": "backfill-hasher_v6.5.3",

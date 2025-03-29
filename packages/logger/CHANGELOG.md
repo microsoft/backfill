@@ -1,8 +1,16 @@
 # Change Log - backfill-logger
 
-This log was last generated on Tue, 05 Sep 2023 21:29:30 GMT and should not be manually modified.
+<!-- This log was last generated on Sat, 29 Mar 2025 08:07:16 GMT and should not be manually modified. -->
 
 <!-- Start content -->
+
+## 5.3.0
+
+Sat, 29 Mar 2025 08:07:16 GMT
+
+### Minor changes
+
+- Update to typescript 4.5 internally (elcraig@microsoft.com)
 
 ## 5.2.1
 

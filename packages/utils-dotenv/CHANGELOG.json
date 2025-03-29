@@ -2,6 +2,21 @@
   "name": "backfill-utils-dotenv",
   "entries": [
     {
+      "date": "Sat, 29 Mar 2025 08:07:16 GMT",
+      "version": "5.3.0",
+      "tag": "backfill-utils-dotenv_v5.3.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-utils-dotenv",
+            "commit": "9befbf37c95d34bcfbea99c993a30fcd3bf8a7c0",
+            "comment": "Update to typescript 4.5 internally"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 05 Sep 2023 21:29:30 GMT",
       "version": "5.2.1",
       "tag": "backfill-utils-dotenv_v5.2.1",

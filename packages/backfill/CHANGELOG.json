@@ -2,6 +2,51 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Sat, 29 Mar 2025 08:07:16 GMT",
+      "version": "6.3.0",
+      "tag": "backfill_v6.3.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill",
+            "commit": "9befbf37c95d34bcfbea99c993a30fcd3bf8a7c0",
+            "comment": "Update to typescript 4.5 internally, and update readme"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill",
+            "comment": "Bump backfill-cache to v5.10.0",
+            "commit": "not available"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill",
+            "comment": "Bump backfill-config to v6.6.0",
+            "commit": "not available"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill",
+            "comment": "Bump backfill-hasher to v6.6.0",
+            "commit": "not available"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill",
+            "comment": "Bump backfill-logger to v5.3.0",
+            "commit": "not available"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill",
+            "comment": "Bump backfill-utils-dotenv to v5.3.0",
+            "commit": "not available"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 27 Dec 2024 21:00:44 GMT",
       "version": "6.2.4",
       "tag": "backfill_v6.2.4",

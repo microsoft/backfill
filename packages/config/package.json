@@ -1,6 +1,6 @@
 {
   "name": "backfill-config",
-  "version": "6.5.0",
+  "version": "6.6.0",
   "description": "Backfill Config",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@azure/core-http": "^3.0.0",
     "@azure/storage-blob": "^12.15.0",
-    "backfill-logger": "^5.2.1",
+    "backfill-logger": "^5.3.0",
     "find-up": "^5.0.0",
     "pkg-dir": "^4.2.0"
   },
