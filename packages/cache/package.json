@@ -16,6 +16,8 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.804.0",
+    "@aws-sdk/lib-storage": "^3.804.0",
     "@azure/core-http": "^3.0.0",
     "@azure/storage-blob": "^12.15.0",
     "backfill-config": "^6.6.0",

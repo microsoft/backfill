@@ -210,6 +210,49 @@ BACKFILL_CACHE_PROVIDER_OPTIONS='{"connectionString":"...","container":"..."}'
 
 ```
 
+### AWS Simple Storage Service (S3)
+
+To cache to a AWS S3 you need to provide a bucket name. If you are configuring
+via `backfill.config.js`, you can use the following syntax:
+
+```js
+module.exports = {
+  cacheStorageConfig: {
+    provider: "s3",
+    options: {
+      bucket: "...",
+      maxSize: 12345,
+    },
+  },
+};
+```
+
+#### Options
+
+<dl>
+  <dt>bucket</dt>
+  <dd>the name of the AWS bucket to store files in</dd>
+
+  <dt>prefix</dt>
+  <dd>optional prefix to add to keys.  For example: "build-cache/"</dd>
+
+  <dt>maxSize (<em>optional</em>)</dt>
+  <dd>
+    max size of a single package cache, in the number of bytes
+  </dd>
+</dl>
+
+You can also configure S3 using environment variables.
+
+```
+
+BACKFILL_CACHE_PROVIDER="s3"
+BACKFILL_CACHE_PROVIDER_OPTIONS='{"bucket":"...","prefix":"...",maxSize:50000000}'
+AWS_PROFILE=...
+AWS_REGION=...
+
+```
+
 ### Npm package
 
 To cache to an NPM package you need to provide a package name and the registry

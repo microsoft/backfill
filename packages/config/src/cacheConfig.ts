@@ -1,6 +1,7 @@
 import { TokenCredential } from "@azure/core-http";
 import { ContainerClient } from "@azure/storage-blob";
 import { Logger } from "backfill-logger";
+import { type S3ClientConfig } from "@aws-sdk/client-s3";
 
 export interface ICacheStorage {
   fetch: (hash: string) => Promise<boolean>;
@@ -18,6 +19,13 @@ export type AzureBlobCacheStorageOptions =
       containerClient: ContainerClient;
       maxSize?: number;
     };
+
+export interface S3CacheStorageOptions {
+  bucket: string;
+  clientConfig?: S3ClientConfig;
+  maxSize?: number;
+  prefix?: string;
+}
 
 export type NpmCacheStorageOptions = {
   npmPackageName: string;
@@ -40,6 +48,11 @@ export type CustomStorageConfig = {
   name?: string;
 };
 
+export type S3CacheStorageConfig = {
+  provider: "s3";
+  options: S3CacheStorageOptions;
+};
+
 export type CacheStorageConfig =
   | {
       provider: "local";
@@ -49,6 +62,7 @@ export type CacheStorageConfig =
     }
   | NpmCacheStorageConfig
   | AzureBlobCacheStorageConfig
+  | S3CacheStorageConfig
   | CustomStorageConfig;
 
 export function getNpmConfigFromSerializedOptions(
@@ -95,6 +109,37 @@ export function getAzureBlobConfigFromSerializedOptions(
 
     return {
       provider: "azure-blob",
+      options: { ...parsedOptions },
+    };
+  } catch (error) {
+    logger.error(error as any);
+    throw new Error("Invalid blob storage options");
+  }
+}
+
+export function getS3ConfigFromSerializedOptions(
+  options: string,
+  logger: Logger
+): S3CacheStorageConfig {
+  try {
+    const parsedOptions = JSON.parse(options);
+
+    if (
+      typeof parsedOptions.bucket !== "string" ||
+      !(
+        typeof parsedOptions.prefix === "undefined" ||
+        typeof parsedOptions.prefix === "string"
+      ) ||
+      !(
+        typeof parsedOptions.maxSize === "undefined" ||
+        typeof parsedOptions.maxSize === "number"
+      )
+    ) {
+      throw new Error("Incorrect blob storage configuration");
+    }
+
+    return {
+      provider: "s3",
       options: { ...parsedOptions },
     };
   } catch (error) {
