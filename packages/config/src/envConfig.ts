@@ -3,6 +3,7 @@ import { isCorrectLogLevel, Logger } from "backfill-logger";
 import {
   getAzureBlobConfigFromSerializedOptions,
   getNpmConfigFromSerializedOptions,
+  getS3ConfigFromSerializedOptions,
 } from "./cacheConfig";
 import { isCorrectMode, Config } from "./index";
 
@@ -20,6 +21,11 @@ export function getEnvConfig(logger: Logger) {
     );
   } else if (cacheProvider === "npm" && serializedCacheProviderOptions) {
     config["cacheStorageConfig"] = getNpmConfigFromSerializedOptions(
+      serializedCacheProviderOptions,
+      logger
+    );
+  } else if (cacheProvider === "s3" && serializedCacheProviderOptions) {
+    config["cacheStorageConfig"] = getS3ConfigFromSerializedOptions(
       serializedCacheProviderOptions,
       logger
     );

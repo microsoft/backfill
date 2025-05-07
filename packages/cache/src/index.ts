@@ -6,6 +6,7 @@ import { AzureBlobCacheStorage } from "./AzureBlobCacheStorage";
 import { LocalCacheStorage } from "./LocalCacheStorage";
 import { NpmCacheStorage } from "./NpmCacheStorage";
 import { LocalSkipCacheStorage } from "./LocalSkipCacheStorage";
+import { S3CacheStorage } from "./S3CacheStorage";
 export { ICacheStorage, CacheStorage } from "./CacheStorage";
 
 export function isCustomProvider(
@@ -49,6 +50,13 @@ export function getCacheStorageProvider(
     );
   } else if (cacheStorageConfig.provider === "azure-blob") {
     cacheStorage = new AzureBlobCacheStorage(
+      cacheStorageConfig.options,
+      logger,
+      cwd,
+      incrementalCaching
+    );
+  } else if (cacheStorageConfig.provider === "s3") {
+    cacheStorage = new S3CacheStorage(
       cacheStorageConfig.options,
       logger,
       cwd,
