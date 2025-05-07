@@ -9,3 +9,4 @@ export * from "./createConfig";
 export * from "./envConfig";
 export * from "./modes";
 export * from "./npmCacheConfig";
+export * from "./s3CacheConfig";
