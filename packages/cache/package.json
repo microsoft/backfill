@@ -24,7 +24,7 @@
     "fs-extra": "^8.1.0",
     "globby": "^11.0.0",
     "p-limit": "^3.0.0",
-    "tar-fs": "^2.1.0"
+    "tar-fs": "^3.0.9"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
