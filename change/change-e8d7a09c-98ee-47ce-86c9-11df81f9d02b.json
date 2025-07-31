@@ -1,0 +1,18 @@
+{
+  "changes": [
+    {
+      "type": "none",
+      "comment": "Update type usage",
+      "packageName": "backfill-cache",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "none"
+    },
+    {
+      "type": "patch",
+      "comment": "Remove direct reference to `@azure/storage-blob` in types (use a minimal facade type for `AzureBlobCacheStorageOptions.containerClient`)",
+      "packageName": "backfill-config",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    }
+  ]
+}
