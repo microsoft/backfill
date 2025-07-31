@@ -1,8 +1,16 @@
 # Change Log - backfill-config
 
-<!-- This log was last generated on Sat, 29 Mar 2025 08:07:16 GMT and should not be manually modified. -->
+<!-- This log was last generated on Thu, 31 Jul 2025 22:24:07 GMT and should not be manually modified. -->
 
 <!-- Start content -->
+
+## 6.6.1
+
+Thu, 31 Jul 2025 22:24:07 GMT
+
+### Patches
+
+- Remove direct reference to `@azure/storage-blob` in types (use a minimal facade type for `AzureBlobCacheStorageOptions.containerClient`) (elcraig@microsoft.com)
 
 ## 6.6.0
 

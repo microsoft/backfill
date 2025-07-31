@@ -1,8 +1,16 @@
 # Change Log - backfill-cache
 
-<!-- This log was last generated on Sat, 29 Mar 2025 08:07:16 GMT and should not be manually modified. -->
+<!-- This log was last generated on Thu, 31 Jul 2025 22:24:07 GMT and should not be manually modified. -->
 
 <!-- Start content -->
+
+## 5.10.1
+
+Thu, 31 Jul 2025 22:24:07 GMT
+
+### Patches
+
+- Bump backfill-config to v6.6.1
 
 ## 5.10.0
 

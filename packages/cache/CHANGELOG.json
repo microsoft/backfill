@@ -2,6 +2,29 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Thu, 31 Jul 2025 22:24:07 GMT",
+      "version": "5.10.1",
+      "tag": "backfill-cache_v5.10.1",
+      "comments": {
+        "none": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-cache",
+            "commit": "b3982d6b2f33ae571d4092142107aa2b72b1bc8e",
+            "comment": "Update type usage"
+          }
+        ],
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "backfill-cache",
+            "comment": "Bump backfill-config to v6.6.1",
+            "commit": "not available"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 29 Mar 2025 08:07:16 GMT",
       "version": "5.10.0",
       "tag": "backfill-cache_v5.10.0",

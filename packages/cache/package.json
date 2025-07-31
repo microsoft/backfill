@@ -1,6 +1,6 @@
 {
   "name": "backfill-cache",
-  "version": "5.10.0",
+  "version": "5.10.1",
   "description": "Backfill Cache Providers",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@azure/core-http": "^3.0.0",
     "@azure/storage-blob": "^12.15.0",
-    "backfill-config": "^6.6.0",
+    "backfill-config": "^6.6.1",
     "backfill-logger": "^5.3.0",
     "execa": "^5.0.0",
     "fs-extra": "^8.1.0",

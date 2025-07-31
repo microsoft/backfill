@@ -1,6 +1,6 @@
 {
   "name": "backfill-hasher",
-  "version": "6.6.0",
+  "version": "6.6.1",
   "description": "Backfill Hasher",
   "license": "MIT",
   "author": "Benjamin Weggersen <bewegger@microsoft.com>",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@rushstack/package-deps-hash": "^3.2.4",
-    "backfill-config": "^6.6.0",
+    "backfill-config": "^6.6.1",
     "backfill-logger": "^5.3.0",
     "fs-extra": "^8.1.0",
     "workspace-tools": "^0.38.0"
