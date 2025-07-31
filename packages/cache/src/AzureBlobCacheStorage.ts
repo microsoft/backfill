@@ -81,7 +81,8 @@ export class AzureBlobCacheStorage extends CacheStorage {
     super(logger, cwd, incrementalCaching);
 
     if ("containerClient" in options) {
-      this.getContainerClient = () => Promise.resolve(options.containerClient);
+      this.getContainerClient = () =>
+        Promise.resolve(options.containerClient as ContainerClient);
     } else {
       const { connectionString, container, credential } = options;
       // This is delay loaded because it's very slow to parse

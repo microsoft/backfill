@@ -1,5 +1,4 @@
 import { TokenCredential } from "@azure/core-http";
-import { ContainerClient } from "@azure/storage-blob";
 import { Logger } from "backfill-logger";
 
 export interface ICacheStorage {
@@ -15,7 +14,13 @@ export type AzureBlobCacheStorageOptions =
       credential?: TokenCredential;
     }
   | {
-      containerClient: ContainerClient;
+      /**
+       * `ContainerClient` from `@azure/storage-blob`.
+       * (This prevents pulling in a large tree of types for the config, especially in `lage`'s types rollup.)
+       */
+      containerClient: {
+        getBlobClient: (hash: string) => unknown;
+      };
       maxSize?: number;
     };
 
