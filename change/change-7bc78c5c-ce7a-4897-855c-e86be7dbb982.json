@@ -1,0 +1,18 @@
+{
+  "changes": [
+    {
+      "type": "minor",
+      "comment": "Remove all direct references to Azure types, update config validation, add docs",
+      "packageName": "backfill-config",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "minor",
+      "comment": "Export logLevelsObject",
+      "packageName": "backfill-logger",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    }
+  ]
+}

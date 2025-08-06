@@ -6,6 +6,17 @@
       "request": "attach",
       "name": "Attach by Process ID",
       "processId": "${command:PickProcess}"
+    },
+    {
+      "name": "Debug current open test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/tools/debugTests.js",
+      "cwd": "${fileDirname}",
+      "args": ["--runInBand", "--watch", "${fileBasename}"],
+      "sourceMaps": true,
+      "outputCapture": "std",
+      "console": "integratedTerminal"
     }
   ]
 }

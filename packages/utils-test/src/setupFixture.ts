@@ -1,30 +1,19 @@
 import path from "path";
-import findUp from "find-up";
 import fs from "fs-extra";
 import tempy from "tempy";
 import execa from "execa";
 
-async function findFixturePath(cwd: string, fixtureName: string) {
-  return await findUp(path.join("__fixtures__", fixtureName), {
-    cwd,
-    type: "directory",
-  });
-}
+const fixturesDir = path.resolve(__dirname, "../__fixtures__");
 
-export async function setupFixture(fixtureName: string) {
-  const fixturePath = await findFixturePath(__dirname, fixtureName);
+export function setupFixture(fixtureName: string) {
+  const fixturePath = path.join(fixturesDir, fixtureName);
 
-  if (!fixturePath) {
-    throw new Error(
-      `Couldn't find fixture "${fixtureName}" in "${path.join(
-        __dirname,
-        "__fixtures__"
-      )}"`
-    );
+  if (!fs.existsSync(fixturePath)) {
+    throw new Error(`Couldn't find fixture "${fixtureName}" in ${fixturesDir}`);
   }
 
   const tempDir = tempy.directory();
-  const cwd = path.join(tempDir, fixtureName);
+  const cwd = path.join(tempDir, `backfill-${fixtureName}`);
 
   fs.mkdirpSync(cwd);
   fs.copySync(fixturePath, cwd);
@@ -36,4 +25,16 @@ export async function setupFixture(fixtureName: string) {
   execa.sync("git", ["commit", "-m", "test"], { cwd });
 
   return cwd;
+}
+
+/**
+ * Remove a temp directory, ignoring any errors.
+ */
+export function removeTempDir(tempDir: string) {
+  try {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  } catch {
+    // ignore errors during cleanup--it's probably from a virus scanner lock
+    // or something, and the OS will clean it up eventually
+  }
 }
