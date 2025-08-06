@@ -4,13 +4,11 @@ import {
   logLevelsObject,
   type LogLevel,
 } from "backfill-logger";
-import {
-  type CacheStorageConfig,
-  getAzureBlobConfigFromSerializedOptions,
-  getNpmConfigFromSerializedOptions,
-} from "./cacheConfig";
+import type { Config } from "./Config";
+import { getAzureBlobConfigFromSerializedOptions } from "./azureBlobCacheConfig";
+import { getNpmConfigFromSerializedOptions } from "./npmCacheConfig";
 import { isCorrectMode, modesObject, type BackfillModes } from "./modes";
-import type { Config } from "./index";
+import type { CacheStorageConfig } from "./cacheConfig";
 
 class BackfillConfigError extends Error {
   constructor(value: string, envName: string, expected: string) {

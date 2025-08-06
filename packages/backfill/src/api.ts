@@ -1,15 +1,17 @@
-import { Writable } from "stream";
+import type { Writable } from "stream";
 import { EOL } from "os";
 
-import { createConfig, Config } from "backfill-config";
+import { createConfig, type Config, type ICacheStorage } from "backfill-config";
 import {
-  Logger,
+  type Logger,
   makeLogger as makeLoggerInternal,
-  Console,
-  LogLevel,
+  type Console,
+  type LogLevel,
 } from "backfill-logger";
 import { Hasher } from "backfill-hasher";
 import { getCacheStorageProvider } from "backfill-cache";
+
+export type { Config, ICacheStorage };
 
 function makeConsole(stdout: Writable, stderr: Writable): Console {
   return {
