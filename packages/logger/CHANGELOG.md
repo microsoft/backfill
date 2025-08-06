@@ -1,8 +1,20 @@
 # Change Log - backfill-logger
 
-<!-- This log was last generated on Sat, 29 Mar 2025 08:07:16 GMT and should not be manually modified. -->
+<!-- This log was last generated on Wed, 06 Aug 2025 06:52:42 GMT and should not be manually modified. -->
 
 <!-- Start content -->
+
+## 5.4.0
+
+Wed, 06 Aug 2025 06:52:42 GMT
+
+### Minor changes
+
+- Export logLevelsObject (elcraig@microsoft.com)
+
+### Patches
+
+- Update to typescript 4.7 (should have no significant emit changes) (elcraig@microsoft.com)
 
 ## 5.3.0
 

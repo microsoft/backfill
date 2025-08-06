@@ -1,8 +1,22 @@
 # Change Log - backfill-cache
 
-<!-- This log was last generated on Thu, 31 Jul 2025 22:24:07 GMT and should not be manually modified. -->
+<!-- This log was last generated on Wed, 06 Aug 2025 06:52:42 GMT and should not be manually modified. -->
 
 <!-- Start content -->
+
+## 5.11.0
+
+Wed, 06 Aug 2025 06:52:42 GMT
+
+### Minor changes
+
+- Remove unused dependency on `@azure/core-http` (elcraig@microsoft.com)
+- Bump backfill-config to v6.7.0
+- Bump backfill-logger to v5.4.0
+
+### Patches
+
+- Update to typescript 4.7 (should have no significant emit changes) (elcraig@microsoft.com)
 
 ## 5.10.1
 

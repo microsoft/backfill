@@ -2,6 +2,33 @@
   "name": "backfill-hasher",
   "entries": [
     {
+      "date": "Wed, 06 Aug 2025 06:52:42 GMT",
+      "version": "6.6.2",
+      "tag": "backfill-hasher_v6.6.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-hasher",
+            "commit": "d22b529be11ec5e4c16d41dec2625e0fa7023aaf",
+            "comment": "Update to typescript 4.7 (should have no significant emit changes)"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-hasher",
+            "comment": "Bump backfill-config to v6.7.0",
+            "commit": "not available"
+          },
+          {
+            "author": "beachball",
+            "package": "backfill-hasher",
+            "comment": "Bump backfill-logger to v5.4.0",
+            "commit": "not available"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 31 Jul 2025 22:24:07 GMT",
       "version": "6.6.1",
       "tag": "backfill-hasher_v6.6.1",

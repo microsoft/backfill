@@ -2,6 +2,83 @@
   "name": "backfill",
   "entries": [
     {
+      "date": "Wed, 06 Aug 2025 06:52:42 GMT",
+      "version": "6.4.0",
+      "tag": "backfill_v6.4.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-config",
+            "commit": "63adc3efeba38dd678d49d8ac5bff11e6b169307",
+            "comment": "Remove all direct references to Azure types, update config validation, add docs"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-config",
+            "commit": "70373c6d9fb0e8c75b854c4f30d13914bdc7ffc3",
+            "comment": "Internally restructure into multiple files"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-logger",
+            "commit": "63adc3efeba38dd678d49d8ac5bff11e6b169307",
+            "comment": "Export logLevelsObject"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill",
+            "commit": "70373c6d9fb0e8c75b854c4f30d13914bdc7ffc3",
+            "comment": "Re-export relevant types"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-cache",
+            "commit": "70373c6d9fb0e8c75b854c4f30d13914bdc7ffc3",
+            "comment": "Remove unused dependency on `@azure/core-http`"
+          }
+        ],
+        "patch": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-config",
+            "commit": "d22b529be11ec5e4c16d41dec2625e0fa7023aaf",
+            "comment": "Update to typescript 4.7 (should have no significant emit changes)"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-logger",
+            "commit": "d22b529be11ec5e4c16d41dec2625e0fa7023aaf",
+            "comment": "Update to typescript 4.7 (should have no significant emit changes)"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill",
+            "commit": "d22b529be11ec5e4c16d41dec2625e0fa7023aaf",
+            "comment": "Update to typescript 4.7 (should have no significant emit changes)"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-cache",
+            "commit": "d22b529be11ec5e4c16d41dec2625e0fa7023aaf",
+            "comment": "Update to typescript 4.7 (should have no significant emit changes)"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-hasher",
+            "commit": "d22b529be11ec5e4c16d41dec2625e0fa7023aaf",
+            "comment": "Update to typescript 4.7 (should have no significant emit changes)"
+          },
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-utils-dotenv",
+            "commit": "d22b529be11ec5e4c16d41dec2625e0fa7023aaf",
+            "comment": "Update to typescript 4.7 (should have no significant emit changes)"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 31 Jul 2025 22:24:07 GMT",
       "version": "6.3.1",
       "tag": "backfill_v6.3.1",

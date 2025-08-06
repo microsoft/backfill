@@ -1,8 +1,39 @@
 # Change Log - backfill
 
-<!-- This log was last generated on Thu, 31 Jul 2025 22:24:07 GMT and should not be manually modified. -->
+<!-- This log was last generated on Wed, 06 Aug 2025 06:52:42 GMT and should not be manually modified. -->
 
 <!-- Start content -->
+
+## 6.4.0
+
+Wed, 06 Aug 2025 06:52:42 GMT
+
+### Minor changes
+
+- `backfill-config`
+  - Remove all direct references to Azure types, update config validation, add docs (elcraig@microsoft.com)
+  - Internally restructure into multiple files (elcraig@microsoft.com)
+- `backfill-logger`
+  - Export logLevelsObject (elcraig@microsoft.com)
+- `backfill`
+  - Re-export relevant types (elcraig@microsoft.com)
+- `backfill-cache`
+  - Remove unused dependency on `@azure/core-http` (elcraig@microsoft.com)
+
+### Patches
+
+- `backfill-config`
+  - Update to typescript 4.7 (should have no significant emit changes) (elcraig@microsoft.com)
+- `backfill-logger`
+  - Update to typescript 4.7 (should have no significant emit changes) (elcraig@microsoft.com)
+- `backfill`
+  - Update to typescript 4.7 (should have no significant emit changes) (elcraig@microsoft.com)
+- `backfill-cache`
+  - Update to typescript 4.7 (should have no significant emit changes) (elcraig@microsoft.com)
+- `backfill-hasher`
+  - Update to typescript 4.7 (should have no significant emit changes) (elcraig@microsoft.com)
+- `backfill-utils-dotenv`
+  - Update to typescript 4.7 (should have no significant emit changes) (elcraig@microsoft.com)
 
 ## 6.3.1
 
