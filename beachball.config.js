@@ -1,7 +1,16 @@
 // @ts-check
 /** @type {import('beachball').BeachballConfig} */
-module.exports = {
+const config = {
   groupChanges: true,
+  changelog: {
+    groups: [
+      {
+        masterPackageName: "backfill",
+        changelogPath: "packages/backfill",
+        include: ["packages/*"],
+      },
+    ],
+  },
   ignorePatterns: [
     "**/jest.config.js",
     "**/src/__fixtures__/**",
@@ -9,3 +18,4 @@ module.exports = {
   ],
   scope: ["!packages/utils-test/__fixtures__/*"],
 };
+module.exports = config;

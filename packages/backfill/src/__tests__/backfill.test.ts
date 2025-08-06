@@ -122,6 +122,6 @@ describe("backfill", () => {
     // Assert
 
     // See `packages/utils-test/__fixtures__/custom-cache-provider/backfill.config.js`'s provider.name
-    expect(spyLogger).toBeCalledWith("custom-provider");
+    expect(spyLogger).toHaveBeenCalledWith("custom-provider");
   });
 });
