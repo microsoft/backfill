@@ -48,7 +48,7 @@ type ContainerClientLike = {
 
 /** One of the credential types from `@azure/identity`. */
 type TokenCredentialLike = {
-  getToken: (scopes: string | string[], options?: unknown) => Promise<any>;
+  getToken: (scopes: string | string[], options?: any) => Promise<any>;
 };
 
 export function getAzureBlobConfigFromSerializedOptions(
