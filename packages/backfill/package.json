@@ -34,15 +34,15 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
-    "@types/jest": "^29.0.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^14.18.36",
     "@types/yargs": "^15.0.15",
     "backfill-utils-test": "*",
     "backfill-utils-tsconfig": "*",
-    "jest": "^29.0.0",
+    "jest": "^30.0.0",
     "ts-jest": "^29.0.0",
     "ts-mockito": "^2.6.1",
-    "typescript": "~4.5.0"
+    "typescript": "~4.7.0"
   },
   "engines": {
     "node": ">=14"
