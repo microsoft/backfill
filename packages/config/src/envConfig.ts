@@ -4,13 +4,13 @@ import {
   logLevelsObject,
   type LogLevel,
 } from "backfill-logger";
-import type { Config } from "./Config";
 import {
   type CacheStorageConfig,
   getAzureBlobConfigFromSerializedOptions,
   getNpmConfigFromSerializedOptions,
 } from "./cacheConfig";
-import { isCorrectMode, modesObject, type BackfillModes } from "./index";
+import { isCorrectMode, modesObject, type BackfillModes } from "./modes";
+import type { Config } from "./index";
 
 class BackfillConfigError extends Error {
   constructor(value: string, envName: string, expected: string) {
@@ -23,6 +23,8 @@ class BackfillConfigError extends Error {
 
 type EnvParser<T> = (value: string, envName: string) => T;
 
+// TODO: possibly more validation should be added here
+// https://github.com/microsoft/backfill/issues/540
 const parseBoolean: EnvParser<boolean> = (value) => value === "true";
 const parseString: EnvParser<string> = (value) => value;
 const parseStringArray: EnvParser<string[]> = (value, envName) => {
@@ -73,9 +75,11 @@ const envOptions: {
 /**
  * Get the config from `process.env.BACKFILL_*`:
  * - `BACKFILL_CACHE_PROVIDER` for `Config.cacheStorageConfig.provider`
- * - `BACKFILL_CACHE_PROVIDER_OPTIONS` for the rest of `Config.cacheStorageConfig`
+ * - `BACKFILL_CACHE_PROVIDER_OPTIONS` for `Config.cacheStorageConfig.options`
  * - For other `Config` properties, `BACKFILL_*` snake case version of option,
  *   e.g. `BACKFILL_LOG_LEVEL` for `Config.logLevel`
+ *
+ * Arrays and objects should be the `JSON.stringify`ed form of the value.
  */
 export function getEnvConfig(logger: Logger): Partial<Config> {
   const config: Partial<Config> = {};
@@ -84,25 +88,25 @@ export function getEnvConfig(logger: Logger): Partial<Config> {
     | Exclude<CacheStorageConfig["provider"], Function> // eslint-disable-line
     | undefined;
   const serializedCacheProviderOptions =
-    process.env.BACKFILL_CACHE_PROVIDER_OPTIONS || "{}";
+    process.env.BACKFILL_CACHE_PROVIDER_OPTIONS;
 
   if (cacheProvider === "azure-blob") {
     config.cacheStorageConfig = getAzureBlobConfigFromSerializedOptions(
-      serializedCacheProviderOptions,
-      logger
+      serializedCacheProviderOptions || "{}"
     );
   } else if (cacheProvider === "npm") {
     config.cacheStorageConfig = getNpmConfigFromSerializedOptions(
-      serializedCacheProviderOptions,
-      logger
+      serializedCacheProviderOptions || "{}"
     );
   } else if (cacheProvider === "local" || cacheProvider === "local-skip") {
     config.cacheStorageConfig = { provider: cacheProvider };
   } else if (cacheProvider) {
-    logger.warn(`Ignoring unknown BACKFILL_CACHE_PROVIDER: ${cacheProvider}`);
-  } else if (serializedCacheProviderOptions !== "{}") {
+    // TODO: In a future major version, this and the next case should throw
+    // https://github.com/microsoft/backfill/issues/540
+    logger.warn(`Ignoring unknown BACKFILL_CACHE_PROVIDER: "${cacheProvider}"`);
+  } else if (serializedCacheProviderOptions) {
     logger.warn(
-      `Ignoring unknown BACKFILL_CACHE_PROVIDER_OPTIONS: ${serializedCacheProviderOptions}`
+      `Ignoring unknown BACKFILL_CACHE_PROVIDER_OPTIONS: "${serializedCacheProviderOptions}"`
     );
   }
 

@@ -1,2 +1,2 @@
 export { jestConfig } from "./jestConfig";
-export { setupFixture } from "./setupFixture";
+export { setupFixture, removeTempDir } from "./setupFixture";

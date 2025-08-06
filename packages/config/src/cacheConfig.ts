@@ -86,25 +86,32 @@ export type CacheStorageConfig =
   | AzureBlobCacheStorageConfig
   | CustomStorageConfig;
 
+const envNames = {
+  cacheProvider: "BACKFILL_CACHE_PROVIDER",
+  cacheProviderOptions: "BACKFILL_CACHE_PROVIDER_OPTIONS",
+};
+
 export function getNpmConfigFromSerializedOptions(
-  options: string,
-  logger: Logger
+  options: string
 ): NpmCacheStorageConfig {
   let parsedOptions: NpmCacheStorageOptions;
-
   try {
     parsedOptions = JSON.parse(options);
   } catch {
-    logger.error(`Could not parse npm storage options as JSON:\n${options}`);
-    throw new Error("Invalid npm storage options");
+    throw new Error(
+      `Could not parse ${envNames.cacheProviderOptions} as JSON:\n"${options}"`
+    );
   }
 
   if (
     typeof parsedOptions.npmPackageName !== "string" ||
     typeof parsedOptions.registryUrl !== "string"
   ) {
-    logger.error(`Invalid npm storage options:\n${options}`);
-    throw new Error("Invalid npm storage options");
+    throw new Error(
+      `Invalid ${envNames.cacheProviderOptions} for ${envNames.cacheProvider}="npm":\n` +
+        `Expected: object with string values for keys "npmPackageName", "registryUrl"\n` +
+        `Received: "${options}"`
+    );
   }
 
   return {
@@ -114,27 +121,36 @@ export function getNpmConfigFromSerializedOptions(
 }
 
 export function getAzureBlobConfigFromSerializedOptions(
-  options: string,
-  logger: Logger
+  options: string
 ): AzureBlobCacheStorageConfig {
   let parsedOptions: AzureBlobCacheStorageConnectionStringOptions;
   try {
     parsedOptions = JSON.parse(options);
   } catch {
-    logger.error(
-      `Could not parse Azure blob storage options as JSON:\n${options}`
+    throw new Error(
+      `Could not parse ${envNames.cacheProviderOptions} as JSON:\n"${options}"`
     );
-    throw new Error("Invalid Azure blob storage options");
   }
 
   if (
     typeof parsedOptions.connectionString !== "string" ||
-    typeof parsedOptions.container !== "string" ||
-    (parsedOptions.maxSize !== undefined &&
-      typeof parsedOptions.maxSize !== "number")
+    typeof parsedOptions.container !== "string"
   ) {
-    logger.error(`Invalid Azure blob storage options:\n${options}`);
-    throw new Error("Invalid Azure blob storage options");
+    throw new Error(
+      `Invalid ${envNames.cacheProviderOptions} for ${envNames.cacheProvider}="azure-blob":\n` +
+        `Expected: object with string values for keys "connectionString", "container"\n` +
+        `Received: "${options}"`
+    );
+  }
+
+  if (
+    parsedOptions.maxSize !== undefined &&
+    typeof parsedOptions.maxSize !== "number"
+  ) {
+    throw new Error(
+      `Invalid ${envNames.cacheProviderOptions} for ${envNames.cacheProvider}="azure-blob":` +
+        `expected "maxSize" property to be unspecified or a number; received: ${parsedOptions.maxSize}`
+    );
   }
 
   return {

@@ -169,8 +169,12 @@ export function createConfig(logger: Logger, fromPath: string): Config {
     (acc, configPath) => {
       const config: Partial<Config> = require(configPath);
 
+      // TODO: In the next major version, the complete validation from
+      // envConfig should also be used here (it shouldn't be added outside a
+      // major version to avoid suddenly throwing on existing configs)
+      // https://github.com/microsoft/backfill/issues/540
       if (config.mode && !isCorrectMode(config.mode)) {
-        throw `Backfill config option "mode" was set, but with the wrong value: "${config.mode}".`;
+        throw `Backfill config option "mode" was set, but with an invalid value: "${config.mode}"`;
       }
 
       return { ...acc, ...config };
