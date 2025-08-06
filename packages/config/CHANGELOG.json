@@ -2,6 +2,21 @@
   "name": "backfill-config",
   "entries": [
     {
+      "date": "Wed, 06 Aug 2025 08:17:18 GMT",
+      "version": "6.7.1",
+      "tag": "backfill-config_v6.7.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "elcraig@microsoft.com",
+            "package": "backfill-config",
+            "commit": "ce8d8ffe09ace2bba44d847d13af391b346bfbf6",
+            "comment": "Fix TokenCredentialLike type"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 06 Aug 2025 06:52:42 GMT",
       "version": "6.7.0",
       "tag": "backfill-config_v6.7.0",

@@ -1,8 +1,16 @@
 # Change Log - backfill-config
 
-<!-- This log was last generated on Wed, 06 Aug 2025 06:52:42 GMT and should not be manually modified. -->
+<!-- This log was last generated on Wed, 06 Aug 2025 08:17:18 GMT and should not be manually modified. -->
 
 <!-- Start content -->
+
+## 6.7.1
+
+Wed, 06 Aug 2025 08:17:18 GMT
+
+### Patches
+
+- Fix TokenCredentialLike type (elcraig@microsoft.com)
 
 ## 6.7.0
 

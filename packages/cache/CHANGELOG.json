@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Wed, 06 Aug 2025 08:17:18 GMT",
+      "version": "5.11.1",
+      "tag": "backfill-cache_v5.11.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "backfill-cache",
+            "comment": "Bump backfill-config to v6.7.1",
+            "commit": "not available"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 06 Aug 2025 06:52:42 GMT",
       "version": "5.11.0",
       "tag": "backfill-cache_v5.11.0",
