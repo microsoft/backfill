@@ -1,11 +1,8 @@
-import yargs from "yargs";
-
 import { loadDotenv } from "backfill-utils-dotenv";
-import { Logger, makeLogger } from "backfill-logger";
-import { createConfig, Config } from "backfill-config";
-export { createDefaultConfig } from "backfill-config";
-
+import { type Logger, makeLogger } from "backfill-logger";
+import { createConfig, type Config } from "backfill-config";
 import { isCustomProvider } from "backfill-cache";
+import yargs from "yargs";
 import {
   getRawBuildCommand,
   createBuildCommand,
@@ -18,6 +15,12 @@ import {
   computeHash,
   computeHashOfOutput,
 } from "./api";
+
+export {
+  createDefaultConfig,
+  type Config,
+  type ICacheStorage,
+} from "backfill-config";
 
 // Load environment variables
 loadDotenv();

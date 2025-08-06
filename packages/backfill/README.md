@@ -2,25 +2,21 @@
 
 A JavaScript caching library for reducing build time.
 
+> ⚠️ As of 2025, `backfill` is primarily used as the caching layer for
+> [`lage`](https://www.npmjs.com/package/lage). Most information about
+> [options](#options) and [remote cache setup](#set-up-remote-cache) also
+> applies to `lage`'s `cacheOptions` configuration.
+
 - **🔌 Easy to install**: Simply wrap your build commands inside
   `backfill -- [command]`
 - **☁️ Remote cache**: Store your cache on Azure Blob or as an npm package
 - **⚙️ Fully configurable**: Smart defaults with cross-package and per-package
   configuration and environment variable overrides
 
-_backfill is under active development and should probably not be used in
-production, yet. We will initially focus on stability improvements. We will look
-into various optimization strategies, adding more customization, and introducing
-an API for only running scripts in packages that have changed and skipping
-others altogether._
-
-_Current prerequisites:_
+_Prerequisites:_
 
 - git
-- yarn.lock and yarn workspaces (for optimized hashing)
-
-These prerequisites can easily be loosened to make backfill work with npm, Rush,
-and Lerna.
+- package manager with lock file (for optimized hashing)
 
 ## Why
 
@@ -36,14 +32,6 @@ Backfill is based on two concepts:
    or remote cache. If there's a match, it will backfill the package using the
    cache. Otherwise, it will run the build command and persist the output to the
    cache.
-
-## Install
-
-Install backfill using yarn:
-
-```
-$ yarn add --dev backfill
-```
 
 ## Usage - CLI
 
@@ -72,67 +60,119 @@ to all file changes in your repo (it assumes you're in a git repo) while running
 the build command and then report on any files that got changed outside of the
 cache folder.
 
-### Configuration
+## Configuration
 
-Backfill will look for `backfill.config.js` in the package it was called from
-and among parent folders recursively and then combine those configs together.
+Backfill will look for `backfill.config.js` (CJS only) in the package it was
+called from and parent folders, then combine those configs together.
 
 To configure backfill, simply export a config object with the properties you
-wish to override:
+wish to override. All properties in are optional in the config file.
 
 ```js
-module.exports = {
+/** @type {Partial<import("backfill").Config>} */
+const config = {
   cacheStorageConfig: {
     provider: "azure-blob",
     options: { ... }
-  }
+  },
+  outputGlob: ["lib/**/*", "dist/bundles/**/*"]
 };
+module.exports = config;
 ```
 
-The default configuration object is:
+### Options
 
-```js
-{
-  cacheStorageConfig: { provider: "local" },
-  clearOutputFolder: false,
-  internalCacheFolder: "node_modules/.cache/backfill",
-  logFolder: "node_modules/.cache/backfill",
-  logLevel: "info",
-  mode: "READ_WRITE",
-  name: "[name-of-package]",
-  outputGlob: ["lib/**"],
-  packageRoot: "path/to/package",
-  producePerformanceLogs: false,
-  validateOutput: false
-}
-```
+Notable options:
 
-The `outputGlob` is a list of globs describing the files you want to cache.
-`outputGlob` should be expressed as a relative path from the root of each
-package. If you want to cache `package-a/lib`, for instance, you'd write
-`outputGlob: ["lib/**"]`. If you also want to cache the `pacakge-a/dist/bundles`
-folder, you'd write `outputGlob: ["lib/**", "dist/bundles/**"]`.
+- `outputGlob` (`string[]`): A list of glob patterns for the built/generated
+  files that should be hashed and cached, relative to the root of each package.
+  For example, if you want to cache `package-a/lib` and
+  `package-a/dist/bundles`, you'd write
+  `"outputGlob: ["lib/**/*", "dist/bundles/**/*"]`.
+- `cacheStorageConfig`: See [set up remote cache](#set-up-remote-cache) below.
 
-The configuration type is:
+All options:
 
 ```ts
 export type Config = {
-  cacheStorageConfig: CacheStorageConfig;
-  clearOutputFolder: boolean;
-  internalCacheFolder: string;
-  logFolder: string;
-  logLevel: LogLevels;
-  mode: "READ_ONLY" | "WRITE_ONLY" | "READ_WRITE" | "PASS";
-  name: string;
+  /**
+   * Glob patterns for the built/generated files that should be hashed and
+   * cached, relative to the root of each package. (see example above)
+   *
+   * Defaults to `["lib/**"]`.
+   */
   outputGlob: string[];
+
+  /**
+   * Cache storage provider name and potentially configuration.
+   * See below for details.
+   * @default { provider: "local" }
+   */
+  cacheStorageConfig: CacheStorageConfig;
+
+  /**
+   * Whether to delete the `outputGlob` files on completion.
+   * @default false
+   */
+  clearOutput: boolean;
+
+  /**
+   * Absolute path to local cache folder.
+   * @default "[packageRoot]/node_modules/.cache/backfill"
+   */
+  internalCacheFolder: string;
+
+  /**
+   * Absolute path to local log folder.
+   * @default "[packageRoot]/node_modules/.cache/backfill"
+   */
+  logFolder: string;
+
+  /**
+   * Log level.
+   * @default "info"
+   */
+  logLevel: "silly" | "verbose" | "info" | "warn" | "error" | "mute";
+
+  /**
+   * Name of the package, used for logging and performance reports.
+   * Defaults to name from `package.json`.
+   */
+  name: string;
+
+  /**
+   * Cache operation mode.
+   * @default "READ_WRITE"
+   */
+  mode: "READ_ONLY" | "WRITE_ONLY" | "READ_WRITE" | "PASS";
+
+  /**
+   * Package root path.
+   * Defaults to searching for `package.json` in the current working directory.
+   */
   packageRoot: string;
-  performanceReportName?: string;
+
+  /**
+   * If true, write performance logs to `logFolder`.
+   * @default false
+   */
   producePerformanceLogs: boolean;
+
+  /**
+   * If true, write the hash of the output files to the performance report.
+   * @default false
+   */
   validateOutput: boolean;
+
+  /**
+   * Compute hashes to only cache changed files.
+   * @default false
+   */
+  incrementalCaching: boolean;
 };
 ```
 
-#### Environment variable
+### Environment variables
 
 You can override configuration with environment variables. Backfill will also
 look for a `.env`-file in the root of your repository, and load those into the
@@ -141,16 +181,28 @@ to your remote cache, or if you want to commit a read-only cache access key in
 the repo and override with a write and read access key in the PR build, for
 instance.
 
-See `getEnvConfig()` in
-[`./packages/config/src/envConfig.ts`](https://github.com/microsoft/backfill/blob/master/packages/config/src/envConfig.ts#L15).
+- `BACKFILL_CACHE_PROVIDER`: Cache provider name
+  (`Config.cacheStorageConfig.provider`)
+- `BACKFILL_CACHE_PROVIDER_OPTIONS`: Cache provider options (the rest of
+  `Config.cacheStorageConfig`)
+- For other `Config` properties, `BACKFILL_*` snake case version of option, e.g.
+  `BACKFILL_LOG_LEVEL` for `Config.logLevel`
 
 ## Set up remote cache
 
-### Microsoft Azure Blob Storage
+Backfill supports multiple cache storage providers:
 
-To cache to a Microsoft Azure Blob Storage you need to provide a connection
+- Local folder (`local`), the default option
+- [Azure blob storage (`azure-blob`)](#azure-blob-storage)
+- [NPM package (`npm`)](#npm-package)
+- [Skip cache locally (`local-skip`)](#skipping-cache-locally)
+- [Custom (`custom`)](#custom-storage-providers)
+
+### Azure Blob Storage
+
+To cache to Microsoft Azure Blob Storage, you need to provide a connection
 string and the container name. If you are configuring via `backfill.config.js`,
-you can use the following syntax:
+use the following syntax:
 
 ```js
 module.exports = {
@@ -186,31 +238,22 @@ module.exports = {
 
 ```
 
-#### Options
+#### `azure-blob` options
 
-<dl>
-  <dt>connectionString</dt>
-  <dd>retrieve this from the Azure Portal interface</dd>
+- `connectionString`: retrieve this from the Azure Portal interface
+- `container`: the name of the blob storage container
+- `maxSize` (optional): max size of a single package cache, in the number of
+  bytes
+- `credential` (optional): one of the credential types from `@azure/identity`.
 
-  <dt>container</dt>
-  <dd>the name of the blob storage container</dd>
-
-  <dt>maxSize (<em>optional</em>)</dt>
-  <dd>
-    max size of a single package cache, in the number of bytes
-  </dd>
-</dl>
-
-You can also configure Microsoft Azure Blob Storage using environment variables.
+You can also use environment variables for configuration.
 
 ```
-
 BACKFILL_CACHE_PROVIDER="azure-blob"
 BACKFILL_CACHE_PROVIDER_OPTIONS='{"connectionString":"...","container":"..."}'
-
 ```
 
-### Npm package
+### NPM package
 
 To cache to an NPM package you need to provide a package name and the registry
 URL of your package feed. This feed should probably be private. If you are
@@ -274,35 +317,34 @@ storage strategy:
 BACKFILL_CACHE_PROVIDER="local-skip"
 ```
 
-## Custom storage providers
+### Custom storage providers
 
-It is also possible to give backfill a custom storage provider altogether. This
-will give the ultimate flexibility in how to handle cache fetching and putting.
+It is also possible to use a custom storage provider. This allows ultimate
+flexibility in how to handle cache fetching and putting.
 
 Configure the custom cache provider this way:
 
 ```js
-// CustomStorageProvider.ts
-class CustomStorageProvider implements ICacheStorage {
-  constructor(providerOptions: any, logger: Logger, cwd: string) {
+// @ts-check
+// See the types for details of the signatures
+/** @implements {import("backfill").ICacheStorage} */
+class CustomStorageProvider {
+  constructor(providerOptions, logger, cwd) {
     // do what is needed in regards to the options
   }
 
-  async fetch(hash: string) {
+  async fetch(hash) {
     // some fetch logic
   }
 
-  async put(hash: string, filesToCache: string[]) {
+  async put(hash, filesToCache) {
     // some putting logic
   }
 }
 
-module.exports.CustomStorageProvider = CustomStorageProvider;
-
-// backfill configuration
-const CustomStorageProvider = require("./custom-storage-provider");
-
-module.exports = {
+// backfill.config.js
+/** @type {Partial<import("backfill").Config>} */
+const config = {
   cacheStorageConfig: {
     provider: (logger, cwd) =>
       new CustomStorageProvider(
@@ -315,12 +357,13 @@ module.exports = {
       ),
   },
 };
+module.exports = config;
 ```
 
 ## API
 
-Backfill provides an API, this allows for more complex scenarios, and
-performance optimizations.
+Backfill provides an API to support more complex scenarios and performance
+optimizations.
 
 ```js
 const backfill = require("backfill/lib/api");
@@ -338,9 +381,8 @@ if (!fetchSuccess) {
 }
 ```
 
-## Performance Logs
+## Performance logs
 
-You can optionally output performance logs to disk. If turned on, backfill will
-output a log file after each run with performance metrics. Each log file is
-formatted as a JSON file. You can turn performance logging by setting
-`producePerformanceLogs: true` in `backfill.config.js`.
+Backfill provides the option to output a JSON log file after each run with
+performance metrics. Enable this by setting `producePerformanceLogs: true` in
+`backfill.config.js`.
