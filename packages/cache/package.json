@@ -26,6 +26,8 @@
     "tar-fs": "^2.1.0"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.804.0",
+    "@aws-sdk/lib-storage": "^3.804.0",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^30.0.0",
     "@types/node": "^14.18.36",
@@ -35,6 +37,18 @@
     "jest": "^30.0.0",
     "ts-jest": "^29.0.0",
     "typescript": "~4.7.0"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-s3": "^3.804.0",
+    "@aws-sdk/lib-storage": "^3.804.0"
+  },
+  "peerDependenciesMeta": {
+    "@aws-sdk/client-s3": {
+      "optional": true
+    },
+    "@aws-sdk/lib-storage": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=14"

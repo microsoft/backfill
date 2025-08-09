@@ -1,5 +1,5 @@
 import * as path from "path";
-import { Transform, TransformCallback, pipeline } from "stream";
+import { pipeline } from "stream";
 import tarFs from "tar-fs";
 
 import { Logger } from "backfill-logger";
@@ -8,61 +8,11 @@ import { AzureBlobCacheStorageOptions } from "backfill-config";
 import { stat } from "fs-extra";
 import { ContainerClient } from "@azure/storage-blob";
 import { CacheStorage } from "./CacheStorage";
+import { TimeoutStream } from "./TimeoutStream";
+import { SpongeStream } from "./SpongeStream";
 
 const ONE_MEGABYTE = 1024 * 1024;
 const FOUR_MEGABYTES = 4 * ONE_MEGABYTE;
-
-/*
- * Timeout stream, will emit an error event if the
- * input has not started providing data after a given time after
- * its creation.
- */
-class TimeoutStream extends Transform {
-  private timeout: NodeJS.Timeout;
-  constructor(timeout: number, message: string) {
-    super();
-    this.timeout = setTimeout(() => {
-      this.destroy(new Error(message));
-    }, timeout);
-  }
-  _transform(
-    chunk: any,
-    _encoding: BufferEncoding,
-    callback: TransformCallback
-  ): void {
-    clearTimeout(this.timeout);
-    this.push(chunk);
-    callback();
-  }
-}
-
-/*
- * Sponge stream, it will accumulate all the data it receives
- * and emit it only if and when the input stream sends the "end" event.
- */
-class SpongeStream extends Transform {
-  constructor() {
-    super({
-      // This stream should never receive more data than its readableHighWaterMark
-      // otherwise the stream will get into a deadlock
-      // 1 TB should give enough room :)
-      readableHighWaterMark: 1024 * 1024 * 1024 * 1024,
-    });
-  }
-  _transform(
-    chunk: any,
-    _encoding: BufferEncoding,
-    callback: TransformCallback
-  ): void {
-    this.pause();
-    this.push(chunk);
-    callback();
-  }
-  _flush(callback: TransformCallback): void {
-    this.resume();
-    callback();
-  }
-}
 
 const uploadOptions = {
   bufferSize: FOUR_MEGABYTES,

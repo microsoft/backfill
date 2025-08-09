@@ -7,6 +7,7 @@ import {
 import type { Config } from "./Config";
 import { getAzureBlobConfigFromSerializedOptions } from "./azureBlobCacheConfig";
 import { getNpmConfigFromSerializedOptions } from "./npmCacheConfig";
+import { getS3ConfigFromSerializedOptions } from "./s3CacheConfig";
 import { isCorrectMode, modesObject, type BackfillModes } from "./modes";
 import type { CacheStorageConfig } from "./cacheConfig";
 
@@ -91,6 +92,11 @@ export function getEnvConfig(logger: Logger): Partial<Config> {
   if (cacheProvider === "azure-blob") {
     config.cacheStorageConfig = getAzureBlobConfigFromSerializedOptions(
       serializedCacheProviderOptions || "{}"
+    );
+  } else if (cacheProvider === "s3" && serializedCacheProviderOptions) {
+    config["cacheStorageConfig"] = getS3ConfigFromSerializedOptions(
+      serializedCacheProviderOptions,
+      logger
     );
   } else if (cacheProvider === "npm") {
     config.cacheStorageConfig = getNpmConfigFromSerializedOptions(
