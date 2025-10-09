@@ -28,6 +28,7 @@ export class LocalCacheStorage extends CacheStorage {
 
     const files = await globby(`**/*`, {
       cwd: localCacheFolder,
+      dot: true,
     });
 
     await Promise.all(

@@ -118,6 +118,15 @@ async function putInCache({
 
     expectPathExists(path.join(fixtureLocation, pathToCheck), expectSuccess);
   });
+
+  if (expectSuccess) {
+    for (const f of filesToCache) {
+      fs.removeSync(path.join(fixtureLocation, f));
+      expectPathExists(path.join(fixtureLocation, f), false);
+      await cacheStorage.fetch(hash);
+      expectPathExists(path.join(fixtureLocation, f), true);
+    }
+  }
 }
 
 describe("LocalCacheStorage", () => {
@@ -195,6 +204,15 @@ describe("LocalCacheStorage", () => {
         hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
         outputGlob: ["lib/**", "!lib/qwerty"],
         filesToCache: ["lib/azerty"],
+      });
+    });
+
+    it("will persist files that are in a folder with a . in them", async () => {
+      await putInCache({
+        fixtureName: "basic",
+        hash: "46df1a257dfbde62b1e284f6382b20a49506f029",
+        outputGlob: [".react-router/**"],
+        filesToCache: [".react-router/types/route.d.ts"],
       });
     });
   });
