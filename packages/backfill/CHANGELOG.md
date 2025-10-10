@@ -1,8 +1,17 @@
 # Change Log - backfill
 
-<!-- This log was last generated on Wed, 06 Aug 2025 08:17:18 GMT and should not be manually modified. -->
+<!-- This log was last generated on Fri, 10 Oct 2025 00:20:02 GMT and should not be manually modified. -->
 
 <!-- Start content -->
+
+## 6.4.2
+
+Fri, 10 Oct 2025 00:20:02 GMT
+
+### Patches
+
+- `backfill-cache`
+  - Make sure that the backfill cache copies files beginning with a . over during fetch calls (1581488+christiango@users.noreply.github.com)
 
 ## 6.4.1
 

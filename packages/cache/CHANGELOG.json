@@ -2,6 +2,21 @@
   "name": "backfill-cache",
   "entries": [
     {
+      "date": "Fri, 10 Oct 2025 00:20:02 GMT",
+      "version": "5.11.2",
+      "tag": "backfill-cache_v5.11.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "1581488+christiango@users.noreply.github.com",
+            "package": "backfill-cache",
+            "commit": "b8668aee2f693530345a868d6d76eadf8f43aa86",
+            "comment": "Make sure that the backfill cache copies files beginning with a . over during fetch calls"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 06 Aug 2025 08:17:18 GMT",
       "version": "5.11.1",
       "tag": "backfill-cache_v5.11.1",
