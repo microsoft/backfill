@@ -1,6 +1,7 @@
 import type { Logger } from "backfill-logger";
 import type { AzureBlobCacheStorageConfig } from "./azureBlobCacheConfig";
 import type { NpmCacheStorageConfig } from "./npmCacheConfig";
+import type { S3CacheStorageConfig } from "./s3CacheConfig";
 
 export interface ICacheStorage {
   fetch: (hash: string) => Promise<boolean>;
@@ -21,6 +22,7 @@ export type CacheStorageConfig =
     }
   | NpmCacheStorageConfig
   | AzureBlobCacheStorageConfig
+  | S3CacheStorageConfig
   | CustomStorageConfig;
 
 /**
