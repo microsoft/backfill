@@ -5094,10 +5094,23 @@ word-wrap@^1.2.5:
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.5.tgz#d2c45c6dd4fbce621a66f136cbe328afd0410b34"
   integrity sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==
 
-workspace-tools@^0.38.0, workspace-tools@^0.38.2:
+workspace-tools@^0.38.2:
   version "0.38.4"
   resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.38.4.tgz#fe1010d5211d1d0555fca3155ff19f9779a3d949"
   integrity sha512-wCei5WNlhHswuU5tPjTYy4yVd7jnavtRUNbqpiHAmWRPOJtkvUpBQZExrrgFs3h9jdx6Qf6inCDSwjqnXhf+vQ==
+  dependencies:
+    "@yarnpkg/lockfile" "^1.1.0"
+    fast-glob "^3.3.1"
+    git-url-parse "^16.0.0"
+    globby "^11.0.0"
+    jju "^1.4.0"
+    js-yaml "^4.1.0"
+    micromatch "^4.0.0"
+
+workspace-tools@^0.40.0:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.40.0.tgz#77a5f9b31006e016e44753e2d9d7202d427e9c23"
+  integrity sha512-OlhUc1gMVNUQnuKil3PilJbmYXycuFT/hmY7H9Nh/WBRf2GcR3ClzpKFIvloidutd6vgo/RLQms4ZmgFG7uHrA==
   dependencies:
     "@yarnpkg/lockfile" "^1.1.0"
     fast-glob "^3.3.1"
