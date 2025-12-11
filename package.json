@@ -79,6 +79,7 @@
   },
   "syncpack": {
     "peer": false,
-    "workspace": false
+    "workspace": false,
+    "resolutions": false
   }
 }
