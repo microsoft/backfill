@@ -5129,6 +5129,19 @@ workspace-tools@^0.40.0:
     js-yaml "^4.1.0"
     micromatch "^4.0.0"
 
+workspace-tools@^0.41.0:
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.41.0.tgz#b9389f7af1ca79bf102ff613ce21bf2d02c4010a"
+  integrity sha512-iBB6LNqtJpfjTWnyjlgOwdJmf1wBTUsIr1V5phOBCJMywubpYAijDUqhgz7RfrTYdscA4vEFyhjiy4OSAGULcA==
+  dependencies:
+    "@yarnpkg/lockfile" "^1.1.0"
+    fast-glob "^3.3.1"
+    git-url-parse "^16.0.0"
+    globby "^11.0.0"
+    jju "^1.4.0"
+    js-yaml "^4.1.0"
+    micromatch "^4.0.0"
+
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
