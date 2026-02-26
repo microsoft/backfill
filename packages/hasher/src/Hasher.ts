@@ -65,14 +65,14 @@ export class Hasher implements IHasher {
     const done: PackageHashInfo[] = [];
 
     while (queue.length > 0) {
-      const packageRoot = queue.shift();
+      const nextPackageRoot = queue.shift();
 
-      if (!packageRoot) {
+      if (!nextPackageRoot) {
         continue;
       }
 
       const packageHash = await getPackageHash(
-        packageRoot,
+        nextPackageRoot,
         this.repoInfo,
         this.logger
       );
@@ -107,5 +107,3 @@ export class Hasher implements IHasher {
     return generateHashOfFiles(this.packageRoot, repoInfo);
   }
 }
-
-export * from "./repoInfo";

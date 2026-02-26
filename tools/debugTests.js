@@ -20,6 +20,7 @@ function start() {
     packagePath,
     "--runInBand",
     "--testTimeout=999999999",
+    "--watch",
     ...args,
   ]);
 }

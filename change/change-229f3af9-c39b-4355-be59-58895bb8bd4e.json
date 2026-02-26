@@ -1,0 +1,46 @@
+{
+  "changes": [
+    {
+      "type": "none",
+      "comment": "Simplify build script",
+      "packageName": "backfill",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "none"
+    },
+    {
+      "type": "patch",
+      "comment": "Move logic out of index file (no behavior change)",
+      "packageName": "backfill-cache",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "none",
+      "comment": "Simplify build script",
+      "packageName": "backfill-config",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "none"
+    },
+    {
+      "type": "minor",
+      "comment": "Improve internal structure and remove excess exports. If you were using exports besides Hasher, please file an issue.",
+      "packageName": "backfill-hasher",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    },
+    {
+      "type": "none",
+      "comment": "Simplify build script",
+      "packageName": "backfill-logger",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "none"
+    },
+    {
+      "type": "none",
+      "comment": "Simplify build script",
+      "packageName": "backfill-utils-dotenv",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "none"
+    }
+  ]
+}

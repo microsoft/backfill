@@ -71,7 +71,7 @@ export function createDefaultConfig(fromPath: string): Config {
 /**
  * Get the package name from `<packageRoot>/package.json`.
  */
-export function getName(packageRoot: string) {
+export function getName(packageRoot: string): string {
   return (
     require(path.join(packageRoot, "package.json")).name ||
     path.basename(path.dirname(packageRoot))
@@ -82,7 +82,7 @@ export function getName(packageRoot: string) {
  * Get a list of `backfill.config.js` file paths, starting at `fromPath` and
  * searching upward.
  */
-export function getSearchPaths(fromPath: string) {
+export function getSearchPaths(fromPath: string): string[] {
   const searchPaths: string[] = [];
 
   let nextPath: string | undefined = fromPath;

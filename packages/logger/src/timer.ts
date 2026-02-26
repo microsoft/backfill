@@ -1,7 +1,7 @@
 export type Timer = { start(): { stop(): number } };
 
-export const defaultTimer = {
-  start() {
+export const defaultTimer: Timer = {
+  start(): { stop(): number } {
     const start = process.hrtime();
     return {
       stop() {

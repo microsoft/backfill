@@ -22,9 +22,9 @@ export function makeConsoleLogger(
   trace(...args: string[]): void;
   consoleOverride: Console;
 } {
-  let consoleOverride = (overrides && overrides.console) || defaultConsole;
-  let formatter = defaultFormatter;
-  let logFilter = defaultLogFilter(logLevel);
+  const consoleOverride = (overrides && overrides.console) || defaultConsole;
+  const formatter = defaultFormatter;
+  const logFilter = defaultLogFilter(logLevel);
 
   return {
     consoleOverride,

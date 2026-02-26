@@ -36,6 +36,7 @@
     "**/@azure/core-util": "~1.12.0",
     "**/@azure/core-xml": "~1.4.5",
     "**/@azure/logger": "~1.2.0",
+    "**/syncpack/minimatch": "^6.0.0",
     "**/cache-base/union-value/set-value": "^2.0.0"
   },
   "devDependencies": {
@@ -74,11 +75,14 @@
   },
   "rationale": {
     "resolutions": {
-      "@azure/*": "Node 18 compatibility"
+      "@azure/*": "Node 18 compatibility",
+      "syncpack/minimatch": "Unpin minimatch due to security issue. Should match original major version."
     }
   },
   "syncpack": {
-    "peer": false,
+    "prod": true,
+    "dev": true,
+    "peer": true,
     "workspace": false,
     "resolutions": false
   }

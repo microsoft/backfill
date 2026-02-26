@@ -109,8 +109,8 @@ export function makeLogger(
       };
     },
 
-    setMode(mode: string, logLevel: "verbose" | "info") {
-      consoleLogger[logLevel](`Running in ${mode} mode.`);
+    setMode(mode: string, level: "verbose" | "info") {
+      consoleLogger[level](`Running in ${mode} mode.`);
 
       performanceReportData["mode"] = mode;
     },

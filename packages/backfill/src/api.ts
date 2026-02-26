@@ -86,8 +86,7 @@ export async function fetch(
     cwd,
     incrementalCaching
   );
-  const fetch = await cacheStorage.fetch(hash);
-  return fetch;
+  return await cacheStorage.fetch(hash);
 }
 
 export async function put(

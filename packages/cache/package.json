@@ -8,10 +8,9 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "main": "lib/index.js",
+  "main": "lib/getCacheStorageProvider.js",
   "scripts": {
-    "build": "yarn compile",
-    "compile": "tsc -b",
+    "build": "tsc -b --pretty",
     "test": "jest",
     "watch": "tsc -b -w"
   },
@@ -26,7 +25,7 @@
     "tar-fs": "^2.1.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^8.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^14.18.36",
     "@types/tar-fs": "^2.0.1",

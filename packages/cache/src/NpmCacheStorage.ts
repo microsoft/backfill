@@ -86,7 +86,7 @@ export class NpmCacheStorage extends CacheStorage {
     return true;
   }
 
-  protected async _put(hash: string, filesToCache: string[]) {
+  protected async _put(hash: string, filesToCache: string[]): Promise<void> {
     const { npmPackageName, registryUrl, npmrcUserconfig } = this.options;
 
     const temporaryNpmOutputFolder = path.resolve(

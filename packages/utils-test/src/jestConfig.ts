@@ -6,8 +6,10 @@ export const jestConfig: Config = {
     "^.+\\.tsx?$": [
       "ts-jest",
       {
-        // Badly-named option actually means disable type checking
-        isolatedModules: true,
+        tsconfig: {
+          // Badly-named option actually means disable type checking
+          isolatedModules: true,
+        },
       },
     ],
   },

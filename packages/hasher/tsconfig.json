@@ -5,9 +5,5 @@
     "outDir": "lib"
   },
   "include": ["src"],
-  "references": [
-    { "path": "../config" },
-    { "path": "../logger" },
-    { "path": "../utils-test" }
-  ]
+  "references": [{ "path": "../logger" }, { "path": "../utils-test" }]
 }

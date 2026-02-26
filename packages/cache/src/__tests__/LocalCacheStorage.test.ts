@@ -5,7 +5,7 @@ import { makeLogger } from "backfill-logger";
 import { setupFixture } from "backfill-utils-test";
 import { CacheStorageConfig } from "backfill-config";
 
-import { getCacheStorageProvider } from "../index";
+import { getCacheStorageProvider } from "../getCacheStorageProvider";
 
 const setupCacheStorage = async (fixtureName: string) => {
   const fixtureLocation = await setupFixture(fixtureName);

@@ -10,8 +10,7 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "build": "yarn compile",
-    "compile": "tsc -b",
+    "build": "tsc -b --pretty",
     "test": "jest",
     "watch": "tsc -b -w"
   },
@@ -21,7 +20,6 @@
     "pkg-dir": "^4.2.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
     "@types/jest": "^30.0.0",
     "backfill-utils-test": "*",
     "backfill-utils-tsconfig": "*",

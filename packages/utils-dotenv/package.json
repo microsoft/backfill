@@ -10,8 +10,7 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "build": "yarn compile",
-    "compile": "tsc -b",
+    "build": "tsc -b --pretty",
     "watch": "tsc -b -w"
   },
   "dependencies": {

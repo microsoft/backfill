@@ -31,7 +31,7 @@ function searchRepoInfoCache(packageRoot: string) {
   }
 }
 
-export async function getRepoInfoNoCache(cwd: string) {
+export async function getRepoInfoNoCache(cwd: string): Promise<RepoInfo> {
   const root = getWorkspaceRoot(cwd);
 
   if (!root) {

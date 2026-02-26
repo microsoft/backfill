@@ -5,7 +5,7 @@ export function createPackageHashes(
   root: string,
   workspaceInfo: WorkspaceInfo,
   repoHashes: { [key: string]: string }
-) {
+): Record<string, [string, string][]> {
   /**
    * This is a trie that looks like this:
    * {
@@ -41,7 +41,7 @@ export function createPackageHashes(
     const pathParts = entry.split(/[\\/]/);
 
     let node = pathTree;
-    let packagePathParts = [];
+    const packagePathParts = [];
 
     for (const part of pathParts) {
       if (node[part]) {

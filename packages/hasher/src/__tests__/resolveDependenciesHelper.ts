@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { setupFixture } from "backfill-utils-test";
 
 import {

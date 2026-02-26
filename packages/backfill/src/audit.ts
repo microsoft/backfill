@@ -37,7 +37,7 @@ export function initializeWatcher(
   logFolder: string,
   outputGlob: string[],
   logger: Logger
-) {
+): void {
   // Trying to find the git root and using it as an approximation of code boundary
   const repositoryRoot = getGitRepositoryRoot(packageRoot);
 
@@ -95,7 +95,7 @@ async function delay(time: number) {
   });
 }
 
-export async function closeWatcher(logger: Logger) {
+export async function closeWatcher(logger: Logger): Promise<void> {
   // Wait for one second before closing, giving time for file changes to propagate
   await delay(1000);
 

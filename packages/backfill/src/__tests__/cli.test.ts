@@ -6,11 +6,16 @@ import { makeLogger } from "backfill-logger";
 
 import { createBuildCommand } from "../commandRunner";
 
-const logger = makeLogger("mute");
+const muteLogger = makeLogger("mute");
 
 describe("createBuildCommand", () => {
   it("runs a command successfully", async () => {
-    const buildCommand = createBuildCommand(["echo foo"], false, [""], logger);
+    const buildCommand = createBuildCommand(
+      ["echo foo"],
+      false,
+      [""],
+      muteLogger
+    );
 
     const buildResult = await buildCommand();
 
@@ -20,7 +25,7 @@ describe("createBuildCommand", () => {
   });
 
   it("resolves if no command can be found", async () => {
-    const buildCommand = createBuildCommand([""], false, [""], logger);
+    const buildCommand = createBuildCommand([""], false, [""], muteLogger);
 
     await expect(buildCommand()).rejects.toThrow("Command not provided");
   });
@@ -65,7 +70,7 @@ describe("createBuildCommand", () => {
       ["echo foo"],
       true,
       [path.join(fixtureLocation, "lib/**").replace(/\\/g, "/")],
-      logger
+      muteLogger
     );
 
     const index_js_ExistsBeforeBuild = await fs.pathExists(

@@ -1,5 +1,6 @@
 import { Logger, makeLogger } from "backfill-logger";
-import { getCacheStorageProvider, ICacheStorage } from "..";
+import { getCacheStorageProvider } from "../getCacheStorageProvider";
+import type { ICacheStorage } from "../CacheStorage";
 import { AzureBlobCacheStorage } from "../AzureBlobCacheStorage";
 import { LocalCacheStorage } from "../LocalCacheStorage";
 

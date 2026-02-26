@@ -13,8 +13,7 @@
     "backfill": "./bin/backfill.js"
   },
   "scripts": {
-    "build": "yarn compile",
-    "compile": "tsc -b",
+    "build": "tsc -b --pretty",
     "test": "jest",
     "watch": "tsc -b -w"
   },
@@ -33,7 +32,7 @@
     "yargs": "^16.1.1"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^8.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^14.18.36",
     "@types/yargs": "^15.0.15",

@@ -42,12 +42,12 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: yarn syncpack:check
 
+      - run: yarn format:check
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+
       - run: yarn build
 
       - run: yarn lint
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-
-      - run: yarn format:check
         if: ${{ matrix.os == 'ubuntu-latest' }}
 
       - run: yarn test

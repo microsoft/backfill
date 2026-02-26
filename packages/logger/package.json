@@ -10,8 +10,7 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "build": "yarn compile",
-    "compile": "tsc -b",
+    "build": "tsc -b --pretty",
     "watch": "tsc -b -w"
   },
   "dependencies": {
@@ -20,7 +19,7 @@
     "fs-extra": "^8.1.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^8.0.0",
     "@types/node": "^14.18.36",
     "backfill-utils-tsconfig": "*",
     "typescript": "~4.7.0"

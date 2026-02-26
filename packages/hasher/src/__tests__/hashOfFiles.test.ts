@@ -97,7 +97,7 @@ describe("generateHashOfFiles()", () => {
     fs.mkdirpSync(folder);
 
     fs.writeFileSync(path.join(folder, "foo.txt"), "bar");
-    let repoInfo = await getRepoInfoNoCache(packageRoot);
+    const repoInfo = await getRepoInfoNoCache(packageRoot);
 
     const hashOfPackage = await generateHashOfFiles(packageRoot, repoInfo);
 
@@ -114,7 +114,7 @@ describe("generateHashOfFiles()", () => {
     fs.mkdirpSync(folder);
 
     fs.writeFileSync(path.join(folder, "foo.txt"), "bar");
-    let repoInfo = await getRepoInfoNoCache(workspaceRoot);
+    const repoInfo = await getRepoInfoNoCache(workspaceRoot);
 
     const hashOfPackage = await generateHashOfFiles(folder, repoInfo);
 
@@ -127,7 +127,7 @@ describe("generateHashOfFiles()", () => {
     const folder = path.join(workspaceRoot, "packages", "package-a");
     fs.writeFileSync(path.join(folder, "foo.txt"), "bar");
 
-    let repoInfo = await getRepoInfoNoCache(workspaceRoot);
+    const repoInfo = await getRepoInfoNoCache(workspaceRoot);
 
     const hashOfPackage = await generateHashOfFiles(folder, repoInfo);
 

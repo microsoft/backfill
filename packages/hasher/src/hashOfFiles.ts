@@ -30,7 +30,6 @@ export async function generateHashOfFiles(
     for (const hash of packageHashes[packageRelativeRoot]) {
       hashes.push(hash[0], hash[1]);
     }
-    return hashStrings(hashes);
   } else {
     // Slow old path: if files are not clearly inside a package (mostly the case for malformed monorepos, like tests)
     const normalized = path.normalize(packageRoot) + sep;
@@ -41,12 +40,10 @@ export async function generateHashOfFiles(
 
     files.sort((a, b) => a.localeCompare(b));
 
-    const hashes: string[] = [];
-
     for (const file of files) {
       hashes.push(file, repoHashes[file]);
     }
-
-    return hashStrings(hashes);
   }
+
+  return hashStrings(hashes);
 }

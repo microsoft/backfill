@@ -5,7 +5,7 @@ import execa from "execa";
 
 const fixturesDir = path.resolve(__dirname, "../__fixtures__");
 
-export function setupFixture(fixtureName: string) {
+export function setupFixture(fixtureName: string): string {
   const fixturePath = path.join(fixturesDir, fixtureName);
 
   if (!fs.existsSync(fixturePath)) {
@@ -30,7 +30,7 @@ export function setupFixture(fixtureName: string) {
 /**
  * Remove a temp directory, ignoring any errors.
  */
-export function removeTempDir(tempDir: string) {
+export function removeTempDir(tempDir: string): void {
   try {
     fs.rmSync(tempDir, { recursive: true, force: true });
   } catch {
