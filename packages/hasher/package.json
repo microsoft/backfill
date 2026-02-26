@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/microsoft/backfill"
   },
-  "main": "lib/Hasher.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc -b --pretty",
     "test": "jest",

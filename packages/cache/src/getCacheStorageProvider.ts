@@ -7,9 +7,6 @@ import { LocalCacheStorage } from "./LocalCacheStorage";
 import { NpmCacheStorage } from "./NpmCacheStorage";
 import { LocalSkipCacheStorage } from "./LocalSkipCacheStorage";
 
-// TODO: move to index file
-export { ICacheStorage, CacheStorage } from "./CacheStorage";
-
 export function isCustomProvider(
   config: CacheStorageConfig
 ): config is CustomStorageConfig {
