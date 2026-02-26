@@ -1,62 +1,59 @@
 import path from "path";
 
-import { setupFixture } from "backfill-utils-test";
+import { removeTempDir, setupFixture } from "backfill-utils-test";
 import { makeLogger } from "backfill-logger";
 
-import { WorkspaceInfo } from "workspace-tools";
-import { PackageHashInfo } from "../hashOfPackage";
-import { Hasher, addToQueue } from "../Hasher";
+import { getPackageInfos } from "workspace-tools";
+import { Hasher, _addToQueue } from "../Hasher";
 
 const logger = makeLogger("mute");
 
-describe("addToQueue", () => {
-  const setupAddToQueue = async () => {
-    const packageRoot = await setupFixture("monorepo");
+type QueueParams = Parameters<typeof _addToQueue>[0];
+
+describe("_addToQueue", () => {
+  let root = "";
+
+  afterEach(() => {
+    root && removeTempDir(root);
+    root = "";
+  });
+
+  const initFixture = () => {
+    root = setupFixture("monorepo");
 
     const packageToAdd = "package-a";
-    const packagePath = path.join(packageRoot, "packages", packageToAdd);
-    const workspaces: WorkspaceInfo = [
-      {
-        name: packageToAdd,
-        path: packagePath,
-        packageJson: {
-          name: "",
-          packageJsonPath: "",
-          version: "",
-        },
-      },
-    ];
-    const internalDependencies = [packageToAdd];
+    const packageInfos = getPackageInfos(root);
+    const packagePath = path.dirname(
+      packageInfos[packageToAdd].packageJsonPath
+    );
 
-    const queue: string[] = [];
-    const done: PackageHashInfo[] = [];
+    const queueParams: QueueParams = {
+      dependencyNames: [packageToAdd],
+      queue: [],
+      done: [],
+      packageInfos,
+    };
 
     return {
-      internalDependencies,
-      queue,
-      done,
-      workspaces,
+      queueParams,
       packageToAdd,
       packagePath,
     };
   };
 
   it("adds internal dependencies to the queue", async () => {
-    const { internalDependencies, queue, done, workspaces, packagePath } =
-      await setupAddToQueue();
+    const { queueParams, packagePath } = initFixture();
 
-    addToQueue(internalDependencies, queue, done, workspaces);
+    _addToQueue(queueParams);
 
-    const expectedQueue = [packagePath];
-    expect(queue).toEqual(expectedQueue);
+    expect(queueParams.queue).toEqual([packagePath]);
   });
 
   it("doesn't add to the queue if the package has been evaluated", async () => {
-    let { internalDependencies, queue, done, workspaces, packageToAdd } =
-      await setupAddToQueue();
+    const { queueParams, packageToAdd } = initFixture();
 
     // Override
-    done = [
+    queueParams.done = [
       {
         name: packageToAdd,
         filesHash: "",
@@ -65,28 +62,36 @@ describe("addToQueue", () => {
       },
     ];
 
-    addToQueue(internalDependencies, queue, done, workspaces);
+    _addToQueue(queueParams);
 
-    expect(queue).toEqual([]);
+    expect(queueParams.queue).toEqual([]);
   });
 
   it("doesn't add to the queue if the package is already in the queue", async () => {
-    let { internalDependencies, queue, done, workspaces, packagePath } =
-      await setupAddToQueue();
+    const { queueParams, packagePath } = initFixture();
 
     // Override
-    queue = [packagePath];
+    queueParams.queue = [packagePath];
 
-    addToQueue(internalDependencies, queue, done, workspaces);
+    _addToQueue(queueParams);
 
-    const expectedQueue = [packagePath];
-    expect(queue).toEqual(expectedQueue);
+    expect(queueParams.queue).toEqual([packagePath]);
   });
 });
 
-describe("The main Hasher class", () => {
+describe("Hasher", () => {
+  let roots: string[] = [];
+
+  afterEach(() => {
+    for (const root of roots) {
+      removeTempDir(root);
+    }
+    roots = [];
+  });
+
   const setupFixtureAndReturnHash = async (fixture = "monorepo") => {
-    const packageRoot = await setupFixture(fixture);
+    const packageRoot = setupFixture(fixture);
+    roots.push(packageRoot);
 
     const options = { packageRoot, outputGlob: ["lib/**"] };
     const buildSignature = "yarn build";

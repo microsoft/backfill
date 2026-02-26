@@ -1,14 +1,13 @@
 import crypto from "crypto";
 import path from "path";
-import { Logger } from "backfill-logger";
-import { resolveInternalDependencies } from "./resolveInternalDependencies";
+import type { Logger } from "backfill-logger";
 import {
   resolveExternalDependencies,
-  Dependencies,
+  type Dependencies,
 } from "./resolveExternalDependencies";
 import { generateHashOfFiles } from "./hashOfFiles";
-import { hashStrings } from "./helpers";
-import { RepoInfo } from "./repoInfo";
+import { hashStrings } from "./hashStrings";
+import type { RepoInfo } from "./types";
 
 export type PackageHashInfo = {
   name: string;
@@ -20,14 +19,15 @@ export type PackageHashInfo = {
 export function generateHashOfInternalPackages(
   internalPackages: PackageHashInfo[]
 ): string {
-  internalPackages.sort((a, b) => a.name.localeCompare(b.name));
+  // Sort to ensure consistent ordering/hashing (use basic sorting since locale correctness doesn't matter)
+  internalPackages = [...internalPackages].sort();
 
   const hasher = crypto.createHash("sha1");
-  internalPackages.forEach((pkg) => {
+  for (const pkg of internalPackages) {
     hasher.update(pkg.name);
     hasher.update(pkg.filesHash);
     hasher.update(pkg.dependenciesHash);
-  });
+  }
 
   return hasher.digest("hex");
 }
@@ -39,7 +39,7 @@ export async function getPackageHash(
   repoInfo: RepoInfo,
   logger: Logger
 ): Promise<PackageHashInfo> {
-  const { workspaceInfo, parsedLock } = repoInfo;
+  const { packageInfos, parsedLock } = repoInfo;
 
   const memoizationKey = path.resolve(packageRoot);
 
@@ -56,20 +56,19 @@ export async function getPackageHash(
     ...devDependencies,
   };
 
-  const internalDependencies = resolveInternalDependencies(
-    allDependencies,
-    workspaceInfo
+  const internalDependencies = Object.keys(allDependencies).filter(
+    (dependency) => packageInfos[dependency]
   );
 
-  const externalDeoendencies = resolveExternalDependencies(
+  const externalDependencies = resolveExternalDependencies(
     allDependencies,
-    workspaceInfo,
+    packageInfos,
     parsedLock
   );
 
   const resolvedDependencies = [
     ...internalDependencies,
-    ...externalDeoendencies,
+    ...externalDependencies,
   ];
 
   const filesHash = await generateHashOfFiles(packageRoot, repoInfo);

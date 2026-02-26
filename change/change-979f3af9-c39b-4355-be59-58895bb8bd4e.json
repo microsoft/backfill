@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "type": "minor",
+      "comment": "Simplify internal logic, remove `@rushstack/package-deps-hash` dependency, and add exports for functions duplicated by lage",
+      "packageName": "backfill-hasher",
+      "email": "elcraig@microsoft.com",
+      "dependentChangeType": "patch"
+    }
+  ]
+}

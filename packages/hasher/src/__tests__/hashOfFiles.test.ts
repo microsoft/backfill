@@ -1,63 +1,58 @@
 import path from "path";
-import fs from "fs-extra";
+import fs from "fs";
 
-import { setupFixture } from "backfill-utils-test";
+import { removeTempDir, setupFixture } from "backfill-utils-test";
 
 import { generateHashOfFiles } from "../hashOfFiles";
 import { getRepoInfoNoCache } from "../repoInfo";
 
 describe("generateHashOfFiles()", () => {
-  it("creates different hashes for different hashes", async () => {
-    const packageRoot = await setupFixture("monorepo");
-    let repoInfo = await getRepoInfoNoCache(packageRoot);
+  let root = "";
 
-    const hashOfPackage = await generateHashOfFiles(packageRoot, repoInfo);
+  afterEach(() => {
+    root && removeTempDir(root);
+    root = "";
+  });
 
-    fs.writeFileSync(path.join(packageRoot, "foo.txt"), "bar");
-    repoInfo = await getRepoInfoNoCache(packageRoot);
+  it("creates different hashes for different contents", async () => {
+    root = setupFixture("monorepo");
+    let repoInfo = await getRepoInfoNoCache(root);
 
-    const hashOfPackageWithFoo = await generateHashOfFiles(
-      packageRoot,
-      repoInfo
-    );
+    const hashOfPackage = await generateHashOfFiles(root, repoInfo);
+
+    fs.writeFileSync(path.join(root, "foo.txt"), "bar");
+    repoInfo = await getRepoInfoNoCache(root);
+
+    const hashOfPackageWithFoo = await generateHashOfFiles(root, repoInfo);
     expect(hashOfPackage).not.toEqual(hashOfPackageWithFoo);
 
-    fs.writeFileSync(path.join(packageRoot, "foo.txt"), "foo");
-    repoInfo = await getRepoInfoNoCache(packageRoot);
-    const hashOfPackageWithFoo2 = await generateHashOfFiles(
-      packageRoot,
-      repoInfo
-    );
+    fs.writeFileSync(path.join(root, "foo.txt"), "foo");
+    repoInfo = await getRepoInfoNoCache(root);
+    const hashOfPackageWithFoo2 = await generateHashOfFiles(root, repoInfo);
     expect(hashOfPackageWithFoo).not.toEqual(hashOfPackageWithFoo2);
 
-    fs.unlinkSync(path.join(packageRoot, "foo.txt"));
-    repoInfo = await getRepoInfoNoCache(packageRoot);
-    const hashOfPackageWithoutFoo = await generateHashOfFiles(
-      packageRoot,
-      repoInfo
-    );
+    fs.unlinkSync(path.join(root, "foo.txt"));
+    repoInfo = await getRepoInfoNoCache(root);
+    const hashOfPackageWithoutFoo = await generateHashOfFiles(root, repoInfo);
     expect(hashOfPackage).toEqual(hashOfPackageWithoutFoo);
   });
 
   it("is not confused by package names being substring of other packages", async () => {
-    const packageRoot = await setupFixture("monorepo");
+    root = setupFixture("monorepo");
 
-    let repoInfo = await getRepoInfoNoCache(packageRoot);
+    let repoInfo = await getRepoInfoNoCache(root);
 
     const hashOfPackageA = await generateHashOfFiles(
-      path.join(packageRoot, "packages", "package-a"),
+      path.join(root, "packages", "package-a"),
       repoInfo
     );
 
-    await fs.mkdir(path.join(packageRoot, "packages", "package-abc"));
-    await fs.writeFile(
-      path.join(packageRoot, "packages", "package-abc", "foo"),
-      "bar"
-    );
+    fs.mkdirSync(path.join(root, "packages", "package-abc"));
+    fs.writeFileSync(path.join(root, "packages", "package-abc", "foo"), "bar");
 
-    repoInfo = await getRepoInfoNoCache(packageRoot);
+    repoInfo = await getRepoInfoNoCache(root);
     const newHashOfPackageA = await generateHashOfFiles(
-      path.join(packageRoot, "packages", "package-a"),
+      path.join(root, "packages", "package-a"),
       repoInfo
     );
 
@@ -65,56 +60,50 @@ describe("generateHashOfFiles()", () => {
   });
 
   it("file paths are included in hash", async () => {
-    const packageRoot = await setupFixture("empty");
+    root = setupFixture("empty");
 
-    fs.writeFileSync(path.join(packageRoot, "foo.txt"), "bar");
-    let repoInfo = await getRepoInfoNoCache(packageRoot);
+    fs.writeFileSync(path.join(root, "foo.txt"), "bar");
+    let repoInfo = await getRepoInfoNoCache(root);
 
-    const hashOfPackageWithFoo = await generateHashOfFiles(
-      packageRoot,
-      repoInfo
-    );
+    const hashOfPackageWithFoo = await generateHashOfFiles(root, repoInfo);
 
-    fs.unlinkSync(path.join(packageRoot, "foo.txt"));
-    fs.writeFileSync(path.join(packageRoot, "bar.txt"), "bar");
-    repoInfo = await getRepoInfoNoCache(packageRoot);
+    fs.unlinkSync(path.join(root, "foo.txt"));
+    fs.writeFileSync(path.join(root, "bar.txt"), "bar");
+    repoInfo = await getRepoInfoNoCache(root);
 
-    const hashOfPackageWithBar = await generateHashOfFiles(
-      packageRoot,
-      repoInfo
-    );
+    const hashOfPackageWithBar = await generateHashOfFiles(root, repoInfo);
 
     expect(hashOfPackageWithFoo).not.toEqual(hashOfPackageWithBar);
   });
 
   // This test will be run on Windows and on Linux on the CI
   it("file paths are consistent across platforms", async () => {
-    const packageRoot = await setupFixture("empty");
+    root = setupFixture("empty");
 
     // Create a folder to make sure we get folder separators as part of the file name
-    const folder = path.join(packageRoot, "foo");
+    const folder = path.join(root, "foo");
 
-    fs.mkdirpSync(folder);
+    fs.mkdirSync(folder, { recursive: true });
 
     fs.writeFileSync(path.join(folder, "foo.txt"), "bar");
-    const repoInfo = await getRepoInfoNoCache(packageRoot);
+    const repoInfo = await getRepoInfoNoCache(root);
 
-    const hashOfPackage = await generateHashOfFiles(packageRoot, repoInfo);
+    const hashOfPackage = await generateHashOfFiles(root, repoInfo);
 
     expect(hashOfPackage).toEqual("4d4ca2ecc436e1198554f5d03236ea8f956ac0c4");
   });
 
   // This test will be run on Windows and on Linux on the CI
-  it("file paths in a package not defined in a workspace (malformed monorepo) are consistent across platforms (uses slow path)", async () => {
-    const workspaceRoot = await setupFixture("empty");
+  it("file paths not defined in a package (malformed monorepo) are consistent across platforms (uses slow path)", async () => {
+    root = setupFixture("empty");
 
     // Create a folder to make sure we get folder separators as part of the file name
-    const folder = path.join(workspaceRoot, "packages", "foo");
+    const folder = path.join(root, "packages", "foo");
 
-    fs.mkdirpSync(folder);
+    fs.mkdirSync(folder, { recursive: true });
 
     fs.writeFileSync(path.join(folder, "foo.txt"), "bar");
-    const repoInfo = await getRepoInfoNoCache(workspaceRoot);
+    const repoInfo = await getRepoInfoNoCache(root);
 
     const hashOfPackage = await generateHashOfFiles(folder, repoInfo);
 
@@ -122,12 +111,12 @@ describe("generateHashOfFiles()", () => {
   });
 
   it("file paths in a monorepo are consistent across platforms (uses fast path)", async () => {
-    const workspaceRoot = await setupFixture("monorepo");
+    root = setupFixture("monorepo");
 
-    const folder = path.join(workspaceRoot, "packages", "package-a");
+    const folder = path.join(root, "packages", "package-a");
     fs.writeFileSync(path.join(folder, "foo.txt"), "bar");
 
-    const repoInfo = await getRepoInfoNoCache(workspaceRoot);
+    const repoInfo = await getRepoInfoNoCache(root);
 
     const hashOfPackage = await generateHashOfFiles(folder, repoInfo);
 

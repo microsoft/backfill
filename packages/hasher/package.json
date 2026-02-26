@@ -15,13 +15,10 @@
     "watch": "tsc -b -w"
   },
   "dependencies": {
-    "@rushstack/package-deps-hash": "^3.2.4",
     "backfill-logger": "^5.4.0",
-    "fs-extra": "^8.1.0",
-    "workspace-tools": "^0.40.0"
+    "workspace-tools": "^0.41.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^8.0.0",
     "@types/jest": "^30.0.0",
     "backfill-utils-test": "*",
     "backfill-utils-tsconfig": "*",

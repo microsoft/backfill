@@ -1,83 +1,100 @@
-import { Logger } from "backfill-logger";
-import { findWorkspacePath, WorkspaceInfo } from "workspace-tools";
+import path from "path";
+import type { Logger } from "backfill-logger";
+import { type PackageInfos, findPackageRoot } from "workspace-tools";
 import { generateHashOfFiles } from "./hashOfFiles";
 import {
-  PackageHashInfo,
+  type PackageHashInfo,
   getPackageHash,
   generateHashOfInternalPackages,
 } from "./hashOfPackage";
-import { hashStrings, getPackageRoot } from "./helpers";
-import { RepoInfo, getRepoInfo, getRepoInfoNoCache } from "./repoInfo";
+import { hashStrings } from "./hashStrings";
+import { getRepoInfo, getRepoInfoNoCache } from "./repoInfo";
 
 export interface IHasher {
   createPackageHash: (salt: string) => Promise<string>;
   hashOfOutput: () => Promise<string>;
 }
 
-function isDone(done: PackageHashInfo[], packageName: string): boolean {
-  return Boolean(done.find(({ name }) => name === packageName));
-}
+/**
+ * Add repo-internal dependencies to the queue, if not already done.
+ */
+export function _addToQueue(params: {
+  /** Dependency names (will be filtered to internal ones) */
+  dependencyNames: string[];
+  /** Package path queue */
+  queue: string[];
+  /** Packages that are already done */
+  done: PackageHashInfo[];
+  /** Package infos internal to the repo */
+  packageInfos: PackageInfos;
+}): void {
+  const { dependencyNames, queue, done, packageInfos } = params;
 
-function isInQueue(queue: string[], packagePath: string): boolean {
-  return queue.indexOf(packagePath) >= 0;
-}
+  for (const dependencyName of dependencyNames) {
+    const dependencyInfo = packageInfos[dependencyName];
+    const dependencyPath =
+      dependencyInfo && path.dirname(dependencyInfo.packageJsonPath);
 
-export function addToQueue(
-  dependencyNames: string[],
-  queue: string[],
-  done: PackageHashInfo[],
-  workspaces: WorkspaceInfo
-): void {
-  dependencyNames.forEach((name) => {
-    const dependencyPath = findWorkspacePath(workspaces, name);
-
-    if (dependencyPath) {
-      if (!isDone(done, name) && !isInQueue(queue, dependencyPath)) {
-        queue.push(dependencyPath);
-      }
+    if (
+      dependencyPath &&
+      !done.some((p) => p.name === dependencyName) &&
+      !queue.includes(dependencyPath)
+    ) {
+      queue.push(dependencyPath);
     }
-  });
+  }
 }
 
 export class Hasher implements IHasher {
   private packageRoot: string;
-  private repoInfo?: RepoInfo;
 
   constructor(
-    private options: {
+    options: {
       packageRoot: string;
     },
     private logger: Logger
   ) {
-    this.packageRoot = this.options.packageRoot;
+    this.packageRoot = options.packageRoot;
   }
 
+  // TODO: This implementation is a bit odd... If the hasher is being reused for many packages,
+  // the repoInfo should be created once and passed in. Otherwise it's a massive perf penalty to
+  // recalculate for every package in a large repo. There's potentially also the opportunity to
+  // reduce the perf penalty by only getting hashes for relevant packages per recursively walking
+  // internal dependencies. (Fixing is lower priority since this is no longer used by lage.)
   public async createPackageHash(salt: string): Promise<string> {
     const tracer = this.logger.setTime("hashTime");
 
-    const packageRoot = await getPackageRoot(this.packageRoot);
+    // TODO: not sure why it's getting the root if this is already the root...?
+    const entryPackageRoot = findPackageRoot(this.packageRoot);
+    if (!entryPackageRoot) {
+      throw new Error(
+        `Could not find package.json inside ${this.packageRoot}.`
+      );
+    }
 
-    this.repoInfo = await getRepoInfo(packageRoot);
+    const repoInfo = await getRepoInfo(entryPackageRoot);
 
-    const { workspaceInfo } = this.repoInfo;
+    const { packageInfos } = repoInfo;
 
-    const queue = [packageRoot];
+    const queue: string[] = [entryPackageRoot];
     const done: PackageHashInfo[] = [];
 
     while (queue.length > 0) {
-      const nextPackageRoot = queue.shift();
-
-      if (!nextPackageRoot) {
-        continue;
-      }
+      const nextPackageRoot = queue.shift()!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
       const packageHash = await getPackageHash(
         nextPackageRoot,
-        this.repoInfo,
+        repoInfo,
         this.logger
       );
 
-      addToQueue(packageHash.internalDependencies, queue, done, workspaceInfo);
+      _addToQueue({
+        dependencyNames: packageHash.internalDependencies,
+        queue,
+        done,
+        packageInfos,
+      });
 
       done.push(packageHash);
     }
